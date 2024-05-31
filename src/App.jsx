@@ -5,7 +5,11 @@ import classNames from "classnames";
 function App() {
   return (
     <Fragment>
-      <h1 className={classNames("text-center text-danger my-5 opacity-50")}>
+      <h1
+        className={classNames(
+          "text-center text-danger my-5 opacity-50 select-none"
+        )}
+      >
         Test Boostrap
       </h1>
     </Fragment>

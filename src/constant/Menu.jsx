@@ -144,11 +144,6 @@ const menus = [
         sub: "Contact 1",
         links: "/contact-01",
       },
-      {
-        id: 2,
-        sub: "Contact 2",
-        links: "/contact-02",
-      },
     ],
   },
 ];

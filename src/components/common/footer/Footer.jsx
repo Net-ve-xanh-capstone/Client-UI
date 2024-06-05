@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logodark from "../../../assets/images/logo/logo_dark.png";
 import logofooter from "../../../assets/images/logo/logo2.png";
+import { withErrorBoundary } from "react-error-boundary";
+import { Fallback } from "../../../constant/Fallback";
 const Footer = () => {
   const accountList = [
     {
@@ -277,4 +279,6 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default withErrorBoundary(Footer, {
+  FallbackComponent: Fallback,
+});

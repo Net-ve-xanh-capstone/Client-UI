@@ -1,7 +1,5 @@
 import Footer from "../components/common/footer/Footer";
 import HeaderVersion1 from "../components/common/header/HeaderVersion1";
-import { withErrorBoundary } from "react-error-boundary";
-import { Fallback } from "../constant/Fallback";
 
 const Home2 = () => {
   return (
@@ -20,6 +18,4 @@ const Home2 = () => {
   );
 };
 
-export default withErrorBoundary(Home2, {
-  FallbackComponent: Fallback,
-});
+export default Home2;

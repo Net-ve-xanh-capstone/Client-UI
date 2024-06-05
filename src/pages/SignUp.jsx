@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import HeaderVersion1 from "../components/common/header/HeaderVersion1";
 import Footer from "../components/common/footer/Footer";
-import { withErrorBoundary } from "react-error-boundary";
-import { Fallback } from "../constant/Fallback";
+
 const SignUp = () => {
   return (
     <div>
@@ -90,6 +89,4 @@ const SignUp = () => {
   );
 };
 
-export default withErrorBoundary(SignUp, {
-  FallbackComponent: Fallback,
-});
+export default SignUp;

@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import { Fallback } from "../constant/Fallback";
 
 const CardModal = (props) => {
   return (
@@ -51,5 +53,6 @@ CardModal.propTypes = {
   show: PropTypes.bool,
   onHide: PropTypes.func,
 };
-
-export default CardModal;
+export default withErrorBoundary(CardModal, {
+  FallbackComponent: Fallback,
+});

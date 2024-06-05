@@ -86,6 +86,4 @@ const Login = () => {
   );
 };
 
-export default withErrorBoundary(Login, {
-  FallbackComponent: Fallback,
-});
+export default Login;

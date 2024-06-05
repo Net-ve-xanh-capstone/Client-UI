@@ -23,8 +23,8 @@ const menus = [
     namesub: [
       {
         id: 1,
-        sub: "Explore 01",
-        links: "/explore-01",
+        sub: "Explore",
+        links: "/explore",
       },
       {
         id: 2,

@@ -8,6 +8,8 @@ import logodark2x from "../../../assets/images/logo/logo_dark@2x.png";
 import imgsun from "../../../assets/images/icon/sun.png";
 import avt from "../../../assets/images/avatar/avt-2.jpg";
 import menus from "../../../constant/Menu";
+import { withErrorBoundary } from "react-error-boundary";
+import { Fallback } from "../../../constant/Fallback";
 
 const HeaderVersion1 = () => {
   const { pathname } = useLocation();
@@ -211,4 +213,6 @@ const HeaderVersion1 = () => {
   );
 };
 
-export default HeaderVersion1;
+export default withErrorBoundary(HeaderVersion1, {
+  FallbackComponent: Fallback,
+});

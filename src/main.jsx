@@ -6,12 +6,16 @@ import { BrowserRouter } from "react-router-dom";
 import store from "./store/configureStore.js";
 import { Provider } from "react-redux";
 import ScrollToTop from "./utils/ScrollToTop.js";
+import { ErrorBoundary } from "react-error-boundary";
+import { Fallback } from "./constant/Fallback";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <BrowserRouter>
-      <ScrollToTop />
-      <App />
+      <ErrorBoundary FallbackComponent={Fallback}>
+        <ScrollToTop />
+        <App />
+      </ErrorBoundary>
     </BrowserRouter>
   </Provider>
 );

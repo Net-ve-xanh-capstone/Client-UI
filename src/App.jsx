@@ -1,18 +1,20 @@
-import { Fragment } from "react";
 import "./App.css";
-import classNames from "classnames";
+import { Route, Routes } from "react-router-dom";
+import routes from "./router/routes";
 
 function App() {
   return (
-    <Fragment>
-      <h1
-        className={classNames(
-          "text-center text-danger my-5 opacity-50 select-none"
-        )}
-      >
-        Test Boostrap
-      </h1>
-    </Fragment>
+    <Routes>
+      {routes.map((data, index) => (
+        <Route
+          onUpdate={() => window.scrollTo(0, 0)}
+          exact={true}
+          path={data.path}
+          element={data.component}
+          key={index}
+        />
+      ))}
+    </Routes>
   );
 }
 

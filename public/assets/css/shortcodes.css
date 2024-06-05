@@ -437,7 +437,7 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: -webkit-flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   margin-left: -33px;
 }
 
@@ -1731,6 +1731,14 @@
   -webkit-text-stroke-color: #fff;
   -webkit-text-fill-color: rgb(0 0 0/0%);
 }
+
+.flat-title-page .heading .tf-text.s2 {
+  font-size: 30px;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #fff;
+  -webkit-text-fill-color: rgb(0 0 0/0%);
+}
+
 .flat-slider .heading {
   font-size: 56px;
   line-height: 1.3;
@@ -5766,6 +5774,7 @@ button.accordion-button {
 -------------------------------------------------------------- */
 .home-5 .flat-title-page .themesflat-container {
   width: 100%;
+  height: 1000px;
 }
 .home-5 .flat-slider .content {
   width: 49%;
@@ -8404,11 +8413,11 @@ button.accordion-button {
 }
 
 .select-none {
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Old versions of Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
 }

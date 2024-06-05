@@ -6634,7 +6634,9 @@ a.bg-warning:hover {
 .bg-danger {
   background-color: #d9534f !important;
 }
-
+.bg-danger-subtle {
+  background-color: #2c0b0e !important;
+}
 a.bg-danger:focus,
 a.bg-danger:hover {
   background-color: #c9302c !important;
@@ -9727,6 +9729,10 @@ a.text-warning:hover {
 
 .text-danger {
   color: #d9534f !important;
+}
+
+.text-danger-sub {
+  color: #fbe9eb !important;
 }
 
 a.text-danger:focus,

@@ -1,10 +1,10 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import globalSlice from "./globalSlice.js";
 import logger from "redux-logger";
+import authSlice from "./auth/authSlice.js";
 
 const reducer = combineReducers({
   // key: value
-  global: globalSlice,
+  auth: authSlice,
 });
 
 const store = configureStore({

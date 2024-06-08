@@ -14,7 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <ErrorBoundary FallbackComponent={Fallback}>
         <ScrollToTop />
-        <App />
+        <App></App>
       </ErrorBoundary>
     </BrowserRouter>
   </Provider>

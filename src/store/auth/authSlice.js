@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { authLogin, authRegister } from "./authAction";
+import { authLogin } from "./authAction";
 
 // initialize userToken from local storage
 const userToken = localStorage.getItem("userToken")
@@ -29,33 +29,33 @@ const authSlice = createSlice({
       state.userInfo = payload;
     },
   },
-  extraReducers: {
-    [authLogin.pending]: (state) => {
+  extraReducers: (builder) => {
+    builder.addCase(authLogin.pending, (state) => {
       state.loading = true;
-    },
-    [authLogin.fulfilled]: (state, { payload }) => {
+    });
+    builder.addCase(authLogin.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.userInfo = payload;
       state.userToken = payload.userToken;
       state.error = null;
-    },
-    [authLogin.rejected]: (state, { payload }) => {
+    });
+    builder.addCase(authLogin.rejected, (state, { payload }) => {
       state.loading = false;
       state.error = payload;
-    },
-    [authRegister.pending]: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    [authRegister.fulfilled]: (state) => {
-      state.loading = false;
-      state.success = true;
-      state.error = null;
-    },
-    [authRegister.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.error = payload;
-    },
+    });
+    // [authRegister.pending]: (state) => {
+    //   state.loading = true;
+    //   state.error = null;
+    // },
+    // [authRegister.fulfilled]: (state) => {
+    //   state.loading = false;
+    //   state.success = true;
+    //   state.error = null;
+    // },
+    // [authRegister.rejected]: (state, { payload }) => {
+    //   state.loading = false;
+    //   state.error = payload;
+    // },
   },
 });
 

@@ -1,20 +1,18 @@
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Redirect, Route } from "react-router-dom";
 import PropTypes from "prop-types";
-const ProtectedRoute = ({ component: Component, ...rest }) => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuthenticated ? Component : <Redirect to="/login" />
-      }
-    />
-  );
+const ProtectedRoute = ({ children }) => {
+  const userToken = useSelector((state) => state.auth.userToken);
+  if (!userToken) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
 };
 
 ProtectedRoute.propTypes = {
-  component: PropTypes.elementType.isRequired,
+  children: PropTypes.node.isRequired,
 };
+
 export default ProtectedRoute;

@@ -1,4 +1,5 @@
 import NoResult from "../constant/NoResult";
+import CreateItem from "../pages/CreateItem";
 import Explore from "../pages/Explore";
 import Home1 from "../pages/Home1";
 import Home2 from "../pages/Home2";
@@ -11,6 +12,7 @@ const routes = [
   { path: "/home-2", component: <Home2 /> },
   { path: "/login", component: <Login /> },
   { path: "/sign-up", component: <SignUp /> },
+  { path: "/create-item", component: <CreateItem /> },
   {
     path: "/explore",
     component: (

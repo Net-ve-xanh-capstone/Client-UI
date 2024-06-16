@@ -1,7 +1,7 @@
 // import React from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../components/header/Header';
-import Footer from '../components/footer/Footer';
+import HeaderVersion2 from '../components/common/header/HeaderVersion2';
+import Footer from '../components/common/footer/Footer';
 import Countdown from "react-countdown";
 import { Tab, Tabs, TabList, TabPanel  } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -11,7 +11,7 @@ import avt from '../assets/images/avatar/avt-9.jpg'
 const CreateItem = () => {
     return (
         <div className='create-item'>
-            <Header />
+            <HeaderVersion2 />
             <section className="flat-title-page inner">
                 <div className="overlay"></div>
                 <div className="themesflat-container">

@@ -174,15 +174,6 @@ const HeaderVersion2 = () => {
                   </ul>
                 </nav>
                 <div className="flat-search-btn flex">
-                  <div className="sc-btn-top mg-r-12" id="site-header">
-                    <Link
-                      to="/wallet-connect"
-                      className="sc-button header-slider style style-1 wallet fl-button pri-1"
-                    >
-                      <span>Wallet connect</span>
-                    </Link>
-                  </div>
-
                   <div className="admin_active" id="header_admin">
                     <div className="header_avatar">
                       <div className="price">

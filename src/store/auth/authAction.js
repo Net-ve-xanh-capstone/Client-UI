@@ -1,18 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { auhtenApi } from "../../api/authenApi";
 
-export const authLogin = createAsyncThunk(
-  "auth/login",
-  async ({ username, password }, { rejectWithValue }) => {
+export const competitorLogin = createAsyncThunk(
+  async ({ email, password }, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
           "Content-Type": "application/json",
         },
       };
-      const { data } = auhtenApi.login(
-        "/login",
-        { username, password },
+      const { data } = auhtenApi.competitorLogin(
+        "/Authentication/LoginCompetitor",
+        { email, password },
         config
       );
 
@@ -21,8 +20,8 @@ export const authLogin = createAsyncThunk(
       return data;
     } catch (error) {
       // return custom error message from API if any
-      if (error.response && error.response.data.error_message) {
-        return rejectWithValue(error.response.data.error_message);
+      if (error.response && error.response.message) {
+        return rejectWithValue(error.response.message);
       } else {
         return rejectWithValue(error.message);
       }

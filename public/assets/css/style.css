@@ -3309,3 +3309,8 @@ header {
 .swiper-pagination-horizontal {
   height: 4% !important;
 }
+.select-none {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

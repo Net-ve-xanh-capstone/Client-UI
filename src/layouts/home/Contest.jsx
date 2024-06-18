@@ -10,16 +10,14 @@ import "swiper/scss/pagination";
 
 import img1 from "../../assets/images/box-item/image-box-26.jpg";
 import img2 from "../../assets/images/box-item/image-box-27.jpg";
-import img3 from "../../assets/images/box-item/image-box-28.jpg";
 import imga1 from "../../assets/images/avatar/avt-11.jpg";
 import imga2 from "../../assets/images/avatar/avt-12.jpg";
-import imga3 from "../../assets/images/avatar/avt-13.jpg";
 import CardModal from "../../components/CardModal";
 import { Fallback } from "../../constant/Fallback";
 import PropTypes from "prop-types";
 import { withErrorBoundary } from "react-error-boundary";
 
-const LiveAuction = () => {
+const Contest = () => {
   const [data] = useState([
     {
       img: img1,
@@ -39,42 +37,6 @@ const LiveAuction = () => {
       price: "4.89 ETH",
       wishlist: "100",
     },
-    {
-      img: img3,
-      title: "Triumphant Awakening...",
-      tags: "bsc",
-      imgAuthor: imga3,
-      nameAuthor: "Trista Francis",
-      price: "4.89 ETH",
-      wishlist: "100",
-    },
-    {
-      img: img1,
-      title: "Triumphant Awakening...",
-      tags: "bsc",
-      imgAuthor: imga1,
-      nameAuthor: "SalvadorDali",
-      price: "4.89 ETH",
-      wishlist: "100",
-    },
-    {
-      img: img2,
-      title: "Triumphant Awakening...",
-      tags: "bsc",
-      imgAuthor: imga2,
-      nameAuthor: "Trista Francis",
-      price: "4.89 ETH",
-      wishlist: "100",
-    },
-    {
-      img: img3,
-      title: "Triumphant Awakening...",
-      tags: "bsc",
-      imgAuthor: imga3,
-      nameAuthor: "Trista Francis",
-      price: "4.89 ETH",
-      wishlist: "100",
-    },
   ]);
 
   const [modalShow, setModalShow] = useState(false);
@@ -86,10 +48,7 @@ const LiveAuction = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="heading-live-auctions">
-                <h2 className="tf-title pb-20">Live Auctions</h2>
-                <Link to="/explore-03" className="exp style2">
-                  EXPLORE MORE
-                </Link>
+                <h2 className="tf-title pb-20">Cuộc Thi</h2>
               </div>
             </div>
             <div className="col-md-12">
@@ -141,7 +100,7 @@ const LiveAuction = () => {
                                     onClick={() => setModalShow(true)}
                                     className="sc-button style-place-bid style bag fl-button pri-3"
                                   >
-                                    <span>Place Bid</span>
+                                    <span>Chi tiết</span>
                                   </button>
                                 </div>
                               </div>
@@ -190,11 +149,11 @@ const LiveAuction = () => {
   );
 };
 
-LiveAuction.propTypes = {
+Contest.propTypes = {
   show: PropTypes.bool,
   onHide: PropTypes.func,
 };
 
-export default withErrorBoundary(LiveAuction, {
+export default withErrorBoundary(Contest, {
   FallbackComponent: Fallback,
 });

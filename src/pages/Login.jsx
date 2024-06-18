@@ -1,10 +1,35 @@
 import { Link } from "react-router-dom";
 import HeaderVersion1 from "../components/common/header/HeaderVersion1";
 import Footer from "../components/common/footer/Footer";
-import { withErrorBoundary } from "react-error-boundary";
-import { Fallback } from "../constant/Fallback";
+import { useForm } from "react-hook-form";
+import TextfieldCommon from "../components/input/TextfieldCommon";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const Login = () => {
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Vui lòng nhập đúng định dạng email")
+      .required("Vui lòng nhập email của bạn"),
+    password: yup.string().required("Vui lòng nhập mật khẩu của bạn").max(10),
+  });
+
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    reValidateMode: "onChange",
+  });
+
+  const handleRegister = (data) => {
+    console.log(data);
+    reset();
+  };
+
   return (
     <div>
       <HeaderVersion1 />
@@ -43,37 +68,41 @@ const Login = () => {
                 <div className="box-title-login"></div>
 
                 <div className="form-inner">
-                  <form action="#" id="contactform">
-                    <input
-                      id="name"
-                      name="name"
-                      tabIndex="1"
-                      aria-required="true"
-                      required
-                      type="text"
-                      placeholder="Your Full Name"
-                    />
-                    <input
+                  <form
+                    onSubmit={handleSubmit(handleRegister)}
+                    className="select-none"
+                  >
+                    <TextfieldCommon
+                      control={control}
+                      error={errors.email?.message}
                       id="email"
                       name="email"
+                      tabIndex="1"
+                      placeholder="Nhập email"
+                      autoFocus
+                    />
+                    <TextfieldCommon
+                      control={control}
+                      error={errors.password?.message}
+                      id="password"
+                      name="password"
                       tabIndex="2"
                       aria-required="true"
-                      type="email"
-                      placeholder="Your Email Address"
-                      required
+                      type="password"
+                      placeholder="Nhập mật khẩu"
                     />
                     <div className="row-form style-1">
                       <label>
-                        Remember me
+                        Ghi nhớ
                         <input type="checkbox" />
                         <span className="btn-checkbox"></span>
                       </label>
                       <Link to="#" className="forgot-pass">
-                        Forgot Password ?
+                        Quên mật khẩu ?
                       </Link>
                     </div>
 
-                    <button className="submit">Login</button>
+                    <button className="submit">đăng nhập</button>
                   </form>
                 </div>
               </div>

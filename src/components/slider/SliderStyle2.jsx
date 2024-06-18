@@ -4,8 +4,6 @@ import "swiper/scss/navigation";
 import "swiper/scss/pagination";
 import { Autoplay } from "swiper/modules";
 import img1 from "../../assets/images/box-item/item-h5.1.png";
-import img2 from "../../assets/images/box-item/item-h5.2.png";
-import img3 from "../../assets/images/box-item/item-h5.3.png";
 
 const SliderStyle2 = () => {
   const subtitle = "Cuộc thi sáng tạo nghệ thuật";

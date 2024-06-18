@@ -9852,3 +9852,16 @@ a.text-gray-dark:hover {
     display: none !important;
   }
 }
+
+.border-danger {
+  border-color: #d9534f !important;
+}
+
+.border-normal {
+  border-color: 1px solid rgba(138, 138, 160, 0.3) !important;
+}
+
+.placeholder-danger::-webkit-input-placeholder {
+  color: #d9534f !important;
+  opacity: 1;
+}

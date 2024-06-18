@@ -1,18 +1,13 @@
 const menus = [
   {
     id: 1,
-    name: "Home",
+    name: "Trang chủ",
     links: "#",
     namesub: [
       {
         id: 1,
         sub: "Home 01",
         links: "/",
-      },
-      {
-        id: 2,
-        sub: "Home 02",
-        links: "/home-2",
       },
     ],
   },
@@ -99,8 +94,8 @@ const menus = [
       },
       {
         id: 4,
-        sub: "Create Item",
-        links: "/create-item",
+        sub: "Đăng ký",
+        links: "/submit",
       },
       {
         id: 5,

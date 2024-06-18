@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { authLogin } from "./authAction";
+import { competitorLogin } from "./authAction";
 
 // initialize userToken from local storage
 const userToken = localStorage.getItem("userToken")
@@ -30,16 +30,16 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(authLogin.pending, (state) => {
+    builder.addCase(competitorLogin.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(authLogin.fulfilled, (state, { payload }) => {
+    builder.addCase(competitorLogin.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.userInfo = payload;
       state.userToken = payload.userToken;
       state.error = null;
     });
-    builder.addCase(authLogin.rejected, (state, { payload }) => {
+    builder.addCase(competitorLogin.rejected, (state, { payload }) => {
       state.loading = false;
       state.error = payload;
     });

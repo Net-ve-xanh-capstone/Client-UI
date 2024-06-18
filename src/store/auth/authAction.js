@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { auhtenApi } from "../../api/authenApi";
+import { authenApi } from "../../api/authenApi";
 
 export const competitorLogin = createAsyncThunk(
+  "/Authentication/LoginCompetitor",
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const config = {
@@ -9,14 +10,14 @@ export const competitorLogin = createAsyncThunk(
           "Content-Type": "application/json",
         },
       };
-      const { data } = auhtenApi.competitorLogin(
+      const { data } = await authenApi.competitorLogin(
         "/Authentication/LoginCompetitor",
         { email, password },
         config
       );
 
       // store user's token in local storage
-      localStorage.setItem("userToken", data.userToken);
+      localStorage.setItem("jwtToken", data.jwtToken);
       return data;
     } catch (error) {
       // return custom error message from API if any

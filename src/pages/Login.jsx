@@ -3,8 +3,12 @@ import HeaderVersion1 from "../components/common/header/HeaderVersion1";
 import Footer from "../components/common/footer/Footer";
 import { useForm } from "react-hook-form";
 import TextfieldCommon from "../components/input/TextfieldCommon";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useEffect } from "react";
+import { competitorLogin } from "../store/auth/authAction";
 
 const Login = () => {
   const schema = yup.object().shape({
@@ -26,9 +30,22 @@ const Login = () => {
   });
 
   const handleRegister = (data) => {
-    console.log(data);
+    dispatch(competitorLogin(data));
     reset();
   };
+
+  const { loading, userInfo, error, success } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // redirect user to login page if registration was successful
+    if (!success) navigate("/login");
+    // redirect authenticated user to profile screen
+    if (userInfo) navigate("/user-profile");
+  }, [navigate, userInfo, success]);
 
   return (
     <div>

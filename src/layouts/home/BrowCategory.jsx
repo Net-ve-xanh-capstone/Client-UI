@@ -1,47 +1,47 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Scrollbar, A11y } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/scss";
-import "swiper/scss/navigation";
-import "swiper/scss/pagination";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Scrollbar, A11y } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/scss';
+import 'swiper/scss/navigation';
+import 'swiper/scss/pagination';
 
-import img1 from "../../assets/images/box-item/imgslider2category.jpg";
-import img2 from "../../assets/images/box-item/imgslider3category.jpg";
-import img3 from "../../assets/images/box-item/imgslider4category.jpg";
-import img4 from "../../assets/images/box-item/imgslider5category.jpg";
-import img5 from "../../assets/images/box-item/imgslider6category.jpg";
-import img6 from "../../assets/images/box-item/imgslider1category.jpg";
-import { Fallback } from "../../constant/Fallback";
-import { withErrorBoundary } from "react-error-boundary";
-import PropTypes from "prop-types";
+import img1 from '../../assets/images/box-item/imgslider2category.jpg';
+import img2 from '../../assets/images/box-item/imgslider3category.jpg';
+import img3 from '../../assets/images/box-item/imgslider4category.jpg';
+import img4 from '../../assets/images/box-item/imgslider5category.jpg';
+import img5 from '../../assets/images/box-item/imgslider6category.jpg';
+import img6 from '../../assets/images/box-item/imgslider1category.jpg';
+import { Fallback } from '../../constant/Fallback';
+import { withErrorBoundary } from 'react-error-boundary';
+import PropTypes from 'prop-types';
 
 const BrowCategory = () => {
   const [data] = useState([
     {
-      title: "Music",
-      img: img1,
+      title: 'Music',
+      img: img1
     },
     {
-      title: "Domain Names",
-      img: img2,
+      title: 'Domain Names',
+      img: img2
     },
     {
-      title: "Virutal world",
-      img: img3,
+      title: 'Virutal world',
+      img: img3
     },
     {
-      title: "Utility",
-      img: img4,
+      title: 'Utility',
+      img: img4
     },
     {
-      title: "Sports",
-      img: img5,
+      title: 'Sports',
+      img: img5
     },
     {
-      title: "Art",
-      img: img6,
-    },
+      title: 'Art',
+      img: img6
+    }
   ]);
   return (
     <section className="tf-section brow-category home5 bg-style2">
@@ -58,14 +58,14 @@ const BrowCategory = () => {
               spaceBetween={32}
               breakpoints={{
                 0: {
-                  slidesPerView: 1,
+                  slidesPerView: 1
                 },
                 767: {
-                  slidesPerView: 2,
+                  slidesPerView: 2
                 },
                 991: {
-                  slidesPerView: 4,
-                },
+                  slidesPerView: 4
+                }
               }}
               loop={{ draggable: true }}
               scrollbar={{ draggable: true }}
@@ -99,5 +99,5 @@ const BrowCategory = () => {
 BrowCategory.propTypes = {};
 
 export default withErrorBoundary(BrowCategory, {
-  FallbackComponent: Fallback,
+  FallbackComponent: Fallback
 });

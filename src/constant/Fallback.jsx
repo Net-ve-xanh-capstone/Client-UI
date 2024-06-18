@@ -5,10 +5,8 @@ export function Fallback({ error, resetErrorBoundary }) {
 
   return (
     <div role="alert">
-      <p className="h1 text-white bg-danger text-danger-sub p-2">
-        Something went wrong:
-      </p>
-      <pre style={{ color: "red" }}>{error?.message}</pre>
+      <p className="h1 text-white bg-danger text-danger-sub p-2">Something went wrong:</p>
+      <pre style={{ color: 'red' }}>{error?.message}</pre>
     </div>
   );
 }

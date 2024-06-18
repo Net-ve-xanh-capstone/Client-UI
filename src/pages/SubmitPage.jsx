@@ -1,12 +1,12 @@
 // import React from 'react';
-import { Link } from "react-router-dom";
-import HeaderVersion2 from "../components/common/header/HeaderVersion2";
-import Footer from "../components/common/footer/Footer";
-import Countdown from "react-countdown";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
-import img1 from "../assets/images/box-item/image-box-6.jpg";
-import avt from "../assets/images/avatar/avt-9.jpg";
+import { Link } from 'react-router-dom';
+import HeaderVersion2 from '../components/common/header/HeaderVersion2';
+import Footer from '../components/common/footer/Footer';
+import Countdown from 'react-countdown';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import img1 from '../assets/images/box-item/image-box-6.jpg';
+import avt from '../assets/images/avatar/avt-9.jpg';
 
 const SubmitPage = () => {
   return (
@@ -69,7 +69,7 @@ const SubmitPage = () => {
                     <div className="info">
                       <span>Owned By</span>
                       <h6>
-                        {" "}
+                        {' '}
                         <Link to="/author-02">Freddie Carpenter</Link>
                       </h6>
                     </div>
@@ -80,10 +80,7 @@ const SubmitPage = () => {
                   </div>
                 </div>
                 <div className="card-bottom">
-                  <Link
-                    to="/wallet-connect"
-                    className="sc-button style bag fl-button pri-3"
-                  >
+                  <Link to="/wallet-connect" className="sc-button style bag fl-button pri-3">
                     <span>Place Bid</span>
                   </Link>
                   <Link to="/activity-01" className="view-history reload">
@@ -97,14 +94,8 @@ const SubmitPage = () => {
                 <form action="#">
                   <h4 className="title-create-item">Tải ảnh</h4>
                   <label className="uploadFile">
-                    <span className="filename">
-                      PNG, JPG, GIF, WEBP or MP4. Max 200mb.
-                    </span>
-                    <input
-                      type="file"
-                      className="inputfile form-control"
-                      name="file"
-                    />
+                    <span className="filename">PNG, JPG, GIF, WEBP or MP4. Max 200mb.</span>
+                    <input type="file" className="inputfile form-control" name="file" />
                   </label>
                 </form>
                 <div className="flat-tabs tab-create-item">
@@ -125,10 +116,7 @@ const SubmitPage = () => {
                     <TabPanel>
                       <form action="#">
                         <h4 className="title-create-item">Price</h4>
-                        <input
-                          type="text"
-                          placeholder="Enter price for one item (ETH)"
-                        />
+                        <input type="text" placeholder="Enter price for one item (ETH)" />
 
                         <h4 className="title-create-item">Title</h4>
                         <input type="text" placeholder="Item Name" />
@@ -196,9 +184,7 @@ const SubmitPage = () => {
                             />
                           </div>
                           <div className="col-md-6">
-                            <h4 className="title-create-item">
-                              Expiration date
-                            </h4>
+                            <h4 className="title-create-item">Expiration date</h4>
                             <input
                               type="date"
                               name="bid_expiration_date"
@@ -218,10 +204,7 @@ const SubmitPage = () => {
                     <TabPanel>
                       <form action="#">
                         <h4 className="title-create-item">Price</h4>
-                        <input
-                          type="text"
-                          placeholder="Enter price for one item (ETH)"
-                        />
+                        <input type="text" placeholder="Enter price for one item (ETH)" />
 
                         <h4 className="title-create-item">Minimum bid</h4>
                         <input type="text" placeholder="enter minimum bid" />
@@ -238,9 +221,7 @@ const SubmitPage = () => {
                             />
                           </div>
                           <div className="col-md-6">
-                            <h4 className="title-create-item">
-                              Expiration date
-                            </h4>
+                            <h4 className="title-create-item">Expiration date</h4>
                             <input
                               type="date"
                               name="bid_expiration_date"

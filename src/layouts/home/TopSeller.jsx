@@ -1,26 +1,26 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
-import img1 from "../../assets/images/avatar/avt-1.jpg";
-import img2 from "../../assets/images/avatar/avt-2.jpg";
-import img3 from "../../assets/images/avatar/avt-3.jpg";
-import img4 from "../../assets/images/avatar/avt-4.jpg";
-import { Fallback } from "../../constant/Fallback";
-import { withErrorBoundary } from "react-error-boundary";
-import PropTypes from "prop-types";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import img1 from '../../assets/images/avatar/avt-1.jpg';
+import img2 from '../../assets/images/avatar/avt-2.jpg';
+import img3 from '../../assets/images/avatar/avt-3.jpg';
+import img4 from '../../assets/images/avatar/avt-4.jpg';
+import { Fallback } from '../../constant/Fallback';
+import { withErrorBoundary } from 'react-error-boundary';
+import PropTypes from 'prop-types';
 
 const TopSeller = () => {
   const [dataTopSellerTab] = useState([
     {
-      title: "1 Day",
+      title: '1 Day'
     },
     {
-      title: "1 Week",
+      title: '1 Week'
     },
     {
-      title: "1 Month",
-    },
+      title: '1 Month'
+    }
   ]);
   const [dataTopSellerPanel] = useState([
     {
@@ -28,106 +28,106 @@ const TopSeller = () => {
       dataTopSellerContent: [
         {
           img: img1,
-          name: "Crispin Berry",
-          price: "214.2 ETH",
+          name: 'Crispin Berry',
+          price: '214.2 ETH'
         },
         {
           img: img1,
-          name: "Crispin Berry",
-          price: "214.2 ETH",
+          name: 'Crispin Berry',
+          price: '214.2 ETH'
         },
         {
           img: img2,
-          name: "Monica Lucas",
-          price: "214.2 ETH",
+          name: 'Monica Lucas',
+          price: '214.2 ETH'
         },
         {
           img: img2,
-          name: "Monica Lucas",
-          price: "214.2 ETH",
+          name: 'Monica Lucas',
+          price: '214.2 ETH'
         },
         {
           img: img3,
-          name: "Crispin Berry",
-          price: "214.2 ETH",
+          name: 'Crispin Berry',
+          price: '214.2 ETH'
         },
         {
           img: img3,
-          name: "Crispin Berry",
-          price: "214.2 ETH",
+          name: 'Crispin Berry',
+          price: '214.2 ETH'
         },
         {
           img: img4,
-          name: "Windsor Lane",
-          price: "214.2 ETH",
+          name: 'Windsor Lane',
+          price: '214.2 ETH'
         },
         {
           img: img4,
-          name: "Windsor Lane",
-          price: "214.2 ETH",
-        },
-      ],
+          name: 'Windsor Lane',
+          price: '214.2 ETH'
+        }
+      ]
     },
     {
       id: 2,
       dataTopSellerContent: [
         {
           img: img2,
-          name: "Monica Lucas",
-          price: "214.2 ETH",
+          name: 'Monica Lucas',
+          price: '214.2 ETH'
         },
         {
           img: img2,
-          name: "Monica Lucas",
-          price: "214.2 ETH",
+          name: 'Monica Lucas',
+          price: '214.2 ETH'
         },
         {
           img: img3,
-          name: "Crispin Berry",
-          price: "214.2 ETH",
+          name: 'Crispin Berry',
+          price: '214.2 ETH'
         },
         {
           img: img3,
-          name: "Crispin Berry",
-          price: "214.2 ETH",
+          name: 'Crispin Berry',
+          price: '214.2 ETH'
         },
         {
           img: img4,
-          name: "Windsor Lane",
-          price: "214.2 ETH",
+          name: 'Windsor Lane',
+          price: '214.2 ETH'
         },
         {
           img: img4,
-          name: "Windsor Lane",
-          price: "214.2 ETH",
-        },
-      ],
+          name: 'Windsor Lane',
+          price: '214.2 ETH'
+        }
+      ]
     },
     {
       id: 3,
       dataTopSellerContent: [
         {
           img: img3,
-          name: "Crispin Berry",
-          price: "214.2 ETH",
+          name: 'Crispin Berry',
+          price: '214.2 ETH'
         },
         {
           img: img3,
-          name: "Crispin Berry",
-          price: "214.2 ETH",
+          name: 'Crispin Berry',
+          price: '214.2 ETH'
         },
         {
           img: img4,
-          name: "Windsor Lane",
-          price: "214.2 ETH",
+          name: 'Windsor Lane',
+          price: '214.2 ETH'
         },
         {
           img: img4,
-          name: "Windsor Lane",
-          price: "214.2 ETH",
-        },
-      ],
-    },
+          name: 'Windsor Lane',
+          price: '214.2 ETH'
+        }
+      ]
+    }
   ]);
   return (
     <div>
@@ -152,11 +152,7 @@ const TopSeller = () => {
                             <div className="sc-author-box style-3">
                               <div className="author-avatar">
                                 <Link to="/authors-02">
-                                  <img
-                                    src={item.img}
-                                    alt="Axies"
-                                    className="avatar"
-                                  />
+                                  <img src={item.img} alt="Axies" className="avatar" />
                                 </Link>
                                 <div className="badge">
                                   <i className="ripple"></i>
@@ -195,11 +191,7 @@ const TopSeller = () => {
                             <div className="sc-author-box style-3">
                               <div className="author-avatar">
                                 <Link to="#">
-                                  <img
-                                    src={item.img}
-                                    alt="Axies"
-                                    className="avatar"
-                                  />
+                                  <img src={item.img} alt="Axies" className="avatar" />
                                 </Link>
                                 <div className="badge">
                                   <i className="ripple"></i>
@@ -229,9 +221,9 @@ const TopSeller = () => {
 
 TopSeller.propTypes = {
   show: PropTypes.bool,
-  onHide: PropTypes.func,
+  onHide: PropTypes.func
 };
 
 export default withErrorBoundary(TopSeller, {
-  FallbackComponent: Fallback,
+  FallbackComponent: Fallback
 });

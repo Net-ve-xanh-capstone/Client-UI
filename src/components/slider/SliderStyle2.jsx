@@ -1,14 +1,14 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/scss";
-import "swiper/scss/navigation";
-import "swiper/scss/pagination";
-import { Autoplay } from "swiper/modules";
-import img1 from "../../assets/images/box-item/item-h5.1.png";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/scss';
+import 'swiper/scss/navigation';
+import 'swiper/scss/pagination';
+import { Autoplay } from 'swiper/modules';
+import img1 from '../../assets/images/box-item/item-h5.1.png';
 
 const SliderStyle2 = () => {
-  const subtitle = "Cuộc thi sáng tạo nghệ thuật";
-  const title = "Nét Vẽ Xanh thành phố Hồ Chí Minh";
-  const description = "Khơi dậy sự sáng tạo, Vươn xa cùng đam mê";
+  const subtitle = 'Cuộc thi sáng tạo nghệ thuật';
+  const title = 'Nét Vẽ Xanh thành phố Hồ Chí Minh';
+  const description = 'Khơi dậy sự sáng tạo, Vươn xa cùng đam mê';
   return (
     <section className="flat-title-page home5">
       <div className="overlay"></div>
@@ -40,14 +40,14 @@ const SliderStyle2 = () => {
 
           <Swiper
             modules={[Autoplay]}
-            direction={"vertical"}
+            direction={'vertical'}
             spaceBetween={10}
             slidesPerView={4}
             loop
             autoplay={{
               delay: 1000,
               disableOnInteraction: false,
-              pauseOnMouseEnter: true,
+              pauseOnMouseEnter: true
             }}
             speed={2000}
           >
@@ -61,14 +61,14 @@ const SliderStyle2 = () => {
           </Swiper>
           <Swiper
             modules={[Autoplay]}
-            direction={"vertical"}
+            direction={'vertical'}
             spaceBetween={10}
             slidesPerView={4}
             loop
             autoplay={{
               delay: 1,
               disableOnInteraction: false,
-              pauseOnMouseEnter: true,
+              pauseOnMouseEnter: true
             }}
             speed={2100}
           >
@@ -82,14 +82,14 @@ const SliderStyle2 = () => {
           </Swiper>
           <Swiper
             modules={[Autoplay]}
-            direction={"vertical"}
+            direction={'vertical'}
             spaceBetween={10}
             slidesPerView={4}
             loop
             autoplay={{
               delay: 1,
               disableOnInteraction: false,
-              pauseOnMouseEnter: true,
+              pauseOnMouseEnter: true
             }}
             speed={2200}
           >
@@ -103,14 +103,14 @@ const SliderStyle2 = () => {
           </Swiper>
           <Swiper
             modules={[Autoplay]}
-            direction={"vertical"}
+            direction={'vertical'}
             spaceBetween={10}
             slidesPerView={4}
             loop
             autoplay={{
               delay: 1,
               disableOnInteraction: false,
-              pauseOnMouseEnter: true,
+              pauseOnMouseEnter: true
             }}
             speed={2000}
             className="end"

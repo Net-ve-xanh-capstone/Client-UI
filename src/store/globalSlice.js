@@ -1,25 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const globalSlice = createSlice({
-  name: "global",
+  name: 'global',
   initialState: {
     darkMode: false,
-    showSidebar: true,
+    showSidebar: true
   },
   reducers: {
     toggleDarkMode: (state, action) => {
       return {
         ...state,
-        darkMode: action.payload,
+        darkMode: action.payload
       };
     },
     toggleSidebar: (state, action) => {
       return {
         ...state,
-        showSidebar: action.payload,
+        showSidebar: action.payload
       };
-    },
-  },
+    }
+  }
 });
 
 export const { toggleDarkMode, toggleSidebar } = globalSlice.actions;

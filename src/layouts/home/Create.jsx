@@ -1,35 +1,35 @@
-import { withErrorBoundary } from "react-error-boundary";
-import { Link } from "react-router-dom";
-import { Fallback } from "../../constant/Fallback";
-import PropTypes from "prop-types";
+import { withErrorBoundary } from 'react-error-boundary';
+import { Link } from 'react-router-dom';
+import { Fallback } from '../../constant/Fallback';
+import PropTypes from 'prop-types';
 
 const Create = () => {
   const data = [
     {
-      title: "Set Up Your Wallet",
+      title: 'Set Up Your Wallet',
       description:
-        "Wallet that is functional for NFT purchasing. You may have a Coinbase account at this point, but very few are actually set up to buy an NFT.",
-      icon: "",
-      colorbg: "#5142FC",
+        'Wallet that is functional for NFT purchasing. You may have a Coinbase account at this point, but very few are actually set up to buy an NFT.',
+      icon: '',
+      colorbg: '#5142FC'
     },
     {
-      title: "Create Your Collection",
+      title: 'Create Your Collection',
       description:
-        "Setting up your NFT collection and creating NFTs on NFTs is easy! This guide explains how to set up your first collection",
-      colorbg: "#47A432",
+        'Setting up your NFT collection and creating NFTs on NFTs is easy! This guide explains how to set up your first collection',
+      colorbg: '#47A432'
     },
     {
-      title: "Add Your NFTs",
+      title: 'Add Your NFTs',
       description:
-        "Sed ut perspiciatis un de omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem.",
-      colorbg: "#9835FB",
+        'Sed ut perspiciatis un de omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem.',
+      colorbg: '#9835FB'
     },
     {
-      title: "List Them For Sale",
+      title: 'List Them For Sale',
       description:
-        "Choose between auctions, fixed-price listings, and declining-price listings. You choose how you want to sell your NFTs!",
-      colorbg: "#DF4949",
-    },
+        'Choose between auctions, fixed-price listings, and declining-price listings. You choose how you want to sell your NFTs!',
+      colorbg: '#DF4949'
+    }
   ];
   return (
     <section className="tf-box-icon create tf-section bg-home-3">
@@ -84,9 +84,9 @@ const CreateItem = (props) => (
 );
 
 CreateItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object
 };
 
 export default withErrorBoundary(Create, {
-  FallbackComponent: Fallback,
+  FallbackComponent: Fallback
 });

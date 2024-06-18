@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import HeaderVersion1 from "../components/common/header/HeaderVersion1";
-import Footer from "../components/common/footer/Footer";
+import { Link } from 'react-router-dom';
+import HeaderVersion1 from '../components/common/header/HeaderVersion1';
+import Footer from '../components/common/footer/Footer';
 
 const SignUp = () => {
   return (

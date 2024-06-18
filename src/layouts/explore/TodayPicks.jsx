@@ -1,9 +1,9 @@
-import { useState, Fragment } from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import CardModal from "../../components/CardModal";
-import { withErrorBoundary } from "react-error-boundary";
-import { Fallback } from "../../constant/Fallback";
+import { useState, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import CardModal from '../../components/CardModal';
+import { withErrorBoundary } from 'react-error-boundary';
+import { Fallback } from '../../constant/Fallback';
 const TodayPicks = (props) => {
   const data = props.data;
 
@@ -120,15 +120,8 @@ const TodayPicks = (props) => {
               </div>
             </div>
             {data.slice(0, visible).map((item, index) => (
-              <div
-                key={index}
-                className="fl-item col-xl-3 col-lg-4 col-md-6 col-sm-6"
-              >
-                <div
-                  className={`sc-card-product ${
-                    item.feature ? "comingsoon" : ""
-                  } `}
-                >
+              <div key={index} className="fl-item col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                <div className={`sc-card-product ${item.feature ? 'comingsoon' : ''} `}>
                   <div className="card-media">
                     <Link to="/item-details-01">
                       <img src={item.img} alt="axies" />
@@ -152,8 +145,8 @@ const TodayPicks = (props) => {
                       <div className="info">
                         <span>Owned By</span>
                         <h6>
-                          {" "}
-                          <Link to="/authors-02">{item.nameAuthor}</Link>{" "}
+                          {' '}
+                          <Link to="/authors-02">{item.nameAuthor}</Link>{' '}
                         </h6>
                       </div>
                     </div>
@@ -197,9 +190,9 @@ const TodayPicks = (props) => {
 };
 
 TodayPicks.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired
 };
 
 export default withErrorBoundary(TodayPicks, {
-  FallbackComponent: Fallback,
+  FallbackComponent: Fallback
 });

@@ -1,23 +1,23 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { authenApi } from "../../api/authenApi";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { authenApi } from '../../api/authenApi';
 
 export const competitorLogin = createAsyncThunk(
-  "/Authentication/LoginCompetitor",
+  '/Authentication/LoginCompetitor',
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
-          "Content-Type": "application/json",
-        },
+          'Content-Type': 'application/json'
+        }
       };
       const { data } = await authenApi.competitorLogin(
-        "/Authentication/LoginCompetitor",
+        '/Authentication/LoginCompetitor',
         { email, password },
         config
       );
 
       // store user's token in local storage
-      localStorage.setItem("jwtToken", data.jwtToken);
+      localStorage.setItem('jwtToken', data.jwtToken);
       return data;
     } catch (error) {
       // return custom error message from API if any

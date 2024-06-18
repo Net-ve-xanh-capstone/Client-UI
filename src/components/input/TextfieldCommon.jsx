@@ -1,28 +1,28 @@
-import PropTypes from "prop-types";
-import { useController } from "react-hook-form";
-import classNames from "classnames";
-import { withErrorBoundary } from "react-error-boundary";
-import { Fallback } from "../../constant/Fallback";
+import PropTypes from 'prop-types';
+import { useController } from 'react-hook-form';
+import classNames from 'classnames';
+import { withErrorBoundary } from 'react-error-boundary';
+import { Fallback } from '../../constant/Fallback';
 
 export const TextFieldCommon = (props) => {
   const {
     control,
     name,
-    type = "text",
+    type = 'text',
     placeholder,
     className,
-    error = "",
+    error = '',
     children,
     ...rest
   } = props;
   const { field } = useController({
     control,
     name,
-    defaultValue: "",
+    defaultValue: ''
   });
 
   const handleOnChange = (e) => {
-    e.target.classList.remove("border-danger placeholder-danger");
+    e.target.classList.remove('border-danger placeholder-danger');
   };
 
   return (
@@ -36,11 +36,7 @@ export const TextFieldCommon = (props) => {
         onChange={handleOnChange}
         {...field}
         {...rest}
-        className={classNames(
-          className,
-          error.length > 0 ? "border-danger" : "",
-          children
-        )}
+        className={classNames(className, error.length > 0 ? 'border-danger' : '', children)}
       />
       {children && <span className="select-none">{children}</span>}
     </div>
@@ -54,9 +50,9 @@ TextFieldCommon.propTypes = {
   className: PropTypes.string,
   error: PropTypes.string,
   children: PropTypes.any,
-  control: PropTypes.any.isRequired,
+  control: PropTypes.any.isRequired
 };
 
 export default withErrorBoundary(TextFieldCommon, {
-  FallbackComponent: Fallback,
+  FallbackComponent: Fallback
 });

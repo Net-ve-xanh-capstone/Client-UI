@@ -5,7 +5,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
-    'plugin:react-hooks/recommended',
+    'plugin:react-hooks/recommended'
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
@@ -13,9 +13,12 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     'react/jsx-no-target-blank': 'off',
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-  },
-}
+    'react/prop-types': 'off',
+    indent: ['error', 2],
+    quotes: ['error', 'single', { avoidEscape: true }],
+    'prettier/prettier': 'error',
+    'eslint-disable no-console': 'off',
+    'eslint-disable no-unused-vars': 'off',
+    'eslint-disable-next-line react': 'no-unescaped-entities'
+  }
+};

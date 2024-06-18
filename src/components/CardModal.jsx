@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import { Modal } from "react-bootstrap";
-import PropTypes from "prop-types";
-import { withErrorBoundary } from "react-error-boundary";
-import { Fallback } from "../constant/Fallback";
+import { Link } from 'react-router-dom';
+import { Modal } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
+import { Fallback } from '../constant/Fallback';
 
 const CardModal = (props) => {
   return (
@@ -12,8 +12,7 @@ const CardModal = (props) => {
       <div className="modal-body space-y-20 pd-40">
         <h3>Place a Bid</h3>
         <p className="text-center">
-          You must bid at least{" "}
-          <span className="price color-popup">4.89 ETH</span>
+          You must bid at least <span className="price color-popup">4.89 ETH</span>
         </p>
         <input type="text" className="form-control" placeholder="00.00 ETH" />
         <p>
@@ -41,7 +40,7 @@ const CardModal = (props) => {
           data-dismiss="modal"
           aria-label="Close"
         >
-          {" "}
+          {' '}
           Place a bid
         </Link>
       </div>
@@ -51,8 +50,8 @@ const CardModal = (props) => {
 
 CardModal.propTypes = {
   show: PropTypes.bool,
-  onHide: PropTypes.func,
+  onHide: PropTypes.func
 };
 export default withErrorBoundary(CardModal, {
-  FallbackComponent: Fallback,
+  FallbackComponent: Fallback
 });

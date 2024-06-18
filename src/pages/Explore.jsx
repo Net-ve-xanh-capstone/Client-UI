@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import todayPickData from "../assets/fake-data/data-today-pick";
-import TodayPicks from "../layouts/explore/TodayPicks";
-import HeaderVersion1 from "../components/common/header/HeaderVersion1";
-import Footer from "../components/common/footer/Footer";
+import { Link } from 'react-router-dom';
+import todayPickData from '../assets/fake-data/data-today-pick';
+import TodayPicks from '../layouts/explore/TodayPicks';
+import HeaderVersion1 from '../components/common/header/HeaderVersion1';
+import Footer from '../components/common/footer/Footer';
 
 const Explore = () => {
   return (

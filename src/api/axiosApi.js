@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
-const baseUrl = "http://localhost:5000/api";
+const baseUrl = 'http://localhost:5000/api';
 
 const axiosApi = axios.create({
   baseURL: baseUrl,
-  Headers: { "Content-Type": "application/json" },
+  Headers: { 'Content-Type': 'application/json' }
 });
 
 // Add a request interceptor

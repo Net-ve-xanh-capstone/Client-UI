@@ -1,25 +1,23 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { competitorLogin } from "./authAction";
+import { createSlice } from '@reduxjs/toolkit';
+import { competitorLogin } from './authAction';
 
 // initialize userToken from local storage
-const jwtToken = localStorage.getItem("jwtToken")
-  ? localStorage.getItem("jwtToken")
-  : null;
+const jwtToken = localStorage.getItem('jwtToken') ? localStorage.getItem('jwtToken') : null;
 
 const initialState = {
   loading: false,
   userInfo: null,
   jwtToken,
   error: null,
-  success: false,
+  success: false
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     logout: (state) => {
-      localStorage.removeItem("userToken");
+      localStorage.removeItem('userToken');
       state.loading = false;
       state.userInfo = null;
       state.jwtToken = null;
@@ -27,7 +25,7 @@ const authSlice = createSlice({
     },
     setCredentials: (state, { payload }) => {
       state.userInfo = payload;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(competitorLogin.pending, (state) => {
@@ -59,7 +57,7 @@ const authSlice = createSlice({
     //   state.loading = false;
     //   state.error = payload;
     // },
-  },
+  }
 });
 
 export const { logout, setCredentials } = authSlice.actions;

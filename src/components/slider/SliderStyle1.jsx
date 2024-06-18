@@ -1,17 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { Navigation, Scrollbar, A11y } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/scss";
-import "swiper/scss/navigation";
-import "swiper/scss/pagination";
-import shape1 from "../../assets/images/backgroup-secsion/bg-gradient1.png";
-import shape2 from "../../assets/images/backgroup-secsion/bg-gradient2.png";
-import shape3 from "../../assets/images/backgroup-secsion/bg-gradient3.png";
-import imgbg from "../../assets/images/backgroup-secsion/img_bg_page_title.jpg";
-import { withErrorBoundary } from "react-error-boundary";
-import { Fallback } from "../../constant/Fallback";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { Navigation, Scrollbar, A11y } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/scss';
+import 'swiper/scss/navigation';
+import 'swiper/scss/pagination';
+import shape1 from '../../assets/images/backgroup-secsion/bg-gradient1.png';
+import shape2 from '../../assets/images/backgroup-secsion/bg-gradient2.png';
+import shape3 from '../../assets/images/backgroup-secsion/bg-gradient3.png';
+import imgbg from '../../assets/images/backgroup-secsion/img_bg_page_title.jpg';
+import { withErrorBoundary } from 'react-error-boundary';
+import { Fallback } from '../../constant/Fallback';
 
 const SliderStyle1 = (props) => {
   const data = props.data;
@@ -35,7 +35,7 @@ const SliderStyle1 = (props) => {
 };
 
 SliderStyle1.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired
 };
 const SliderItem = (props) => (
   <div className="flat-title-page" style={{ backgroundImage: `url(${imgbg})` }}>
@@ -95,5 +95,5 @@ const SliderItem = (props) => (
 );
 
 export default withErrorBoundary(SliderStyle1, {
-  FallbackComponent: Fallback,
+  FallbackComponent: Fallback
 });

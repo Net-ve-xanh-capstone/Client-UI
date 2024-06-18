@@ -1,14 +1,14 @@
-import React, { useState, Fragment } from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { Dropdown } from "react-bootstrap";
-import img1 from "../../assets/images/icon/menu.png";
-import img2 from "../../assets/images/icon/rainbow.png";
-import img3 from "../../assets/images/icon/photo.png";
-import img4 from "../../assets/images/icon/itunes.png";
-import CardModal from "../../components/CardModal";
-import { withErrorBoundary } from "react-error-boundary";
-import { Fallback } from "../../constant/Fallback";
+import React, { useState, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { Dropdown } from 'react-bootstrap';
+import img1 from '../../assets/images/icon/menu.png';
+import img2 from '../../assets/images/icon/rainbow.png';
+import img3 from '../../assets/images/icon/photo.png';
+import img4 from '../../assets/images/icon/itunes.png';
+import CardModal from '../../components/CardModal';
+import { withErrorBoundary } from 'react-error-boundary';
+import { Fallback } from '../../constant/Fallback';
 
 const TodayPicks = (props) => {
   const data = props.data;
@@ -243,18 +243,8 @@ const TodayPicks = (props) => {
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M3 7H21"
-                          stroke="white"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        />
-                        <path
-                          d="M6 12H18"
-                          stroke="white"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        />
+                        <path d="M3 7H21" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                        <path d="M6 12H18" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                         <path
                           d="M10 17H14"
                           stroke="white"
@@ -297,12 +287,7 @@ const TodayPicks = (props) => {
                         </Link>
                         <Link className="sort-filter" to="#">
                           <span>Show lazy minted</span>
-                          <input
-                            className="check"
-                            type="checkbox"
-                            value="checkbox"
-                            name="check"
-                          />
+                          <input className="check" type="checkbox" value="checkbox" name="check" />
                         </Link>
                       </Dropdown.Item>
                     </Dropdown.Menu>
@@ -311,15 +296,8 @@ const TodayPicks = (props) => {
               </div>
             </div>
             {data.slice(0, visible).map((item, index) => (
-              <div
-                key={index}
-                className="fl-item col-xl-3 col-lg-4 col-md-6 col-sm-6"
-              >
-                <div
-                  className={`sc-card-product ${
-                    item.feature ? "comingsoon" : ""
-                  } `}
-                >
+              <div key={index} className="fl-item col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                <div className={`sc-card-product ${item.feature ? 'comingsoon' : ''} `}>
                   <div className="card-media">
                     <Link to="/item-details-01">
                       <img src={item.img} alt="axies" />
@@ -343,8 +321,8 @@ const TodayPicks = (props) => {
                       <div className="info">
                         <span>Owned By</span>
                         <h6>
-                          {" "}
-                          <Link to="/authors-02">{item.nameAuthor}</Link>{" "}
+                          {' '}
+                          <Link to="/authors-02">{item.nameAuthor}</Link>{' '}
                         </h6>
                       </div>
                     </div>
@@ -388,9 +366,9 @@ const TodayPicks = (props) => {
 };
 
 TodayPicks.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired
 };
 
 export default withErrorBoundary(TodayPicks, {
-  FallbackComponent: Fallback,
+  FallbackComponent: Fallback
 });

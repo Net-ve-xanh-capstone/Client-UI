@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-import Countdown from "react-countdown";
-import HeaderVersion1 from "../components/common/header/HeaderVersion1";
-import Footer from "../components/common/footer/Footer";
-import liveAuctionData from "../assets/fake-data/data-live-auction";
-import CardModal from "../components/CardModal";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import Countdown from 'react-countdown';
+import HeaderVersion1 from '../components/common/header/HeaderVersion1';
+import Footer from '../components/common/footer/Footer';
+import liveAuctionData from '../assets/fake-data/data-live-auction';
+import CardModal from '../components/CardModal';
 const NoResult = () => {
   const [data] = useState(liveAuctionData);
   const [modalShow, setModalShow] = useState(false);
@@ -44,9 +44,8 @@ const NoResult = () => {
                 Sorry, We Couldn’t Find Any Results For This Search.
               </h2>
               <h5 className="sub-title help-center mg-bt-32 ">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Laborum obcaecati dignissimos quae quo ad iste ipsum officiis
-                deleniti asperiores sit.
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum obcaecati
+                dignissimos quae quo ad iste ipsum officiis deleniti asperiores sit.
               </h5>
             </div>
           </div>
@@ -65,17 +64,17 @@ const NoResult = () => {
                 spaceBetween={30}
                 breakpoints={{
                   0: {
-                    slidesPerView: 1,
+                    slidesPerView: 1
                   },
                   767: {
-                    slidesPerView: 2,
+                    slidesPerView: 2
                   },
                   991: {
-                    slidesPerView: 3,
+                    slidesPerView: 3
                   },
                   1300: {
-                    slidesPerView: 4,
-                  },
+                    slidesPerView: 4
+                  }
                 }}
                 navigation
                 pagination={{ clickable: true }}
@@ -92,13 +91,8 @@ const NoResult = () => {
                                 <Link to="/item-details-01">
                                   <img src={item.img} alt="axies" />
                                 </Link>
-                                <Link
-                                  to="/login"
-                                  className="wishlist-button heart"
-                                >
-                                  <span className="number-like">
-                                    {item.wishlist}
-                                  </span>
+                                <Link to="/login" className="wishlist-button heart">
+                                  <span className="number-like">{item.wishlist}</span>
                                 </Link>
                                 <div className="featured-countdown">
                                   <span className="slogan"></span>
@@ -117,9 +111,7 @@ const NoResult = () => {
                               </div>
                               <div className="card-title">
                                 <h5>
-                                  <Link to="/item-details-01">
-                                    {item.title}
-                                  </Link>
+                                  <Link to="/item-details-01">{item.title}</Link>
                                 </h5>
                                 <div className="tags">{item.tags}</div>
                               </div>
@@ -131,10 +123,8 @@ const NoResult = () => {
                                   <div className="info">
                                     <span>Creator</span>
                                     <h6>
-                                      {" "}
-                                      <Link to="/authors-02">
-                                        {item.nameAuthor}
-                                      </Link>{" "}
+                                      {' '}
+                                      <Link to="/authors-02">{item.nameAuthor}</Link>{' '}
                                     </h6>
                                   </div>
                                 </div>

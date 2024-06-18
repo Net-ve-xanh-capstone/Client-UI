@@ -1,42 +1,42 @@
-import { useState, Fragment } from "react";
-import { Link } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-import Countdown from "react-countdown";
+import { useState, Fragment } from 'react';
+import { Link } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import Countdown from 'react-countdown';
 
-import "swiper/scss";
-import "swiper/scss/navigation";
-import "swiper/scss/pagination";
+import 'swiper/scss';
+import 'swiper/scss/navigation';
+import 'swiper/scss/pagination';
 
-import img1 from "../../assets/images/box-item/image-box-26.jpg";
-import img2 from "../../assets/images/box-item/image-box-27.jpg";
-import imga1 from "../../assets/images/avatar/avt-11.jpg";
-import imga2 from "../../assets/images/avatar/avt-12.jpg";
-import CardModal from "../../components/CardModal";
-import { Fallback } from "../../constant/Fallback";
-import PropTypes from "prop-types";
-import { withErrorBoundary } from "react-error-boundary";
+import img1 from '../../assets/images/box-item/image-box-26.jpg';
+import img2 from '../../assets/images/box-item/image-box-27.jpg';
+import imga1 from '../../assets/images/avatar/avt-11.jpg';
+import imga2 from '../../assets/images/avatar/avt-12.jpg';
+import CardModal from '../../components/CardModal';
+import { Fallback } from '../../constant/Fallback';
+import PropTypes from 'prop-types';
+import { withErrorBoundary } from 'react-error-boundary';
 
 const Contest = () => {
   const [data] = useState([
     {
       img: img1,
-      title: "Hamlet Contemplates ...",
-      tags: "bsc",
+      title: 'Hamlet Contemplates ...',
+      tags: 'bsc',
       imgAuthor: imga1,
-      nameAuthor: "SalvadorDali",
-      price: "4.89 ETH",
-      wishlist: "100",
+      nameAuthor: 'SalvadorDali',
+      price: '4.89 ETH',
+      wishlist: '100'
     },
     {
       img: img2,
-      title: "Triumphant Awakening...",
-      tags: "bsc",
+      title: 'Triumphant Awakening...',
+      tags: 'bsc',
       imgAuthor: imga2,
-      nameAuthor: "Trista Francis",
-      price: "4.89 ETH",
-      wishlist: "100",
-    },
+      nameAuthor: 'Trista Francis',
+      price: '4.89 ETH',
+      wishlist: '100'
+    }
   ]);
 
   const [modalShow, setModalShow] = useState(false);
@@ -57,14 +57,14 @@ const Contest = () => {
                 spaceBetween={30}
                 breakpoints={{
                   0: {
-                    slidesPerView: 1,
+                    slidesPerView: 1
                   },
                   767: {
-                    slidesPerView: 2,
+                    slidesPerView: 2
                   },
                   991: {
-                    slidesPerView: 3,
-                  },
+                    slidesPerView: 3
+                  }
                 }}
                 navigation
                 pagination={{ clickable: true }}
@@ -81,13 +81,8 @@ const Contest = () => {
                                 <Link to="/item-details-01">
                                   <img src={item.img} alt="axies" />
                                 </Link>
-                                <Link
-                                  to="/login"
-                                  className="wishlist-button heart"
-                                >
-                                  <span className="number-like">
-                                    {item.wishlist}
-                                  </span>
+                                <Link to="/login" className="wishlist-button heart">
+                                  <span className="number-like">{item.wishlist}</span>
                                 </Link>
                                 <div className="featured-countdown">
                                   <span className="slogan"></span>
@@ -106,9 +101,7 @@ const Contest = () => {
                               </div>
                               <div className="card-title">
                                 <h5>
-                                  <Link to="/item-details-01">
-                                    {item.title}
-                                  </Link>
+                                  <Link to="/item-details-01">{item.title}</Link>
                                 </h5>
                                 <div className="tags">{item.tags}</div>
                               </div>
@@ -120,10 +113,8 @@ const Contest = () => {
                                   <div className="info">
                                     <span>Creator</span>
                                     <h6>
-                                      {" "}
-                                      <Link to="/authors-02">
-                                        {item.nameAuthor}
-                                      </Link>{" "}
+                                      {' '}
+                                      <Link to="/authors-02">{item.nameAuthor}</Link>{' '}
                                     </h6>
                                   </div>
                                 </div>
@@ -151,9 +142,9 @@ const Contest = () => {
 
 Contest.propTypes = {
   show: PropTypes.bool,
-  onHide: PropTypes.func,
+  onHide: PropTypes.func
 };
 
 export default withErrorBoundary(Contest, {
-  FallbackComponent: Fallback,
+  FallbackComponent: Fallback
 });

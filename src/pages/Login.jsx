@@ -1,32 +1,32 @@
-import { Link } from "react-router-dom";
-import HeaderVersion1 from "../components/common/header/HeaderVersion1";
-import Footer from "../components/common/footer/Footer";
-import { useForm } from "react-hook-form";
-import TextfieldCommon from "../components/input/TextfieldCommon";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useEffect } from "react";
-import { competitorLogin } from "../store/auth/authAction";
+import { Link } from 'react-router-dom';
+import HeaderVersion1 from '../components/common/header/HeaderVersion1';
+import Footer from '../components/common/footer/Footer';
+import { useForm } from 'react-hook-form';
+import TextfieldCommon from '../components/input/TextfieldCommon';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useEffect } from 'react';
+import { competitorLogin } from '../store/auth/authAction';
 
 const Login = () => {
   const schema = yup.object().shape({
     email: yup
       .string()
-      .email("Vui lòng nhập đúng định dạng email")
-      .required("Vui lòng nhập email của bạn"),
-    password: yup.string().required("Vui lòng nhập mật khẩu của bạn").max(10),
+      .email('Vui lòng nhập đúng định dạng email')
+      .required('Vui lòng nhập email của bạn'),
+    password: yup.string().required('Vui lòng nhập mật khẩu của bạn').max(10)
   });
 
   const {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     resolver: yupResolver(schema),
-    reValidateMode: "onChange",
+    reValidateMode: 'onChange'
   });
 
   const handleRegister = (data) => {
@@ -34,17 +34,15 @@ const Login = () => {
     reset();
   };
 
-  const { loading, userInfo, error, success } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, userInfo, error, success } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     // redirect user to login page if registration was successful
-    if (!success) navigate("/login");
+    if (!success) navigate('/login');
     // redirect authenticated user to profile screen
-    if (userInfo) navigate("/user-profile");
+    if (userInfo) navigate('/user-profile');
   }, [navigate, userInfo, success]);
 
   return (
@@ -77,18 +75,13 @@ const Login = () => {
         <div className="themesflat-container">
           <div className="row">
             <div className="col-12">
-              <h2 className="tf-title-heading ct style-1">
-                Đăng nhập tài khoản
-              </h2>
+              <h2 className="tf-title-heading ct style-1">Đăng nhập tài khoản</h2>
 
               <div className="flat-form box-login-email">
                 <div className="box-title-login"></div>
 
                 <div className="form-inner">
-                  <form
-                    onSubmit={handleSubmit(handleRegister)}
-                    className="select-none"
-                  >
+                  <form onSubmit={handleSubmit(handleRegister)} className="select-none">
                     <TextfieldCommon
                       control={control}
                       error={errors.email?.message}

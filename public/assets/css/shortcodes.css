@@ -241,9 +241,9 @@
 
 /* button style icon */
 
-.sc-button.style span {
-  padding-left: 26px;
-}
+/*.sc-button.style span {*/
+/*  padding-left: 26px;*/
+/*}*/
 
 .sc-button.style span::before {
   position: absolute;
@@ -1820,7 +1820,6 @@
 
 .sc-button.header-slider span,
 .sc-button.style-place-bid span {
-  padding-left: 28px;
   font-size: 15px;
 }
 

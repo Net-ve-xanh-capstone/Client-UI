@@ -9,7 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useEffect } from 'react';
 import { competitorLogin } from '../store/auth/authAction';
-
+import { FadeLoader } from 'react-spinners';
 const Login = () => {
   const schema = yup.object().shape({
     email: yup
@@ -59,12 +59,12 @@ const Login = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/">Home</Link>
+                    <Link to="/">Trang chủ</Link>
                   </li>
                   <li>
-                    <Link to="#">Pages</Link>
+                    <Link to="#">Trang</Link>
                   </li>
-                  <li>Login</li>
+                  <li>Đăng nhập</li>
                 </ul>
               </div>
             </div>
@@ -112,7 +112,13 @@ const Login = () => {
                       </Link>
                     </div>
 
-                    <button className="submit">đăng nhập</button>
+                    <button className="submit">
+                      {loading ? (
+                        <FadeLoader color="#fff" loading={loading} size={10} />
+                      ) : (
+                        'Đăng nhập'
+                      )}
+                    </button>
                   </form>
                 </div>
               </div>

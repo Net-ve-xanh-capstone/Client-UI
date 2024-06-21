@@ -24,12 +24,6 @@ const SliderStyle2 = () => {
             <p className="sub-heading mg-t-7 mg-bt-39">{description}</p>
             <div className="flat-bt-slider style2 flex">
               <a
-                href="/login"
-                className="sc-button header-slider style style-1 rocket fl-button pri-1"
-              >
-                <span>Đăng nhập</span>
-              </a>
-              <a
                 href="/explore"
                 className="sc-button header-slider style style-1 note fl-button pri-1"
               >

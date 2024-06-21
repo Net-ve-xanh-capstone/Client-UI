@@ -7,6 +7,7 @@ import coin from "../../../assets/images/logo/coin.svg";
 import menus from "../../../constant/Menu";
 import { withErrorBoundary } from "react-error-boundary";
 import { Fallback } from "../../../constant/Fallback";
+import { useSelector } from 'react-redux';
 
 const HeaderVersion2 = () => {
   const { pathname } = useLocation();
@@ -41,6 +42,8 @@ const HeaderVersion2 = () => {
   const handleOnClick = (index) => {
     setActiveIndex(index);
   };
+  
+  const { user } = useSelector(state => state.auth);
 
   return (
     <header
@@ -174,6 +177,14 @@ const HeaderVersion2 = () => {
                   </ul>
                 </nav>
                 <div className="flat-search-btn flex">
+                  <div className="sc-btn-top mg-r-12" id="site-header">
+                    <Link
+                      to="/wallet-connect"
+                      className="sc-button header-slider style style-1 fl-button pri-1"
+                    >
+                      {user ? <span>Đăng xuất</span> : <span>Đăng nhập</span>}
+                    </Link>
+                  </div>
                   <div className="admin_active" id="header_admin">
                     <div className="header_avatar">
                       <div className="price">

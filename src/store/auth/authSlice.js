@@ -1,15 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { competitorLogin } from './authAction';
+import { competitorLogin, competitorRegister } from './authAction';
+import { jwtDecode } from 'jwt-decode';
 
 // initialize userToken from local storage
 const jwtToken = localStorage.getItem('jwtToken') ? localStorage.getItem('jwtToken') : null;
 
+const decodeToken = jwtToken ? jwtDecode(jwtToken) : null;
 const initialState = {
-  loading: false,
-  userInfo: null,
-  jwtToken,
-  error: null,
-  success: false
+  login: {
+    loading: false,
+    userInfo: null,
+    jwtToken,
+    success: false,
+    message: null
+  },
+  register: {
+    loading: false,
+    success: false,
+    message: null
+  }
 };
 
 const authSlice = createSlice({
@@ -21,7 +30,6 @@ const authSlice = createSlice({
       state.loading = false;
       state.userInfo = null;
       state.jwtToken = null;
-      state.error = null;
     },
     setCredentials: (state, { payload }) => {
       state.userInfo = payload;
@@ -29,34 +37,33 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(competitorLogin.pending, (state) => {
-      state.loading = true;
-      state.error = null;
+      state.login.loading = true;
     });
     builder.addCase(competitorLogin.fulfilled, (state, { payload }) => {
-      state.loading = false;
-      state.userInfo = payload;
-      state.jwtToken = payload.jwtToken;
-      state.error = null;
-      state.success = true;
+      state.login.loading = false;
+      state.login.userInfo = decodeToken;
+      state.login.jwtToken = payload.jwtToken;
+      state.login.success = payload.success;
+      state.login.message = payload.message;
     });
     builder.addCase(competitorLogin.rejected, (state, { payload }) => {
-      state.loading = false;
-      state.error = payload;
-      state.success = false;
+      state.login.loading = false;
+      state.login.success = false;
+      state.login.message = payload;
     });
-    // [authRegister.pending]: (state) => {
-    //   state.loading = true;
-    //   state.error = null;
-    // },
-    // [authRegister.fulfilled]: (state) => {
-    //   state.loading = false;
-    //   state.success = true;
-    //   state.error = null;
-    // },
-    // [authRegister.rejected]: (state, { payload }) => {
-    //   state.loading = false;
-    //   state.error = payload;
-    // },
+    builder.addCase(competitorRegister.pending, (state) => {
+      state.register.loading = true;
+    });
+    builder.addCase(competitorRegister.fulfilled, (state, { payload }) => {
+      state.register.loading = false;
+      state.register.success = payload.success;
+      state.register.message = payload.message;
+    });
+    builder.addCase(competitorRegister.rejected, (state, { payload }) => {
+      state.register.loading = false;
+      state.register.success = payload.success;
+      state.register.message = payload.message;
+    });
   }
 });
 

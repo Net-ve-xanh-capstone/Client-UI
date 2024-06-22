@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { useRef, useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import logodark from "../../../assets/images/logo/logo_dark.png";
-import avt from "../../../assets/images/avatar/avt-2.jpg";
-import coin from "../../../assets/images/logo/coin.svg";
-import menus from "../../../constant/Menu";
-import { withErrorBoundary } from "react-error-boundary";
-import { Fallback } from "../../../constant/Fallback";
+import { useRef, useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import logodark from '../../../assets/images/logo/logo_dark.png';
+import avt from '../../../assets/images/avatar/avt-2.jpg';
+import coin from '../../../assets/images/logo/coin.svg';
+import menus from '../../../constant/Menu';
+import { withErrorBoundary } from 'react-error-boundary';
+import { Fallback } from '../../../constant/Fallback';
 import { useSelector } from 'react-redux';
 
 const HeaderVersion2 = () => {
@@ -14,43 +14,35 @@ const HeaderVersion2 = () => {
 
   const headerRef = useRef(null);
   useEffect(() => {
-    window.addEventListener("scroll", isSticky);
+    window.addEventListener('scroll', isSticky);
     return () => {
-      window.removeEventListener("scroll", isSticky);
+      window.removeEventListener('scroll', isSticky);
     };
   });
   const isSticky = (e) => {
-    const header = document.querySelector(".js-header");
+    const header = document.querySelector('.js-header');
     const scrollTop = window.scrollY;
-    scrollTop >= 300
-      ? header.classList.add("is-fixed")
-      : header.classList.remove("is-fixed");
-    scrollTop >= 400
-      ? header.classList.add("is-small")
-      : header.classList.remove("is-small");
+    scrollTop >= 300 ? header.classList.add('is-fixed') : header.classList.remove('is-fixed');
+    scrollTop >= 400 ? header.classList.add('is-small') : header.classList.remove('is-small');
   };
 
   const menuLeft = useRef(null);
   const btnToggle = useRef(null);
 
   const menuToggle = () => {
-    menuLeft.current.classList.toggle("active");
-    btnToggle.current.classList.toggle("active");
+    menuLeft.current.classList.toggle('active');
+    btnToggle.current.classList.toggle('active');
   };
 
   const [activeIndex, setActiveIndex] = useState(null);
   const handleOnClick = (index) => {
     setActiveIndex(index);
   };
-  
-  const { user } = useSelector(state => state.auth);
+
+  const { user } = useSelector((state) => state.auth);
 
   return (
-    <header
-      id="header_main"
-      className="header_1 header_2 style2 js-header"
-      ref={headerRef}
-    >
+    <header id="header_main" className="header_1 header_2 style2 js-header" ref={headerRef}>
       <div className="themesflat-container">
         <div className="row">
           <div className="col-md-12">
@@ -63,20 +55,12 @@ const HeaderVersion2 = () => {
                     </Link>
                   </div>
                 </div>
-                <div
-                  className="mobile-button"
-                  ref={btnToggle}
-                  onClick={menuToggle}
-                >
+                <div className="mobile-button" ref={btnToggle} onClick={menuToggle}>
                   <span></span>
                 </div>
                 <div className="question-form">
                   <form action="#" method="get">
-                    <input
-                      type="text"
-                      placeholder="Type to search..."
-                      required
-                    />
+                    <input type="text" placeholder="Type to search..." required />
                     <button type="submit">
                       <svg
                         width="20"
@@ -152,8 +136,8 @@ const HeaderVersion2 = () => {
                         key={index}
                         onClick={() => handleOnClick(index)}
                         className={`menu-item ${
-                          data.namesub ? "menu-item-has-children" : ""
-                        } ${activeIndex === index ? "active" : ""} `}
+                          data.namesub ? 'menu-item-has-children' : ''
+                        } ${activeIndex === index ? 'active' : ''} `}
                       >
                         <Link to="#">{data.name}</Link>
                         {data.namesub && (
@@ -163,8 +147,8 @@ const HeaderVersion2 = () => {
                                 key={submenu.id}
                                 className={
                                   pathname === submenu.links
-                                    ? "menu-item current-item"
-                                    : "menu-item"
+                                    ? 'menu-item current-item'
+                                    : 'menu-item'
                                 }
                               >
                                 <Link to={submenu.links}>{submenu.sub}</Link>
@@ -179,7 +163,7 @@ const HeaderVersion2 = () => {
                 <div className="flat-search-btn flex">
                   <div className="sc-btn-top mg-r-12" id="site-header">
                     <Link
-                      to="/wallet-connect"
+                      to="/login"
                       className="sc-button header-slider style style-1 fl-button pri-1"
                     >
                       {user ? <span>Đăng xuất</span> : <span>Đăng nhập</span>}
@@ -189,7 +173,7 @@ const HeaderVersion2 = () => {
                     <div className="header_avatar">
                       <div className="price">
                         <span>
-                          2.45 <strong>ETH</strong>{" "}
+                          2.45 <strong>ETH</strong>{' '}
                         </span>
                       </div>
                       <img className="avatar" src={avt} alt="avatar" />
@@ -203,27 +187,20 @@ const HeaderVersion2 = () => {
                         <div className="d-flex align-items-center mt-10">
                           <img className="coin" src={coin} alt="/" />
                           <div className="info ml-10">
-                            <p className="text-sm font-book text-gray-400">
-                              Balance
-                            </p>
-                            <p className="w-full text-sm font-bold text-green-500">
-                              16.58 ETH
-                            </p>
+                            <p className="text-sm font-book text-gray-400">Balance</p>
+                            <p className="w-full text-sm font-bold text-green-500">16.58 ETH</p>
                           </div>
                         </div>
                         <div className="hr"></div>
                         <div className="links mt-20">
                           <Link to="#">
-                            <i className="fab fa-accusoft"></i>{" "}
-                            <span> My items</span>
+                            <i className="fab fa-accusoft"></i> <span> My items</span>
                           </Link>
                           <a className="mt-10" href="/edit-profile">
-                            <i className="fas fa-pencil-alt"></i>{" "}
-                            <span> Edit Profile</span>
+                            <i className="fas fa-pencil-alt"></i> <span> Edit Profile</span>
                           </a>
                           <a className="mt-10" href="/login" id="logout">
-                            <i className="fal fa-sign-out"></i>{" "}
-                            <span> Logout</span>
+                            <i className="fal fa-sign-out"></i> <span> Logout</span>
                           </a>
                         </div>
                       </div>
@@ -240,5 +217,5 @@ const HeaderVersion2 = () => {
 };
 
 export default withErrorBoundary(HeaderVersion2, {
-  FallbackComponent: Fallback,
+  FallbackComponent: Fallback
 });

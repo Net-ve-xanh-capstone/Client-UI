@@ -2,22 +2,20 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { authenApi } from '../../api/authenApi';
 
 export const competitorLogin = createAsyncThunk(
-  '/Authentication/LoginCompetitor',
-  async ({ email, password }, { rejectWithValue }) => {
+  '/login',
+  async ({ userName, password }, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
           'Content-Type': 'application/json'
         }
       };
-      const { data } = await authenApi.competitorLogin(
-        '/Authentication/LoginCompetitor',
-        { email, password },
-        config
-      );
+      const { data } = await authenApi.competitorLogin('/login', { userName, password }, config);
 
       // store user's token in local storage
-      localStorage.setItem('jwtToken', data.jwtToken);
+      if (data.jwtToken) {
+        localStorage.setItem('jwtToken', data.jwtToken);
+      }
       return data;
     } catch (error) {
       // return custom error message from API if any
@@ -30,21 +28,22 @@ export const competitorLogin = createAsyncThunk(
   }
 );
 
-// export const authRegister = createAsyncThunk(
-//   "user/register",
-//   async ({ firstName, email, password }, { rejectWithValue }) => {
-//     try {
-//       const config = {
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       };
-//     } catch (error) {
-//       if (error.response && error.response.data.message) {
-//         return rejectWithValue(error.response.data.message);
-//       } else {
-//         return rejectWithValue(error.message);
-//       }
-//     }
-//   }
-// );
+export const competitorRegister = createAsyncThunk(
+  '/create',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+      const { data } = await authenApi.competitorRegister('/create', payload, config);
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);

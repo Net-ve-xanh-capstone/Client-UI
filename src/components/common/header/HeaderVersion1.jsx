@@ -1,35 +1,31 @@
 /* eslint-disable no-unused-vars */
-import { useRef, useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import logoheader from "../../../assets/images/logo/logo.png";
-import logoheader2x from "../../../assets/images/logo/logo@2x.png";
-import logodark from "../../../assets/images/logo/logo_dark.png";
-import logodark2x from "../../../assets/images/logo/logo_dark@2x.png";
-import imgsun from "../../../assets/images/icon/sun.png";
-import avt from "../../../assets/images/avatar/avt-2.jpg";
-import menus from "../../../constant/Menu";
-import { withErrorBoundary } from "react-error-boundary";
-import { Fallback } from "../../../constant/Fallback";
+import { useRef, useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import logoheader from '../../../assets/images/logo/logo.png';
+import logoheader2x from '../../../assets/images/logo/logo@2x.png';
+import logodark from '../../../assets/images/logo/logo_dark.png';
+import logodark2x from '../../../assets/images/logo/logo_dark@2x.png';
+import imgsun from '../../../assets/images/icon/sun.png';
+import avt from '../../../assets/images/avatar/avt-2.jpg';
+import menus from '../../../constant/Menu';
+import { withErrorBoundary } from 'react-error-boundary';
+import { Fallback } from '../../../constant/Fallback';
 
 const HeaderVersion1 = () => {
   const { pathname } = useLocation();
 
   const headerRef = useRef(null);
   useEffect(() => {
-    window.addEventListener("scroll", isSticky);
+    window.addEventListener('scroll', isSticky);
     return () => {
-      window.removeEventListener("scroll", isSticky);
+      window.removeEventListener('scroll', isSticky);
     };
   });
   const isSticky = (e) => {
-    const header = document.querySelector(".js-header");
+    const header = document.querySelector('.js-header');
     const scrollTop = window.scrollY;
-    scrollTop >= 300
-      ? header.classList.add("is-fixed")
-      : header.classList.remove("is-fixed");
-    scrollTop >= 400
-      ? header.classList.add("is-small")
-      : header.classList.remove("is-small");
+    scrollTop >= 300 ? header.classList.add('is-fixed') : header.classList.remove('is-fixed');
+    scrollTop >= 400 ? header.classList.add('is-small') : header.classList.remove('is-small');
   };
 
   const menuLeft = useRef(null);
@@ -37,12 +33,12 @@ const HeaderVersion1 = () => {
   const btnSearch = useRef(null);
 
   const menuToggle = () => {
-    menuLeft.current.classList.toggle("active");
-    btnToggle.current.classList.toggle("active");
+    menuLeft.current.classList.toggle('active');
+    btnToggle.current.classList.toggle('active');
   };
 
   const searchBtn = () => {
-    btnSearch.current.classList.toggle("active");
+    btnSearch.current.classList.toggle('active');
   };
 
   const [activeIndex, setActiveIndex] = useState(null);
@@ -77,11 +73,7 @@ const HeaderVersion1 = () => {
                     </Link>
                   </div>
                 </div>
-                <div
-                  className="mobile-button"
-                  ref={btnToggle}
-                  onClick={menuToggle}
-                >
+                <div className="mobile-button" ref={btnToggle} onClick={menuToggle}>
                   <span></span>
                 </div>
                 <nav id="main-nav" className="main-nav" ref={menuLeft}>
@@ -91,8 +83,8 @@ const HeaderVersion1 = () => {
                         key={index}
                         onClick={() => handleOnClick(index)}
                         className={`menu-item ${
-                          data.namesub ? "menu-item-has-children" : ""
-                        } ${activeIndex === index ? "active" : ""} `}
+                          data.namesub ? 'menu-item-has-children' : ''
+                        } ${activeIndex === index ? 'active' : ''} `}
                       >
                         <Link to={data.links}>{data.name}</Link>
                         {data.namesub && (
@@ -102,8 +94,8 @@ const HeaderVersion1 = () => {
                                 key={submenu.id}
                                 className={
                                   pathname === submenu.links
-                                    ? "menu-item current-item"
-                                    : "menu-item"
+                                    ? 'menu-item current-item'
+                                    : 'menu-item'
                                 }
                               >
                                 <Link to={submenu.links}>{submenu.sub}</Link>
@@ -117,20 +109,8 @@ const HeaderVersion1 = () => {
                 </nav>
                 <div className="flat-search-btn flex">
                   <div className="header-search flat-show-search" id="s1">
-                    <Link
-                      to="#"
-                      className="show-search header-search-trigger"
-                      onClick={searchBtn}
-                    >
-                      <i className="far fa-search"></i>
-                    </Link>
                     <div className="top-search" ref={btnSearch}>
-                      <form
-                        action="#"
-                        method="get"
-                        role="search"
-                        className="search-form"
-                      >
+                      <form action="#" method="get" role="search" className="search-form">
                         <input
                           type="search"
                           id="s"
@@ -140,30 +120,18 @@ const HeaderVersion1 = () => {
                           title="Search for"
                           required=""
                         />
-                        <button
-                          className="search search-submit"
-                          type="submit"
-                          title="Search"
-                        >
+                        <button className="search search-submit" type="submit" title="Search">
                           <i className="icon-fl-search-filled"></i>
                         </button>
                       </form>
                     </div>
-                  </div>
-                  <div className="sc-btn-top mg-r-12" id="site-header">
-                    <Link
-                      to="/wallet-connect"
-                      className="sc-button header-slider style style-1 wallet fl-button pri-1"
-                    >
-                      <span>Wallet connect</span>
-                    </Link>
                   </div>
 
                   <div className="admin_active" id="header_admin">
                     <div className="header_avatar">
                       <div className="price">
                         <span>
-                          2.45 <strong>ETH</strong>{" "}
+                          2.45 <strong>ETH</strong>{' '}
                         </span>
                       </div>
                       <img className="avatar" src={avt} alt="avatar" />
@@ -177,27 +145,20 @@ const HeaderVersion1 = () => {
                         <div className="d-flex align-items-center mt-10">
                           <img className="coin" src={imgsun} alt="/" />
                           <div className="info ml-10">
-                            <p className="text-sm font-book text-gray-400">
-                              Balance
-                            </p>
-                            <p className="w-full text-sm font-bold text-green-500">
-                              16.58 ETH
-                            </p>
+                            <p className="text-sm font-book text-gray-400">Balance</p>
+                            <p className="w-full text-sm font-bold text-green-500">16.58 ETH</p>
                           </div>
                         </div>
                         <div className="hr"></div>
                         <div className="links mt-20">
                           <Link to="#">
-                            <i className="fab fa-accusoft"></i>{" "}
-                            <span> My items</span>
+                            <i className="fab fa-accusoft"></i> <span> My items</span>
                           </Link>
                           <a className="mt-10" href="/edit-profile">
-                            <i className="fas fa-pencil-alt"></i>{" "}
-                            <span> Edit Profile</span>
+                            <i className="fas fa-pencil-alt"></i> <span> Edit Profile</span>
                           </a>
                           <a className="mt-10" href="/login" id="logout">
-                            <i className="fal fa-sign-out"></i>{" "}
-                            <span> Logout</span>
+                            <i className="fal fa-sign-out"></i> <span> Logout</span>
                           </a>
                         </div>
                       </div>
@@ -214,5 +175,5 @@ const HeaderVersion1 = () => {
 };
 
 export default withErrorBoundary(HeaderVersion1, {
-  FallbackComponent: Fallback,
+  FallbackComponent: Fallback
 });

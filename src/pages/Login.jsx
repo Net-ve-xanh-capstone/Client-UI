@@ -7,15 +7,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { competitorLogin } from '../store/auth/authAction';
 import { FadeLoader } from 'react-spinners';
+import CloseIcon from '@mui/icons-material/Close';
+import { Dialog, DialogContent, IconButton, Typography, styled } from '@mui/material';
 const Login = () => {
+  // open dialog
+  const [open, setOpen] = useState(false);
   const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email('Vui lòng nhập đúng định dạng email')
-      .required('Vui lòng nhập email của bạn'),
+    userName: yup.string().required('Vui lòng nhập username của bạn'),
     password: yup.string().required('Vui lòng nhập mật khẩu của bạn').max(10)
   });
 
@@ -23,26 +24,40 @@ const Login = () => {
     handleSubmit,
     control,
     reset,
+    trigger,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(schema),
     reValidateMode: 'onChange'
   });
 
-  const handleRegister = (data) => {
-    dispatch(competitorLogin(data));
-    reset();
+  const handleRegister = async (data) => {
+    // Trigger validate form
+    const isValid = await trigger();
+    if (!isValid) return;
+    else {
+      setOpen(true);
+      dispatch(competitorLogin(data));
+      reset();
+    }
   };
 
-  const { loading, userInfo, error, success } = useSelector((state) => state.auth);
+  const {
+    login: { loading, userInfo, success }
+  } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
-    // redirect user to login page if registration was successful
-    if (!success) navigate('/login');
-    // redirect authenticated user to profile screen
-    if (userInfo) navigate('/user-profile');
+    if (!userInfo) {
+      navigate('/login');
+    }
+    // redirect home page
+    if (userInfo) navigate('/');
   }, [navigate, userInfo, success]);
 
   return (
@@ -61,9 +76,6 @@ const Login = () => {
                   <li>
                     <Link to="/">Trang chủ</Link>
                   </li>
-                  <li>
-                    <Link to="#">Trang</Link>
-                  </li>
                   <li>Đăng nhập</li>
                 </ul>
               </div>
@@ -71,24 +83,39 @@ const Login = () => {
           </div>
         </div>
       </section>
+      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 6,
+            color: (theme) => theme.palette.grey[500]
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent>
+          <TypographyStyled className="h3 text-center">
+            Sai tài khoản hoặc mật khẩu, vui lòng nhập lại
+          </TypographyStyled>
+        </DialogContent>
+      </BootstrapDialog>
       <section className="tf-login tf-section">
         <div className="themesflat-container">
           <div className="row">
             <div className="col-12">
-              <h2 className="tf-title-heading ct style-1">Đăng nhập tài khoản</h2>
-
               <div className="flat-form box-login-email">
-                <div className="box-title-login"></div>
-
                 <div className="form-inner">
                   <form onSubmit={handleSubmit(handleRegister)} className="select-none">
                     <TextfieldCommon
                       control={control}
-                      error={errors.email?.message}
-                      id="email"
-                      name="email"
+                      error={errors.userName?.message}
+                      id="userName"
+                      name="userName"
                       tabIndex="1"
-                      placeholder="Nhập email"
+                      placeholder="Nhập username"
                       autoFocus
                     />
                     <TextfieldCommon
@@ -101,12 +128,7 @@ const Login = () => {
                       type="password"
                       placeholder="Nhập mật khẩu"
                     />
-                    <div className="row-form style-1">
-                      <label>
-                        Ghi nhớ
-                        <input type="checkbox" />
-                        <span className="btn-checkbox"></span>
-                      </label>
+                    <div className="row-form style-1 flex-row-reverse">
                       <Link to="#" className="forgot-pass">
                         Quên mật khẩu ?
                       </Link>
@@ -119,6 +141,12 @@ const Login = () => {
                         'Đăng nhập'
                       )}
                     </button>
+                    <div className="mt-5 text-right h5">
+                      Bạn chưa có tài khoản? {''}
+                      <Link to={'/sign-up'} className="font-weight-bold">
+                        đăng ký
+                      </Link>
+                    </div>
                   </form>
                 </div>
               </div>
@@ -130,5 +158,17 @@ const Login = () => {
     </div>
   );
 };
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(5)
+  }
+}));
+
+const TypographyStyled = styled('div')(({ theme }) => ({
+  color: theme.palette.text.primary,
+  fontSize: 14,
+  fontWeight: theme.typography.fontWeightMedium
+}));
 
 export default Login;

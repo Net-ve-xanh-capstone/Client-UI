@@ -3,14 +3,14 @@ import { authenApi } from '../../api/authenApi';
 
 export const competitorLogin = createAsyncThunk(
   '/login',
-  async ({ userName, password }, { rejectWithValue }) => {
+  async ({ username, password }, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
           'Content-Type': 'application/json'
         }
       };
-      const { data } = await authenApi.competitorLogin('/login', { userName, password }, config);
+      const { data } = await authenApi.competitorLogin('/login', { username, password }, config);
 
       // store user's token in local storage
       if (data.jwtToken) {

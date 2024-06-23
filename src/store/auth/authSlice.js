@@ -12,7 +12,8 @@ const initialState = {
     userInfo: null,
     jwtToken,
     success: false,
-    message: null
+    message: null,
+    error: false
   },
   register: {
     loading: false,
@@ -45,11 +46,13 @@ const authSlice = createSlice({
       state.login.jwtToken = payload.jwtToken;
       state.login.success = payload.success;
       state.login.message = payload.message;
+      state.login.error = !payload.success;
     });
     builder.addCase(competitorLogin.rejected, (state, { payload }) => {
       state.login.loading = false;
-      state.login.success = false;
+      state.login.success = payload.success;
       state.login.message = payload;
+      state.login.error = !payload.success;
     });
     builder.addCase(competitorRegister.pending, (state) => {
       state.register.loading = true;

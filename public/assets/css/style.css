@@ -4,14 +4,14 @@
   * Author: Themesflat
   * Author URI: http://www.themesflat.com
 */
-@import "ntfs.css";
-@import "shortcodes.css";
-@import "responsive.css";
-@import "animate.css";
-@import "font-awesome.css";
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=REM:ital,wght@0,100..900;1,100..900&display=swap");
+@import 'ntfs.css';
+@import 'shortcodes.css';
+@import 'responsive.css';
+@import 'animate.css';
+@import 'font-awesome.css';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=REM:ital,wght@0,100..900;1,100..900&display=swap');
 
-@import "bootstrap.css";
+@import 'bootstrap.css';
 /**
   	* Reset Browsers
     * General
@@ -198,7 +198,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
+  content: '';
   content: none;
 }
 
@@ -228,7 +228,7 @@ button,
 input,
 select,
 textarea {
-  font-family: "REM", sans-serif;
+  font-family: 'REM', sans-serif;
   color: var(--primary-color2);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -460,10 +460,7 @@ textarea,
 select {
   font-size: 14px;
   max-width: 100%;
-  background-image: -webkit-linear-gradient(
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0)
-  );
+  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
 }
 
 textarea {
@@ -471,22 +468,22 @@ textarea {
   vertical-align: top;
 }
 
-input[type="checkbox"] {
+input[type='checkbox'] {
   display: inline;
 }
 
 button,
-input[type="button"],
-input[type="reset"],
-input[type="submit"] {
+input[type='button'],
+input[type='reset'],
+input[type='submit'] {
   line-height: 1;
   cursor: pointer;
   -webkit-appearance: button;
   border: 0;
 }
 
-input[type="checkbox"],
-input[type="radio"] {
+input[type='checkbox'],
+input[type='radio'] {
   padding: 0;
   width: 18px;
   height: 18px;
@@ -495,11 +492,11 @@ input[type="radio"] {
   vertical-align: sub;
 }
 
-input[type="search"] {
+input[type='search'] {
   -webkit-appearance: textfield;
 }
 
-input[type="search"]::-webkit-search-decoration {
+input[type='search']::-webkit-search-decoration {
   -webkit-appearance: none;
 }
 
@@ -517,14 +514,14 @@ input:-webkit-autofill {
 
 /* Reset search styling */
 
-input[type="search"] {
+input[type='search'] {
   outline: 0;
 }
 
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration {
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration {
   display: none;
 }
 
@@ -549,8 +546,8 @@ select {
 }
 
 .select::after {
-  font-family: "Font Awesome 5 Pro";
-  content: "\f078";
+  font-family: 'Font Awesome 5 Pro';
+  content: '\f078';
   font-size: 14px;
   right: 10px;
   font-weight: 600;
@@ -576,20 +573,20 @@ select option {
 }
 
 textarea,
-input[type="text"],
-input[type="password"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="date"],
-input[type="month"],
-input[type="time"],
-input[type="week"],
-input[type="number"],
-input[type="email"],
-input[type="url"],
-input[type="search"],
-input[type="tel"],
-input[type="color"] {
+input[type='text'],
+input[type='password'],
+input[type='datetime'],
+input[type='datetime-local'],
+input[type='date'],
+input[type='month'],
+input[type='time'],
+input[type='week'],
+input[type='number'],
+input[type='email'],
+input[type='url'],
+input[type='search'],
+input[type='tel'],
+input[type='color'] {
   border: 1px solid rgba(138, 138, 160, 0.3);
   outline: 0;
   -webkit-box-shadow: none;
@@ -606,20 +603,20 @@ input[type="color"] {
 
 /* Input focus */
 textarea:focus,
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="datetime"]:focus,
-input[type="datetime-local"]:focus,
-input[type="date"]:focus,
-input[type="month"]:focus,
-input[type="time"]:focus,
-input[type="week"]:focus,
-input[type="number"]:focus,
-input[type="email"]:focus,
-input[type="url"]:focus,
-input[type="search"]:focus,
-input[type="tel"]:focus,
-input[type="color"]:focus {
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='datetime']:focus,
+input[type='datetime-local']:focus,
+input[type='date']:focus,
+input[type='month']:focus,
+input[type='time']:focus,
+input[type='week']:focus,
+input[type='number']:focus,
+input[type='email']:focus,
+input[type='url']:focus,
+input[type='search']:focus,
+input[type='tel']:focus,
+input[type='color']:focus {
   border: 1px solid #8a8aa0;
   outline: 0;
   -webkit-box-shadow: none;
@@ -628,20 +625,20 @@ input[type="color"]:focus {
 }
 
 textarea::placeholder,
-input[type="text"]::placeholder,
-input[type="password"]::placeholder,
-input[type="datetime"]::placeholder,
-input[type="datetime-local"]::placeholder,
-input[type="date"]::placeholder,
-input[type="month"]::placeholder,
-input[type="time"]::placeholder,
-input[type="week"]::placeholder,
-input[type="number"]::placeholder,
-input[type="email"]::placeholder,
-input[type="url"]::placeholder,
-input[type="search"]::placeholder,
-input[type="tel"]::placeholder,
-input[type="color"]::placeholder {
+input[type='text']::placeholder,
+input[type='password']::placeholder,
+input[type='datetime']::placeholder,
+input[type='datetime-local']::placeholder,
+input[type='date']::placeholder,
+input[type='month']::placeholder,
+input[type='time']::placeholder,
+input[type='week']::placeholder,
+input[type='number']::placeholder,
+input[type='email']::placeholder,
+input[type='url']::placeholder,
+input[type='search']::placeholder,
+input[type='tel']::placeholder,
+input[type='color']::placeholder {
   font-size: 18px;
   font-weight: 400;
   line-height: 28px;
@@ -650,9 +647,9 @@ input[type="color"]::placeholder {
 
 /* Button */
 button,
-input[type="button"],
-input[type="reset"],
-input[type="submit"] {
+input[type='button'],
+input[type='reset'],
+input[type='submit'] {
   font-weight: 700;
   font-size: 15px;
   line-height: 22px;
@@ -670,13 +667,13 @@ input[type="submit"] {
 
 /* Button hover + focus */
 button:hover,
-input[type="button"]:hover,
-input[type="reset"]:hover,
-input[type="submit"]:hover,
+input[type='button']:hover,
+input[type='reset']:hover,
+input[type='submit']:hover,
 button:focus,
-input[type="button"]:focus,
-input[type="reset"]:focus,
-input[type="submit"]:focus {
+input[type='button']:focus,
+input[type='reset']:focus,
+input[type='submit']:focus {
   outline: 0;
   border: 1px solid var(--primary-color3);
   color: var(--primary-color3);
@@ -780,16 +777,16 @@ label.error {
 }
 .live-auctions .swiper-button-next:after,
 .live-auctions .swiper-button-prev:after {
-  font-family: "Font Awesome 5 Pro";
+  font-family: 'Font Awesome 5 Pro';
   font-size: 20px;
 }
 
 .live-auctions .swiper-button-next:after {
-  content: "\f061";
+  content: '\f061';
 }
 
 .live-auctions .swiper-button-prev:after {
-  content: "\f060";
+  content: '\f060';
 }
 
 .flex {
@@ -1576,8 +1573,8 @@ header {
 }
 
 .main-nav > .menu > li.menu-item-has-children > a::after {
-  content: "\f107";
-  font-family: "Font Awesome 5 Pro";
+  content: '\f107';
+  font-family: 'Font Awesome 5 Pro';
   font-weight: 300;
   position: absolute;
   right: 0;
@@ -1614,7 +1611,7 @@ header {
 }
 
 .main-nav .sub-menu::before {
-  content: "";
+  content: '';
   position: absolute;
   top: -5px;
   left: 25px;
@@ -1678,7 +1675,7 @@ header {
   width: 12px;
 }
 .main-nav > ul > li .sub-menu li a::after {
-  content: "";
+  content: '';
   position: absolute;
   width: 0;
   height: 2px;
@@ -1804,7 +1801,7 @@ header {
     cursor: pointer;
     display: inline-block;
     font-size: 20px;
-    font-family: "FontAwesome";
+    font-family: 'FontAwesome';
     line-height: 48px;
     position: absolute;
     right: 15px;
@@ -1814,8 +1811,8 @@ header {
   }
 
   .main-nav.active .menu-item-has-children .arrow:before {
-    font-family: "Font Awesome 5 Pro";
-    content: "\f107";
+    font-family: 'Font Awesome 5 Pro';
+    content: '\f107';
     color: var(--primary-color2);
   }
 
@@ -1843,7 +1840,7 @@ header {
   }
 
   .main-nav.active .menu-item-has-children .arrow.active:before {
-    content: "\f107";
+    content: '\f107';
   }
 
   .main-nav.active ul ul li {
@@ -2010,7 +2007,7 @@ header {
 
 .mobile-button:before,
 .mobile-button:after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   height: 3px;
@@ -2147,7 +2144,7 @@ header {
 .themesflat-pagination ul li .page-numbers {
   display: inline-block;
   font-size: 14px;
-  font-family: "Rubik", sans-serif;
+  font-family: 'Rubik', sans-serif;
   font-weight: 400;
   color: #787878;
   text-align: center;
@@ -2227,8 +2224,8 @@ header {
 }
 
 #scroll-top:after {
-  content: "\f077";
-  font-family: "Font Awesome 5 Pro";
+  content: '\f077';
+  font-family: 'Font Awesome 5 Pro';
   font-size: 18px;
   color: #ffffff;
   font-weight: 600;
@@ -2501,7 +2498,7 @@ header {
 }
 
 .widget-menu ul li a::after {
-  content: "";
+  content: '';
   width: 0;
   height: 1px;
   position: absolute;
@@ -2763,11 +2760,11 @@ header {
 }
 
 .widget-tag.style-2 ul li::after {
-  content: ",";
+  content: ',';
 }
 
 .widget-tag.style-2 ul li:last-child::after {
-  content: "";
+  content: '';
 }
 
 .widget-tag.style-2 ul li a {
@@ -2980,7 +2977,7 @@ header {
 }
 
 .widget-filter .btn-checkbox:after {
-  content: "";
+  content: '';
   position: absolute;
   display: none;
 }
@@ -2990,8 +2987,8 @@ header {
 }
 
 .widget-filter .btn-checkbox:after {
-  content: "\e921";
-  font-family: "nfts";
+  content: '\e921';
+  font-family: 'nfts';
   left: 6px;
   top: 2px;
   color: #fff;
@@ -3063,7 +3060,7 @@ header {
 }
 
 .widget-category .btn-checkbox:after {
-  content: "";
+  content: '';
   position: absolute;
   display: none;
 }
@@ -3073,8 +3070,8 @@ header {
 }
 
 .widget-category .btn-checkbox:after {
-  content: "\e921";
-  font-family: "nfts";
+  content: '\e921';
+  font-family: 'nfts';
   font-size: 10px;
   left: 2px;
   top: 0px;
@@ -3191,7 +3188,7 @@ header {
 }
 
 .widget-filter .btn-checkbox:after {
-  content: "";
+  content: '';
   position: absolute;
   display: none;
 }
@@ -3201,8 +3198,8 @@ header {
 }
 
 .widget-filter .btn-checkbox:after {
-  content: "\e921";
-  font-family: "nfts";
+  content: '\e921';
+  font-family: 'nfts';
   left: 6px;
   top: 2px;
   color: #fff;
@@ -3288,7 +3285,7 @@ header {
 }
 
 .widget-category .btn-checkbox:after {
-  content: "";
+  content: '';
   position: absolute;
   display: none;
 }
@@ -3298,8 +3295,8 @@ header {
 }
 
 .widget-category .btn-checkbox:after {
-  content: "\e921";
-  font-family: "nfts";
+  content: '\e921';
+  font-family: 'nfts';
   font-size: 10px;
   left: 2px;
   top: 0px;
@@ -3313,4 +3310,17 @@ header {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.d-flex {
+  display: flex;
+}
+.row-form .textfield {
+  flex: 1 !important;
+  margin: 0 5px;
+}
+
+.MuiInputBase-root input {
+  margin-bottom: 0px !important;
+  height: 30px;
 }

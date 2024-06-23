@@ -6,17 +6,17 @@ import TextfieldCommon from '../components/input/TextfieldCommon';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { useEffect, useState } from 'react';
 import { competitorLogin } from '../store/auth/authAction';
 import { FadeLoader } from 'react-spinners';
 import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogContent, IconButton, Typography, styled } from '@mui/material';
+import * as yup from 'yup';
 const Login = () => {
-  // open dialog
   const [open, setOpen] = useState(false);
+  // open dialog
   const schema = yup.object().shape({
-    userName: yup.string().required('Vui lòng nhập username của bạn'),
+    username: yup.string().required('Vui lòng nhập username của bạn'),
     password: yup.string().required('Vui lòng nhập mật khẩu của bạn').max(10)
   });
 
@@ -31,34 +31,34 @@ const Login = () => {
     reValidateMode: 'onChange'
   });
 
-  const handleRegister = async (data) => {
-    // Trigger validate form
-    const isValid = await trigger();
-    if (!isValid) return;
-    else {
-      setOpen(true);
-      dispatch(competitorLogin(data));
-      reset();
-    }
-  };
-
   const {
-    login: { loading, userInfo, success }
+    login: { loading, userInfo, success, error }
   } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleRegister = async (data) => {
+    // Trigger validate form
+    const isValid = await trigger();
+
+    if (!isValid) return;
+    else {
+      dispatch(competitorLogin(data));
+      if (error) {
+        setOpen(true);
+      }
+    }
+  };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  useEffect(() => {
-    if (!userInfo) {
-      navigate('/login');
-    }
-    // redirect home page
-    if (userInfo) navigate('/');
-  }, [navigate, userInfo, success]);
+  if (!userInfo) {
+    navigate('/login');
+  }
+  // redirect home page
+  if (userInfo) navigate('/');
 
   return (
     <div>
@@ -111,11 +111,11 @@ const Login = () => {
                   <form onSubmit={handleSubmit(handleRegister)} className="select-none">
                     <TextfieldCommon
                       control={control}
-                      error={errors.userName?.message}
-                      id="userName"
-                      name="userName"
+                      error={errors.username?.message}
+                      id="username"
+                      name="username"
                       tabIndex="1"
-                      placeholder="Nhập username"
+                      placeholder="Tên tài khoản"
                       autoFocus
                     />
                     <TextfieldCommon
@@ -126,7 +126,7 @@ const Login = () => {
                       tabIndex="2"
                       aria-required="true"
                       type="password"
-                      placeholder="Nhập mật khẩu"
+                      placeholder="Mật khẩu"
                     />
                     <div className="row-form style-1 flex-row-reverse">
                       <Link to="#" className="forgot-pass">

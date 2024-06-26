@@ -2,15 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { competitorLogin, competitorRegister } from './authAction';
 import { jwtDecode } from 'jwt-decode';
 
-// initialize userToken from local storage
-const jwtToken = localStorage.getItem('jwtToken') ? localStorage.getItem('jwtToken') : null;
-
-const decodeToken = jwtToken ? jwtDecode(jwtToken) : null;
 const initialState = {
   login: {
     loading: false,
     userInfo: null,
-    jwtToken,
+    jwtToken: null,
     success: false,
     message: null,
     error: false
@@ -42,7 +38,7 @@ const authSlice = createSlice({
     });
     builder.addCase(competitorLogin.fulfilled, (state, { payload }) => {
       state.login.loading = false;
-      state.login.userInfo = decodeToken;
+      state.login.userInfo = jwtDecode(payload.jwtToken);
       state.login.jwtToken = payload.jwtToken;
       state.login.success = payload.success;
       state.login.message = payload.message;

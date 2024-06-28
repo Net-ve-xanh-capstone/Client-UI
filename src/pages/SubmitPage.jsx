@@ -7,6 +7,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import avt from '../assets/images/avatar/avt-9.jpg';
 import { useEffect, useState } from 'react';
+import { defaultImage } from '../constant/imageDefault';
 
 const SubmitPage = () => {
   const [image, setImage] = useState(null);
@@ -61,7 +62,7 @@ const SubmitPage = () => {
               <div className="sc-card-product">
                 <div className="card-media">
                   <Link className="cursor-none" to="#">
-                    <img src={image.preview} alt="preview" />
+                    <img src={image ? image.preview : defaultImage} alt="preview" />
                   </Link>
                   <Link to="/login" className="wishlist-button heart">
                     <span className="number-like"> 100</span>

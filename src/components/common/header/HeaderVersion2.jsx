@@ -41,10 +41,20 @@ const HeaderVersion2 = () => {
     setActiveIndex(index);
   };
 
-  const { jwtToken } = useSelector((state) => state.auth);
+  const { jwtToken, userInfo } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
+  };
+
+  const hasAccess = (submenu) => {
+    if (submenu.public) {
+      return true;
+    }
+    if (!submenu.role || submenu.role.length === 0) {
+      return false;
+    }
+    return userInfo && submenu.role.includes(userInfo.role);
   };
 
   return (
@@ -148,11 +158,11 @@ const HeaderVersion2 = () => {
                         <Link to="#">{data.name}</Link>
                         {data.namesub && (
                           <ul className="sub-menu">
-                            {data.namesub.map((submenu) => (
+                            {data.namesub.filter(hasAccess).map((submenu) => (
                               <li
                                 key={submenu.id}
                                 className={
-                                  pathname === submenu.links
+                                  window.location.pathname === submenu.links
                                     ? 'menu-item current-item'
                                     : 'menu-item'
                                 }

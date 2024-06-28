@@ -1,3 +1,5 @@
+import Role from './Role';
+
 const menus = [
   {
     id: 1,
@@ -7,7 +9,8 @@ const menus = [
       {
         id: 1,
         sub: 'Trang chủ',
-        links: '/'
+        links: '/',
+        public: true
       }
     ]
   },
@@ -19,17 +22,20 @@ const menus = [
       {
         id: 1,
         sub: 'Explore',
-        links: '/explore'
+        links: '/explore',
+        public: true
       },
       {
         id: 2,
         sub: 'Live Auctions',
-        links: '/live-auctions'
+        links: '/live-auctions',
+        public: true
       },
       {
         id: 3,
         sub: 'Item Details 02',
-        links: '/item-details-02'
+        links: '/item-details-02',
+        public: true
       }
     ]
   },
@@ -41,12 +47,14 @@ const menus = [
       {
         id: 1,
         sub: 'Activity 01',
-        links: '/activity-01'
+        links: '/activity-01',
+        public: true
       },
       {
         id: 2,
         sub: 'Activity 02',
-        links: '/activity-02'
+        links: '/activity-02',
+        public: true
       }
     ]
   },
@@ -58,17 +66,20 @@ const menus = [
       {
         id: 1,
         sub: 'Blog',
-        links: '/blog'
+        links: '/blog',
+        public: true
       },
       {
         id: 2,
         sub: 'Blog Details',
-        links: '/blog-details'
+        links: '/blog-details',
+        public: true
       },
       {
         id: 3,
         sub: 'Help Center',
-        links: '/help-center'
+        links: '/help-center',
+        public: true
       }
     ]
   },
@@ -80,52 +91,52 @@ const menus = [
       {
         id: 1,
         sub: 'Authors 01',
-        links: '/authors-01'
+        links: '/authors-01',
+        public: false
       },
       {
         id: 2,
-        sub: 'Authors 02',
-        links: '/authors-02'
+        sub: 'nộp bài',
+        links: '/submit',
+        public: false,
+        role: [Role.COMPETITOR]
       },
       {
         id: 3,
-        sub: 'Wallet Connect',
-        links: '/wallet-connect'
-      },
-      {
-        id: 4,
-        sub: 'nộp bài',
-        links: '/submit'
-      },
-      {
-        id: 5,
         sub: 'Edit Profile',
-        links: '/edit-profile'
+        links: '/edit-profile',
+        public: false,
+        role: [Role.COMPETITOR, Role.ADMIN, Role.STAFF, Role.EXAMINER, Role.GUARDIAN]
       },
       {
         id: 6,
         sub: 'Ranking',
-        links: '/ranking'
+        links: '/ranking',
+        public: true
       },
       {
         id: 7,
         sub: 'Đăng nhập',
-        links: '/login'
+        links: '/login',
+        public: true
       },
       {
         id: 8,
         sub: 'Đăng ký',
-        links: '/sign-up'
+        links: '/sign-up',
+        public: true
       },
       {
         id: 9,
         sub: 'No Result',
-        links: '/no-result'
+        links: '/no-result',
+        public: true
       },
       {
         id: 10,
         sub: 'FAQ',
-        links: '/faq'
+        links: '/faq',
+        public: true
       }
     ]
   },
@@ -137,7 +148,8 @@ const menus = [
       {
         id: 1,
         sub: 'Contact 1',
-        links: '/contact-01'
+        links: '/contact-01',
+        public: true
       }
     ]
   }

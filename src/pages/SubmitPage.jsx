@@ -5,10 +5,28 @@ import Footer from '../components/common/footer/Footer';
 import Countdown from 'react-countdown';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import img1 from '../assets/images/box-item/image-box-6.jpg';
 import avt from '../assets/images/avatar/avt-9.jpg';
+import { useEffect, useState } from 'react';
 
 const SubmitPage = () => {
+  const [image, setImage] = useState(null);
+  const handlePreviewImage = (e) => {
+    const file = e.target.files[0];
+
+    file.preview = URL.createObjectURL(file);
+    console.log(file.preview);
+    setImage(file);
+  };
+
+  useEffect(() => {
+    //clean-up
+    return () => {
+      if (image) {
+        URL.revokeObjectURL(image.preview);
+      }
+    };
+  }, [image]);
+
   return (
     <div className="create-item">
       <HeaderVersion2 />
@@ -42,8 +60,8 @@ const SubmitPage = () => {
               <h4 className="title-create-item">Xem trước</h4>
               <div className="sc-card-product">
                 <div className="card-media">
-                  <Link to="/item-details-01">
-                    <img src={img1} alt="Axies" />
+                  <Link className="cursor-none" to="#">
+                    <img src={image.preview} alt="preview" />
                   </Link>
                   <Link to="/login" className="wishlist-button heart">
                     <span className="number-like"> 100</span>
@@ -57,7 +75,9 @@ const SubmitPage = () => {
                 </div>
                 <div className="card-title">
                   <h5>
-                    <Link to="/item-details-01">Cyber Doberman #766</Link>
+                    <Link className="" to="#">
+                      Cyber Doberman #766
+                    </Link>
                   </h5>
                   <div className="tags">bsc</div>
                 </div>
@@ -70,7 +90,7 @@ const SubmitPage = () => {
                       <span>Owned By</span>
                       <h6>
                         {' '}
-                        <Link to="/author-02">Freddie Carpenter</Link>
+                        <Link to="#">Freddie Carpenter</Link>
                       </h6>
                     </div>
                   </div>
@@ -94,8 +114,13 @@ const SubmitPage = () => {
                 <form action="#">
                   <h4 className="title-create-item">Tải ảnh</h4>
                   <label className="uploadFile">
-                    <span className="filename">PNG, JPG, GIF, WEBP or MP4. Max 200mb.</span>
-                    <input type="file" className="inputfile form-control" name="file" />
+                    <span className="filename">PNG, JPG. Max 20mb.</span>
+                    <input
+                      onChange={handlePreviewImage}
+                      type="file"
+                      className="inputfile form-control"
+                      name="file"
+                    />
                   </label>
                 </form>
                 <div className="flat-tabs tab-create-item">

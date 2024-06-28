@@ -10,14 +10,14 @@ import { useEffect, useState } from 'react';
 import { competitorLogin } from '../store/auth/authAction';
 import { FadeLoader } from 'react-spinners';
 import CloseIcon from '@mui/icons-material/Close';
-import { Dialog, DialogContent, IconButton, Typography, styled } from '@mui/material';
+import { Dialog, DialogContent, IconButton, styled } from '@mui/material';
 import * as yup from 'yup';
 const Login = () => {
   const [open, setOpen] = useState(false);
   // open dialog
   const schema = yup.object().shape({
     username: yup.string().required('Vui lòng nhập username của bạn'),
-    password: yup.string().required('Vui lòng nhập mật khẩu của bạn').max(10)
+    password: yup.string().required('Vui lòng nhập mật khẩu của bạn')
   });
 
   const {
@@ -32,21 +32,21 @@ const Login = () => {
   });
 
   const {
-    login: { loading, userInfo, success, error }
+    login: { loading, success, error },
+    jwtToken
   } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleRegister = async (data) => {
+  const handleLogin = async (data) => {
     // Trigger validate form
     const isValid = await trigger();
 
     if (!isValid) return;
     else {
-      dispatch(competitorLogin(data));
-      if (error) {
-        setOpen(true);
-      }
+      dispatch(competitorLogin(data)).then(() => {
+        if (error) setOpen(true);
+      });
     }
   };
 
@@ -54,11 +54,15 @@ const Login = () => {
     setOpen(false);
   };
 
-  if (!userInfo) {
-    navigate('/login');
-  }
-  // redirect home page
-  if (userInfo) navigate('/');
+  useEffect(() => {
+    if (success || jwtToken) {
+      reset();
+      navigate('/');
+    }
+    if (error) {
+      setOpen(true);
+    }
+  }, [success, error, jwtToken]);
 
   return (
     <div>
@@ -108,7 +112,7 @@ const Login = () => {
             <div className="col-12">
               <div className="flat-form box-login-email">
                 <div className="form-inner">
-                  <form onSubmit={handleSubmit(handleRegister)} className="select-none">
+                  <form onSubmit={handleSubmit(handleLogin)} className="select-none">
                     <TextfieldCommon
                       control={control}
                       error={errors.username?.message}

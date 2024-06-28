@@ -7,10 +7,12 @@ import coin from '../../../assets/images/logo/coin.svg';
 import menus from '../../../constant/Menu';
 import { withErrorBoundary } from 'react-error-boundary';
 import { Fallback } from '../../../constant/Fallback';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../../store/auth/authSlice';
 
 const HeaderVersion2 = () => {
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
 
   const headerRef = useRef(null);
   useEffect(() => {
@@ -39,7 +41,11 @@ const HeaderVersion2 = () => {
     setActiveIndex(index);
   };
 
-  const { user } = useSelector((state) => state.auth);
+  const { jwtToken } = useSelector((state) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <header id="header_main" className="header_1 header_2 style2 js-header" ref={headerRef}>
@@ -162,12 +168,21 @@ const HeaderVersion2 = () => {
                 </nav>
                 <div className="flat-search-btn flex">
                   <div className="sc-btn-top mg-r-12" id="site-header">
-                    <Link
-                      to="/login"
-                      className="sc-button header-slider style style-1 fl-button pri-1"
-                    >
-                      {user ? <span>Đăng xuất</span> : <span>Đăng nhập</span>}
-                    </Link>
+                    {jwtToken ? (
+                      <Link
+                        to="/"
+                        className="sc-button header-slider style style-1 fl-button pri-1"
+                      >
+                        <span onClick={handleLogout}>Đăng xuất</span>
+                      </Link>
+                    ) : (
+                      <Link
+                        to="/login"
+                        className="sc-button header-slider style style-1 fl-button pri-1"
+                      >
+                        <span>Đăng nhập</span>
+                      </Link>
+                    )}
                   </div>
                   <div className="admin_active" id="header_admin">
                     <div className="header_avatar">

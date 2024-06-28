@@ -3315,12 +3315,26 @@ header {
 .d-flex {
   display: flex;
 }
+
 .row-form .textfield {
-  flex: 1 !important;
   margin: 0 5px;
 }
 
 .MuiInputBase-root input {
   margin-bottom: 0px !important;
   height: 30px;
+}
+
+.MuiFormGroup-root label {
+  padding-left: 0px !important;
+}
+
+input.number::-webkit-outer-spin-button,
+input.number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.none-cursor {
+  cursor: none !important;
 }

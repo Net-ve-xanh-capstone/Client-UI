@@ -1,25 +1,27 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:5555';
+const baseUrl = 'http://localhost:5555/';
 
 const axiosApi = axios.create({
   baseURL: baseUrl,
-  Headers: { 'Content-Type': 'application/json' }
+  Headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
 // Add a request interceptor
-// axios.interceptors.request.use(úh
-//   (config) => {
-//     const token = localStorage.getItem("localtoken");
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('localtoken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // Add a response interceptor
 axios.interceptors.response.use(

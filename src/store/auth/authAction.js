@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { authenApi } from '../../api/authenApi';
+import Role from '../../constant/Role';
 
 export const competitorLogin = createAsyncThunk(
-  '/login',
-  async ({ username, password }, { rejectWithValue }) => {
+  'login',
+  async ({ username, password }, { rejectWithValue, getState }) => {
     try {
       const config = {
         headers: {
@@ -12,10 +13,6 @@ export const competitorLogin = createAsyncThunk(
       };
       const { data } = await authenApi.competitorLogin('/login', { username, password }, config);
 
-      // store user's token in local storage
-      if (data.jwtToken) {
-        localStorage.setItem('jwtToken', data.jwtToken);
-      }
       return data;
     } catch (error) {
       // return custom error message from API if any
@@ -29,7 +26,7 @@ export const competitorLogin = createAsyncThunk(
 );
 
 export const competitorRegister = createAsyncThunk(
-  '/create',
+  'create',
   async (payload, { rejectWithValue }) => {
     try {
       const config = {
@@ -37,7 +34,19 @@ export const competitorRegister = createAsyncThunk(
           'Content-Type': 'application/json'
         }
       };
-      const { data } = await authenApi.competitorRegister('/create', payload, config);
+      const fullName = payload.lastname + ' ' + payload.firstname;
+      const role = Role.COMPETITOR;
+      const date = new Date(payload.birthday);
+      const birthday = date.toISOString();
+      const req = {
+        ...payload,
+        fullName,
+        role,
+        birthday
+      };
+
+      const { data } = await authenApi.competitorRegister('/create', req, config);
+      return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);

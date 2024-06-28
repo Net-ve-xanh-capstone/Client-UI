@@ -2,22 +2,18 @@ import { createSlice } from '@reduxjs/toolkit';
 import { competitorLogin, competitorRegister } from './authAction';
 import { jwtDecode } from 'jwt-decode';
 
-// initialize userToken from local storage
-const jwtToken = localStorage.getItem('jwtToken') ? localStorage.getItem('jwtToken') : null;
-
-const decodeToken = jwtToken ? jwtDecode(jwtToken) : null;
 const initialState = {
+  jwtToken: null,
+  userInfo: null,
   login: {
     loading: false,
-    userInfo: null,
-    jwtToken,
     success: false,
     message: null,
     error: false
   },
   register: {
-    loading: false,
-    success: false,
+    loading: null,
+    success: null,
     message: null
   }
 };
@@ -28,12 +24,25 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       localStorage.removeItem('userToken');
-      state.loading = false;
       state.userInfo = null;
       state.jwtToken = null;
+      state.login.success = false;
     },
     setCredentials: (state, { payload }) => {
       state.userInfo = payload;
+    },
+    setDefault: (state) => {
+      state.login = {
+        loading: false,
+        success: false,
+        message: null,
+        error: false
+      };
+      state.register = {
+        loading: null,
+        success: null,
+        message: null
+      };
     }
   },
   extraReducers: (builder) => {
@@ -41,9 +50,10 @@ const authSlice = createSlice({
       state.login.loading = true;
     });
     builder.addCase(competitorLogin.fulfilled, (state, { payload }) => {
+      console.log('payload', payload);
       state.login.loading = false;
-      state.login.userInfo = decodeToken;
-      state.login.jwtToken = payload.jwtToken;
+      state.jwtToken = payload.jwtToken;
+      state.userInfo = payload.jwtToken ? jwtDecode(payload.jwtToken) : null;
       state.login.success = payload.success;
       state.login.message = payload.message;
       state.login.error = !payload.success;
@@ -70,5 +80,5 @@ const authSlice = createSlice({
   }
 });
 
-export const { logout, setCredentials } = authSlice.actions;
+export const { logout, setCredentials, setDefault } = authSlice.actions;
 export default authSlice.reducer;

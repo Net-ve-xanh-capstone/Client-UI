@@ -6,7 +6,7 @@ const menus = [
     namesub: [
       {
         id: 1,
-        sub: 'Home 01',
+        sub: 'Trang chủ',
         links: '/'
       }
     ]
@@ -74,7 +74,7 @@ const menus = [
   },
   {
     id: 5,
-    name: 'Page',
+    name: 'Trang',
     links: '#',
     namesub: [
       {
@@ -94,7 +94,7 @@ const menus = [
       },
       {
         id: 4,
-        sub: 'Đăng ký',
+        sub: 'nộp bài',
         links: '/submit'
       },
       {
@@ -109,12 +109,12 @@ const menus = [
       },
       {
         id: 7,
-        sub: 'Login',
+        sub: 'Đăng nhập',
         links: '/login'
       },
       {
         id: 8,
-        sub: 'Sign Up',
+        sub: 'Đăng ký',
         links: '/sign-up'
       },
       {

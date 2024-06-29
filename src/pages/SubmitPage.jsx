@@ -8,15 +8,25 @@ import 'react-tabs/style/react-tabs.css';
 import avt from '../assets/images/avatar/avt-9.jpg';
 import { useEffect, useState } from 'react';
 import { defaultImage } from '../constant/imageDefault';
+import { useUploadImage } from '../hooks/firebaseImageUpload/useUploadImage';
 
 const SubmitPage = () => {
   const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
+  const { progress, url, error } = useUploadImage(file);
   const handlePreviewImage = (e) => {
     const file = e.target.files[0];
-
     file.preview = URL.createObjectURL(file);
-    console.log(file.preview);
     setImage(file);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const file = e.target[0]?.files[0];
+
+    if (!file) return;
+
+    setFile(file);
   };
 
   useEffect(() => {
@@ -112,7 +122,7 @@ const SubmitPage = () => {
             </div>
             <div className="col-xl-9 col-lg-6 col-md-12 col-12">
               <div className="form-create-item">
-                <form action="#">
+                <form action="#" onSubmit={handleSubmit}>
                   <h4 className="title-create-item">Tải ảnh</h4>
                   <label className="uploadFile">
                     <span className="filename">PNG, JPG. Max 20mb.</span>
@@ -123,7 +133,9 @@ const SubmitPage = () => {
                       name="file"
                     />
                   </label>
+                  <button className="submit">Nộp ảnh</button>
                 </form>
+
                 <div className="flat-tabs tab-create-item">
                   <h4 className="title-create-item">Select method</h4>
                   <Tabs>

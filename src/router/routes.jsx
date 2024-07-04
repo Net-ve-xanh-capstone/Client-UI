@@ -16,9 +16,9 @@ const routes = [
   {
     path: '/submit',
     component: (
-      <ProtectedRoute role={Role.COMPETITOR}>
-        <SubmitPage />
-      </ProtectedRoute>
+      // <ProtectedRoute role={Role.COMPETITOR}>
+      <SubmitPage />
+      // </ProtectedRoute>
     )
   },
   {

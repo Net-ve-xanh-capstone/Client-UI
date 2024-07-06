@@ -1,0 +1,21 @@
+.container {
+    height: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f8f8f8;
+    overflow: visible;
+    /* Ensure no overflow hidden */
+}
+
+.subcontainer {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10rem;
+    padding: 77px 0 75px;
+    margin-top: 3rem;
+}

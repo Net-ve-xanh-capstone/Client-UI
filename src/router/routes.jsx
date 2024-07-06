@@ -1,4 +1,5 @@
 import Role from '../constant/Role';
+import StaffManage from '../pages/StaffManage';
 import ProtectedRoute from './ProtectedRoute';
 import React, { lazy } from 'react';
 
@@ -13,6 +14,7 @@ const routes = [
   { path: '/', component: <Home1 /> },
   { path: '/login', component: <Login /> },
   { path: '/sign-up', component: <SignUp /> },
+  { path: '/staff', component: <StaffManage /> },
   {
     path: '/submit',
     component: (

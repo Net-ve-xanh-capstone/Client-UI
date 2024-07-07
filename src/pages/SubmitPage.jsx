@@ -2,9 +2,7 @@
 import { Link } from 'react-router-dom';
 import HeaderVersion2 from '../components/common/header/HeaderVersion2';
 import Footer from '../components/common/footer/Footer';
-import Countdown from 'react-countdown';
 import 'react-tabs/style/react-tabs.css';
-import avt from '../assets/images/avatar/avt-9.jpg';
 import { useEffect, useState } from 'react';
 import { defaultImage } from '../constant/imageDefault';
 import { useUploadImage } from '../hooks/firebaseImageUpload/useUploadImage';
@@ -15,14 +13,23 @@ import TextfieldCommon from '../components/input/TextfieldCommon';
 import TextareaCommon from '../components/textarea/TextareaCommon';
 import { Dropdown } from '../components/dropdown';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
+import { topicApi } from '../api/topicApi';
+import { paintingApi } from '../api/paintingApi';
+import Swal from 'sweetalert2';
 
-const topicsData = ['Chủ đề 1', 'Chủ đề 2', 'Chủ đề 3', 'Chủ đề 4', 'Chủ đề 5'];
-
+const draffPaintingEndpoint = 'paintings/draftepainting1stround';
+const getAllPaintingByCompetitorIdEndpoint = 'paintings/listpaintingbyaccountid';
+const topics = await topicApi.getAllTopic('topics');
+const topicsData = topics.data.result.list;
 const SubmitPage = () => {
   const [image, setImage] = useState(null);
   const [file, setFile] = useState(null);
+  const [topicId, setTopicId] = useState(null);
   const { progress, url, error } = useUploadImage(file);
-
+  const userInfo = useSelector((state) => state.auth.userInfo);
+  const today = new Date().toISOString().slice(0, 10);
+  const [competitorTopic, setCompetitorTopic] = useState(null);
   const schema = yup.object().shape({
     file: yup.mixed().required('Vui lòng chọn ảnh'),
     name: yup.string().required('Vui lòng nhập tên của bức tranh'),
@@ -47,18 +54,42 @@ const SubmitPage = () => {
     const file = e.target.files[0];
     file.preview = URL.createObjectURL(file);
     setImage(file);
+    setValue('file', file);
     setError('file', '');
+    setFile(file);
   };
 
-  const handleSubmitPainting = (e) => {
-    e.preventDefault();
-    const file = e.target[0]?.files[0];
-
-    if (!file) return;
-
-    setFile(file);
-
-    console.log(progress, url, error);
+  const handleSubmitPainting = async (e) => {
+    // Trigger validate form
+    const isValid = await trigger();
+    if (!isValid) return;
+    const data = {
+      image: url,
+      name: e.name,
+      description: e.description,
+      roundId: '1ff52294-cc72-4781-a73a-042baffb4ced',
+      topicId: topicId,
+      currentUserId: userInfo.Id
+    };
+    Swal.fire({
+      title: 'Bạn có chắc chắn nộp bài?',
+      showCancelButton: true,
+      confirmButtonText: 'Nộp'
+    }).then((result) => {
+      console.log('call');
+      if (result.isConfirmed) {
+        paintingApi
+          .submitPainting(draffPaintingEndpoint, data)
+          .then(() => {
+            Swal.fire('Đã nộp bài thành công', '', 'success');
+          })
+          .catch((error) => {
+            Swal.fire('Nộp bài thất bại', 'Hãy thử lại sau bạn nhé', 'error');
+          });
+      } else if (result.isDenied) {
+        Swal.fire('Bạn đã hủy nộp bài', '', 'info');
+      }
+    });
   };
 
   const getDropdownOptions = (data, defaultValue = '') => {
@@ -67,11 +98,17 @@ const SubmitPage = () => {
   };
 
   const handleSelectDropdownOption = (name, value) => {
-    setValue(name, value);
+    setValue(name, value.name);
+    setTopicId(value.id);
     setError(name, '');
   };
 
   useEffect(() => {
+    paintingApi
+      .getAllPaintingByCompetitorId(getAllPaintingByCompetitorIdEndpoint, userInfo.Id)
+      .then((res) => {
+        setCompetitorTopic(res.data.result.list);
+      });
     //clean-up
     return () => {
       if (image) {
@@ -79,8 +116,6 @@ const SubmitPage = () => {
       }
     };
   }, [image]);
-
-  console.log('errors', errors.file?.message);
 
   return (
     <div className="create-item">
@@ -111,40 +146,36 @@ const SubmitPage = () => {
       <div className="tf-create-item tf-section">
         <div className="themesflat-container">
           <div className="row">
-            <div className="col-xl-3 col-lg-6 col-md-6 col-12">
-              <h4 style={{ marginBottom: '20px' }} className="title-create-item">
-                Xem trước
-              </h4>
-              <div className="sc-card-product">
-                <div className="card-media">
-                  <Link className="cursor-none" to="#">
-                    <img src={image ? image.preview : defaultImage} alt="preview" />
-                  </Link>
-                </div>
-                <div className="card-title">
-                  <h5>
-                    <Link className="" to="#">
-                      Tên bức tranh
+            {image && (
+              <div className="col-xl-3 col-lg-6 col-md-6 col-12">
+                <h4 style={{ marginBottom: '20px' }} className="title-create-item">
+                  Xem trước
+                </h4>
+                <div className="sc-card-product">
+                  <div className="card-media">
+                    <Link className="cursor-none" to="#">
+                      <img src={image ? image.preview : defaultImage} alt="preview" />
                     </Link>
-                  </h5>
-                  <div className="tags">Trạng thái</div>
-                </div>
-                <div className="meta-info">
-                  <div className="author">
-                    <div className="text">
-                      <span>Tác giả</span>
-                      <h5>Nguyễn Duy</h5>
-                    </div>
                   </div>
-                  <div className="text">
-                    <span>Ngày nộp</span>
-                    <h5>29/06/2024</h5>
+                  <div className="meta-info">
+                    <div className="author">
+                      <div className="text">
+                        <span>Tác giả</span>
+                        <h5>{userInfo.nameid}</h5>
+                      </div>
+                    </div>
+                    <div className="text">
+                      <span>Ngày nộp</span>
+                      <h5>{today}</h5>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-xl-9 col-lg-6 col-md-12 col-12">
-              <div className="form-create-item">
+            )}
+            <div
+              className={`${image ? 'col-xl-9 col-lg-6 col-md-12 col-12' : 'col-xl-12 col-lg-12 col-md-12 col-12'}`}
+            >
+              <div className="form-create-item" style={{ left: '50%' }}>
                 <form action="#" onSubmit={handleSubmit(handleSubmitPainting)}>
                   <h4 className="title-create-item">Tải ảnh</h4>
                   <label
@@ -203,10 +234,10 @@ const SubmitPage = () => {
                           <Dropdown.List>
                             {topicsData.map((topic) => (
                               <Dropdown.Option
-                                key={topic}
+                                key={topic.name}
                                 onClick={() => handleSelectDropdownOption('topic', topic)}
                               >
-                                {topic}
+                                {topic.name}
                               </Dropdown.Option>
                             ))}
                           </Dropdown.List>

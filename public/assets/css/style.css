@@ -3338,3 +3338,7 @@ input.number::-webkit-inner-spin-button {
 .none-cursor {
   cursor: none !important;
 }
+
+.option:hover {
+  background-color: rgb(246, 246, 246);
+}

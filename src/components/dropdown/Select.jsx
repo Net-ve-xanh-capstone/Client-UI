@@ -18,11 +18,12 @@ const Select = ({ placeholder = '', className = '' }) => {
         borderRadius: '4px',
         background: 'transparent',
         color: '#8A8A8A',
-        width: '100%'
+        width: '100%',
+        padding: '10px 0'
       }}
       className={classNames(className, errors?.length > 0 ? 'border-danger' : '')}
     >
-      <span className="capitalize">{placeholder}</span>
+      <span style={{ marginLeft: '15px' }}>{placeholder}</span>
 
       <span style={{ float: 'right', marginTop: '4px' }}>
         {show ? (

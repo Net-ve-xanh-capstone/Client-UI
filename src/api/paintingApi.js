@@ -3,5 +3,16 @@ import axiosApi from './axiosApi';
 export const paintingApi = {
   submitPainting: async (endpoint, data, config) => {
     return await axiosApi.post(endpoint, data, config);
+  },
+  getAllPaintingByCompetitorId: async (endpoint, competitorId, config) => {
+    return await axiosApi.get(endpoint, {
+      params: {
+        competitorId
+      },
+      ...config
+    });
+  },
+  updatePainting: async (endpoint, data, config) => {
+    return await axiosApi.put(endpoint, data, config);
   }
 };

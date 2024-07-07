@@ -29,7 +29,7 @@ const SubmitPage = () => {
   const { progress, url, error } = useUploadImage(file);
   const userInfo = useSelector((state) => state.auth.userInfo);
   const today = new Date().toISOString().slice(0, 10);
-  const [competitorTopic, setCompetitorTopic] = useState(null);
+  const [paintingCompetitor, setPaintingCompetitor] = useState(null);
   const schema = yup.object().shape({
     file: yup.mixed().required('Vui lòng chọn ảnh'),
     name: yup.string().required('Vui lòng nhập tên của bức tranh'),
@@ -53,7 +53,7 @@ const SubmitPage = () => {
   const handlePreviewImage = (e) => {
     const file = e.target.files[0];
     file.preview = URL.createObjectURL(file);
-    setImage(file);
+    setImage(URL.createObjectURL(file));
     setValue('file', file);
     setError('file', '');
     setFile(file);
@@ -104,18 +104,25 @@ const SubmitPage = () => {
   };
 
   useEffect(() => {
-    paintingApi
-      .getAllPaintingByCompetitorId(getAllPaintingByCompetitorIdEndpoint, userInfo.Id)
-      .then((res) => {
-        setCompetitorTopic(res.data.result.list);
-      });
     //clean-up
     return () => {
       if (image) {
         URL.revokeObjectURL(image.preview);
       }
     };
-  }, [image]);
+  }, [image, userInfo.Id]);
+
+  useEffect(() => {
+    paintingApi
+      .getAllPaintingByCompetitorId(getAllPaintingByCompetitorIdEndpoint + '/' + userInfo.Id)
+      .then((res) => {
+        const draftPaintings = res.data.result.list.filter(
+          (painting) => painting.status === 'Draft'
+        );
+        setPaintingCompetitor(draftPaintings[0]);
+        setImage(draftPaintings[0]?.image);
+      });
+  }, [userInfo.Id]);
 
   return (
     <div className="create-item">
@@ -154,7 +161,7 @@ const SubmitPage = () => {
                 <div className="sc-card-product">
                   <div className="card-media">
                     <Link className="cursor-none" to="#">
-                      <img src={image ? image.preview : defaultImage} alt="preview" />
+                      <img src={image ? image : defaultImage} alt="preview" />
                     </Link>
                   </div>
                   <div className="meta-info">
@@ -185,7 +192,7 @@ const SubmitPage = () => {
                     )}
                   >
                     {image ? (
-                      <span className="filename">Tên file: {image.name}</span>
+                      <span className="filename">PNG, JPG. tối đa 20mb.</span>
                     ) : errors.file ? (
                       <span className="text-danger h5">{errors.file.message}</span>
                     ) : (

@@ -48,7 +48,7 @@
     border-radius: 500px;
     overflow: hidden;
     background: var(--linear);
-    color: ghostwhite;
+    color: black;
 }
 
 .btnCreate:hover {
@@ -81,7 +81,7 @@
 
 .btnCreate::before {
     content: "";
-    background: #000;
+    background: #fff;
     width: 120%;
     left: -10%;
     transform: skew(30deg);
@@ -90,4 +90,11 @@
 
 .btnCreate:hover::before {
     transform: translate3d(100%, 0, 0);
+}
+
+.blurContainer {
+    background: url('../../assets/images/backgroundTable/table.png') no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
 }

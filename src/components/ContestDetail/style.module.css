@@ -36,7 +36,7 @@
 
 .heading .iconBox {
     position: absolute;
-    left: 0;
+    left: 20px;
 }
 
 .heading .backIcon {
@@ -44,11 +44,11 @@
 }
 
 .titleHeader {
-    text-align: center;
-    font-size: 24px;
+    cursor: default;
+    background: var(--linear);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     color: var(--pink);
-    font-weight: 500;
-    margin: 0;
 }
 
 .tabs {

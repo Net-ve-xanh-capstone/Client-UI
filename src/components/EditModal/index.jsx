@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function DeleteModal({ show, setShow, title, callBack }) {
+function EditModal({ show, setShow, title, callBack }) {
   const handleClose = () => setShow(false);
   const handleCallBack = () => {
     handleClose();
@@ -11,9 +11,9 @@ function DeleteModal({ show, setShow, title, callBack }) {
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Xóa {title}</Modal.Title>
+          <Modal.Title>Chỉnh sửa {title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Bạn có chắc chắn muốn xóa {title} này?</Modal.Body>
+        <Modal.Body>Bạn có chắc chắn muốn chỉnh sửa {title} này?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" size="lg" onClick={handleClose}>
             Không
@@ -27,4 +27,4 @@ function DeleteModal({ show, setShow, title, callBack }) {
   );
 }
 
-export default DeleteModal;
+export default EditModal;

@@ -44,8 +44,9 @@
     .card_content {
         display: flex;
         flex-direction: column;
-        gap: 2rem;
         align-items: flex-start;
+        justify-content: space-between;
+        padding: 1rem 0;
     }
 
     .card_content h3 {
@@ -77,6 +78,12 @@
     .tag:hover>span {
         width: 4.5rem;
         border-radius: 2rem;
+    }
+
+    .text_box {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
 }
 
@@ -266,6 +273,7 @@
         height: 100%;
         border-radius: calc(2rem - 1.6rem);
         overflow: hidden;
+        flex: 2;
     }
 
 
@@ -291,8 +299,10 @@
     .card_content {
         display: flex;
         flex-direction: column;
-        gap: 2rem;
         align-items: flex-start;
+        padding: 1rem 0;
+        justify-content: space-between;
+        flex: 3;
     }
 
     .card_content h3 {
@@ -348,6 +358,7 @@
         height: 100%;
         border-radius: calc(2rem - 1.6rem);
         overflow: hidden;
+        flex: 2;
     }
 
 
@@ -373,8 +384,10 @@
     .card_content {
         display: flex;
         flex-direction: column;
-        gap: 2rem;
         align-items: flex-start;
+        justify-content: space-between;
+        padding: 1rem 0;
+        flex: 3;
     }
 
     .card_content h3 {
@@ -386,7 +399,7 @@
         height: auto;
         display: flex;
         gap: 2rem;
-        margin-top: 8rem;
+        margin-top: 0;
     }
 
     .tag {

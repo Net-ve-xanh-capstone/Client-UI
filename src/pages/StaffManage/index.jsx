@@ -4,6 +4,8 @@ import SidebarStraff from '../../components/SideBarStaff';
 
 import './style.scss';
 import ContestManagement from '../ContestManagement';
+import BlogStaff from '../../components/cardBlogStaff/page.jsx';
+import CategoryBlog from '../../components/categoryBlog/page.jsx';
 
 function StaffManage() {
   const [collapsed, setCollapsed] = useState(false);
@@ -15,7 +17,9 @@ function StaffManage() {
   };
   const componentFragment = {
     contest: <ContestManagement />,
-    profile: <Profile />
+    profile: <Profile />,
+    blog: <BlogStaff />,
+    category: <CategoryBlog />
   };
 
   function Profile() {

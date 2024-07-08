@@ -73,10 +73,17 @@ const SideBarStaff = ({
           </MenuItem>
           <MenuItem
             icon={<FaBlog />}
-            onClick={() => handleItemClick('profile')}
-            active={activeItem === 'profile'}
+            onClick={() => handleItemClick('blog')}
+            active={activeItem === 'blog'}
           >
             Bài viết
+          </MenuItem>
+          <MenuItem
+            icon={<FaBlog />}
+            onClick={() => handleItemClick('category')}
+            active={activeItem === 'category'}
+          >
+            Thể Loại
           </MenuItem>
           <MenuItem
             icon={<FaPersonBooth />}

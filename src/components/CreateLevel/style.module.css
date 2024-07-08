@@ -1,0 +1,94 @@
+.title {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 0;
+    margin-top: 20px;
+}
+
+.titleHeader {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@media (max-width: 800px) {
+    .modalForm {
+        right: -5px !important;
+    }
+
+
+}
+
+.modalForm {
+    padding: 20px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: -17px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: absolute;
+}
+
+.modalForm>.inputModal {
+    padding: 5px 5px;
+}
+
+.modalForm .btnCreate {
+    margin-top: 10px;
+    padding: 7px 30px;
+}
+
+.modalForm .btnCreate:hover {
+    color: white;
+    background-color: #5142fc70;
+}
+
+.modalForm .btnCreate:focus {
+    color: white;
+}
+
+.formControl {
+    padding: 5px 5px !important;
+}
+
+.levelBlock {
+    margin: 20px;
+    display: flex;
+    gap: 20px;
+    width: max-content;
+}
+
+.levelBlock p {
+    color: black;
+    border: 1px solid black;
+    padding: 0px 5px;
+    border-radius: 10px;
+    width: 100px;
+    text-align: center;
+}
+
+.roundBlock h5 {
+    color: black;
+    font-weight: 500;
+    font-size: 14px;
+    border: 1px solid black;
+    padding: 10px 5px;
+    border-radius: 10px;
+    width: 150px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.inputAward {
+    width: 100px !important;
+    height: 40px;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+}
+
+.rankTitle {
+    width: 100px;
+}

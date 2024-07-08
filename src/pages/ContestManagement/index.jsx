@@ -7,6 +7,9 @@ import ModalForm from '../../components/ModalForm';
 import axios from 'axios';
 import { formatDate } from '../../utils/formatDate';
 import DeleteModal from '../../components/DeleteModal';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import Switch from '@mui/material/Switch';
 
 function ContestManagement() {
   const [isOpenDetail, setIsOpenDetail] = useState(false);
@@ -15,6 +18,7 @@ function ContestManagement() {
   const [contest, setContest] = useState([]);
   const [idContestDelete, setIdContestDelete] = useState();
   const [selectedContest, setSelectedContest] = useState(null); // State để lưu trữ contest được chọn
+  const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     getContest();
@@ -46,11 +50,42 @@ function ContestManagement() {
     axios
       .patch(`https://webapp-240702160733.azurewebsites.net/api/contests?id=${idContestDelete}`)
       .then((res) => {
-        console.log(res.result);
+        if (res.result) {
+          toast.success('Xóa cuộc thi thành công', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light'
+          });
+          getContest();
+        }
       })
       .catch((error) => {
         console.error('There was an error!', error);
       });
+  };
+
+  const handleActiveDate = (data) => {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    const startDate = data.rowData[1].split('T')[0];
+    const endDate = data.rowData[2].split('T')[0];
+
+    if (startDate <= currentDate && currentDate <= endDate) return true;
+
+    return false;
+  };
+
+  const handleActiveDelete = (data) => {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    const startDate = data.rowData[1].split('T')[0];
+
+    if (currentDate < startDate) return false;
+
+    return true;
   };
 
   const columns = [
@@ -84,25 +119,41 @@ function ContestManagement() {
     {
       name: 'TRẠNG THÁI',
       options: {
-        customBodyRender: (value) => (
-          <button className="btn btn-success btn-lg" disabled>
-            Active
-          </button>
-        )
+        customBodyRender: (value, tableData) => {
+          const isActive = handleActiveDate(tableData);
+
+          return (
+            <>
+              <Switch checked={isActive} color="success" disabled />
+              <button
+                className={`btn btn-lg ${isActive ? 'btn-success' : 'btn-secondary'}`}
+                disabled
+              >
+                {isActive ? 'Active' : 'Inactive'}
+              </button>
+            </>
+          );
+        }
       }
     },
     {
       name: 'id',
       label: 'TƯƠNG TÁC',
       options: {
-        customBodyRender: (value) => (
+        customBodyRender: (value, tableData) => (
           <div className={styles.btnAction}>
             <button className="btn btn-info btn-lg" onClick={() => handleOpenDetail(value)}>
               Chi tiết
             </button>
-            <button onClick={() => handleOpenDelete(value)} className="btn btn-danger btn-lg">
-              Xóa
-            </button>
+            {userInfo.role === 'Staff' && (
+              <button
+                onClick={() => handleOpenDelete(value)}
+                disabled={handleActiveDelete(tableData)}
+                className="btn btn-danger btn-lg"
+              >
+                Xóa
+              </button>
+            )}
           </div>
         )
       }
@@ -127,22 +178,22 @@ function ContestManagement() {
       },
       palette: {
         background: {
-          paper: '#1d1d1d',
           default: '#0f172a'
         },
-        mode: 'dark'
+        mode: 'light'
       },
       components: {
         MuiTableCell: {
           styleOverrides: {
             head: {
-              padding: '15px 10px',
-              fontWeight: 'bold'
+              padding: '10px 10px',
+              fontWeight: 'bold',
+              borderBottom: '1px solid black'
             },
             body: {
-              padding: '20px 10px',
-              color: '#fff',
-              fontWeight: 'bold'
+              color: '#000',
+              fontWeight: 'bold',
+              borderBottom: '1px solid black'
             }
           }
         }
@@ -151,36 +202,52 @@ function ContestManagement() {
 
   const handleBack = () => {
     setIsOpenDetail(false);
+    getContest();
+  };
+
+  const handlePostDone = () => {
+    setModalShow(false);
+    getContest();
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <ModalForm modalShow={modalShow} onHide={() => setModalShow(false)} />
+    <div>
+      <ModalForm modalShow={modalShow} onHide={handlePostDone} />
       <DeleteModal
         show={deleteModalShow}
         setShow={setDeleteModalShow}
-        title={'cuộc thi'}
+        title={'cc thi'}
         callBack={handleDelete}
       />
       {!isOpenDetail && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <div className={styles.buttonContainer}>
-            <button className={styles.btnCreate} onClick={() => setModalShow(true)}>
-              <span>Tạo cuộc thi</span>
-            </button>
+        <div className={styles.blurContainer}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+              overflow: 'hidden',
+              padding: '20px'
+            }}
+          >
+            <div className={styles.buttonContainer}>
+              <button className={styles.btnCreate} onClick={() => setModalShow(true)}>
+                <span>Tạo cuộc thi</span>
+              </button>
+            </div>
+            <StyledEngineProvider injectFirst>
+              <ThemeProvider theme={getMuiTheme()}>
+                <div className={styles.tableContainer}>
+                  <MUIDataTable
+                    title={'Quản lí cuộc thi'}
+                    data={contest}
+                    columns={columns}
+                    options={options}
+                  />
+                </div>
+              </ThemeProvider>
+            </StyledEngineProvider>
           </div>
-          <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={getMuiTheme()}>
-              <div className={styles.tableContainer}>
-                <MUIDataTable
-                  title={'Quản lí cuộc thi'}
-                  data={contest}
-                  columns={columns}
-                  options={options}
-                />
-              </div>
-            </ThemeProvider>
-          </StyledEngineProvider>
         </div>
       )}
       {isOpenDetail && (

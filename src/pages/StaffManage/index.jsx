@@ -6,21 +6,11 @@ import './style.scss';
 import ContestManagement from '../ContestManagement';
 import BlogStaff from '../../components/cardBlogStaff/page.jsx';
 import CategoryBlog from '../../components/categoryBlog/page.jsx';
+import { Outlet } from 'react-router-dom';
 
 function StaffManage() {
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
-  const [type, setType] = useState('contest');
-
-  const handleChangeType = (text) => {
-    setType(text);
-  };
-  const componentFragment = {
-    contest: <ContestManagement />,
-    profile: <Profile />,
-    blog: <BlogStaff />,
-    category: <CategoryBlog />
-  };
 
   function Profile() {
     return <h1>Profile</h1>;
@@ -42,7 +32,6 @@ function StaffManage() {
             toggled={toggled}
             handleToggleSidebar={handleToggleSidebar}
             handleCollapsedChange={handleCollapsedChange}
-            handleChangeType={handleChangeType}
           />
           <main>
             <div className="btn-toggle" onClick={() => handleToggleSidebar(true)}>
@@ -57,7 +46,8 @@ function StaffManage() {
             backgroundColor: '#F5F7F8'
           }}
         >
-          {componentFragment[type]}
+          {/* {componentFragment[type]} */}
+          <Outlet />
         </div>
       </div>
     </>

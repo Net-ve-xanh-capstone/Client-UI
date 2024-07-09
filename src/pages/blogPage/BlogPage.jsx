@@ -10,7 +10,7 @@ import styles from './blog.module.css';
 
 function BlogPage() {
   const [blogList, setBlogList] = useState([]);
-  const [totalPage, setTotalPage] = useState(null);
+  const [totalPage, setTotalPage] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const moveToBox = useRef(null);
   const activeMoving = () => {
@@ -29,7 +29,6 @@ function BlogPage() {
     await getAllBlog(pageNumber)
       .then((res) => {
         const data = res.data.result;
-        console.log(data);
         setTotalPage(data.totalPage);
         setBlogList(data.list);
       })

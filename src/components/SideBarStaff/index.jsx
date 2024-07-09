@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import BookIcon from '@mui/icons-material/Book';
+import CategoryIcon from '@mui/icons-material/Category';
+import React, { useEffect, useState } from 'react';
 import {
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
   FaGem,
   FaPalette,
-  FaBlog,
   FaPersonBooth
 } from 'react-icons/fa';
 import {
@@ -15,23 +16,58 @@ import {
   SidebarFooter,
   SidebarHeader
 } from 'react-pro-sidebar';
-import { Link } from 'react-router-dom';
-import CategoryIcon from '@mui/icons-material/Category';
-import BookIcon from '@mui/icons-material/Book';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const SideBarStaff = ({
-  collapsed,
-  toggled,
-  handleToggleSidebar,
-  handleCollapsedChange,
-  handleChangeType
-}) => {
+const SideBarStaff = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedChange }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { pathname } = location;
+
   const [activeItem, setActiveItem] = useState('contest');
 
-  const handleItemClick = (type) => {
-    setActiveItem(type);
-    handleChangeType(type);
+  const listContent = [
+    {
+      icon: <FaPalette />,
+      path: '/contest',
+      name: ' Cuộc thi',
+      new: true
+    },
+    {
+      icon: <BookIcon />,
+      path: '/blog',
+      name: 'Bài viết',
+      new: false
+    },
+    {
+      icon: <CategoryIcon />,
+      path: '/category',
+      name: 'Thể Loại',
+      new: false
+    },
+    {
+      icon: <FaPersonBooth />,
+      path: null,
+      name: 'Giám khảo',
+      new: false
+    },
+    {
+      icon: <FaGem />,
+      path: null,
+      name: 'Working schedule',
+      new: false
+    }
+  ];
+
+  const handleItemClick = (val) => {
+    if (val) {
+      navigate(`/staff-management${val}`);
+    }
   };
+
+  useEffect(() => {
+    const currentPath = pathname.replace('/staff-management', '');
+    setActiveItem(currentPath);
+  }, [pathname]);
 
   return (
     <ProSidebar
@@ -65,42 +101,17 @@ const SideBarStaff = ({
       {/* Content */}
       <SidebarContent>
         <Menu iconShape="circle">
-          <MenuItem
-            icon={<FaPalette />}
-            onClick={() => handleItemClick('contest')}
-            suffix={<span className="badge red">NEW</span>}
-            active={activeItem === 'contest'}
-          >
-            Cuộc thi
-          </MenuItem>
-          <MenuItem
-            icon={<BookIcon />}
-            onClick={() => handleItemClick('blog')}
-            active={activeItem === 'blog'}
-          >
-            Bài viết
-          </MenuItem>
-          <MenuItem
-            icon={<CategoryIcon />}
-            onClick={() => handleItemClick('category')}
-            active={activeItem === 'category'}
-          >
-            Thể Loại
-          </MenuItem>
-          <MenuItem
-            icon={<FaPersonBooth />}
-            onClick={() => handleItemClick('judges')}
-            active={activeItem === 'judges'}
-          >
-            Giám khảo
-          </MenuItem>
-          <MenuItem
-            icon={<FaGem />}
-            onClick={() => handleItemClick('schedule')}
-            active={activeItem === 'schedule'}
-          >
-            Working schedule
-          </MenuItem>
+          {listContent.map((vl, _) => (
+            <MenuItem
+              key={vl}
+              icon={vl.icon}
+              onClick={() => handleItemClick(vl.path)}
+              suffix={vl.new && <span className="badge red">NEW</span>}
+              active={activeItem === vl.path}
+            >
+              {vl.name}
+            </MenuItem>
+          ))}
         </Menu>
       </SidebarContent>
       {/* Footer */}

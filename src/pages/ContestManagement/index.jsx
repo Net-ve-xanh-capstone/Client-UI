@@ -220,7 +220,7 @@ function ContestManagement() {
         callBack={handleDelete}
       />
       {!isOpenDetail && (
-        <div className={styles.blurContainer}>
+        <div className="blur-container">
           <div
             style={{
               display: 'flex',

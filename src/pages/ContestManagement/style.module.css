@@ -1,12 +1,4 @@
 @media (max-width: 800px) {
-    .tableContainer table:nth-child(1) {
-        width: 200%;
-    }
-
-    .tableContainer {
-        margin-top: 20px;
-    }
-
     .btnCreate {
         font-size: 12px !important;
         padding: 5px 10px !important;

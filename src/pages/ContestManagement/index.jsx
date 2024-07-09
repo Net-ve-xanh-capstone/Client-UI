@@ -237,7 +237,7 @@ function ContestManagement() {
             </div>
             <StyledEngineProvider injectFirst>
               <ThemeProvider theme={getMuiTheme()}>
-                <div className={styles.tableContainer}>
+                <div className="table-contest">
                   <MUIDataTable
                     title={'Quản lí cuộc thi'}
                     data={contest}

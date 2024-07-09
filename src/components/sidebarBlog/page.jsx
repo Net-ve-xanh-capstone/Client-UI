@@ -1,13 +1,9 @@
 import FlareIcon from '@mui/icons-material/Flare';
-import Looks3Icon from '@mui/icons-material/Looks3';
-import LooksOneIcon from '@mui/icons-material/LooksOne';
-import LooksTwoIcon from '@mui/icons-material/LooksTwo';
+import SearchIcon from '@mui/icons-material/Search';
 import React, { forwardRef } from 'react';
 import styles from './page.module.css';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
-import SearchIcon from '@mui/icons-material/Search';
 const SidebarBlog = forwardRef((props, ref) => {
-  const { children, setNavigate } = props;
+  const { children } = props;
 
   return (
     <div className={styles.section} ref={ref}>

@@ -6,14 +6,15 @@ import Form from 'react-bootstrap/Form';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import { addnewBlog } from '../../api/blogApi.js';
 import CloseIcon from '@mui/icons-material/Close';
+import { toast } from 'react-toastify';
 
-function AddNewBlog({ triggerClose }) {
+function AddNewBlog({ triggerClose, refetchData }) {
   const [imageLoaded, setImageLoaded] = useState(null);
   const [listCategory, setListCategory] = useState([]);
   const [txtCategory, setTxtCategory] = useState('');
 
   const [imagePost, setImagePost] = useState(null);
-  const { progress, url, error } = useUploadImage(imagePost);
+  const { progress, url } = useUploadImage(imagePost);
   const [txtTitles, setTxtTitles] = useState('');
   const [txtDes, setTxtDes] = useState('');
   const [idCategory, setIdCategory] = useState('');
@@ -23,6 +24,17 @@ function AddNewBlog({ triggerClose }) {
 
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
+  // check all field in payload must be fill in
+  const validation = (payload) => {
+    for (const key in payload) {
+      if (payload[key] === '' || payload[key] === null) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  //auto resize fix with the content
   const resizeTextArea = (value) => {
     if (!txtTitle.current) {
       return;
@@ -34,10 +46,12 @@ function AddNewBlog({ triggerClose }) {
     txtTitle.current.style.height = `${txtTitle.current.scrollHeight}px`;
   };
 
+  // close the popup
   const closePopup = () => {
     triggerClose(null);
   };
 
+  //auto resize fix with the content
   const resizeTextDes = (value) => {
     if (!txtDesRef.current) {
       return;
@@ -48,6 +62,7 @@ function AddNewBlog({ triggerClose }) {
     txtDesRef.current.style.height = `${txtDesRef.current.scrollHeight}px`;
   };
 
+  // adding file to state and loading to the UI
   const changeFile = (e) => {
     console.log('running adding file image');
     if (!(e.target.files.length > 0 && allowedTypes.includes(e.target.files[0].type))) {
@@ -57,6 +72,7 @@ function AddNewBlog({ triggerClose }) {
     setImageLoaded(URL.createObjectURL(e.target.files[0]));
   };
 
+  //calling api to getting all of category not use
   const getAllCategory = async () => {
     await getContaintCategory()
       .then((res) => {
@@ -66,14 +82,27 @@ function AddNewBlog({ triggerClose }) {
       .catch((err) => console.log(err));
   };
 
+  // post the blog with calling api
   const postBlog = async (payload) => {
     await addnewBlog(payload)
-      .then((res) => {
+      .then(() => {
+        toast.success('Bài viết đã được đăng tải thành công !!!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light'
+        });
         triggerClose(null);
+        refetchData();
       })
       .catch((err) => console.log(err));
   };
 
+  // accept the custom hook to get the url from firebase and go to post
   const postImage = () => {
     if (progress) {
       const payload = {
@@ -83,10 +112,31 @@ function AddNewBlog({ triggerClose }) {
         categoryId: idCategory,
         currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c'
       };
-      postBlog(payload);
-    }
-    if (error) {
-      alert('The image having an trouble');
+      if (validation(payload)) {
+        postBlog(payload);
+      } else {
+        toast.error('Không được để trống bất cứ trường dữ liệu nào !!!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light'
+        });
+      }
+    } else {
+      toast.warning('Bạn vẫn đang thiếu ảnh của bài viết này!!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light'
+      });
     }
   };
 
@@ -118,9 +168,9 @@ function AddNewBlog({ triggerClose }) {
             }}
           />
         </div>
+
         {/* handle upload image */}
         <div className={styles.upload_image}>
-          <h3 className={styles.image_title}>Thêm ảnh của bài viết</h3>
           {imageLoaded !== null ? (
             <>
               <label htmlFor="add_more_file" className={styles.image_box}>
@@ -140,7 +190,7 @@ function AddNewBlog({ triggerClose }) {
           ) : (
             <>
               <label htmlFor="add_more_file" className={styles.onClick_upload}>
-                <CloudUploadIcon sx={{ color: '#5142fc', fontSize: '10rem' }} />
+                <CloudUploadIcon sx={{ color: '#5142fc', fontSize: '20rem' }} />
               </label>
               <input
                 type="file"

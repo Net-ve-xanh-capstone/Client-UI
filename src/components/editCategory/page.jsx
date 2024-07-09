@@ -5,6 +5,7 @@ import styles from './page.module.css';
 function EditCategory({ idCategory, textCategory, fetchData, setOpenEdit }) {
   const [valueInput, setValueInput] = useState(textCategory);
 
+  //update category with new object
   const triggerUpdate = async () => {
     await updateCate({
       id: idCategory,
@@ -18,6 +19,7 @@ function EditCategory({ idCategory, textCategory, fetchData, setOpenEdit }) {
       .catch((err) => console.log(err));
   };
 
+  // delete by id category
   const deleteCategory = async () => {
     await deleteCate(idCategory)
       .then(() => {

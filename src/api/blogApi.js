@@ -19,3 +19,9 @@ export const updateBlog = (payload) => {
 export const addnewBlog = (payload) => {
   return axiosApi.post(`posts`, payload);
 };
+
+export const searchingBlog = (payload) => {
+  return axiosApi.get(
+    `posts/search?searchString=${payload.serchString}&PageSize=10&PageNumber=${payload.pageNumber}`
+  );
+};

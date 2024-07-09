@@ -25,8 +25,8 @@ function BlogPage() {
   };
 
   // fetch data
-  const fetchDataBlog = () => {
-    getAllBlog(pageNumber)
+  const fetchDataBlog = async () => {
+    await getAllBlog(pageNumber)
       .then((res) => {
         const data = res.data.result;
         console.log(data);
@@ -40,6 +40,11 @@ function BlogPage() {
   useEffect(() => {
     fetchDataBlog();
   }, []);
+
+  // fetch data when re-render
+  useEffect(() => {
+    fetchDataBlog();
+  }, [pageNumber]);
 
   return (
     <div className="home-5">

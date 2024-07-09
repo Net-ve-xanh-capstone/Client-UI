@@ -77,7 +77,7 @@ function BlogStaff() {
   return (
     <>
       {isopenCreate ? (
-        <AddNewBlog triggerClose={setisopenCreate} />
+        <AddNewBlog triggerClose={setisopenCreate} refetchData={fetchDataBlog} />
       ) : openEdit !== null ? (
         <PopupBlog setOpenEdit={setOpenEdit} blogId={openEdit} recallBlogData={fetchDataBlog} />
       ) : (

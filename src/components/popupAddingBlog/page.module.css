@@ -1,4 +1,8 @@
 .box {
+    background: url('../../../public/assets/images/backgroup-secsion/bg-gradient1.png') no-repeat;
+    background-size: cover;
+    background-position: center;
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,6 +14,7 @@
     background-color: white;
 }
 
+
 .scroll_section {
     width: 100%;
     height: auto;
@@ -19,12 +24,17 @@
     gap: 2rem;
 }
 
+
+
+
 .upload_image {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
     width: 100%;
+
+
 }
 
 .title_line {
@@ -50,6 +60,10 @@
     align-items: center;
     cursor: pointer;
     border-radius: 3rem;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .input_hidden {
@@ -59,6 +73,10 @@
 .image_box {
     max-width: 100%;
     max-height: 40rem;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .image {
@@ -73,8 +91,12 @@
     min-height: 10rem;
     height: auto;
     border-radius: 3rem;
-    border: 1px solid #000;
     padding: 2px;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+
 }
 
 .title_input {
@@ -97,8 +119,11 @@
     min-height: 10rem;
     height: auto;
     border-radius: 3rem;
-    border: 1px solid #000;
     padding: 2px;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .des_input {
@@ -131,13 +156,15 @@
 .form_selected {
     width: 100% !important;
     height: 5rem !important;
-    box-shadow: 0px 3px 16px rgba(47, 83, 109, 0.12) !important;
     font-size: 2rem !important;
     border: none !important;
     border-radius: 3rem !important;
     padding: 0 1rem !important;
     cursor: pointer;
+
+
 }
+
 
 .form_selected:focus {
     outline: none !important;

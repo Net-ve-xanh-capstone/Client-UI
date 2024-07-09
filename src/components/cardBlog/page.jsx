@@ -13,7 +13,7 @@ function CardBlog({ blogList }) {
               </div>
               <div className={styles.card_content}>
                 <div className={styles.text_box}>
-                  <h3>{cutString(vl.title, 10)}</h3>
+                  <h3>{vl.title?.length > 35 ? cutString(vl.title, 35) + '...' : vl.title}</h3>
                   <p>
                     {vl.description?.length > 200
                       ? cutString(vl.description, 200) + '...'

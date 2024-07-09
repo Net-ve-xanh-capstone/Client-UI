@@ -1,22 +1,5 @@
-.overlayer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 1;
-}
-
-
 .box {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
     padding: 2rem;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     z-index: 2;
     display: flex;
     flex-direction: column;
@@ -25,6 +8,10 @@
     border-radius: 3rem;
     min-height: 20rem;
     width: 40%;
+    margin-top: 10rem;
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .title {
@@ -34,7 +21,10 @@
 .input_box {
     width: 100%;
     border-radius: 3rem;
-    border: 1px solid #000;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .txt_input {
@@ -43,6 +33,9 @@
     width: 100%;
     height: 100%;
     border-radius: 3rem;
+    font-size: 1.5rem !important;
+
+    color: #000 !important;
 }
 
 .txt_input:focus {
@@ -74,28 +67,26 @@
 }
 
 /* Máy tính bảng trung bình */
-@media (min-width: 760px) {
+@media (min-width: 300px) {
     .box {
-        position: fixed;
-        top: 50%;
-        left: 70%;
+        width: 94%;
     }
 
     .title {
-        font-size: 3rem !important;
+        font-size: 2rem !important;
     }
 
 }
 
+/* Máy tính bảng trung bình */
+@media (min-width: 760px) {
+    .title {
+        font-size: 3rem !important;
+    }
+}
+
 /* Máy tính bảng lớn */
 @media (min-width: 1024px) {
-
-    .box {
-        position: fixed;
-        top: 50%;
-        left: 70%;
-    }
-
     .title {
         font-size: 3rem !important;
     }
@@ -104,9 +95,7 @@
 /* Laptop nhỏ */
 @media (min-width: 1275px) {
     .box {
-        position: fixed;
-        top: 50%;
-        left: 50%;
+        width: 50%;
     }
 
     .title {

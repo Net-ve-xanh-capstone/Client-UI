@@ -3,18 +3,30 @@ import styles from './page.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 import { getBlogId, updateBlog } from '../../api/blogApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
+import { toast } from 'react-toastify';
 
 function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
   const [txtTitles, setTxtTitles] = useState('');
   const [txtDes, setTxtDes] = useState('');
   const [imageUrl, setImageUrl] = useState(null);
   const [imagePost, setImagePost] = useState('');
-  const { progress, url, error } = useUploadImage(imagePost);
+  const { progress, url } = useUploadImage(imagePost);
 
   const txtTitle = useRef(null);
   const txtDesRef = useRef(null);
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
+  // check all field in payload must be fill in
+  const validation = (payload) => {
+    for (const key in payload) {
+      if (payload[key] === '' || payload[key] === null) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  // resize with text whilt typing
   const resizeTextArea = (value) => {
     if (!txtTitle.current) {
       return;
@@ -25,6 +37,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
     txtTitle.current.style.height = `${txtTitle.current.scrollHeight}px`;
   };
 
+  // resize with text whilt typing
   const resizeTextDes = (value) => {
     if (!txtDesRef.current) {
       return;
@@ -35,6 +48,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
     txtDesRef.current.style.height = `${txtDesRef.current.scrollHeight}px`;
   };
 
+  // adding new file image to state and loading to UI
   const changeFile = (e) => {
     if (!(e.target.files.length > 0 && allowedTypes.includes(e.target.files[0].type))) {
       return;
@@ -55,17 +69,38 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
       .catch((err) => console.log(err));
   };
 
+  //update the blog with new payload
   const triggerUpdate = async (payload) => {
     try {
       await updateBlog(payload);
       recallBlogData();
+      toast.success('Bài viết đã được đăng tải thành công !!!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light'
+      });
     } catch (error) {
-      console.log(error);
+      toast.success(error, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light'
+      });
     } finally {
       setOpenEdit(null);
     }
   };
 
+  // get the url from custom hook with firebase
   const updateImage = () => {
     let payload;
     if (progress) {
@@ -76,10 +111,20 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
         description: txtDes,
         currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c'
       };
-      triggerUpdate(payload);
-    }
-    if (error) {
-      alert(error);
+      if (validation(payload)) {
+        triggerUpdate(payload);
+      } else {
+        toast.error('Không được để trống bất cứ trường dữ liệu nào !!!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light'
+        });
+      }
     } else {
       payload = {
         id: blogId,
@@ -88,10 +133,24 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
         description: txtDes,
         currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c'
       };
-      triggerUpdate(payload);
+      if (validation(payload)) {
+        triggerUpdate(payload);
+      } else {
+        toast.error('Không được để trống bất cứ trường dữ liệu nào !!!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light'
+        });
+      }
     }
   };
 
+  // rerender and calling the event for resize the box input
   useEffect(() => {
     window.addEventListener('resize', resizeTextArea);
     window.addEventListener('resize', resizeTextDes);
@@ -101,14 +160,10 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
     };
   }, [txtTitles, txtDes]);
 
+  // calling blog by id in first time
   useEffect(() => {
-    console.log('calling data');
     fetchData(blogId);
   }, []);
-
-  useEffect(() => {
-    console.log(imageUrl);
-  }, [imageUrl]);
 
   return (
     <div className={styles.container}>

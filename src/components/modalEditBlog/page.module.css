@@ -4,6 +4,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+
 }
 
 .box {
@@ -23,6 +25,10 @@
     flex-direction: column;
     gap: 2rem;
     padding: 2rem;
+
+    background: url('../../../public/assets/images/backgroup-secsion/bg-gradient1.png') no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 
 .title_line {
@@ -35,7 +41,10 @@
     min-height: 10rem;
     height: auto;
     border-radius: 3rem;
-    border: 1px solid #000;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .title_textarea {
@@ -60,7 +69,10 @@
     min-height: 10rem;
     height: auto;
     border-radius: 3rem;
-    border: 1px solid #000;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .des_textarea {

@@ -45,7 +45,7 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
     const { name, value } = event.target;
     setFormData({
       ...formData,
-      [name]: name.includes('rank') && name !== NaN ? parseInt(value) : value
+      [name]: value
     });
   };
 

@@ -143,11 +143,21 @@ $icon-size: 35px;
   color: white;
 }
 
+@media (max-width: 800px) {
+  .table-contest table:nth-child(1) {
+    width: 200%;
+  }
+
+  .table-contest {
+    margin-top: 20px;
+  }
+}
+
 .tss-hj53wm-MUIDataTableToolbar-titleText {
   font-weight: bold !important;
 }
 
-.tss-gm6zfk-MUIDataTableHeadCell-fixedHeader {
+.table-contest .tss-gm6zfk-MUIDataTableHeadCell-fixedHeader {
   background: transparent !important;
 }
 
@@ -155,10 +165,20 @@ $icon-size: 35px;
   font-weight: bold;
 }
 
-.tss-1x5mjc5-MUIDataTable-root {
+.table-contest .tss-1x5mjc5-MUIDataTable-root {
   background: transparent;
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(40px);
   box-shadow:
     rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
     rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.table-contest .tss-178gktx-MUIDataTableHeadCell-contentWrapper {
+  justify-content: center;
+}
+
+.table-contest .css-1gbwibi-MuiTablePagination-selectLabel,
+.table-contest .css-1ni0rdx-MuiTablePagination-displayedRows {
+  color: #454545;
+  font-weight: 700;
 }

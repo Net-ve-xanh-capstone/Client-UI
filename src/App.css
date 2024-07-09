@@ -74,3 +74,26 @@
   background-position: center;
   height: 100vh;
 }
+
+.scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  opacity: 0;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #d5d5d5;
+  border-radius: 100vh;
+  border: none;
+  transition: all 0.2s;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #c0a0b9;
+}
+
+.border_element {
+  border: solid 2px #EEEEEE
+}

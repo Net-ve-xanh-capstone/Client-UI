@@ -10,6 +10,7 @@ import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
 import AddIcon from '@mui/icons-material/Add';
 import AddNewBlog from '../popupAddingBlog/page.jsx';
+import { toast } from 'react-toastify';
 
 function BlogStaff() {
   const [popup, setPopup] = useState('');
@@ -60,8 +61,29 @@ function BlogStaff() {
         fetchDataBlog();
         setModalOpen(null);
         setIdDelete(null);
+        toast.success('Xoá thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light'
+        });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast.error(err, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light'
+        });
+      });
   };
 
   // fetch data when re-render

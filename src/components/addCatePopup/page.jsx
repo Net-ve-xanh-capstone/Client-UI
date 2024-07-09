@@ -48,7 +48,7 @@ function AddCatePopup({
         })
         .catch((err) => console.log(err));
     } else {
-      toast.error('Không được để trống bất cứ trường dữ liệu nào !!!', {
+      toast.error('Xin hãy điền đầy đủ thông tin !!!', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
@@ -85,7 +85,7 @@ function AddCatePopup({
         })
         .catch((err) => console.log(err));
     } else {
-      toast.error('Không được để trống bất cứ trường dữ liệu nào !!!', {
+      toast.error('Xin hãy điền đầy đủ thông tin !!!', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
@@ -107,7 +107,7 @@ function AddCatePopup({
   return (
     <div className={styles.box}>
       <h2 className={`tf-title pb-20 ${styles.title}`}>
-        {isEdit ? `Chỉnh sữa thể loại` : 'Thêm mới thể loại'}
+        {isEdit ? `Chỉnh sửa thể loại` : 'Thêm mới thể loại'}
       </h2>
       <div className={styles.input_box}>
         <input

@@ -86,7 +86,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
   const postBlog = async (payload) => {
     await addnewBlog(payload)
       .then(() => {
-        toast.success('Bài viết đã được đăng tải thành công !!!', {
+        toast.success('Bài viết đã được tải lên !!!', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
@@ -99,7 +99,18 @@ function AddNewBlog({ triggerClose, refetchData }) {
         triggerClose(null);
         refetchData();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast.error(err, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light'
+        });
+      });
   };
 
   // accept the custom hook to get the url from firebase and go to post
@@ -115,7 +126,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
       if (validation(payload)) {
         postBlog(payload);
       } else {
-        toast.error('Không được để trống bất cứ trường dữ liệu nào !!!', {
+        toast.error('Bạn hãy điền đầy đủ thông tin nhé !!!', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
@@ -127,7 +138,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
         });
       }
     } else {
-      toast.warning('Bạn vẫn đang thiếu ảnh của bài viết này!!', {
+      toast.warning('Bạn vui lòng bổ sung thêm ảnh nhé !!', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,

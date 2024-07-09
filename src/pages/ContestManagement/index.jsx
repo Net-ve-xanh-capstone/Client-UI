@@ -216,7 +216,7 @@ function ContestManagement() {
       <DeleteModal
         show={deleteModalShow}
         setShow={setDeleteModalShow}
-        title={'cc thi'}
+        title={'cuộc thi'}
         callBack={handleDelete}
       />
       {!isOpenDetail && (

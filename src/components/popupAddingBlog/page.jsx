@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styles from './page.module.css';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { getContaintCategory } from '../../api/categoryApi.js';
-import Form from 'react-bootstrap/Form';
-import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
-import { addnewBlog } from '../../api/blogApi.js';
 import CloseIcon from '@mui/icons-material/Close';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import React, { useEffect, useRef, useState } from 'react';
+import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
+import { addnewBlog } from '../../api/blogApi.js';
+import { allCategory } from '../../api/categoryApi.js';
+import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
+import styles from './page.module.css';
 
 function AddNewBlog({ triggerClose, refetchData }) {
   const [imageLoaded, setImageLoaded] = useState(null);
@@ -17,12 +17,44 @@ function AddNewBlog({ triggerClose, refetchData }) {
   const { progress, url } = useUploadImage(imagePost);
   const [txtTitles, setTxtTitles] = useState('');
   const [txtDes, setTxtDes] = useState('');
+  const [supDesValue, setSupDes] = useState('');
   const [idCategory, setIdCategory] = useState('');
 
   const txtTitle = useRef(null);
   const txtDesRef = useRef(null);
+  const txtSupDes = useRef(null);
 
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+  const inputArea = [
+    {
+      ref: txtTitle,
+      placeHoder: 'Tiêu đề bài viết',
+      value: txtTitles,
+      onchange: (e) => {
+        setTxtTitles(e.target.value);
+        resizeTextArea(e.target.value);
+      }
+    },
+    {
+      ref: txtSupDes,
+      placeHoder: 'Mô tả bài viết',
+      value: supDesValue,
+      onchange: (e) => {
+        setSupDes(e.target.value);
+        resizeSupDes(e.target.value);
+      }
+    },
+    {
+      ref: txtDesRef,
+      placeHoder: 'Nội dung bài viết',
+      value: txtDes,
+      onchange: (e) => {
+        setTxtDes(e.target.value);
+        resizeTextDes(e.target.value);
+      }
+    }
+  ];
 
   // check all field in payload must be fill in
   const validation = (payload) => {
@@ -52,6 +84,17 @@ function AddNewBlog({ triggerClose, refetchData }) {
   };
 
   //auto resize fix with the content
+  const resizeSupDes = (value) => {
+    if (!txtSupDes.current) {
+      return;
+    }
+    if (value === '') {
+      txtSupDes.current.style.height = 'auto';
+    }
+    txtSupDes.current.style.height = `${txtSupDes.current.scrollHeight}px`;
+  };
+
+  //auto resize fix with the content
   const resizeTextDes = (value) => {
     if (!txtDesRef.current) {
       return;
@@ -73,10 +116,10 @@ function AddNewBlog({ triggerClose, refetchData }) {
   };
 
   //calling api to getting all of category not use
-  const getAllCategory = async () => {
-    await getContaintCategory()
+  const getCategory = async () => {
+    await allCategory()
       .then((res) => {
-        const data = res.data.result.list;
+        const data = res.data.result;
         setListCategory(data);
       })
       .catch((err) => console.log(err));
@@ -153,7 +196,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
 
   // call api in first time join page
   useEffect(() => {
-    getAllCategory();
+    getCategory();
   }, []);
 
   // resize the box whilt input text
@@ -246,35 +289,19 @@ function AddNewBlog({ triggerClose, refetchData }) {
         </div>
         {/* ending category */}
 
-        {/* title editor */}
-        <div className={styles.title_box}>
-          <textarea
-            ref={txtTitle}
-            className={styles.title_input}
-            placeholder="Tiêu đề bài viết"
-            value={txtTitles}
-            onChange={(e) => {
-              setTxtTitles(e.target.value);
-              resizeTextArea(e.target.value);
-            }}
-          ></textarea>
-        </div>
-        {/*ending title editor */}
-
-        {/* des editor */}
-        <div className={styles.des_box}>
-          <textarea
-            ref={txtDesRef}
-            className={styles.des_input}
-            placeholder="Nội dung bài viết"
-            value={txtDes}
-            onChange={(e) => {
-              setTxtDes(e.target.value);
-              resizeTextDes(e.target.value);
-            }}
-          ></textarea>
-        </div>
-        {/*ending des editor */}
+        {/* text editor */}
+        {inputArea.map((vl, _) => (
+          <div key={vl} className={styles.title_box}>
+            <textarea
+              ref={vl.ref}
+              className={styles.title_input}
+              placeholder={vl.placeHoder}
+              value={vl.value}
+              onChange={vl.onchange}
+            ></textarea>
+          </div>
+        ))}
+        {/*ending text editor */}
 
         <div className={styles.btn_click}>
           <span className={styles.btn_find} onClick={() => closePopup()}>

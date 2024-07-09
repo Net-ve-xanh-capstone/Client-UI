@@ -10,11 +10,45 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
   const [txtDes, setTxtDes] = useState('');
   const [imageUrl, setImageUrl] = useState(null);
   const [imagePost, setImagePost] = useState('');
+  const [supDesValue, setSupDes] = useState('');
+
   const { progress, url } = useUploadImage(imagePost);
 
   const txtTitle = useRef(null);
   const txtDesRef = useRef(null);
+  const txtSupDes = useRef(null);
+
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+  const inputArea = [
+    {
+      ref: txtTitle,
+      placeHoder: 'Tiêu đề bài viết',
+      value: txtTitles,
+      onchange: (e) => {
+        setTxtTitles(e.target.value);
+        resizeTextArea(e.target.value);
+      }
+    },
+    {
+      ref: txtSupDes,
+      placeHoder: 'Mô tả bài viết',
+      value: supDesValue,
+      onchange: (e) => {
+        setSupDes(e.target.value);
+        resizeSupDes(e.target.value);
+      }
+    },
+    {
+      ref: txtDesRef,
+      placeHoder: 'Nội dung bài viết',
+      value: txtDes,
+      onchange: (e) => {
+        setTxtDes(e.target.value);
+        resizeTextDes(e.target.value);
+      }
+    }
+  ];
 
   // check all field in payload must be fill in
   const validation = (payload) => {
@@ -35,6 +69,16 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
       txtTitle.current.style.height = 'auto';
     }
     txtTitle.current.style.height = `${txtTitle.current.scrollHeight}px`;
+  };
+
+  const resizeSupDes = (value) => {
+    if (!txtSupDes.current) {
+      return;
+    }
+    if (value === '') {
+      txtSupDes.current.style.height = 'auto';
+    }
+    txtSupDes.current.style.height = `${txtSupDes.current.scrollHeight}px`;
   };
 
   // resize with text whilt typing
@@ -74,7 +118,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
     try {
       await updateBlog(payload);
       recallBlogData();
-      toast.success('Bài viết đã được đăng tải thành công !!!', {
+      toast.success('Bài viết đã được cập nhật thành công !!!', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
@@ -195,30 +239,18 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
               </>
             )}
           </div>
-          <div className={styles.input_title}>
-            <textarea
-              ref={txtTitle}
-              className={styles.title_textarea}
-              placeholder="Tiêu đề bài viết"
-              value={txtTitles}
-              onChange={(e) => {
-                setTxtTitles(e.target.value);
-                resizeTextArea(e.target.value);
-              }}
-            ></textarea>
-          </div>
-          <div className={styles.description}>
-            <textarea
-              ref={txtDesRef}
-              className={styles.des_textarea}
-              placeholder="Nội dung bài viết"
-              value={txtDes}
-              onChange={(e) => {
-                setTxtDes(e.target.value);
-                resizeTextDes(e.target.value);
-              }}
-            ></textarea>
-          </div>
+          {inputArea.map((vl, _) => (
+            <div key={vl} className={styles.input_title}>
+              <textarea
+                ref={vl.ref}
+                className={styles.title_textarea}
+                placeholder={vl.placeHoder}
+                value={vl.value}
+                onChange={vl.onchange}
+              ></textarea>
+            </div>
+          ))}
+
           <div className={styles.button_trigger}>
             <span className={styles.btn_find} onClick={() => setOpenEdit(null)}>
               <h5>Cancel</h5>

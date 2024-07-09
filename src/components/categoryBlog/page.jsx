@@ -3,12 +3,11 @@ import MUIDataTable from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { deleteCate, getAllCategory } from '../../api/categoryApi.js';
+import { categoryNotuse, deleteCate } from '../../api/categoryApi.js';
 import AddCatePopup from '../addCatePopup/page.jsx';
 import styles from './page.module.css';
 
 function CategoryBlog() {
-  const [totalPage, setTotalPage] = useState(10);
   const [listCate, setListCate] = useState([]);
   const [openEdit, setOpenEdit] = useState(null);
   const [nameCate, setNameCate] = useState('');
@@ -102,11 +101,10 @@ function CategoryBlog() {
 
   // get all category
   const fetchData = async () => {
-    await getAllCategory(1)
+    await categoryNotuse()
       .then((res) => {
         const data = res.data.result;
-        setTotalPage(data.totalPage);
-        setListCate(data.list);
+        setListCate(data);
       })
       .catch((err) => console.log(err));
   };

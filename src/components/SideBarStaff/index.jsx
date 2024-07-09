@@ -16,6 +16,8 @@ import {
   SidebarHeader
 } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
+import CategoryIcon from '@mui/icons-material/Category';
+import BookIcon from '@mui/icons-material/Book';
 
 const SideBarStaff = ({
   collapsed,
@@ -72,14 +74,14 @@ const SideBarStaff = ({
             Cuộc thi
           </MenuItem>
           <MenuItem
-            icon={<FaBlog />}
+            icon={<BookIcon />}
             onClick={() => handleItemClick('blog')}
             active={activeItem === 'blog'}
           >
             Bài viết
           </MenuItem>
           <MenuItem
-            icon={<FaBlog />}
+            icon={<CategoryIcon />}
             onClick={() => handleItemClick('category')}
             active={activeItem === 'category'}
           >

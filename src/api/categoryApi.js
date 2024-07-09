@@ -1,7 +1,11 @@
 import axiosApi from './axiosApi';
 
-export const getAllCategory = (PageNumber) => {
-  return axiosApi.get(`categories/getcategoryunused?PageSize=5&PageNumber=${PageNumber}`);
+export const categoryNotuse = () => {
+  return axiosApi.get(`categories/getallcategoryunused`);
+};
+// wait for api by backend
+export const allCategory = () => {
+  return axiosApi.get(`categories/getallcategory`);
 };
 
 export const updateCate = (payload) => {

@@ -2,7 +2,7 @@ import Role from '../constant/Role';
 import ProtectedRoute from './ProtectedRoute';
 import React, { lazy } from 'react';
 
-const Home1 = lazy(() => import('../pages/Home1'));
+const Home1 = lazy(() => import('../pages/Home.jsx'));
 const Login = lazy(() => import('../pages/Login'));
 const SignUp = lazy(() => import('../pages/SignUp'));
 const SubmitPage = lazy(() => import('../pages/SubmitPage'));
@@ -16,9 +16,9 @@ const routes = [
   {
     path: '/submit',
     component: (
-      // <ProtectedRoute role={Role.COMPETITOR}>
+      <ProtectedRoute role={Role.COMPETITOR}>
       <SubmitPage />
-      // </ProtectedRoute>
+      </ProtectedRoute>
     )
   },
   {

@@ -3342,3 +3342,9 @@ input.number::-webkit-inner-spin-button {
 .option:hover {
   background-color: rgb(246, 246, 246);
 }
+
+.tag-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

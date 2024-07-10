@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import img1 from '../../assets/images/avatar/avt-1.jpg';
-import img2 from '../../assets/images/avatar/avt-2.jpg';
-import img3 from '../../assets/images/avatar/avt-3.jpg';
-import img4 from '../../assets/images/avatar/avt-4.jpg';
-import { Fallback } from '../../constant/Fallback';
+import img1 from '../../../assets/images/avatar/avt-1.jpg';
+import img2 from '../../../assets/images/avatar/avt-2.jpg';
+import img3 from '../../../assets/images/avatar/avt-3.jpg';
+import img4 from '../../../assets/images/avatar/avt-4.jpg';
+import { Fallback } from '../../../constant/Fallback';
 import { withErrorBoundary } from 'react-error-boundary';
 import PropTypes from 'prop-types';
 

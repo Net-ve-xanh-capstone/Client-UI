@@ -1,7 +1,7 @@
 import { withErrorBoundary } from 'react-error-boundary';
 import { Link } from 'react-router-dom';
-import { Fallback } from '../../constant/Fallback';
 import PropTypes from 'prop-types';
+import { Fallback } from '../../../constant/Fallback';
 
 const Create = () => {
   const data = [

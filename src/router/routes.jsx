@@ -2,7 +2,7 @@ import React, { lazy } from 'react';
 import Role from '../constant/Role';
 import ProtectedRoute from './ProtectedRoute';
 
-const Home = lazy(() => import('../pages/Home'));
+const Home = lazy(() => import('../pages/Home/Home'));
 const BlogPage = lazy(() => import('../pages/blogPage/BlogPage'));
 const Login = lazy(() => import('../pages/Login'));
 const SignUp = lazy(() => import('../pages/SignUp'));

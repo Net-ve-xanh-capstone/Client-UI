@@ -2,13 +2,13 @@ import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
-import img1 from '../../assets/images/icon/menu.png';
-import img2 from '../../assets/images/icon/rainbow.png';
-import img3 from '../../assets/images/icon/photo.png';
-import img4 from '../../assets/images/icon/itunes.png';
-import CardModal from '../../components/CardModal';
+import img1 from '../../../assets/images/icon/menu.png';
+import img2 from '../../../assets/images/icon/rainbow.png';
+import img3 from '../../../assets/images/icon/photo.png';
+import img4 from '../../../assets/images/icon/itunes.png';
+import CardModal from '../../../components/CardModal';
 import { withErrorBoundary } from 'react-error-boundary';
-import { Fallback } from '../../constant/Fallback';
+import { Fallback } from '../../../constant/Fallback';
 
 const TodayPicks = (props) => {
   const data = props.data;

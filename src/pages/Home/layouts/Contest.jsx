@@ -8,29 +8,29 @@ import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 
-import CardModal from '../../components/CardModal';
-import { Fallback } from '../../constant/Fallback';
+import CardModal from '../../../components/CardModal';
+import { Fallback } from '../../../constant/Fallback';
 import PropTypes from 'prop-types';
 import { withErrorBoundary } from 'react-error-boundary';
-import { contestApi } from '../../api/contestApi.js';
-import { useQuery } from '@tanstack/react-query';
-import { defaultAvatar, defaultImage } from '../../constant/imageDefault.js';
+import { defaultAvatar, defaultImage } from '../../../constant/imageDefault.js';
+import useFetchData from '../hooks/useQueryData.js';
 const Contest = () => {
-  const { isLoading, isError, data, error } =  useQuery({
-    queryKey: ['contests'],
-    queryFn: contestApi.fetchAllContest,
-  })
+  const { isLoading, isError, data, error } = useFetchData('contests');
   const [contest, setContest] = useState(null);
   useEffect(() => {
-    if(data) {
-      setContest(data?.data?.result)
+    if (data) {
+      setContest(data?.data?.result);
     }
   }, [data]);
- 
+
   const [modalShow, setModalShow] = useState(false);
 
   if (isLoading) {
-    return <span>Loading...</span>
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
   }
   return (
     <Fragment>
@@ -72,10 +72,12 @@ const Contest = () => {
                                 <Link to="/item-details-01">
                                   <img src={defaultImage} alt="axies" />
                                 </Link>
-                                
+
                                 <div className="featured-countdown">
                                   <span className="slogan"></span>
-                                  <Countdown date={Date.now() + new Date(contest?.endTime).getTime()/1000}>
+                                  <Countdown
+                                    date={Date.now() + new Date(contest?.endTime).getTime() / 1000}
+                                  >
                                     <span>You are good to go!</span>
                                   </Countdown>
                                 </div>
@@ -84,7 +86,7 @@ const Contest = () => {
                                     onClick={() => setModalShow(true)}
                                     className="sc-button style-place-bid style fl-button pri-3"
                                   >
-                                    <span>Chi tiết</span>
+                                    <span>Đăng Ký</span>
                                   </button>
                                 </div>
                               </div>
@@ -107,7 +109,7 @@ const Contest = () => {
                                     </h6>
                                   </div>
                                 </div>
-                                <div style={{width: '100px'}}className="price">
+                                <div style={{ width: '100px' }} className="price">
                                   <span>Mô tả</span>
                                   <h5> {contest?.content}</h5>
                                 </div>

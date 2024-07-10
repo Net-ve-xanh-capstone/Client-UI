@@ -49,7 +49,7 @@ export const competitorRegister = createAsyncThunk(
         birthday
       };
 
-      const { data } = await authenApi.competitorRegister('/create', req, config);
+      const { data } = await authenApi.competitorRegister('/authentications/register', req, config);
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {

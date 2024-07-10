@@ -1,8 +1,7 @@
+import './App.css';
 import React, { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import './App.css';
 import routes from './router/routes';
-import React, { Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient();
 function App() {

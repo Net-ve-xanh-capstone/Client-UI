@@ -1,0 +1,196 @@
+.box {
+    background: url('../../../public/assets/images/backgroup-secsion/bg-gradient1.png') no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+    width: 100%;
+    padding: 2rem;
+    overflow-y: auto;
+    background-color: white;
+}
+
+
+.scroll_section {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+
+
+
+.upload_image {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+
+
+}
+
+.title_line {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.title {
+    color: #5142fc !important;
+}
+
+.image_title {
+    color: #5142fc !important;
+}
+
+.onClick_upload {
+    width: 100%;
+    height: 30rem;
+    border: 1px dashed #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 3rem;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.input_hidden {
+    opacity: 0;
+}
+
+.image_box {
+    max-width: 100%;
+    max-height: 40rem;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.image {
+    max-width: 100%;
+    max-height: 40rem;
+    object-fit: cover;
+    object-position: top center;
+}
+
+.title_box {
+    width: 100%;
+    min-height: 10rem;
+    height: auto;
+    border-radius: 3rem;
+    padding: 2px;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+
+}
+
+.title_input {
+    font-size: 2rem;
+    color: black;
+    width: 100%;
+    word-break: break-word;
+    resize: none;
+    overflow: hidden;
+    border: none;
+    outline: none !important;
+}
+
+.title_input:focus {
+    border: none;
+}
+
+.des_box {
+    width: 100%;
+    min-height: 10rem;
+    height: auto;
+    border-radius: 3rem;
+    padding: 2px;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.des_input {
+    font-size: 2rem;
+    color: black;
+    width: 100%;
+    word-break: break-word;
+    resize: none;
+    overflow: hidden;
+    border: none;
+    outline: none !important;
+}
+
+.des_input:focus {
+    border: none;
+}
+
+.category_box {
+    width: 100%;
+}
+
+.cate_title {
+    color: #5142fc !important;
+}
+
+.box_select {
+    width: 100%;
+}
+
+.form_selected {
+    width: 100% !important;
+    height: 5rem !important;
+    font-size: 2rem !important;
+    border: none !important;
+    border-radius: 3rem !important;
+    padding: 0 1rem !important;
+    cursor: pointer;
+
+
+}
+
+
+.form_selected:focus {
+    outline: none !important;
+    border: none !important;
+}
+
+.btn_click {
+    display: flex;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 2rem;
+}
+
+.btn_find {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: calc(2rem - 0.5rem);
+    background-color: #5142fc;
+    color: white;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 1.2rem 1rem;
+}
+
+.btn_find:hover {
+    opacity: 0.9;
+}

@@ -32,7 +32,68 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.tss-hj53wm-MUIDataTableToolbar-titleText {
+  font-weight: bold !important;
+}
+
+.tss-gm6zfk-MUIDataTableHeadCell-fixedHeader {
+  background: transparent !important;
+}
+
+.tss-1akey0g-MUIDataTableHeadCell-data {
+  font-weight: bold;
+}
+
+.tss-1x5mjc5-MUIDataTable-root {
+  background: transparent;
+  backdrop-filter: blur(40px);
+  box-shadow:
+    rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.tss-178gktx-MUIDataTableHeadCell-contentWrapper {
+  justify-content: center;
+}
+
+.css-1gbwibi-MuiTablePagination-selectLabel,
+.css-1ni0rdx-MuiTablePagination-displayedRows {
+  color: #454545;
+  font-weight: 700;
+}
+
+.blur-container {
+  background: url('./assets/images/backgroundTable/table.png') no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  opacity: 0;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #d5d5d5;
+  border-radius: 100vh;
+  border: none;
+  transition: all 0.2s;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #c0a0b9;
+}
+
+.border_element {
+  border: solid 2px #EEEEEE
 }

@@ -11,7 +11,11 @@ export const competitorLogin = createAsyncThunk(
           'Content-Type': 'application/json'
         }
       };
-      const { data } = await authenApi.competitorLogin('/login', { username, password }, config);
+      const { data } = await authenApi.competitorLogin(
+        'authentications/login',
+        { username, password },
+        config
+      );
 
       return data;
     } catch (error) {

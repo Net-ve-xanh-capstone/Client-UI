@@ -9,6 +9,8 @@ import ScrollToTop from './utils/ScrollToTop.js';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { PersistGate } from 'redux-persist/lib/integration/react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
@@ -17,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="vi">
           <ScrollToTop />
           <App></App>
+          <ToastContainer />
         </LocalizationProvider>
       </BrowserRouter>
     </PersistGate>

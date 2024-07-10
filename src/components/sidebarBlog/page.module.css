@@ -1,0 +1,150 @@
+/* Điện thoại di động trung bình */
+@media (min-width: 300px) {
+
+    /* css for section body */
+    .section {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        gap: 2rem;
+        padding: 0 2rem;
+    }
+
+    /* ending css for section body */
+
+    .left_side {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 2rem;
+        height: auto;
+        width: 100%;
+    }
+
+
+    /* this is for sidebar */
+
+    .right_side {
+        width: 100%;
+        height: auto;
+        position: unset;
+    }
+
+    .sticky {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        gap: 1rem;
+        width: 100%;
+        height: auto;
+    }
+
+    .topic {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+
+    .side_choose {
+        width: 90%;
+        display: flex;
+        padding: 1rem 2rem;
+        align-items: center;
+        height: 5rem;
+        background-color: #eeecff;
+        border-radius: 5rem;
+    }
+
+    .side_choose input {
+        height: 100%;
+        width: 100%;
+        outline: none !important;
+        border: none !important;
+        background-color: none;
+    }
+}
+
+
+/* Máy tính bảng lớn */
+@media (min-width: 1268px) {
+
+    /* css for section body */
+    .section {
+        width: 100%;
+        height: auto;
+        display: flex;
+        gap: 3rem;
+        padding: 0 5rem;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    /* ending css for section body */
+
+    .left_side {
+        flex: 4;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+        align-items: center;
+    }
+
+
+    /* this is for sidebar */
+
+    .right_side {
+        flex: 1.5;
+        width: 100%;
+        height: 100%;
+        position: -webkit-sticky;
+        /* Safari */
+        position: sticky;
+        top: 10rem;
+    }
+
+    .sticky {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 2rem;
+        gap: 2rem;
+        width: 100%;
+        height: 100%;
+        position: sticky;
+    }
+
+    .topic {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .side_choose {
+        width: 100%;
+        display: flex;
+        padding: 1rem 2rem;
+        align-items: center;
+        height: 5rem;
+        background-color: #eeecff;
+        border-radius: 5rem;
+    }
+
+    .side_choose input {
+        height: 100%;
+        width: 100%;
+        outline: none !important;
+        border: none !important;
+        background-color: none;
+    }
+
+}
+
+/* Laptop nhỏ */

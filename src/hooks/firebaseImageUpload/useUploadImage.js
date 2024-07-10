@@ -23,10 +23,12 @@ export const useUploadImage = (file) => {
         },
         (error) => {
           alert(error);
+          setError(error);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setUrl(downloadURL);
+            console.log(downloadURL);
           });
         }
       );

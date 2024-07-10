@@ -2,31 +2,105 @@
 import { Link } from 'react-router-dom';
 import HeaderVersion2 from '../components/common/header/HeaderVersion2';
 import Footer from '../components/common/footer/Footer';
-import Countdown from 'react-countdown';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import avt from '../assets/images/avatar/avt-9.jpg';
 import { useEffect, useState } from 'react';
 import { defaultImage } from '../constant/imageDefault';
 import { useUploadImage } from '../hooks/firebaseImageUpload/useUploadImage';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import TextfieldCommon from '../components/input/TextfieldCommon';
+import TextareaCommon from '../components/textarea/TextareaCommon';
+import { Dropdown } from '../components/dropdown';
+import classNames from 'classnames';
+import { useSelector } from 'react-redux';
+import { topicApi } from '../api/topicApi';
+import { paintingApi } from '../api/paintingApi';
+import Swal from 'sweetalert2';
 
+const draffPaintingEndpoint = 'paintings/draftepainting1stround';
+const getAllPaintingByCompetitorIdEndpoint = 'paintings/listpaintingbyaccountid';
+const topics = await topicApi.getAllTopic('topics');
+const topicsData = topics.data.result.list;
 const SubmitPage = () => {
   const [image, setImage] = useState(null);
   const [file, setFile] = useState(null);
+  const [topicId, setTopicId] = useState(null);
   const { progress, url, error } = useUploadImage(file);
+  const userInfo = useSelector((state) => state.auth.userInfo);
+  const today = new Date().toISOString().slice(0, 10);
+  const [paintingCompetitor, setPaintingCompetitor] = useState(null);
+  const schema = yup.object().shape({
+    file: yup.mixed().required('Vui lòng chọn ảnh'),
+    name: yup.string().required('Vui lòng nhập tên của bức tranh'),
+    description: yup.string(),
+    topic: yup.string().required('Vui lòng chọn chủ đề')
+  });
+
+  const {
+    handleSubmit,
+    control,
+    reset,
+    setValue,
+    trigger,
+    watch,
+    setError,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(schema),
+    reValidateMode: 'onChange'
+  });
   const handlePreviewImage = (e) => {
     const file = e.target.files[0];
     file.preview = URL.createObjectURL(file);
-    setImage(file);
+    setImage(URL.createObjectURL(file));
+    setValue('file', file);
+    setError('file', '');
+    setFile(file);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const file = e.target[0]?.files[0];
+  const handleSubmitPainting = async (e) => {
+    // Trigger validate form
+    const isValid = await trigger();
+    if (!isValid) return;
+    const data = {
+      image: url,
+      name: e.name,
+      description: e.description,
+      roundId: '1ff52294-cc72-4781-a73a-042baffb4ced',
+      topicId: topicId,
+      currentUserId: userInfo.Id
+    };
+    Swal.fire({
+      title: 'Bạn có chắc chắn nộp bài?',
+      showCancelButton: true,
+      confirmButtonText: 'Nộp'
+    }).then((result) => {
+      console.log('call');
+      if (result.isConfirmed) {
+        paintingApi
+          .submitPainting(draffPaintingEndpoint, data)
+          .then(() => {
+            Swal.fire('Đã nộp bài thành công', '', 'success');
+          })
+          .catch((error) => {
+            Swal.fire('Nộp bài thất bại', 'Hãy thử lại sau bạn nhé', 'error');
+          });
+      } else if (result.isDenied) {
+        Swal.fire('Bạn đã hủy nộp bài', '', 'info');
+      }
+    });
+  };
 
-    if (!file) return;
+  const getDropdownOptions = (data, defaultValue = '') => {
+    const value = watch(data) || defaultValue;
+    return value;
+  };
 
-    setFile(file);
+  const handleSelectDropdownOption = (name, value) => {
+    setValue(name, value.name);
+    setTopicId(value.id);
+    setError(name, '');
   };
 
   useEffect(() => {
@@ -36,7 +110,19 @@ const SubmitPage = () => {
         URL.revokeObjectURL(image.preview);
       }
     };
-  }, [image]);
+  }, [image, userInfo.Id]);
+
+  useEffect(() => {
+    paintingApi
+      .getAllPaintingByCompetitorId(getAllPaintingByCompetitorIdEndpoint + '/' + userInfo.Id)
+      .then((res) => {
+        const draftPaintings = res.data.result.list.filter(
+          (painting) => painting.status === 'Draft'
+        );
+        setPaintingCompetitor(draftPaintings[0]);
+        setImage(draftPaintings[0]?.image);
+      });
+  }, [userInfo.Id]);
 
   return (
     <div className="create-item">
@@ -67,65 +153,51 @@ const SubmitPage = () => {
       <div className="tf-create-item tf-section">
         <div className="themesflat-container">
           <div className="row">
-            <div className="col-xl-3 col-lg-6 col-md-6 col-12">
-              <h4 className="title-create-item">Xem trước</h4>
-              <div className="sc-card-product">
-                <div className="card-media">
-                  <Link className="cursor-none" to="#">
-                    <img src={image ? image.preview : defaultImage} alt="preview" />
-                  </Link>
-                  <Link to="/login" className="wishlist-button heart">
-                    <span className="number-like"> 100</span>
-                  </Link>
-                  <div className="featured-countdown">
-                    <span className="slogan"></span>
-                    <Countdown date={Date.now() + 500000000}>
-                      <span>You are good to go!</span>
-                    </Countdown>
-                  </div>
-                </div>
-                <div className="card-title">
-                  <h5>
-                    <Link className="" to="#">
-                      Cyber Doberman #766
+            {image && (
+              <div className="col-xl-3 col-lg-6 col-md-6 col-12">
+                <h4 style={{ marginBottom: '20px' }} className="title-create-item">
+                  Xem trước
+                </h4>
+                <div className="sc-card-product">
+                  <div className="card-media">
+                    <Link className="cursor-none" to="#">
+                      <img src={image ? image : defaultImage} alt="preview" />
                     </Link>
-                  </h5>
-                  <div className="tags">bsc</div>
-                </div>
-                <div className="meta-info">
-                  <div className="author">
-                    <div className="avatar">
-                      <img src={avt} alt="Axies" />
+                  </div>
+                  <div className="meta-info">
+                    <div className="author">
+                      <div className="text">
+                        <span>Tác giả</span>
+                        <h5>{userInfo.nameid}</h5>
+                      </div>
                     </div>
-                    <div className="info">
-                      <span>Owned By</span>
-                      <h6>
-                        {' '}
-                        <Link to="#">Freddie Carpenter</Link>
-                      </h6>
+                    <div className="text">
+                      <span>Ngày nộp</span>
+                      <h5>{today}</h5>
                     </div>
                   </div>
-                  <div className="price">
-                    <span>Current Bid</span>
-                    <h5> 4.89 ETH</h5>
-                  </div>
-                </div>
-                <div className="card-bottom">
-                  <Link to="/wallet-connect" className="sc-button style bag fl-button pri-3">
-                    <span>Place Bid</span>
-                  </Link>
-                  <Link to="/activity-01" className="view-history reload">
-                    View History
-                  </Link>
                 </div>
               </div>
-            </div>
-            <div className="col-xl-9 col-lg-6 col-md-12 col-12">
-              <div className="form-create-item">
-                <form action="#" onSubmit={handleSubmit}>
+            )}
+            <div
+              className={`${image ? 'col-xl-9 col-lg-6 col-md-12 col-12' : 'col-xl-12 col-lg-12 col-md-12 col-12'}`}
+            >
+              <div className="form-create-item" style={{ left: '50%' }}>
+                <form action="#" onSubmit={handleSubmit(handleSubmitPainting)}>
                   <h4 className="title-create-item">Tải ảnh</h4>
-                  <label className="uploadFile">
-                    <span className="filename">PNG, JPG. Max 20mb.</span>
+                  <label
+                    className={classNames(
+                      'uploadFile',
+                      errors.file?.message?.length > 0 ? 'border-danger' : ''
+                    )}
+                  >
+                    {image ? (
+                      <span className="filename">PNG, JPG. tối đa 20mb.</span>
+                    ) : errors.file ? (
+                      <span className="text-danger h5">{errors.file.message}</span>
+                    ) : (
+                      <span className="filename">PNG, JPG. tối đa 20mb.</span>
+                    )}
                     <input
                       onChange={handlePreviewImage}
                       type="file"
@@ -133,151 +205,57 @@ const SubmitPage = () => {
                       name="file"
                     />
                   </label>
-                  <button className="submit">Nộp ảnh</button>
+                  <div>
+                    <h4 className="title-create-item">Tên bức tranh</h4>
+                    <TextfieldCommon
+                      control={control}
+                      error={errors.name?.message}
+                      id="name"
+                      name="name"
+                      tabIndex="1"
+                      placeholder="Nhập tên của bức tranh"
+                      className="mb-15"
+                      autoFocus
+                    />
+                    <h4 className="title-create-item">Mô tả bức tranh</h4>
+                    <TextareaCommon
+                      control={control}
+                      id="description"
+                      name="description"
+                      tabIndex="1"
+                      placeholder="Nhập mô tả của bức tranh"
+                      className="mb-15"
+                      autoFocus
+                    />
+
+                    <div className="inner-row-form style-2">
+                      <div id="item-create" className="dropdown">
+                        <h4 className="title-create-item">Chủ đề</h4>
+                        {errors.topic && (
+                          <span className="text-danger h5">{errors.topic.message}</span>
+                        )}
+                        <Dropdown errors={errors.topic?.message}>
+                          <Dropdown.Select
+                            placeholder={getDropdownOptions('topic', 'Chọn chủ đề')}
+                          ></Dropdown.Select>
+                          <Dropdown.List>
+                            {topicsData.map((topic) => (
+                              <Dropdown.Option
+                                key={topic.name}
+                                onClick={() => handleSelectDropdownOption('topic', topic)}
+                              >
+                                {topic.name}
+                              </Dropdown.Option>
+                            ))}
+                          </Dropdown.List>
+                        </Dropdown>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" className="btn-submit">
+                    Nộp bản vẽ mềm
+                  </button>
                 </form>
-
-                <div className="flat-tabs tab-create-item">
-                  <h4 className="title-create-item">Select method</h4>
-                  <Tabs>
-                    <TabList>
-                      <Tab>
-                        <span className="icon-fl-tag"></span>Fixed Price
-                      </Tab>
-                      <Tab>
-                        <span className="icon-fl-clock"></span>Time Auctions
-                      </Tab>
-                      <Tab>
-                        <span className="icon-fl-icon-22"></span>Open For Bids
-                      </Tab>
-                    </TabList>
-
-                    <TabPanel>
-                      <form action="#">
-                        <h4 className="title-create-item">Price</h4>
-                        <input type="text" placeholder="Enter price for one item (ETH)" />
-
-                        <h4 className="title-create-item">Title</h4>
-                        <input type="text" placeholder="Item Name" />
-
-                        <h4 className="title-create-item">Description</h4>
-                        <textarea placeholder="e.g. “This is very limited item”"></textarea>
-
-                        <div className="row-form style-3">
-                          <div className="inner-row-form">
-                            <h4 className="title-create-item">Royalties</h4>
-                            <input type="text" placeholder="5%" />
-                          </div>
-                          <div className="inner-row-form">
-                            <h4 className="title-create-item">Size</h4>
-                            <input type="text" placeholder="e.g. “size”" />
-                          </div>
-                          <div className="inner-row-form style-2">
-                            <div className="seclect-box">
-                              <div id="item-create" className="dropdown">
-                                <Link to="#" className="btn-selector nolink">
-                                  Abstraction
-                                </Link>
-                                <ul>
-                                  <li>
-                                    <span>Art</span>
-                                  </li>
-                                  <li>
-                                    <span>Music</span>
-                                  </li>
-                                  <li>
-                                    <span>Domain Names</span>
-                                  </li>
-                                  <li>
-                                    <span>Virtual World</span>
-                                  </li>
-                                  <li>
-                                    <span>Trading Cards</span>
-                                  </li>
-                                  <li>
-                                    <span>Sports</span>
-                                  </li>
-                                  <li>
-                                    <span>Utility</span>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
-                    </TabPanel>
-                    <TabPanel>
-                      <form action="#">
-                        <h4 className="title-create-item">Minimum bid</h4>
-                        <input type="text" placeholder="enter minimum bid" />
-                        <div className="row">
-                          <div className="col-md-6">
-                            <h5 className="title-create-item">Starting date</h5>
-                            <input
-                              type="date"
-                              name="bid_starting_date"
-                              id="bid_starting_date"
-                              className="form-control"
-                              min="1997-01-01"
-                            />
-                          </div>
-                          <div className="col-md-6">
-                            <h4 className="title-create-item">Expiration date</h4>
-                            <input
-                              type="date"
-                              name="bid_expiration_date"
-                              id="bid_expiration_date"
-                              className="form-control"
-                            />
-                          </div>
-                        </div>
-
-                        <h4 className="title-create-item">Title</h4>
-                        <input type="text" placeholder="Item Name" />
-
-                        <h4 className="title-create-item">Description</h4>
-                        <textarea placeholder="e.g. “This is very limited item”"></textarea>
-                      </form>
-                    </TabPanel>
-                    <TabPanel>
-                      <form action="#">
-                        <h4 className="title-create-item">Price</h4>
-                        <input type="text" placeholder="Enter price for one item (ETH)" />
-
-                        <h4 className="title-create-item">Minimum bid</h4>
-                        <input type="text" placeholder="enter minimum bid" />
-
-                        <div className="row">
-                          <div className="col-md-6">
-                            <h5 className="title-create-item">Starting date</h5>
-                            <input
-                              type="date"
-                              name="bid_starting_date"
-                              id="bid_starting_date2"
-                              className="form-control"
-                              min="1997-01-01"
-                            />
-                          </div>
-                          <div className="col-md-6">
-                            <h4 className="title-create-item">Expiration date</h4>
-                            <input
-                              type="date"
-                              name="bid_expiration_date"
-                              id="bid_expiration_date2"
-                              className="form-control"
-                            />
-                          </div>
-                        </div>
-
-                        <h4 className="title-create-item">Title</h4>
-                        <input type="text" placeholder="Item Name" />
-
-                        <h4 className="title-create-item">Description</h4>
-                        <textarea placeholder="e.g. “This is very limited item”"></textarea>
-                      </form>
-                    </TabPanel>
-                  </Tabs>
-                </div>
               </div>
             </div>
           </div>

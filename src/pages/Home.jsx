@@ -8,13 +8,12 @@ import TopSeller from '../layouts/home/TopSeller';
 import todayPickData from '../assets/fake-data/data-today-pick';
 import PopularCollection from '../layouts/home/PopularCollection';
 import Create from '../layouts/home/Create';
-
-const Home1 = () => {
+const Home = () => {
   return (
     <div className="home-5">
       <HeaderVersion2 />
       <SliderStyle2 data={heroSliderData} />
-      <Contest />
+      <Contest/>
       <TopSeller />
       <TodayPicks data={todayPickData} />
       <PopularCollection />
@@ -24,4 +23,4 @@ const Home1 = () => {
   );
 };
 
-export default Home1;
+export default Home;

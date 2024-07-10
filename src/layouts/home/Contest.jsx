@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
@@ -8,39 +8,30 @@ import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 
-import img1 from '../../assets/images/box-item/image-box-26.jpg';
-import img2 from '../../assets/images/box-item/image-box-27.jpg';
-import imga1 from '../../assets/images/avatar/avt-11.jpg';
-import imga2 from '../../assets/images/avatar/avt-12.jpg';
 import CardModal from '../../components/CardModal';
 import { Fallback } from '../../constant/Fallback';
 import PropTypes from 'prop-types';
 import { withErrorBoundary } from 'react-error-boundary';
-
+import { contestApi } from '../../api/contestApi.js';
+import { useQuery } from '@tanstack/react-query';
+import { defaultAvatar, defaultImage } from '../../constant/imageDefault.js';
 const Contest = () => {
-  const [data] = useState([
-    {
-      img: img1,
-      title: 'Hamlet Contemplates ...',
-      tags: 'bsc',
-      imgAuthor: imga1,
-      nameAuthor: 'SalvadorDali',
-      price: '4.89 ETH',
-      wishlist: '100'
-    },
-    {
-      img: img2,
-      title: 'Triumphant Awakening...',
-      tags: 'bsc',
-      imgAuthor: imga2,
-      nameAuthor: 'Trista Francis',
-      price: '4.89 ETH',
-      wishlist: '100'
+  const { isLoading, isError, data, error } =  useQuery({
+    queryKey: ['contests'],
+    queryFn: contestApi.fetchAllContest,
+  })
+  const [contest, setContest] = useState(null);
+  useEffect(() => {
+    if(data) {
+      setContest(data?.data?.result)
     }
-  ]);
-
+  }, [data]);
+ 
   const [modalShow, setModalShow] = useState(false);
 
+  if (isLoading) {
+    return <span>Loading...</span>
+  }
   return (
     <Fragment>
       <section className="tf-section live-auctions">
@@ -70,8 +61,8 @@ const Contest = () => {
                 pagination={{ clickable: true }}
                 scrollbar={{ draggable: true }}
               >
-                {data.map((item, index) => (
-                  <SwiperSlide key={index}>
+                {contest && (
+                  <SwiperSlide>
                     <div className="swiper-container show-shadow carousel auctions">
                       <div className="swiper-wrapper">
                         <div className="swiper-slide">
@@ -79,21 +70,19 @@ const Contest = () => {
                             <div className="sc-card-product">
                               <div className="card-media">
                                 <Link to="/item-details-01">
-                                  <img src={item.img} alt="axies" />
+                                  <img src={defaultImage} alt="axies" />
                                 </Link>
-                                <Link to="/login" className="wishlist-button heart">
-                                  <span className="number-like">{item.wishlist}</span>
-                                </Link>
+                                
                                 <div className="featured-countdown">
                                   <span className="slogan"></span>
-                                  <Countdown date={Date.now() + 500000000}>
+                                  <Countdown date={Date.now() + new Date(contest?.endTime).getTime()/1000}>
                                     <span>You are good to go!</span>
                                   </Countdown>
                                 </div>
                                 <div className="button-place-bid">
                                   <button
                                     onClick={() => setModalShow(true)}
-                                    className="sc-button style-place-bid style bag fl-button pri-3"
+                                    className="sc-button style-place-bid style fl-button pri-3"
                                   >
                                     <span>Chi tiết</span>
                                   </button>
@@ -101,26 +90,26 @@ const Contest = () => {
                               </div>
                               <div className="card-title">
                                 <h5>
-                                  <Link to="/item-details-01">{item.title}</Link>
+                                  <Link to="/item-details-01">{contest?.name}</Link>
                                 </h5>
-                                <div className="tags">{item.tags}</div>
+                                <div className="tags tag-flex">{contest?.status}</div>
                               </div>
                               <div className="meta-info">
                                 <div className="author">
                                   <div className="avatar">
-                                    <img src={item.imgAuthor} alt="axies" />
+                                    <img src={defaultAvatar} alt="axies" />
                                   </div>
                                   <div className="info">
-                                    <span>Creator</span>
+                                    <span>Người tạo</span>
                                     <h6>
                                       {' '}
-                                      <Link to="/authors-02">{item.nameAuthor}</Link>{' '}
+                                      <Link to="/authors-02">{contest?.staffId}</Link>{' '}
                                     </h6>
                                   </div>
                                 </div>
-                                <div className="price">
-                                  <span>Current Bid</span>
-                                  <h5> {item.price}</h5>
+                                <div style={{width: '100px'}}className="price">
+                                  <span>Mô tả</span>
+                                  <h5> {contest?.content}</h5>
                                 </div>
                               </div>
                             </div>
@@ -129,7 +118,7 @@ const Contest = () => {
                       </div>
                     </div>
                   </SwiperSlide>
-                ))}
+                )}
               </Swiper>
             </div>
           </div>

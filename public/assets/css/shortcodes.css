@@ -2040,8 +2040,8 @@
 }
 
 .sc-card-product .card-title .tags {
-  width: 49px;
-  height: 24px;
+  width: 70px;
+  height: 50px;
   line-height: 24px;
   text-align: center;
   font-weight: bold;
@@ -2058,6 +2058,14 @@
 }
 
 .sc-card-product .meta-info .price h5 {
+  margin-top: 6px;
+}
+
+.sc-card-product .meta-info .text {
+  text-align: left;
+}
+
+.sc-card-product .meta-info .text h5 {
   margin-top: 6px;
 }
 
@@ -4370,7 +4378,6 @@ section.today-picks {
 
 .title-create-item {
   line-height: 26px;
-  margin-bottom: 20px;
 }
 
 .uploadFile {
@@ -4379,10 +4386,10 @@ section.today-picks {
   border: 1px solid rgba(138, 138, 160, 0.3);
   border-radius: 8px;
   color: var(--primary-color4);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 100px;
   overflow: hidden;
-  padding: 0px 59px;
+  padding: 0px 15px;
   position: relative;
   resize: none;
   cursor: pointer;
@@ -4403,10 +4410,10 @@ section.today-picks {
   border-radius: 30px;
 }
 
-.uploadFile .inputfile:hover::before {
+/* .uploadFile .inputfile:hover::before {
   background: #5142fc;
   color: #fff;
-}
+} */
 
 .is_dark .uploadFile .inputfile:hover::before,
 .is_dark .uploadFile .inputfile:focus::before {
@@ -4424,11 +4431,11 @@ section.today-picks {
   font-weight: 700;
   font-size: 14px;
   line-height: 48px;
-  content: 'Nộp hình vẽ';
   display: inline-block;
-  background-color: rgba(81, 66, 252, 0.1);
+  content: 'Upload File';
+  background-color: #fff;
   border: 2px solid transparent;
-  color: var(--primary-color3);
+  color: #fff;
   text-align: center;
   border-radius: 30px;
   -webkit-transition: all 0.3s ease-in-out;
@@ -4449,7 +4456,6 @@ section.today-picks {
 .uploadFile input[type='file']::-webkit-file-upload-button {
   visibility: hidden;
 }
-
 .create-item .react-tabs__tab-list {
   display: -webkit-box;
   display: -moz-box;
@@ -4643,6 +4649,15 @@ section.today-picks {
 
 .row-form.style-3 .dropdown li:hover span {
   color: #ffffff;
+}
+
+.form-create-item button[type='submit'] {
+  width: 40%;
+  margin: 20px 30%;
+  background: rgba(81, 66, 252, 0.1);
+  border: 1px solid rgba(81, 66, 252, 0.1);
+  border: none;
+  color: var(--primary-color3);
 }
 
 /* Page connect-wallet

@@ -1,14 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosApi from '../../../api/axiosApi';
+import { masterApi } from '../../../api/masterApi';
 
 //Axios get data
 const fetchDefaultData = async (url) => {
-  const response = await axiosApi.get(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
+  const response = await masterApi.fetchAll(url);
   if (response.status === 200) {
     return response;
   } else {

@@ -2,7 +2,7 @@ import React, { lazy } from 'react';
 import Role from '../constant/Role';
 import ProtectedRoute from './ProtectedRoute';
 
-const Home1 = lazy(() => import('../pages/Home1'));
+const Home = lazy(() => import('../pages/Home'));
 const BlogPage = lazy(() => import('../pages/blogPage/BlogPage'));
 const Login = lazy(() => import('../pages/Login'));
 const SignUp = lazy(() => import('../pages/SignUp'));
@@ -15,7 +15,7 @@ const ContestManagement = lazy(() => import('../pages/ContestManagement/index.js
 const StaffManage = lazy(() => import('../pages/StaffManage'));
 
 const routes = [
-  { path: '/', component: <Home1 /> },
+  { path: '/', component: <Home /> },
   { path: '/login', component: <Login /> },
   { path: '/sign-up', component: <SignUp /> },
   {

@@ -86,7 +86,7 @@ const Contest = () => {
                                     onClick={() => setModalShow(true)}
                                     className="sc-button style-place-bid style fl-button pri-3"
                                   >
-                                    <span>Đăng Ký</span>
+                                    <span>Chi tiết</span>
                                   </button>
                                 </div>
                               </div>
@@ -94,7 +94,7 @@ const Contest = () => {
                                 <h5>
                                   <Link to="/item-details-01">{contest?.name}</Link>
                                 </h5>
-                                <div className="tags tag-flex">{contest?.status}</div>
+                                <div className="tags tag-flex">{contest?.status === 'ACTIVE' ? 'Diễn ra' : 'Kết thúc'}</div>
                               </div>
                               <div className="meta-info">
                                 <div className="author">
@@ -103,7 +103,7 @@ const Contest = () => {
                                   </div>
                                   <div className="info">
                                     <span>Người tạo</span>
-                                    <h6>
+                                    <h6>s
                                       {' '}
                                       <Link to="/authors-02">{contest?.staffId}</Link>{' '}
                                     </h6>

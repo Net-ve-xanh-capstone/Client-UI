@@ -1,24 +1,47 @@
+/* eslint-env node */
+
 module.exports = {
-  root: true,
-  env: { browser: true, es2020: true },
+  env: { browser: true, es2020: true, node: true },
   extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
-    'plugin:react-hooks/recommended'
+    "eslint:recommended",
+    "plugin:react/recommended"
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  settings: { react: { version: '18.2' } },
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
   plugins: ['react-refresh'],
   rules: {
-    'react/jsx-no-target-blank': 'off',
-    'react/prop-types': 'off',
-    indent: ['error', 2],
-    quotes: ['error', 'single', { avoidEscape: true }],
-    'prettier/prettier': 'error',
-    'eslint-disable no-console': 'off',
-    'eslint-disable no-unused-vars': 'off',
-    'eslint-disable-next-line react': 'no-unescaped-entities'
-  }
+    'react-refresh/only-export-components': 'warn',
+    'no-unused-vars': 'off',
+    'eslint/no-unused-vars': ['error'],
+    'eslint/no-empty-interface': [
+      'error',
+      {
+        allowSingleExtends: true,
+      },
+    ],
+    'eslint/no-inferrable-types': 'off',
+    'react/react-in-jsx-scope': 'off',
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+    'import/resolver': {
+      node: {
+        paths: ["path.resolve(__dirname, '')"],
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
+      },
+      'eslint-import-resolver-custom-alias': {
+        alias: {
+          '~': 'src',
+        },
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
+      },
+    },
+  },
 };

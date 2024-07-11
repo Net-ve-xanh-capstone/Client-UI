@@ -12,6 +12,7 @@ import { FadeLoader } from 'react-spinners';
 import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogContent, IconButton, styled } from '@mui/material';
 import * as yup from 'yup';
+import { color } from '../constant/Color.js';
 const Login = () => {
   const [open, setOpen] = useState(false);
   // open dialog
@@ -140,7 +141,7 @@ const Login = () => {
 
                     <button className="submit">
                       {loading ? (
-                        <FadeLoader color="#fff" loading={loading} size={10} />
+                        <FadeLoader color={color.purple} loading={loading} size={10} />
                       ) : (
                         'Đăng nhập'
                       )}

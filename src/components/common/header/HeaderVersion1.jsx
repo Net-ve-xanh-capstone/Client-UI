@@ -1,10 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { useRef, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import logoheader from '../../../assets/images/logo/logo.png';
-import logoheader2x from '../../../assets/images/logo/logo@2x.png';
-import logodark from '../../../assets/images/logo/logo_dark.png';
-import logodark2x from '../../../assets/images/logo/logo_dark@2x.png';
+import logoheader from '../../../assets/images/logo/net-ve-xanh-logo.png';
+import logoheader2x from '../../../assets/images/logo/net-ve-xanh-logo.png';
 import imgsun from '../../../assets/images/icon/sun.png';
 import avt from '../../../assets/images/avatar/avt-2.jpg';
 import menus from '../../../constant/Menu';
@@ -57,18 +55,11 @@ const HeaderVersion1 = () => {
                   <div id="site-logo-inner">
                     <Link to="/" rel="home" className="main-logo">
                       <img
-                        className="logo-dark"
-                        id="logo_header"
-                        src={logodark}
-                        srcSet={`${logodark2x}`}
-                        alt="nft-gaming"
-                      />
-                      <img
                         className="logo-light"
                         id="logo_header"
                         src={logoheader}
                         srcSet={`${logoheader2x}`}
-                        alt="nft-gaming"
+                        alt="logo-netvexanh"
                       />
                     </Link>
                   </div>

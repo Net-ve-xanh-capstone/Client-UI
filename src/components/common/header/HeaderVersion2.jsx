@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useRef, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import logodark from '../../../assets/images/logo/logo_dark.png';
+import logodark from '../../../assets/images/logo/net-ve-xanh-logo.png';
 import avt from '../../../assets/images/avatar/avt-2.jpg';
 import coin from '../../../assets/images/logo/coin.svg';
 import menus from '../../../constant/Menu';

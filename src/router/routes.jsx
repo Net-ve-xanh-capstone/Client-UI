@@ -13,6 +13,7 @@ const BlogStaff = lazy(() => import('../components/cardBlogStaff/page.jsx'));
 const CategoryBlog = lazy(() => import('../components/categoryBlog/page.jsx'));
 const ContestManagement = lazy(() => import('../pages/ContestManagement/index.jsx'));
 const StaffManage = lazy(() => import('../pages/StaffManage'));
+const ContestDetail = lazy(() => import('../pages/ContestDetail/ContestDetail.jsx'));
 
 const routes = [
   { path: '/', component: <Home /> },
@@ -60,6 +61,7 @@ const routes = [
       </ProtectedRoute>
     )
   },
+  {path: '/contest-detail/:id', component: <ContestDetail />},
   { path: '/*', component: <NoResult /> }
 ];
 

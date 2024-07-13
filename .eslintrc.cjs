@@ -17,15 +17,16 @@ module.exports = {
   rules: {
     'react-refresh/only-export-components': 'warn',
     'no-unused-vars': 'off',
-    'eslint/no-unused-vars': ['error'],
+    'eslint/no-unused-vars': ['off'],
     'eslint/no-empty-interface': [
-      'error',
+      'off',
       {
         allowSingleExtends: true,
       },
     ],
     'eslint/no-inferrable-types': 'off',
     'react/react-in-jsx-scope': 'off',
+    "react/prop-types": "off",
   },
   settings: {
     react: {

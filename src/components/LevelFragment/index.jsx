@@ -15,7 +15,7 @@ function LevelFragment({ levelFrag, getContestDetail }) {
     getContestDetail();
   };
 
-  const hanldeOpenDelete = (id) => {
+  const hanldeOpenDelete = id => {
     setIdLevelDelete(id);
     setDeleteModalShow(true);
   };
@@ -23,9 +23,9 @@ function LevelFragment({ levelFrag, getContestDetail }) {
   const handleDelete = async () => {
     axios
       .patch(
-        `https://webapp-240702160733.azurewebsites.net/api/educationallevels?id=${idLevelDelete}`
+        `https://webapp-240702160733.azurewebsites.net/api/educationallevels?id=${idLevelDelete}`,
       )
-      .then((res) => {
+      .then(res => {
         if (res.result) {
           toast.success('Xóa đối tượng dự thi thành công', {
             position: 'top-right',
@@ -35,37 +35,39 @@ function LevelFragment({ levelFrag, getContestDetail }) {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light'
+            theme: 'light',
           });
           getContestDetail();
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('There was an error!', error);
       });
   };
   return (
     <>
-      <CreateLevel modalShow={modalShow} onHide={resetDetail} contestId={levelFrag.id} />
+      <CreateLevel
+        modalShow={modalShow}
+        onHide={resetDetail}
+        contestId={levelFrag.id}
+      />
       <DeleteModal
         show={deleteModalShow}
         setShow={setDeleteModalShow}
         title={'đối tượng dự thi'}
         callBack={handleDelete}
       />
-      {levelFrag.educationalLevel.map((data) => (
+      {levelFrag.educationalLevel.map(data => (
         <div
           className="flex row pb-10 align-items-center justify-content-center text-center"
-          key={data.id}
-        >
+          key={data.id}>
           <p className="col-md-2">{data.level} :</p>
           <p className="col-md-8">{data.description || 'None'}</p>
           <div className="col-md-2">
             <button
               className="btn btn-danger"
               disabled={isEditing}
-              onClick={() => hanldeOpenDelete(data.id)}
-            >
+              onClick={() => hanldeOpenDelete(data.id)}>
               Xóa
             </button>
           </div>
@@ -76,8 +78,7 @@ function LevelFragment({ levelFrag, getContestDetail }) {
         <button
           className="btn btn-outline-primary btn-lg"
           onClick={() => setModalShow(true)}
-          disabled={isEditing}
-        >
+          disabled={isEditing}>
           Thêm
         </button>
       </div>

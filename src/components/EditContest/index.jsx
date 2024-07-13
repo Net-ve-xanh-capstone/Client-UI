@@ -9,21 +9,33 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
-  const findRoundTimes = (levels) => {
+  const findRoundTimes = levels => {
+    let startTime = null;
+    let endTime = null;
+
     for (const level of levels) {
       if (level.round && level.round.length > 0) {
-        const startTime =
-          level.round.find((item) => item.name === 'Vòng Sơ Khảo')?.startTime?.split('T')[0] ||
-          null;
-        const endTime =
-          level.round.find((item) => item.name === 'Vòng Chung Kết')?.endTime?.split('T')[0] ||
-          null;
+        for (const round of level.round) {
+          const currentStartTime = round.startTime?.split('T')[0];
+          const currentEndTime = round.endTime?.split('T')[0];
+          if (
+            currentStartTime &&
+            (!startTime || currentStartTime < startTime)
+          ) {
+            startTime = currentStartTime;
+          }
 
-        if (startTime && endTime) {
-          return { startTime, endTime };
+          if (currentEndTime && (!endTime || currentEndTime > endTime)) {
+            endTime = currentEndTime;
+          }
         }
       }
     }
+
+    if (startTime && endTime) {
+      return { startTime, endTime };
+    }
+
     return { startTime: null, endTime: null };
   };
 
@@ -36,20 +48,20 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
         ...contestEdit,
         startTime: contestEdit.startTime.split('T')[0],
         endTime: contestEdit.endTime.split('T')[0],
-        currentUserId: contestEdit.createdBy
+        currentUserId: contestEdit.createdBy,
       });
     }
   }, [contestEdit]);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = event => {
     const { name, value } = event.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -74,8 +86,11 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
 
   const putContest = async () => {
     axios
-      .put(`https://webapp-240702160733.azurewebsites.net/api/contests`, formData)
-      .then((res) => {
+      .put(
+        `https://webapp-240702160733.azurewebsites.net/api/contests`,
+        formData,
+      )
+      .then(res => {
         if (res.result) {
           toast.success('Chỉnh sửa thành công', {
             position: 'top-right',
@@ -85,13 +100,13 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light'
+            theme: 'light',
           });
           callBack();
           onHide();
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error('Có lỗi xảy ra', {
           position: 'top-right',
           autoClose: 5000,
@@ -100,7 +115,7 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light'
+          theme: 'light',
         });
         console.error('There was an error!', error);
       });
@@ -119,13 +134,11 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
         onHide={onHide}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
+        centered>
         <Modal.Header closeButton style={{ margin: '0 auto' }}>
           <Modal.Title
             id="contained-modal-title-vcenter"
-            style={{ fontWeight: 'bold', fontSize: '20px' }}
-          >
+            style={{ fontWeight: 'bold', fontSize: '20px' }}>
             Chỉnh sửa cuộc thi
           </Modal.Title>
         </Modal.Header>
@@ -168,21 +181,21 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
                 />
               </div>
             </div>
-            {errors.startTime && <p className={styles.error}>{errors.startTime}</p>}
+            {errors.startTime && (
+              <p className={styles.error}>{errors.startTime}</p>
+            )}
             <h4 className={styles.title}>Mô tả ngắn</h4>
             <textarea
               required
               name="description"
               value={formData.description}
-              onChange={handleInputChange}
-            ></textarea>
+              onChange={handleInputChange}></textarea>
             <h4 className={styles.title}>Nội dung cuộc thi</h4>
             <textarea
               required
               name="content"
               value={formData.content}
-              onChange={handleInputChange}
-            ></textarea>
+              onChange={handleInputChange}></textarea>
             <div style={{ textAlign: 'end' }}>
               <button className={styles.btnCreate} type="submit">
                 Chỉnh sửa

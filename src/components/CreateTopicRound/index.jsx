@@ -6,8 +6,9 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CreateModal from '../CreateModal';
+import Checkbox from '@mui/material/Checkbox';
 
-function CreateLevel({ modalShow, onHide, contestId }) {
+function CreateTopicRound({ modalShow, onHide, topicName }) {
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
   const { userInfo } = useSelector(state => state.auth);
@@ -22,7 +23,6 @@ function CreateLevel({ modalShow, onHide, contestId }) {
   const intialState = {
     description: '',
     level: '',
-    contestId: contestId,
     currentUserId: userInfo?.Id,
   };
 
@@ -84,12 +84,6 @@ function CreateLevel({ modalShow, onHide, contestId }) {
 
   return (
     <>
-      <CreateModal
-        show={showModalCreate}
-        setShow={setShowModalCreate}
-        title={'đối tượng dự thi'}
-        callBack={postContest}
-      />
       <Modal
         show={modalShow}
         onHide={onHide}
@@ -100,37 +94,70 @@ function CreateLevel({ modalShow, onHide, contestId }) {
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            Tạo đối tượng dự thi
+            Thêm chủ đề thi
           </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ height: '50vh', overflow: 'hidden' }}>
-          <form onSubmit={handleSubmit} className={styles.modalForm}>
-            <h4 className={styles.title}>Tên đối tượng</h4>
-            <input
-              className={styles.inputModal}
-              required
-              type="text"
-              name="level"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
+          <div className={styles.roundContainer}>
+            <ul className={styles.roundTableResponse}>
+              <li className={styles.roundHeader}>
+                <div className={styles.col}></div>
+                <div className={styles.col}>Tên chủ đề</div>
+                <div className={styles.col}>Mô tả</div>
+              </li>
 
-            <h4 className={styles.title}>Mô tả ngắn</h4>
-            <textarea
-              required
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}></textarea>
-            <div style={{ textAlign: 'end' }}>
-              <button className={styles.btnCreate} type="submit">
-                Tạo
+              <li className={styles.tableRow}>
+                <div className={styles.col} data-label="Chọn">
+                  <input type="checkbox" />
+                </div>
+                <div className={styles.col} data-label="Tên chủ đề">
+                  Biển đảo
+                </div>
+
+                <div className={styles.col} data-label="Mô tả">
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}>
+                    <>Chưa có mô tả</>
+                  </div>
+                </div>
+              </li>
+              <li className={styles.tableRow}>
+                <div className={styles.col} data-label="Chọn">
+                  <input type="checkbox" />
+                </div>
+                <div className={styles.col} data-label="Tên chủ đề">
+                  Biển đảo
+                </div>
+
+                <div className={styles.col} data-label="Mô tả">
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}>
+                    <>Chưa có mô tả</>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <div className="flex justify-content-end mt-20">
+              <button
+                className="btn btn-outline-primary btn-lg"
+                //onClick={() => handleOpenCreate()}
+              >
+                Thêm
               </button>
             </div>
-          </form>
+          </div>
         </Modal.Body>
       </Modal>
     </>
   );
 }
 
-export default CreateLevel;
+export default CreateTopicRound;

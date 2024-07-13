@@ -39,8 +39,7 @@ function ContestFragment({ contestFrag, getContestDetail }) {
         <button
           className="btn btn-outline-primary btn-lg"
           onClick={() => setModalShow(true)}
-          disabled={isEditing}
-        >
+          disabled={isEditing}>
           Chỉnh sửa
         </button>
       </div>

@@ -11,58 +11,62 @@ const Explore = lazy(() => import('../pages/Explore'));
 const NoResult = lazy(() => import('../constant/NoResult'));
 const BlogStaff = lazy(() => import('../components/cardBlogStaff/page.jsx'));
 const CategoryBlog = lazy(() => import('../components/categoryBlog/page.jsx'));
-const ContestManagement = lazy(() => import('../pages/ContestManagement/index.jsx'));
+const ContestManagement = lazy(
+    () => import('../pages/ContestManagement/index.jsx'),
+);
 const StaffManage = lazy(() => import('../pages/StaffManage'));
-const ContestDetail = lazy(() => import('../pages/ContestDetail/ContestDetail.jsx'));
+const ContestDetail = lazy(
+    () => import('../pages/ContestDetail/ContestDetail.jsx'),
+);
 
 const routes = [
-  { path: '/', component: <Home /> },
-  { path: '/login', component: <Login /> },
-  { path: '/sign-up', component: <SignUp /> },
-  {
-    path: '/staff-management',
-    component: <StaffManage />,
-    children: [
-      {
-        path: 'contest',
-        component: <ContestManagement />
-      },
-      {
-        path: 'blog',
-        component: <BlogStaff />
-      },
-      {
-        path: 'category',
-        component: <CategoryBlog />
-      }
-    ]
-  },
-  {
-    path: '/submit',
-    component: (
-      <ProtectedRoute role={Role.COMPETITOR}>
-        <SubmitPage />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/explore',
-    component: (
-      <ProtectedRoute>
-        <Explore />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/blog',
-    component: (
-      <ProtectedRoute>
-        <BlogPage />
-      </ProtectedRoute>
-    )
-  },
-  {path: '/contest-detail/:id', component: <ContestDetail />},
-  { path: '/*', component: <NoResult /> }
+    { path: '/', component: <Home /> },
+    { path: '/login', component: <Login /> },
+    { path: '/sign-up', component: <SignUp /> },
+    {
+        path: '/staff-management',
+        component: <StaffManage />,
+        children: [
+            {
+                path: 'contest',
+                component: <ContestManagement />,
+            },
+            {
+                path: 'blog',
+                component: <BlogStaff />,
+            },
+            {
+                path: 'category',
+                component: <CategoryBlog />,
+            },
+        ],
+    },
+    {
+        path: '/submit',
+        component: (
+            <ProtectedRoute role={Role.COMPETITOR}>
+                <SubmitPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/explore',
+        component: (
+            <ProtectedRoute>
+                <Explore />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/blog',
+        component: (
+            <ProtectedRoute>
+                <BlogPage />
+            </ProtectedRoute>
+        ),
+    },
+    { path: '/contest-detail/:contestId', component: <ContestDetail /> },
+    { path: '/*', component: <NoResult /> },
 ];
 
 export default routes;

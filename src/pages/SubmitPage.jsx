@@ -1,4 +1,3 @@
-// import React from 'react';
 import { Link } from 'react-router-dom';
 import HeaderVersion2 from '../components/common/header/HeaderVersion2';
 import Footer from '../components/common/footer/Footer';
@@ -119,8 +118,14 @@ const SubmitPage = () => {
         const draftPaintings = res.data.result.list.filter(
           (painting) => painting.status === 'Draft'
         );
-        setPaintingCompetitor(draftPaintings[0]);
-        setImage(draftPaintings[0]?.image);
+        const submitPaintings = res.data.result.list.filter(
+          (painting) => painting.status === 'Submitted'
+        );
+        const draftPainting = draftPaintings[0];
+        setPaintingCompetitor(draftPainting);
+        setImage(draftPainting.image);
+        setValue('name', draftPainting.name);
+        setValue('description', draftPainting.description);
       });
   }, [userInfo.Id]);
 

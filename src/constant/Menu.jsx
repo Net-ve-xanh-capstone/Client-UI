@@ -16,7 +16,7 @@ const menus = [
   },
   {
     id: 2,
-    name: 'Explore',
+    name: 'Tìm hiểu',
     links: '#',
     namesub: [
       {
@@ -31,12 +31,6 @@ const menus = [
         links: '/live-auctions',
         public: true
       },
-      {
-        id: 3,
-        sub: 'Item Details 02',
-        links: '/item-details-02',
-        public: true
-      }
     ]
   },
   {

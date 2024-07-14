@@ -1,6 +1,7 @@
 import React, { lazy } from 'react';
 import Role from '../constant/Role';
 import ProtectedRoute from './ProtectedRoute';
+import EditProfile from '../pages/EditProfile/EditProfile.jsx';
 
 const Home = lazy(() => import('../pages/Home/Home'));
 const BlogPage = lazy(() => import('../pages/blogPage/BlogPage'));
@@ -50,10 +51,10 @@ const routes = [
         ),
     },
     {
-        path: '/explore',
+        path: '/edit-profile',
         component: (
             <ProtectedRoute>
-                <Explore />
+                <EditProfile />
             </ProtectedRoute>
         ),
     },

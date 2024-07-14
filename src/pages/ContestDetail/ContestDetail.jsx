@@ -13,6 +13,7 @@ import img3 from '../../assets/images/avatar/avt-1.jpg';
 import img4 from '../../assets/images/avatar/avt-5.jpg';
 import img5 from '../../assets/images/avatar/avt-7.jpg';
 import img6 from '../../assets/images/avatar/avt-8.jpg';
+import levelIcon from '../../assets/images/icon/level.png';
 import useFetchData from '../../hooks/useQueryData.js';
 import { defaultImage, defaultAvatar } from '../../constant/imageDefault.js';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
@@ -158,7 +159,6 @@ const ContestDetail = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <p>{contest.content}</p>
                                     <div className="meta-item-details style2">
                                         <div className="item meta-price">
                                             <span className="heading">
@@ -208,152 +208,61 @@ const ContestDetail = () => {
                                     <div className="flat-tabs themesflat-tabs">
                                         <Tabs>
                                             <TabList>
-                                                <Tab>Bid History</Tab>
-                                                <Tab>Info</Tab>
-                                                <Tab>Provenance</Tab>
+                                                <Tab>Cấp</Tab>
+                                                <Tab>Nội dung</Tab>
                                             </TabList>
 
                                             <TabPanel>
                                                 <ul className="bid-history-list">
-                                                    {dataHistory.map(
-                                                        (item, index) => (
-                                                            <li
-                                                                key={index}
-                                                                item={item}>
-                                                                <div className="content">
-                                                                    <div className="client">
-                                                                        <div className="sc-author-box style-2">
-                                                                            <div className="author-avatar">
-                                                                                <Link to="#">
-                                                                                    <img
-                                                                                        src={
-                                                                                            item.img
-                                                                                        }
-                                                                                        alt="Axies"
-                                                                                        className="avatar"
-                                                                                    />
-                                                                                </Link>
-                                                                                <div className="badge"></div>
-                                                                            </div>
-                                                                            <div className="author-infor">
-                                                                                <div className="name">
-                                                                                    <h6>
-                                                                                        <Link to="/author-02">
-                                                                                            {
-                                                                                                item.name
-                                                                                            }{' '}
-                                                                                        </Link>
-                                                                                    </h6>{' '}
-                                                                                    <span>
-                                                                                        {' '}
-                                                                                        place
-                                                                                        a
-                                                                                        bid
-                                                                                    </span>
+                                                    {contest.educationalLevel
+                                                        .length > 0 &&
+                                                        contest.educationalLevel.map(
+                                                            (item, index) => (
+                                                                <li key={index}>
+                                                                    <div className="content">
+                                                                        <div className="client">
+                                                                            <div className="sc-author-box style-2">
+                                                                                <div className="author-avatar">
+                                                                                    <Link to="#">
+                                                                                        <img
+                                                                                            src={
+                                                                                                levelIcon
+                                                                                            }
+                                                                                            alt="Axies"
+                                                                                            className="avatar"
+                                                                                        />
+                                                                                    </Link>
+                                                                                    <div className="badge"></div>
                                                                                 </div>
-                                                                                <span className="time">
-                                                                                    {
-                                                                                        item.time
-                                                                                    }
-                                                                                </span>
+                                                                                <div className="author-infor">
+                                                                                    <div className="name">
+                                                                                        <h6>
+                                                                                            <Link to="/author-02">
+                                                                                                {
+                                                                                                    item.level
+                                                                                                }{' '}
+                                                                                            </Link>
+                                                                                        </h6>{' '}
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div className="price">
-                                                                        <h5>
-                                                                            {
-                                                                                item.price
-                                                                            }
-                                                                        </h5>
-                                                                        <span>
-                                                                            ={' '}
-                                                                            {
-                                                                                item.priceChange
-                                                                            }
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        ),
-                                                    )}
-                                                </ul>
-                                            </TabPanel>
-                                            <TabPanel>
-                                                <ul className="bid-history-list">
-                                                    <li>
-                                                        <div className="content">
-                                                            <div className="client">
-                                                                <div className="sc-author-box style-2">
-                                                                    <div className="author-avatar">
-                                                                        <Link to="#">
-                                                                            <img
-                                                                                src={
-                                                                                    img1
+                                                                        <div className="price">
+                                                                            <h5>
+                                                                                {
+                                                                                    item.description
                                                                                 }
-                                                                                alt="Axies"
-                                                                                className="avatar"
-                                                                            />
-                                                                        </Link>
-                                                                        <div className="badge"></div>
-                                                                    </div>
-                                                                    <div className="author-infor">
-                                                                        <div className="name">
-                                                                            <h6>
-                                                                                {' '}
-                                                                                <Link to="/author-02">
-                                                                                    Mason
-                                                                                    Woodward{' '}
-                                                                                </Link>
-                                                                            </h6>{' '}
-                                                                            <span>
-                                                                                {' '}
-                                                                                place
-                                                                                a
-                                                                                bid
-                                                                            </span>
+                                                                            </h5>
                                                                         </div>
-                                                                        <span className="time">
-                                                                            8
-                                                                            hours
-                                                                            ago
-                                                                        </span>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
+                                                                </li>
+                                                            ),
+                                                        )}
                                                 </ul>
                                             </TabPanel>
                                             <TabPanel>
                                                 <div className="provenance">
-                                                    <p>
-                                                        Lorem Ipsum is simply
-                                                        dummy text of the
-                                                        printing and typesetting
-                                                        industry. Lorem Ipsum
-                                                        has been the industry's
-                                                        standard dummy text ever
-                                                        since the 1500s, when an
-                                                        unknown printer took a
-                                                        galley of type and
-                                                        scrambled it to make a
-                                                        type specimen book. It
-                                                        has survived not only
-                                                        five centuries, but also
-                                                        the leap into electronic
-                                                        typesetting, remaining
-                                                        essentially unchanged.
-                                                        It was popularised in
-                                                        the 1960s with the
-                                                        release of Letraset
-                                                        sheets containing Lorem
-                                                        Ipsum passages, and more
-                                                        recently with desktop
-                                                        publishing software like
-                                                        Aldus PageMaker
-                                                        including versions of
-                                                        Lorem Ipsum.
-                                                    </p>
+                                                    <p>{contest?.content}</p>
                                                 </div>
                                             </TabPanel>
                                         </Tabs>

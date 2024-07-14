@@ -42,7 +42,7 @@ const routes = [
         ],
     },
     {
-        path: '/submit',
+        path: '/submit/:roundId',
         component: (
             <ProtectedRoute role={Role.COMPETITOR}>
                 <SubmitPage />

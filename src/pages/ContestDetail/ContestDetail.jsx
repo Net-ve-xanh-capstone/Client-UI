@@ -13,8 +13,6 @@ import img3 from '../../assets/images/avatar/avt-1.jpg';
 import img4 from '../../assets/images/avatar/avt-5.jpg';
 import img5 from '../../assets/images/avatar/avt-7.jpg';
 import img6 from '../../assets/images/avatar/avt-8.jpg';
-import img7 from '../../assets/images/avatar/avt-2.jpg';
-import imgdetail1 from '../../assets/images/box-item/images-item-details.jpg';
 import useFetchData from '../../hooks/useQueryData.js';
 import { defaultImage, defaultAvatar } from '../../constant/imageDefault.js';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
@@ -25,6 +23,7 @@ const ContestDetail = () => {
         `contests/${contestId}`,
     );
     const contest = data?.data?.result;
+    const checkTime = new Date(contest?.endTime) < new Date();
     const [dataHistory] = useState([
         {
             img: img1,
@@ -131,10 +130,7 @@ const ContestDetail = () => {
                                                     <span>Tổ chức bởi</span>
                                                     <h6>
                                                         <Link className="cursor-none">
-                                                            {
-                                                                contest?.account
-                                                                    .fullName
-                                                            }
+                                                            Nét vẽ xanh
                                                         </Link>
                                                     </h6>
                                                 </div>
@@ -178,8 +174,7 @@ const ContestDetail = () => {
                                             <span className="heading style-2">
                                                 Thời gian
                                             </span>
-                                            {contest?.endTime <
-                                            new Date().toISOString() ? (
+                                            {checkTime ? (
                                                 <span>Đã kết thúc</span>
                                             ) : (
                                                 <div>
@@ -196,11 +191,20 @@ const ContestDetail = () => {
                                             )}
                                         </div>
                                     </div>
-                                    <Link
-                                        to="/wallet-connect"
-                                        className="sc-button loadmore style fl-button pri-3">
-                                        <span>Đăng ký dự thi</span>
-                                    </Link>
+                                    {checkTime ? (
+                                        <Link
+                                            to="#"
+                                            className="sc-button loadmore style fl-button pri-3 cursor-none">
+                                            <span>Đã kết thúc</span>
+                                        </Link>
+                                    ) : (
+                                        <Link
+                                            to={`/submit/${contestId}`}
+                                            className="sc-button loadmore style fl-button pri-3">
+                                            <span>Đăng ký dự thi</span>
+                                        </Link>
+                                    )}
+
                                     <div className="flat-tabs themesflat-tabs">
                                         <Tabs>
                                             <TabList>

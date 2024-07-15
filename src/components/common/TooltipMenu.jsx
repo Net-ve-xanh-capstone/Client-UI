@@ -4,16 +4,16 @@ import coin from '../../assets/images/logo/coin.svg';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/auth/authSlice';
 
-const dispatch = useDispatch();
-const handleLogout = () => {
-    dispatch(logout());
-};
-
 const TitleComponent = props => {
+    const dispatch = useDispatch();
+    const handleLogout = () => {
+        dispatch(logout());
+    };
+
     return (
         <ul
             style={{
-                width: '200px',
+                width: '180px',
             }}
             id="menu-primary-menu"
             className="menu h5">
@@ -30,7 +30,7 @@ const TitleComponent = props => {
                 </a>
             </li>
             <li>
-                <a href="#" id="logout" onClick={handleLogout}>
+                <a href="/#" id="logout" onClick={handleLogout}>
                     <i className="fal fa-sign-out"></i>
                     <span>Đăng xuất</span>
                 </a>
@@ -42,9 +42,9 @@ const TitleComponent = props => {
 const InsideComponent = forwardRef(function MyComponent(props, ref) {
     return (
         <div {...props} ref={ref}>
-            <div className="header_avatar">
-                <div className="price">
-                    <span>Thông tin tài khoản</span>
+            <div className="sc-button header-slider style style-1 fl-button pri-1 flex justify-content-between align-items-center">
+                <div className="info">
+                    <span>Thông tin</span>
                 </div>
                 <img className="avatar" src={coin} alt="avatar" />
             </div>

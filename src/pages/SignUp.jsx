@@ -70,7 +70,6 @@ const SignUp = () => {
     const {
         handleSubmit,
         control,
-        reset,
         trigger,
         setValue,
         formState: { errors },
@@ -93,7 +92,6 @@ const SignUp = () => {
             }, 3000);
         }
         if (success) {
-            reset();
             setTimeout(() => {
                 setOpen(false);
                 dispatch(setDefault());

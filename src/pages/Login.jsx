@@ -24,7 +24,6 @@ const Login = () => {
     const {
         handleSubmit,
         control,
-        reset,
         trigger,
         formState: { errors },
     } = useForm({
@@ -57,7 +56,6 @@ const Login = () => {
 
     useEffect(() => {
         if (success || jwtToken) {
-            reset();
             navigate('/');
         }
         if (error) {

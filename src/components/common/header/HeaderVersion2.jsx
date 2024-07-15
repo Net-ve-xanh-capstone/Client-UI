@@ -6,7 +6,6 @@ import menus from '../../../constant/Menu';
 import { withErrorBoundary } from 'react-error-boundary';
 import { Fallback } from '../../../constant/Fallback';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../../store/auth/authSlice';
 import TooltipMenu from '../TooltipMenu';
 
 const HeaderVersion2 = () => {

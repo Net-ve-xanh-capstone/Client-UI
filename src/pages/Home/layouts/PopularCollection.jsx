@@ -27,7 +27,6 @@ const PopularCollection = () => {
         error,
     } = useFetchData('contests');
     const [collection, setCollection] = useState(null);
-    const test = collectionData?.data?.result;
     useEffect(() => {
         if (collectionData) {
             setCollection(collectionData?.data?.result);

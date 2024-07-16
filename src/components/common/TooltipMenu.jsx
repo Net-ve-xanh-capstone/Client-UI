@@ -1,5 +1,5 @@
 import { styled, Tooltip, tooltipClasses } from '@mui/material';
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import React, { forwardRef} from 'react';
 import coin from '../../assets/images/logo/coin.svg';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/auth/authSlice';

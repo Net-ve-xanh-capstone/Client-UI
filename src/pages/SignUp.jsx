@@ -111,7 +111,6 @@ const SignUp = () => {
             await dispatch(competitorRegister(data)).then(() => {
                 if (message) setOpen(true);
             });
-            reset();
         }
     };
 

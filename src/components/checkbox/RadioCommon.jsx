@@ -5,14 +5,14 @@ import { Controller } from 'react-hook-form';
 import { Fallback } from '../../constant/Fallback';
 
 const RadioCommon = props => {
-    const { control, error = '', name, valueArray, ...rest } = props;
-
+    const { control, error = '', name, valueArray, defaultValue, ...rest } = props;
     return (
         <div>
             {error ? <span className="text-danger h5">{error}</span> : null}
             <Controller
                 control={control}
                 name={name}
+                defaultValue={defaultValue ? 1 : 0}
                 rules={{ required: true }}
                 render={({
                     field: { onChange, value, name },
@@ -24,7 +24,8 @@ const RadioCommon = props => {
                             aria-labelledby="demo-controlled-radio-buttons-group"
                             value={value}
                             onChange={event => onChange(event.target.value)}
-                            sx={{ marginTop: '10px' }}>
+                            sx={{ marginTop: '10px' }}
+                        >
                             {valueArray.map((item, index) => {
                                 return (
                                     <FormControlLabelStyled
@@ -32,6 +33,7 @@ const RadioCommon = props => {
                                         control={<Radio />}
                                         value={item.value}
                                         label={item.label}
+                                        {...rest}
                                     />
                                 );
                             })}

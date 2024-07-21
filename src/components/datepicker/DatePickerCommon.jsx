@@ -1,5 +1,4 @@
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import classNames from 'classnames';
 import React from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { Controller } from 'react-hook-form';
@@ -17,7 +16,6 @@ const DatepickerCommon = (props) => {
         render={({ field: { onChange, value } }) => {
           return (
             <DatePicker
-              disablePast={disablePast}
               onChange={onChange}
               onAccept={onChange}
               value={value}

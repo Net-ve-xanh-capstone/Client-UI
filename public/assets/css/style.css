@@ -3482,3 +3482,28 @@ input.number::-webkit-inner-spin-button {
     background-size: 200% 100%;
     animation: 1.5s shine linear infinite;
 }
+
+.avatar {
+    width: 30px;
+    border-radius: 2000px;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+.form-upload-profile .button-center {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.w-half {
+    width: 50%;
+}
+
+.w-birthday {
+    width: 45%;
+}
+
+.color-disabled {
+    color: #b5b5b5 !important;
+}

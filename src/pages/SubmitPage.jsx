@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import HeaderVersion2 from '../components/common/header/HeaderVersion2';
 import Footer from '../components/common/footer/Footer';
 import 'react-tabs/style/react-tabs.css';
@@ -20,16 +20,23 @@ import Swal from 'sweetalert2';
 const draffPaintingEndpoint = 'paintings/draftepainting1stround';
 const getAllPaintingByCompetitorIdEndpoint =
     'paintings/listpaintingbyaccountid';
-const topics = await topicApi.getAllTopic('topics');
-const topicsData = topics.data.result.list;
 const SubmitPage = () => {
+    const { contestId } = useParams();
     const [image, setImage] = useState(null);
     const [file, setFile] = useState(null);
+    const [roundTopicsData, setRoundTopicsData] = useState([]);
     const [topicId, setTopicId] = useState(null);
     const { progress, url, error } = useUploadImage(file);
     const userInfo = useSelector(state => state.auth.userInfo);
     const today = new Date().toISOString().slice(0, 10);
     const [paintingCompetitor, setPaintingCompetitor] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await topicApi.getAllTopic('roundtopics/getalltopic', userInfo.Id, contestId);
+      setRoundTopicsData(response.data.result);
+    }
+    fetchData();
+  }, []);
     const schema = yup.object().shape({
         file: yup.mixed().required('Vui lòng chọn ảnh'),
         name: yup.string().required('Vui lòng nhập tên của bức tranh'),
@@ -63,19 +70,17 @@ const SubmitPage = () => {
         const isValid = await trigger();
         if (!isValid) return;
         const data = {
-            image: url,
-            name: e.name,
-            description: e.description,
-            roundId: '1ff52294-cc72-4781-a73a-042baffb4ced',
-            topicId: topicId,
-            currentUserId: userInfo.Id,
+          image: url,
+          name: e.name,
+          description: e.description,
+          roundTopicId: topicId,
+          accountId: userInfo.Id,
         };
         Swal.fire({
             title: 'Bạn có chắc chắn nộp bài?',
             showCancelButton: true,
             confirmButtonText: 'Nộp',
         }).then(result => {
-            console.log('call');
             if (result.isConfirmed) {
                 paintingApi
                     .submitPainting(draffPaintingEndpoint, data)
@@ -288,7 +293,7 @@ const SubmitPage = () => {
                                                             'Chọn chủ đề',
                                                         )}></Dropdown.Select>
                                                     <Dropdown.List>
-                                                        {topicsData.map(
+                                                        {roundTopicsData.map(
                                                             topic => (
                                                                 <Dropdown.Option
                                                                     key={

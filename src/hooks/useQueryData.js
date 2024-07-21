@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import axiosApi from '../api/axiosApi.js';
 import { masterApi } from '../api/masterApi.js';
 
 //Axios get data

@@ -28,7 +28,7 @@ const Login = () => {
         formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
-        reValidateMode: 'onChange',
+        reValidateMode: 'onSubmit',
     });
 
     const {

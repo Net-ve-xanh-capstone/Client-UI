@@ -1,6 +1,5 @@
 import { styled, Tooltip, tooltipClasses } from '@mui/material';
-import React, { forwardRef} from 'react';
-import coin from '../../assets/images/logo/coin.svg';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/auth/authSlice';
 
@@ -9,16 +8,15 @@ const TitleComponent = props => {
     const handleLogout = () => {
         dispatch(logout());
     };
-
     return (
         <ul
             style={{
-                width: '180px',
+                width: '160px',
             }}
             id="menu-primary-menu"
             className="menu h5">
             <li className="mb-15">
-                <a href="/edit-profile">
+                <a href="/my-painting">
                     <i className="fab fa-accusoft"></i>{' '}
                     <span>Tranh của tôi</span>
                 </a>
@@ -26,7 +24,7 @@ const TitleComponent = props => {
             <li className="mb-15">
                 <a href="/edit-profile">
                     <i className="fas fa-pencil-alt"></i>{' '}
-                    <span> Chỉnh sửa thông tin</span>
+                    <span> Thông tin cá nhân</span>
                 </a>
             </li>
             <li>
@@ -40,33 +38,32 @@ const TitleComponent = props => {
 };
 
 const InsideComponent = forwardRef(function MyComponent(props, ref) {
-    return (
+  return (
         <div {...props} ref={ref}>
-            <div className="sc-button header-slider style style-1 fl-button pri-1 flex justify-content-between align-items-center">
-                <div className="info">
-                    <span>Thông tin</span>
-                </div>
-                <img className="avatar" src={coin} alt="avatar" />
+          <div className="sc-button header-slider style style-1 fl-button pri-1 flex  align-items-center">
+            <div className="info">
+              <span>Thông tin</span>
             </div>
+          </div>
         </div>
-    );
+  );
 });
 
 const LightTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} classes={{ popper: className }} />
+  <Tooltip {...props} classes={{ popper: className }} PopperProps={{ disablePortal: true }} />
 ))(({ theme }) => ({
     [`& .${tooltipClasses.tooltip}`]: {
         backgroundColor: theme.palette.common.white,
         color: 'rgba(0, 0, 0, 0.87)',
         boxShadow: theme.shadows[1],
-        fontSize: 18,
+        zIndex: 9999,
     },
 }));
 
 const TooltipMenu = () => {
     return (
         <LightTooltip title={<TitleComponent />}>
-            <InsideComponent />
+            <InsideComponent  />
         </LightTooltip>
     );
 };

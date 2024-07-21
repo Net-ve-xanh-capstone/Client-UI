@@ -25,50 +25,7 @@ const ContestDetail = () => {
     );
     const contest = data?.data?.result;
     const checkTime = new Date(contest?.endTime) < new Date();
-    const [dataHistory] = useState([
-        {
-            img: img1,
-            name: 'Mason Woodward',
-            time: '8 hours ago',
-            price: '4.89 ETH',
-            priceChange: '$12.246',
-        },
-        {
-            img: img2,
-            name: 'Mason Woodward',
-            time: 'at 06/10/2021, 3:20 AM',
-            price: '4.89 ETH',
-            priceChange: '$12.246',
-        },
-        {
-            img: img3,
-            name: 'Mason Woodward',
-            time: '8 hours ago',
-            price: '4.89 ETH',
-            priceChange: '$12.246',
-        },
-        {
-            img: img4,
-            name: 'Mason Woodward',
-            time: '8 hours ago',
-            price: '4.89 ETH',
-            priceChange: '$12.246',
-        },
-        {
-            img: img5,
-            name: 'Mason Woodward',
-            time: '8 hours ago',
-            price: '4.89 ETH',
-            priceChange: '$12.246',
-        },
-        {
-            img: img6,
-            name: 'Mason Woodward',
-            time: '8 hours ago',
-            price: '4.89 ETH',
-            priceChange: '$12.246',
-        },
-    ]);
+    
     if (isLoading) {
         return <DotLoaderCustom />;
     }
@@ -209,6 +166,7 @@ const ContestDetail = () => {
                                         <Tabs>
                                             <TabList>
                                                 <Tab>Cấp</Tab>
+                                                <Tab>Nhà tài trợ</Tab>
                                                 <Tab>Nội dung</Tab>
                                             </TabList>
 
@@ -252,6 +210,45 @@ const ContestDetail = () => {
                                                                                 {
                                                                                     item.description
                                                                                 }
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            ),
+                                                        )}
+                                                </ul>
+                                            </TabPanel>
+
+                                            <TabPanel>
+                                                <ul className="bid-history-list">
+                                                    {contest.resource.length > 0 &&
+                                                        contest.resource.map(
+                                                            (item, index) => (
+                                                                <li key={index}>
+                                                                    <div className="content">
+                                                                        <div className="client">
+                                                                            <div className="sc-author-box style-2">
+                                                                                <div className="author-avatar">
+                                                                                    <Link to="#">
+                                                                                        <img src={item.sponsor?.logo} alt="Axies" className="avatar"
+                                                                                        />
+                                                                                    </Link>
+                                                                                    <div className="badge"></div>
+                                                                                </div>
+                                                                                <div className="author-infor">
+                                                                                    <div className="name">
+                                                                                        <h6>
+                                                                                            <Link to="/author-02">
+                                                                                                {item.sponsor?.name}
+                                                                                            </Link>
+                                                                                        </h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="price">
+                                                                            <h5>
+                                                                                {item.sponsorship}
                                                                             </h5>
                                                                         </div>
                                                                     </div>

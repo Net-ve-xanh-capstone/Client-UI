@@ -178,6 +178,7 @@ const HeaderVersion1 = () => {
                                     <div className="flat-search-btn flex">
                                         {
                                             <div
+                                              style={{width: '150px'}}
                                                 className="sc-btn-top mg-r-12"
                                                 id="site-header">
                                                 {jwtToken ? (

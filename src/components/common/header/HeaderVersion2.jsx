@@ -41,7 +41,7 @@ const HeaderVersion2 = () => {
     };
 
     const { jwtToken, userInfo } = useSelector(state => state.auth);
-
+    
     const hasAccess = submenu => {
         if (submenu.public) {
             return true;

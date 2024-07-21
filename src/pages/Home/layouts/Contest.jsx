@@ -1,5 +1,5 @@
 import { useState, Fragment, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import Countdown from 'react-countdown';
@@ -8,25 +8,26 @@ import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 
-import CardModal from '../../../components/CardModal';
 import { Fallback } from '../../../constant/Fallback';
 import PropTypes from 'prop-types';
 import { withErrorBoundary } from 'react-error-boundary';
 import { defaultAvatar, defaultImage } from '../../../constant/imageDefault.js';
 import useFetchData from '../hooks/useQueryData.js';
+import LoadingSkeleton from '../../../components/loading/LoadingSkeleton.jsx';
 const Contest = () => {
   const { isLoading, isError, data, error } = useFetchData('contests');
   const [contest, setContest] = useState(null);
+  
+  const navigate = useNavigate();
   useEffect(() => {
     if (data) {
       setContest(data?.data?.result);
     }
   }, [data]);
 
-  const [modalShow, setModalShow] = useState(false);
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <ContestLoading></ContestLoading>;
   }
 
   if (isError) {
@@ -72,7 +73,7 @@ const Contest = () => {
                                 <Link to="/item-details-01">
                                   <img src={defaultImage} alt="axies" />
                                 </Link>
-
+                    
                                 <div className="featured-countdown">
                                   <span className="slogan"></span>
                                   <Countdown
@@ -83,10 +84,10 @@ const Contest = () => {
                                 </div>
                                 <div className="button-place-bid">
                                   <button
-                                    onClick={() => setModalShow(true)}
+                                    onClick={() => navigate(`/contest-detail/${contest?.id}`)}
                                     className="sc-button style-place-bid style fl-button pri-3"
                                   >
-                                    <span>Đăng Ký</span>
+                                    <span>Chi tiết</span>
                                   </button>
                                 </div>
                               </div>
@@ -94,7 +95,7 @@ const Contest = () => {
                                 <h5>
                                   <Link to="/item-details-01">{contest?.name}</Link>
                                 </h5>
-                                <div className="tags tag-flex">{contest?.status}</div>
+                                <div className="tags tag-flex">{contest?.status === 'ACTIVE' ? 'Diễn ra' : 'Kết thúc'}</div>
                               </div>
                               <div className="meta-info">
                                 <div className="author">
@@ -126,10 +127,92 @@ const Contest = () => {
           </div>
         </div>
       </section>
-      <CardModal show={modalShow} onHide={() => setModalShow(false)} />
     </Fragment>
   );
 };
+
+const ContestLoading = () => {
+  return (
+    <div className="swiper-container show-shadow carousel auctions">
+      <div className="swiper-wrapper">
+        <div className="swiper-slide">
+          <div className="slider-item">
+            <div className="sc-card-product">
+              <div className="card-media">
+                <LoadingSkeleton
+                  width="100%"
+                  height="400px"
+                  radius="16px"
+                >
+                </LoadingSkeleton>
+                
+                <div className="button-place-bid">
+                  <LoadingSkeleton
+                    width="100%"
+                    height="100%"
+                    radius="16px">
+                  </LoadingSkeleton>
+                </div>
+              </div>
+              <div className="card-title">
+                <h5>
+                  <LoadingSkeleton
+                    width="250px"
+                    height="50px"
+                    radius="16px"
+                  />
+                </h5>
+                <div className="tag-flex">
+                  <LoadingSkeleton
+                    width="90px"
+                    height="70px"
+                    radius="16px"
+                  />
+                </div>
+              </div>
+              <div className="meta-info">
+                <div className="author">
+                  <div className="avatar">
+                    <LoadingSkeleton
+                      width="100%"
+                      height="100%"
+                      radius="50%"
+                    >
+                    </LoadingSkeleton>
+                  </div>
+                  <div className="info">
+                    <span>
+                      <LoadingSkeleton
+                        width="100px"
+                        height="20px"
+                        radius="16px"
+                      />
+                    </span>
+                    <h6>
+                      <LoadingSkeleton/>
+                    </h6>
+                  </div>
+                </div>
+                <div style={{ width: '100px' }} className="price">
+                  <span>
+                    <LoadingSkeleton
+                      width="100px"
+                      height="20px"
+                      radius="16px"
+                    />
+                  </span>
+                  <h5>
+                    <LoadingSkeleton/>
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 Contest.propTypes = {
   show: PropTypes.bool,

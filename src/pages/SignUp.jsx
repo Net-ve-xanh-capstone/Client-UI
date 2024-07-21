@@ -17,6 +17,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { competitorRegister } from '../store/auth/authAction';
 import { FadeLoader } from 'react-spinners';
 import { setDefault } from '../store/auth/authSlice';
+import { color } from '../constant/Color.js';
 
 const SignUp = () => {
   dayjs.extend(utc);
@@ -268,7 +269,7 @@ const SignUp = () => {
 
                     <button className="submit">
                       {loading ? (
-                        <FadeLoader color="#fff" loading={loading} size={10} />
+                        <FadeLoader color={color.purple} loading={loading} size={10} />
                       ) : (
                         'Đăng ký'
                       )}

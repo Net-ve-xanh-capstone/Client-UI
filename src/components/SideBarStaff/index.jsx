@@ -1,12 +1,13 @@
 import BookIcon from '@mui/icons-material/Book';
 import CategoryIcon from '@mui/icons-material/Category';
+import TopicIcon from '@mui/icons-material/Topic';
 import React, { useEffect, useState } from 'react';
 import {
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
   FaGem,
   FaPalette,
-  FaPersonBooth
+  FaPersonBooth,
 } from 'react-icons/fa';
 import {
   Menu,
@@ -14,11 +15,16 @@ import {
   ProSidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader
+  SidebarHeader,
 } from 'react-pro-sidebar';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const SideBarStaff = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedChange }) => {
+const SideBarStaff = ({
+  collapsed,
+  toggled,
+  handleToggleSidebar,
+  handleCollapsedChange,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
@@ -30,25 +36,31 @@ const SideBarStaff = ({ collapsed, toggled, handleToggleSidebar, handleCollapsed
       icon: <FaPalette />,
       path: '/contest',
       name: ' Cuộc thi',
-      new: true
+      new: true,
     },
     {
       icon: <BookIcon />,
       path: '/blog',
       name: 'Bài viết',
-      new: false
+      new: false,
     },
     {
       icon: <CategoryIcon />,
       path: '/category',
       name: 'Thể Loại',
-      new: false
+      new: false,
+    },
+    {
+      icon: <TopicIcon />,
+      path: '/topic',
+      name: 'Chủ đề',
+      new: false,
     },
     {
       icon: <FaPersonBooth />,
-      path: null,
+      path: '/examiner',
       name: 'Giám khảo',
-      new: false
+      new: false,
     },
     {
       icon: <FaGem />,
@@ -64,7 +76,7 @@ const SideBarStaff = ({ collapsed, toggled, handleToggleSidebar, handleCollapsed
     }
   ];
 
-  const handleItemClick = (val) => {
+  const handleItemClick = val => {
     if (val) {
       navigate(`/staff-management${val}`);
     }
@@ -80,24 +92,26 @@ const SideBarStaff = ({ collapsed, toggled, handleToggleSidebar, handleCollapsed
       collapsed={collapsed}
       toggled={toggled}
       onToggle={handleToggleSidebar}
-      breakPoint="md"
-    >
+      breakPoint="md">
       {/* Header */}
       <SidebarHeader>
         <Menu iconShape="circle">
           {collapsed ? (
-            <MenuItem icon={<FaAngleDoubleRight />} onClick={handleCollapsedChange}></MenuItem>
+            <MenuItem
+              icon={<FaAngleDoubleRight />}
+              onClick={handleCollapsedChange}></MenuItem>
           ) : (
-            <MenuItem suffix={<FaAngleDoubleLeft />} onClick={handleCollapsedChange}>
+            <MenuItem
+              suffix={<FaAngleDoubleLeft />}
+              onClick={handleCollapsedChange}>
               <div
                 style={{
                   padding: '9px',
                   textTransform: 'uppercase',
                   fontWeight: 'bold',
                   fontSize: 15,
-                  letterSpacing: '1px'
-                }}
-              >
+                  letterSpacing: '1px',
+                }}>
                 Nét vẽ xanh
               </div>
             </MenuItem>
@@ -113,8 +127,7 @@ const SideBarStaff = ({ collapsed, toggled, handleToggleSidebar, handleCollapsed
               icon={vl.icon}
               onClick={() => handleItemClick(vl.path)}
               suffix={vl.new && <span className="badge red">NEW</span>}
-              active={activeItem === vl.path}
-            >
+              active={activeItem === vl.path}>
               {vl.name}
             </MenuItem>
           ))}

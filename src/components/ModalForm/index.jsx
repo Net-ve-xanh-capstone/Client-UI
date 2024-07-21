@@ -6,11 +6,12 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CreateModal from '../CreateModal';
+import { createContest } from '../../api/contestStaffApi';
 
 function ModalForm({ modalShow, onHide }) {
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const [showModalCreate, setShowModalCreate] = useState(false);
 
@@ -25,6 +26,7 @@ function ModalForm({ modalShow, onHide }) {
     endTime: '',
     description: '',
     content: '',
+    logo: '',
     round1StartTime: '',
     round1EndTime: '',
     round2StartTime: '',
@@ -34,22 +36,24 @@ function ModalForm({ modalShow, onHide }) {
     rank2: 1,
     rank3: 1,
     rank4: 1,
-    passRound1: 1
+    passRound1: 1,
   };
 
   const [formData, setFormData] = useState(intialState);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = event => {
     try {
       const { name, value } = event.target;
       setFormData({
         ...formData,
-        [name]: value
+        [name]: value,
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -67,7 +71,8 @@ function ModalForm({ modalShow, onHide }) {
     }
 
     if (round1StartDate < startDate || round1EndDate > endDate) {
-      formErrors.round1 = 'Vòng sơ khảo phải nằm trong khoảng thời gian cuộc thi';
+      formErrors.round1 =
+        'Vòng sơ khảo phải nằm trong khoảng thời gian cuộc thi';
     }
 
     if (round1StartDate > round1EndDate) {
@@ -98,26 +103,24 @@ function ModalForm({ modalShow, onHide }) {
   };
 
   const postContest = async () => {
-    axios
-      .post(`https://webapp-240702160733.azurewebsites.net/api/contests`, formData)
-      .then((res) => {
-        if (res.result) {
-          toast.success('Tạo cuộc thi thành công', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light'
-          });
-          onHide();
-        }
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-      });
+    try {
+      const { data } = await createContest(formData);
+      if (data?.result) {
+        toast.success('Tạo cuộc thi thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      }
+      onHide();
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
   return (
@@ -133,13 +136,11 @@ function ModalForm({ modalShow, onHide }) {
         onHide={onHide}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
+        centered>
         <Modal.Header closeButton style={{ margin: '0 auto' }}>
           <Modal.Title
             id="contained-modal-title-vcenter"
-            style={{ fontWeight: 'bold', fontSize: '20px' }}
-          >
+            style={{ fontWeight: 'bold', fontSize: '20px' }}>
             Tạo cuộc thi
           </Modal.Title>
         </Modal.Header>
@@ -180,21 +181,16 @@ function ModalForm({ modalShow, onHide }) {
                 />
               </div>
             </div>
-            {errors.startTime && <p className={styles.error}>{errors.startTime}</p>}
-            <h4 className={styles.title}>Mô tả ngắn</h4>
-            <textarea
-              required
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-            ></textarea>
+            {errors.startTime && (
+              <p className={styles.error}>{errors.startTime}</p>
+            )}
+
             <h4 className={styles.title}>Nội dung cuộc thi</h4>
             <textarea
               required
               name="content"
               value={formData.content}
-              onChange={handleInputChange}
-            ></textarea>
+              onChange={handleInputChange}></textarea>
             <h4 className={styles.title}>Đối tượng tham gia</h4>
             <div className={styles.levelBlock}>
               <p>Bảng A</p>
@@ -280,8 +276,7 @@ function ModalForm({ modalShow, onHide }) {
             <div className="row mb-4 box-award">
               <div
                 className="col-md-6 d-flex justify-content-center align-items-center"
-                style={{ gap: '20px' }}
-              >
+                style={{ gap: '20px' }}>
                 <p className={styles.rankTitle}>Giải nhất</p>
                 <input
                   className={styles.inputAward}
@@ -297,8 +292,7 @@ function ModalForm({ modalShow, onHide }) {
               </div>
               <div
                 className="col-md-6 d-flex justify-content-center align-items-center"
-                style={{ gap: '20px' }}
-              >
+                style={{ gap: '20px' }}>
                 <p className={styles.rankTitle}>Giải ba</p>
                 <input
                   className={styles.inputAward}
@@ -316,8 +310,7 @@ function ModalForm({ modalShow, onHide }) {
             <div className="row">
               <div
                 className="col-md-6 d-flex justify-content-center align-items-center"
-                style={{ gap: '20px' }}
-              >
+                style={{ gap: '20px' }}>
                 <p className={styles.rankTitle}>Giải nhì</p>
                 <input
                   className={styles.inputAward}
@@ -333,8 +326,7 @@ function ModalForm({ modalShow, onHide }) {
               </div>
               <div
                 className="col-md-6 d-flex justify-content-center align-items-center"
-                style={{ gap: '20px' }}
-              >
+                style={{ gap: '20px' }}>
                 <p className={styles.rankTitle}>Giải khuyến khích</p>
                 <input
                   className={styles.inputAward}

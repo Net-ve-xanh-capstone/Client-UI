@@ -12,12 +12,44 @@
         padding: 7px 10px
     }
 
+    .titleHeader {
+        font-size: 20px;
+    }
+
+    .blur-container {
+        margin-top: 20px;
+    }
+
+    .headerContainer {
+        margin-top: 20px;
+    }
+
 }
 
+.headerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.titleHeader {
+    cursor: default;
+    background: var(--linear);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--pink);
+}
 
 .btnAction {
     display: flex;
-    gap: 20px;
+}
+
+.btnAction button:hover {
+    border: none;
+}
+
+.btnAction button:focus {
+    border: none;
 }
 
 .buttonContainer {

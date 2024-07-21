@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
@@ -17,8 +17,17 @@ import img3right2 from '../../..//assets/images/box-item/collection-item-8.jpg';
 import { withErrorBoundary } from 'react-error-boundary';
 import { Fallback } from '../../../constant/Fallback';
 import PropTypes from 'prop-types';
+import useFetchData from '../hooks/useQueryData.js';
 
 const PopularCollection = () => {
+  const { isLoading, isError, data: collectionData, error } = useFetchData('contests');
+  const [collection, setCollection] = useState(null);
+  const test = collectionData?.data?.result;
+  useEffect(() => {
+    if (collectionData) {
+      setCollection(collectionData?.data?.result);
+    }
+  }, [collectionData]);
   const [data] = useState([
     {
       title: 'Creative Art Collection',
@@ -84,13 +93,20 @@ const PopularCollection = () => {
       wishlist: '100'
     }
   ]);
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
   return (
     <section className="tf-section live-auctions style4 home5 bg-style2">
       <div className="themesflat-container">
         <div className="row">
           <div className="col-md-12">
             <div className="heading-live-auctions">
-              <h2 className="tf-title pb-22 text-left">Popular Collection</h2>
+              <h2 className="tf-title pb-22 text-left">Các bộ sưu tập nổi trội</h2>
               <Link to="/explore-03" className="exp style2">
                 EXPLORE MORE
               </Link>

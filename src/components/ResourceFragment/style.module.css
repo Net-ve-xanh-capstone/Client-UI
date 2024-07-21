@@ -22,13 +22,16 @@
 }
 
 .roundTableResponse .col:nth-child(1) {
-    flex-basis: 50%;
+    flex-basis: 10%;
 }
 
 .roundTableResponse .col:nth-child(2) {
-    flex-basis: 50%;
+    flex-basis: 40%;
 }
 
+.roundTableResponse .col:nth-child(3) {
+    flex-basis: 50%;
+}
 
 .roundTableResponse .col button:hover {
     border: none;

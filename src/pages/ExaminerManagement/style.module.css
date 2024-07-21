@@ -23,7 +23,6 @@
     .headerContainer {
         margin-top: 20px;
     }
-
 }
 
 .headerContainer {
@@ -34,14 +33,10 @@
 
 .titleHeader {
     cursor: default;
-    background: var(--linear);
+    background: linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     color: var(--pink);
-}
-
-.btnAction {
-    display: flex;
 }
 
 .btnAction button:hover {
@@ -50,6 +45,10 @@
 
 .btnAction button:focus {
     border: none;
+}
+
+.btnAction {
+    display: flex;
 }
 
 .buttonContainer {

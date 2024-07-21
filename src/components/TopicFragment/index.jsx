@@ -12,52 +12,68 @@ import DeleteModal from '../DeleteModal';
 import RoundForm from '../RoundForm/index.jsx';
 import styles from './style.module.css';
 import CreateTopicRound from '../CreateTopicRound/index.jsx';
+import { getById } from '../../api/contestStaffApi.js';
+import { deleteTopicRound } from '../../api/topicStaffApi.js';
 
 function TopicFragment({ topicFrag, getContestDetail }) {
+  const [topic, setTopic] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
-  const [idRoundDelete, setIdRoundDelete] = useState();
+  const [topicRoundDelete, setTopicRoundDelete] = useState();
   const isEditing = checkEditButton(topicFrag.startTime);
   const [level, setLevel] = useState();
   const [editRoundData, setEditRoundData] = useState();
 
   const resetDetail = () => {
     setModalShow(false);
-    getContestDetail();
+    //getContestDetail();
+    getTopic();
   };
 
-  const hanldeOpenDelete = id => {
-    setIdRoundDelete(id);
+  useEffect(() => {
+    getTopic();
+  }, [topicFrag]);
+
+  const getTopic = async () => {
+    try {
+      const { data } = await getById(topicFrag.id);
+      setTopic(data?.result);
+      setLevel(sortLevel(data?.result.educationalLevel));
+    } catch (e) {
+      console.log('error', e);
+    }
+  };
+
+  const hanldeOpenDelete = (roundId, topicId) => {
+    console.log(roundId, topicId);
+    setTopicRoundDelete({ roundId: roundId, topicId: topicId });
     setDeleteModalShow(true);
   };
 
   const handleDelete = async () => {
-    axios
-      .patch(
-        `https://webapp-240702160733.azurewebsites.net/api/educationallevels?id=${idRoundDelete}`,
-      )
-      .then(res => {
-        if (res.result) {
-          toast.success('Xóa đối tượng dự thi thành công', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
-          getContestDetail();
-        }
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
+    try {
+      const { data } = await deleteTopicRound(topicRoundDelete);
+      if (data?.result) {
+        toast.success('Xóa chủ đề thi thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        //getContestDetail();
+        getTopic();
+      }
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
-  const handleOpenCreate = () => {
-    setEditRoundData();
+  const handleOpenCreate = data => {
+    setEditRoundData(data);
     setModalShow(true);
   };
 
@@ -72,20 +88,13 @@ function TopicFragment({ topicFrag, getContestDetail }) {
     return levels;
   };
 
-  useEffect(() => {
-    try {
-      setLevel(sortLevel(topicFrag.educationalLevel));
-    } catch (e) {
-      console.log('err', e);
-    }
-  }, []);
   return (
     level && (
       <>
         <CreateTopicRound
           modalShow={modalShow}
           onHide={resetDetail}
-          topicName={editRoundData}
+          roundData={editRoundData}
         />
         <DeleteModal
           show={deleteModalShow}
@@ -114,37 +123,41 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                         <div className={styles.col}>Mô tả</div>
                       </li>
 
-                      <li className={styles.tableRow}>
-                        <div className={styles.col} data-label="Tên chủ đề">
-                          Biển đảo
-                        </div>
-
-                        <div className={styles.col} data-label="Mô tả">
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                            }}>
-                            <>Chưa có mô tả</>
-
-                            <IconButton
-                              aria-label="delete"
-                              size="large"
-                              color="error"
-                              onClick={() => hanldeOpenDelete(data.id)}
-                              disabled={isEditing}>
-                              <DeleteIcon />
-                            </IconButton>
+                      {data.roundTopic?.map((topicData, index) => (
+                        <li key={index} className={styles.tableRow}>
+                          <div className={styles.col} data-label="Tên chủ đề">
+                            {topicData.topic.name}
                           </div>
-                        </div>
-                      </li>
+
+                          <div className={styles.col} data-label="Mô tả">
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                              }}>
+                              <>{topicData.topic.description}</>
+
+                              <IconButton
+                                aria-label="delete"
+                                size="large"
+                                color="error"
+                                onClick={() =>
+                                  hanldeOpenDelete(data?.id, topicData?.topic.id)
+                                }
+                                disabled={isEditing}>
+                                <DeleteIcon />
+                              </IconButton>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                   <div className="flex justify-content-end mt-20">
                     <button
                       className="btn btn-outline-primary btn-lg"
-                      onClick={() => handleOpenCreate()}
+                      onClick={() => handleOpenCreate(data)}
                       disabled={isEditing}>
                       Thêm
                     </button>

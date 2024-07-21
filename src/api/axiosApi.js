@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://webapp-240702160733.azurewebsites.net/api/';
+const baseUrl = 'https://netvexanh.azurewebsites.net/api/';
 
 const axiosApi = axios.create({
   baseURL: baseUrl,

@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import ContestDetail from '../../components/ContestDetail';
-import MUIDataTable from 'mui-datatables';
-import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
-import styles from './style.module.css';
-import ModalForm from '../../components/ModalForm';
-import axios from 'axios';
-import { formatDate } from '../../utils/formatDate';
-import DeleteModal from '../../components/DeleteModal';
-import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
+import IconButton from '@mui/material/IconButton';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MUIDataTable from 'mui-datatables';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { deleteContest, getAll } from '../../api/contestStaffApi';
+import ContestDetail from '../../components/ContestDetail';
+import DeleteModal from '../../components/DeleteModal';
+import ModalForm from '../../components/ModalForm';
+import { formatDate } from '../../utils/formatDate';
+import styles from './style.module.css';
 
 function ContestManagement() {
   const [isOpenDetail, setIsOpenDetail] = useState(false);
@@ -18,58 +25,54 @@ function ContestManagement() {
   const [contest, setContest] = useState([]);
   const [idContestDelete, setIdContestDelete] = useState();
   const [selectedContest, setSelectedContest] = useState(null); // State để lưu trữ contest được chọn
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector(state => state.auth);
 
   useEffect(() => {
     getContest();
   }, []);
 
-  const getContest = () => {
-    axios
-      .get(`https://webapp-240702160733.azurewebsites.net/api/contests/getallcontest`)
-      .then((res) => {
-        setContest(res?.result);
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-      });
+  const getContest = async () => {
+    try {
+      const { data } = await getAll();
+      setContest(data?.result);
+    } catch (e) {
+      console.log('error', e);
+    }
   };
 
-  const handleOpenDetail = (id) => {
-    const contestData = contest.find((item) => item.id === id);
+  const handleOpenDetail = id => {
+    const contestData = contest.find(item => item.id === id);
     setSelectedContest(contestData);
     setIsOpenDetail(true);
   };
 
-  const handleOpenDelete = (id) => {
+  const handleOpenDelete = id => {
     setIdContestDelete(id);
     setDeleteModalShow(true);
   };
 
   const handleDelete = async () => {
-    axios
-      .patch(`https://webapp-240702160733.azurewebsites.net/api/contests?id=${idContestDelete}`)
-      .then((res) => {
-        if (res.result) {
-          toast.success('Xóa cuộc thi thành công', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light'
-          });
-          getContest();
-        }
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-      });
+    try {
+      const { data } = await deleteContest(idContestDelete);
+      if (data?.result) {
+        toast.success('Xóa cuộc thi thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        getContest();
+      }
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
-  const handleActiveDate = (data) => {
+  const handleActiveDate = data => {
     let currentDate = new Date().toJSON().slice(0, 10);
     const startDate = data.rowData[1].split('T')[0];
     const endDate = data.rowData[2].split('T')[0];
@@ -79,7 +82,7 @@ function ContestManagement() {
     return false;
   };
 
-  const handleActiveDelete = (data) => {
+  const handleActiveDelete = data => {
     let currentDate = new Date().toJSON().slice(0, 10);
     const startDate = data.rowData[1].split('T')[0];
 
@@ -93,28 +96,30 @@ function ContestManagement() {
       name: 'name',
       label: 'TÊN CUỘC THI',
       options: {
-        customBodyRender: (value) => (
-          <span>{value.length > 50 ? value.substring(0, 50) + '...' : value}</span>
-        )
-      }
+        customBodyRender: value => (
+          <span>
+            {value.length > 50 ? value.substring(0, 50) + '...' : value}
+          </span>
+        ),
+      },
     },
     {
       name: 'startTime',
       label: 'THỜI GIAN BẮT ĐẦU',
       options: {
-        customBodyRender: (value) => formatDate(value)
-      }
+        customBodyRender: value => formatDate(value),
+      },
     },
     {
       name: 'endTime',
       label: 'THỜI GIAN KẾT THÚC',
       options: {
-        customBodyRender: (value) => formatDate(value)
-      }
+        customBodyRender: value => formatDate(value),
+      },
     },
     {
       name: 'accountFullName',
-      label: 'TÊN STAFF'
+      label: 'TÊN STAFF',
     },
     {
       name: 'TRẠNG THÁI',
@@ -127,14 +132,13 @@ function ContestManagement() {
               <Switch checked={isActive} color="success" disabled />
               <button
                 className={`btn btn-lg ${isActive ? 'btn-success' : 'btn-secondary'}`}
-                disabled
-              >
+                disabled>
                 {isActive ? 'Active' : 'Inactive'}
               </button>
             </>
           );
-        }
-      }
+        },
+      },
     },
     {
       name: 'id',
@@ -142,22 +146,27 @@ function ContestManagement() {
       options: {
         customBodyRender: (value, tableData) => (
           <div className={styles.btnAction}>
-            <button className="btn btn-info btn-lg" onClick={() => handleOpenDetail(value)}>
-              Chi tiết
-            </button>
+            <IconButton
+              aria-label="delete"
+              size="large"
+              color="info"
+              onClick={() => handleOpenDetail(value)}>
+              <RemoveRedEyeIcon />
+            </IconButton>
             {userInfo.role === 'Staff' && (
-              <button
+              <IconButton
+                aria-label="delete"
+                size="large"
+                color="error"
                 onClick={() => handleOpenDelete(value)}
-                disabled={handleActiveDelete(tableData)}
-                className="btn btn-danger btn-lg"
-              >
-                Xóa
-              </button>
+                disabled={handleActiveDelete(tableData)}>
+                <DeleteIcon />
+              </IconButton>
             )}
           </div>
-        )
-      }
-    }
+        ),
+      },
+    },
   ];
 
   const options = {
@@ -168,19 +177,24 @@ function ContestManagement() {
     responsive: 'standard',
     print: false,
     download: false,
-    filter: false
+    filter: false,
+    textLabels: {
+      body: {
+        noMatch: 'Không có dữ liệu',
+      },
+    },
   };
 
   const getMuiTheme = () =>
     createTheme({
       typography: {
-        fontSize: 20
+        fontSize: 20,
       },
       palette: {
         background: {
-          default: '#0f172a'
+          default: '#0f172a',
         },
-        mode: 'light'
+        mode: 'light',
       },
       components: {
         MuiTableCell: {
@@ -188,16 +202,16 @@ function ContestManagement() {
             head: {
               padding: '10px 10px',
               fontWeight: 'bold',
-              borderBottom: '1px solid black'
+              borderBottom: '1px solid black',
             },
             body: {
               color: '#000',
               fontWeight: 'bold',
-              borderBottom: '1px solid black'
-            }
-          }
-        }
-      }
+              borderBottom: '1px solid black',
+            },
+          },
+        },
+      },
     });
 
   const handleBack = () => {
@@ -227,19 +241,25 @@ function ContestManagement() {
               flexDirection: 'column',
               gap: '10px',
               overflow: 'hidden',
-              padding: '20px'
-            }}
-          >
-            <div className={styles.buttonContainer}>
-              <button className={styles.btnCreate} onClick={() => setModalShow(true)}>
-                <span>Tạo cuộc thi</span>
-              </button>
+              padding: '10px 20px 0 20px',
+            }}>
+            <div className={styles.headerContainer}>
+              <div>
+                <h2 className={styles.titleHeader}>Quản lí cuộc thi</h2>
+              </div>
+              <div className={styles.buttonContainer}>
+                <button
+                  className={styles.btnCreate}
+                  onClick={() => setModalShow(true)}>
+                  <span>Tạo cuộc thi</span>
+                </button>
+              </div>
             </div>
             <StyledEngineProvider injectFirst>
               <ThemeProvider theme={getMuiTheme()}>
                 <div className="table-contest">
                   <MUIDataTable
-                    title={'Quản lí cuộc thi'}
+                    //title={'Quản lí cuộc thi'}
                     data={contest}
                     columns={columns}
                     options={options}

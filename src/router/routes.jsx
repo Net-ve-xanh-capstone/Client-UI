@@ -11,9 +11,20 @@ const Explore = lazy(() => import('../pages/Explore'));
 const NoResult = lazy(() => import('../constant/NoResult'));
 const BlogStaff = lazy(() => import('../components/cardBlogStaff/page.jsx'));
 const CategoryBlog = lazy(() => import('../components/categoryBlog/page.jsx'));
-const ContestManagement = lazy(() => import('../pages/ContestManagement/index.jsx'));
+const ContestManagement = lazy(
+  () => import('../pages/ContestManagement/index.jsx'),
+);
 const StaffManage = lazy(() => import('../pages/StaffManage'));
-const ContestDetail = lazy(() => import('../pages/ContestDetail/ContestDetail.jsx'));
+const ContestDetail = lazy(
+  () => import('../pages/ContestDetail/ContestDetail.jsx'),
+);
+const TopicManagement = lazy(
+  () => import('../pages/TopicManagement/index.jsx'),
+);
+
+const ExaminerManagement = lazy(
+  () => import('../pages/ExaminerManagement/index.jsx'),
+);
 
 const routes = [
   { path: '/', component: <Home /> },
@@ -25,17 +36,25 @@ const routes = [
     children: [
       {
         path: 'contest',
-        component: <ContestManagement />
+        component: <ContestManagement />,
       },
       {
         path: 'blog',
-        component: <BlogStaff />
+        component: <BlogStaff />,
       },
       {
         path: 'category',
-        component: <CategoryBlog />
-      }
-    ]
+        component: <CategoryBlog />,
+      },
+      {
+        path: 'topic',
+        component: <TopicManagement />,
+      },
+      {
+        path: 'examiner',
+        component: <ExaminerManagement />,
+      },
+    ],
   },
   {
     path: '/submit',
@@ -43,7 +62,7 @@ const routes = [
       <ProtectedRoute role={Role.COMPETITOR}>
         <SubmitPage />
       </ProtectedRoute>
-    )
+    ),
   },
   {
     path: '/explore',
@@ -51,7 +70,7 @@ const routes = [
       <ProtectedRoute>
         <Explore />
       </ProtectedRoute>
-    )
+    ),
   },
   {
     path: '/blog',
@@ -59,10 +78,10 @@ const routes = [
       <ProtectedRoute>
         <BlogPage />
       </ProtectedRoute>
-    )
+    ),
   },
-  {path: '/contest-detail/:id', component: <ContestDetail />},
-  { path: '/*', component: <NoResult /> }
+  { path: '/contest-detail/:id', component: <ContestDetail /> },
+  { path: '/*', component: <NoResult /> },
 ];
 
 export default routes;

@@ -4,6 +4,7 @@ import styles from './style.module.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import EditModal from '../EditModal';
+import { editContest } from '../../api/contestStaffApi';
 
 function EditContest({ modalShow, onHide, contestEdit, callBack }) {
   const [showModalEdit, setShowModalEdit] = useState(false);
@@ -85,29 +86,10 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
   };
 
   const putContest = async () => {
-    axios
-      .put(
-        `https://webapp-240702160733.azurewebsites.net/api/contests`,
-        formData,
-      )
-      .then(res => {
-        if (res.result) {
-          toast.success('Chỉnh sửa thành công', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
-          callBack();
-          onHide();
-        }
-      })
-      .catch(error => {
-        toast.error('Có lỗi xảy ra', {
+    try {
+      const { data } = await editContest(formData);
+      if (data?.result) {
+        toast.success('Chỉnh sửa thành công', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
@@ -117,8 +99,12 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
           progress: undefined,
           theme: 'light',
         });
-        console.error('There was an error!', error);
-      });
+        callBack();
+        onHide();
+      }
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
   return (
@@ -142,7 +128,7 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
             Chỉnh sửa cuộc thi
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ height: '80vh', overflow: 'hidden' }}>
+        <Modal.Body style={{ height: '60vh', overflow: 'hidden' }}>
           <form onSubmit={handleSubmit} className={styles.modalForm}>
             <h4 className={styles.title}>Tên cuộc thi</h4>
             <input
@@ -184,12 +170,6 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
             {errors.startTime && (
               <p className={styles.error}>{errors.startTime}</p>
             )}
-            <h4 className={styles.title}>Mô tả ngắn</h4>
-            <textarea
-              required
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}></textarea>
             <h4 className={styles.title}>Nội dung cuộc thi</h4>
             <textarea
               required

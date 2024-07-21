@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CreateModal from '../CreateModal';
+import { createContest } from '../../api/contestStaffApi';
 
 function ModalForm({ modalShow, onHide }) {
   const [validated, setValidated] = useState(false);
@@ -25,6 +26,7 @@ function ModalForm({ modalShow, onHide }) {
     endTime: '',
     description: '',
     content: '',
+    logo: '',
     round1StartTime: '',
     round1EndTime: '',
     round2StartTime: '',
@@ -101,29 +103,24 @@ function ModalForm({ modalShow, onHide }) {
   };
 
   const postContest = async () => {
-    axios
-      .post(
-        `https://webapp-240702160733.azurewebsites.net/api/contests`,
-        formData,
-      )
-      .then(res => {
-        if (res.result) {
-          toast.success('Tạo cuộc thi thành công', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
-          onHide();
-        }
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
+    try {
+      const { data } = await createContest(formData);
+      if (data?.result) {
+        toast.success('Tạo cuộc thi thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      }
+      onHide();
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
   return (
@@ -187,12 +184,7 @@ function ModalForm({ modalShow, onHide }) {
             {errors.startTime && (
               <p className={styles.error}>{errors.startTime}</p>
             )}
-            <h4 className={styles.title}>Mô tả ngắn</h4>
-            <textarea
-              required
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}></textarea>
+
             <h4 className={styles.title}>Nội dung cuộc thi</h4>
             <textarea
               required

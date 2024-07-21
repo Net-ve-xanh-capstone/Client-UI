@@ -1,89 +1,120 @@
+import Multiselect from 'multiselect-react-dropdown';
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import styles from './style.module.css';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { createTopicRound, getAll } from '../../api/topicStaffApi';
 import CreateModal from '../CreateModal';
-import Checkbox from '@mui/material/Checkbox';
+import { round } from 'lodash';
 
-function CreateTopicRound({ modalShow, onHide, topicName }) {
-  const [validated, setValidated] = useState(false);
-  const [errors, setErrors] = useState({});
+function CreateTopicRound({ modalShow, onHide, roundData }) {
   const { userInfo } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const [showModalCreate, setShowModalCreate] = useState(false);
+  const [topic, setTopic] = useState([]);
+  const [selectedTopics, setSelectedTopics] = useState([]);
 
   useEffect(() => {
     if (userInfo === null) navigate('/login');
+    getTopic();
+  }, []);
+
+  useEffect(() => {
     setFormData(intialState);
-  }, [modalShow]);
+    const selecteBefore = roundData?.roundTopic?.map(ele => ({
+      id: ele.topic.id,
+      name: ele.topic.name,
+    }));
+    setSelectedTopics(selecteBefore);
+  }, [roundData]);
 
   const intialState = {
-    description: '',
-    level: '',
-    currentUserId: userInfo?.Id,
+    roundId: roundData?.id,
+    listTopicId: [],
   };
 
   const [formData, setFormData] = useState(intialState);
 
-  const handleInputChange = event => {
+  const getTopic = async () => {
     try {
-      const { name, value } = event.target;
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
+      const { data } = await getAll();
+      setTopic(data?.result);
     } catch (e) {
       console.log('err', e);
     }
   };
 
-  const handleSubmit = async event => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    let formErrors = {};
-
-    if (Object.keys(formErrors).length === 0) {
-      setValidated(true);
-      setShowModalCreate(true);
-      setErrors({});
-    } else {
-      setValidated(false);
-      setErrors(formErrors);
+  const postRoundTopic = async () => {
+    try {
+      const { data } = await createTopicRound(formData);
+      if (data?.result) {
+        toast.success('Tạo chủ đề thi thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        onHide();
+      }
+    } catch (e) {
+      console.log('err', e);
     }
   };
 
-  const postContest = async () => {
-    axios
-      .post(
-        `https://webapp-240702160733.azurewebsites.net/api/educationallevels`,
-        formData,
-      )
-      .then(res => {
-        if (res.result) {
-          toast.success('Tạo đối tượng dự thi thành công', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
-          onHide();
-        }
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
+  const handleInputChange = selectedIds => {
+    setFormData(prevState => ({
+      ...prevState,
+      listTopicId: selectedIds,
+    }));
   };
+
+  const handleSelect = seletedList => {
+    const newTopic = seletedList.filter(
+      item => !roundData?.roundTopic?.some(t => t.topic.id === item.id),
+    );
+    handleInputChange(newTopic.map(item => item.id));
+  };
+
+  const handleRemove = seletedList => {
+    const newTopic = seletedList.filter(
+      item => !roundData?.roundTopic?.some(t => t.topic.id === item.id),
+    );
+    handleInputChange(newTopic.map(item => item.id));
+  };
+
+  const handleOpenCrete = () => {
+    if (!formData.listTopicId.length > 0) {
+      toast.error('Chưa chọn chủ đề nào', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      return;
+    }
+    setShowModalCreate(true);
+  };
+
+  const selectedTopicsIds = formData.listTopicId;
+  const filteredTopics = topic.filter(t => !selectedTopicsIds.includes(t.id));
 
   return (
     <>
+      <CreateModal
+        setShow={setShowModalCreate}
+        show={showModalCreate}
+        title={'chủ đề thi'}
+        callBack={postRoundTopic}
+      />
       <Modal
         show={modalShow}
         onHide={onHide}
@@ -97,62 +128,37 @@ function CreateTopicRound({ modalShow, onHide, topicName }) {
             Thêm chủ đề thi
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ height: '50vh', overflow: 'hidden' }}>
-          <div className={styles.roundContainer}>
-            <ul className={styles.roundTableResponse}>
-              <li className={styles.roundHeader}>
-                <div className={styles.col}></div>
-                <div className={styles.col}>Tên chủ đề</div>
-                <div className={styles.col}>Mô tả</div>
-              </li>
-
-              <li className={styles.tableRow}>
-                <div className={styles.col} data-label="Chọn">
-                  <input type="checkbox" />
-                </div>
-                <div className={styles.col} data-label="Tên chủ đề">
-                  Biển đảo
-                </div>
-
-                <div className={styles.col} data-label="Mô tả">
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}>
-                    <>Chưa có mô tả</>
-                  </div>
-                </div>
-              </li>
-              <li className={styles.tableRow}>
-                <div className={styles.col} data-label="Chọn">
-                  <input type="checkbox" />
-                </div>
-                <div className={styles.col} data-label="Tên chủ đề">
-                  Biển đảo
-                </div>
-
-                <div className={styles.col} data-label="Mô tả">
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}>
-                    <>Chưa có mô tả</>
-                  </div>
-                </div>
-              </li>
-            </ul>
-            <div className="flex justify-content-end mt-20">
-              <button
-                className="btn btn-outline-primary btn-lg"
-                //onClick={() => handleOpenCreate()}
-              >
-                Thêm
-              </button>
-            </div>
+        <Modal.Body
+          style={{
+            height: '60vh',
+            overflow: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}>
+          <Multiselect
+            displayValue="name"
+            disablePreSelectedValues
+            onKeyPressFn={function noRefCheck() {}}
+            onRemove={e => handleRemove(e)}
+            onSelect={e => handleSelect(e)}
+            options={filteredTopics}
+            selectedValues={selectedTopics}
+            placeholder="Chọn chủ đề"
+            emptyRecordMsg="Không tìm thấy chủ đề nào"
+            avoidHighlightFirstOption="true"
+            style={{
+              chips: {
+                background: 'var(--linear)',
+              },
+            }}
+          />
+          <div className="flex justify-content-end mt-20">
+            <button
+              className="btn btn-outline-primary btn-lg"
+              onClick={() => handleOpenCrete()}>
+              Thêm
+            </button>
           </div>
         </Modal.Body>
       </Modal>

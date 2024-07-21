@@ -6,14 +6,16 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CreateModal from '../CreateModal';
-import { createLevel } from '../../api/levelStaffApi';
+import { formatDate } from '../../utils/formatDate';
+import EditModal from '../EditModal';
+import { createTopic, editTopic } from '../../api/topicStaffApi';
 
-function CreateLevel({ modalShow, onHide, contestId }) {
+function TopicForm({ modalShow, onHide, topicData }) {
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
   const { userInfo } = useSelector(state => state.auth);
   const navigate = useNavigate();
-  const [showModalCreate, setShowModalCreate] = useState(false);
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     if (userInfo === null) navigate('/login');
@@ -21,9 +23,9 @@ function CreateLevel({ modalShow, onHide, contestId }) {
   }, [modalShow]);
 
   const intialState = {
-    description: '',
-    level: '',
-    contestId: contestId,
+    name: topicData?.name || '',
+    description: topicData?.description || '',
+    image: '',
     currentUserId: userInfo?.Id,
   };
 
@@ -37,7 +39,7 @@ function CreateLevel({ modalShow, onHide, contestId }) {
         [name]: value,
       });
     } catch (e) {
-      console.log('err', e);
+      console.log(e);
     }
   };
 
@@ -49,7 +51,7 @@ function CreateLevel({ modalShow, onHide, contestId }) {
 
     if (Object.keys(formErrors).length === 0) {
       setValidated(true);
-      setShowModalCreate(true);
+      setModal(true);
       setErrors({});
     } else {
       setValidated(false);
@@ -57,11 +59,11 @@ function CreateLevel({ modalShow, onHide, contestId }) {
     }
   };
 
-  const postContest = async () => {
+  const postTopic = async () => {
     try {
-      const { data } = await createLevel(formData);
+      const { data } = await createTopic(formData);
       if (data?.result) {
-        toast.success('Tạo đối tượng dự thi thành công', {
+        toast.success('Tạo chủ đề thi thành công', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
@@ -75,17 +77,49 @@ function CreateLevel({ modalShow, onHide, contestId }) {
       }
     } catch (e) {
       console.log('err', e);
+      onHide();
+    }
+  };
+
+  const handleEditTopic = async () => {
+    try {
+      formData.id = topicData?.id;
+      const { data } = await editTopic(formData);
+      if (data?.result) {
+        toast.success('Chỉnh sửa chủ đề thi thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        onHide();
+      }
+    } catch (e) {
+      console.log('Err', e);
     }
   };
 
   return (
     <>
-      <CreateModal
-        show={showModalCreate}
-        setShow={setShowModalCreate}
-        title={'đối tượng dự thi'}
-        callBack={postContest}
-      />
+      {!topicData ? (
+        <CreateModal
+          show={modal}
+          setShow={setModal}
+          title={'chủ đề'}
+          callBack={postTopic}
+        />
+      ) : (
+        <EditModal
+          show={modal}
+          setShow={setModal}
+          title={'chủ đề'}
+          callBack={handleEditTopic}
+        />
+      )}
       <Modal
         show={modalShow}
         onHide={onHide}
@@ -96,30 +130,30 @@ function CreateLevel({ modalShow, onHide, contestId }) {
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            Tạo đối tượng dự thi
+            Tạo chủ đề thi
           </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ height: '50vh', overflow: 'hidden' }}>
           <form onSubmit={handleSubmit} className={styles.modalForm}>
-            <h4 className={styles.title}>Tên đối tượng</h4>
+            <h4 className={styles.title}>Tên chủ đề</h4>
             <input
               className={styles.inputModal}
               required
               type="text"
-              name="level"
+              name="name"
               value={formData.name}
-              onChange={handleInputChange}
-            />
+              onChange={handleInputChange}></input>
 
-            <h4 className={styles.title}>Mô tả ngắn</h4>
+            <h4 className={styles.title}>Mô tả</h4>
             <textarea
               required
               name="description"
               value={formData.description}
               onChange={handleInputChange}></textarea>
+
             <div style={{ textAlign: 'end' }}>
               <button className={styles.btnCreate} type="submit">
-                Tạo
+                {!topicData ? 'Thêm' : 'Chỉnh sửa'}
               </button>
             </div>
           </form>
@@ -129,4 +163,4 @@ function CreateLevel({ modalShow, onHide, contestId }) {
   );
 }
 
-export default CreateLevel;
+export default TopicForm;

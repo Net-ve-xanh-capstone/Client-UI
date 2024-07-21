@@ -18,7 +18,7 @@ $icon-size: 35px;
   color: whitesmoke;
   font-weight: bold;
   .pro-sidebar-inner {
-    background: $sidebar-bg-color;
+    background: linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%);
   }
 }
 
@@ -78,6 +78,7 @@ $icon-size: 35px;
     overflow-y: auto;
     position: absolute;
     display: none;
+    z-index: 100;
 
     header {
       margin-bottom: 16px;
@@ -145,7 +146,11 @@ $icon-size: 35px;
 
 @media (max-width: 800px) {
   .table-contest table:nth-child(1) {
-    width: 200%;
+    width: 150%;
+  }
+
+  .table-contest-topic table:nth-child(1) {
+    width: 130% !important;
   }
 
   .table-contest {
@@ -156,4 +161,40 @@ $icon-size: 35px;
 .css-1086bdv-MuiPaper-root-MuiAccordion-root {
   border: 1px solid black;
   box-shadow: none !important;
+}
+
+//table cell hover
+
+.css-crgmwz-MuiButtonBase-root-MuiButton-root:hover,
+.css-crgmwz-MuiButtonBase-root-MuiButton-root:focus {
+  border: none;
+}
+
+//change width colum
+.table-contest-topic th:nth-child(2) {
+  width: 60%;
+}
+
+.table-examiner th:nth-child(1) {
+  width: 15%;
+}
+
+.table-examiner th:nth-child(4) {
+  width: 15%;
+}
+
+.table-examiner th:nth-child(5) {
+  width: 20%;
+}
+
+.tss-1qtl85h-MUIDataTableBodyCell-root span {
+  word-wrap: break-word;
+}
+
+.optionContainer .highlightOption {
+  background: var(--linear);
+}
+
+.multiSelectContainer li:hover {
+  background: var(--linear) !important;
 }

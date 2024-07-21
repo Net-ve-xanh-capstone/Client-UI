@@ -8,6 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import CreateModal from '../CreateModal';
 import { formatDate } from '../../utils/formatDate';
 import EditModal from '../EditModal';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { createRoundLevel, editRoundLevel } from '../../api/roundStaffApi';
 
 function RoundForm({ modalShow, onHide, roundData, contestData }) {
   const [validated, setValidated] = useState(false);
@@ -15,6 +18,41 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
   const { userInfo } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
+
+  //for checkbox level
+  const [selectedLevel, setSelectedLevel] = useState([]);
+
+  const handleCheckall = event => {
+    if (event.target.checked) {
+      const levelIds = contestData.educationalLevel.map(data => data.id);
+      setSelectedLevel(levelIds);
+    } else {
+      setSelectedLevel([]);
+    }
+  };
+
+  const handleChangeCheckbox = id => {
+    const index = selectedLevel.indexOf(id);
+    if (index === -1) {
+      setSelectedLevel([...selectedLevel, id]);
+    } else {
+      setSelectedLevel(selectedLevel.filter(levelId => levelId !== id));
+    }
+  };
+
+  const children = (
+    <div
+      style={{ display: 'flex', flexDirection: 'column', marginLeft: '25px' }}>
+      {contestData.educationalLevel?.map(data => (
+        <FormControlLabel
+          key={data.id}
+          label={<span style={{ fontSize: '16px' }}>{data.level}</span>}
+          checked={selectedLevel.includes(data.id)}
+          control={<Checkbox onChange={() => handleChangeCheckbox(data.id)} />}
+        />
+      ))}
+    </div>
+  );
 
   useEffect(() => {
     if (userInfo === null) navigate('/login');
@@ -27,9 +65,8 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
     endTime: roundData?.endTime.split('T')[0] || '',
     location: roundData?.location || '',
     description: roundData?.description || '',
-    educationalLevelId: roundData?.educationalLevelId || '',
-    listTopic: [],
-    currentUserId: userInfo?.id,
+    listLevel: [],
+    currentUserId: userInfo?.Id,
   };
 
   const [formData, setFormData] = useState(intialState);
@@ -47,18 +84,39 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
   };
 
   const isValidDate = (startTime, endTime) => {
-    for (let level of contestData.educationalLevel) {
-      if (level.round && level.round.length > 0) {
-        for (let round of level.round) {
+    //check for edit and create
+    if (roundData?.id) {
+      const selectLevel = contestData.educationalLevel.find(item =>
+        item.round.find(ele => ele.id === roundData.id),
+      );
+      if (selectLevel.round && selectLevel.round.length > 0) {
+        for (let round of selectLevel.round) {
           const roundStart = new Date(round.startTime);
           const roundEnd = new Date(round.endTime);
           roundEnd.setDate(roundEnd.getDate() + 1);
-          if (!(startTime > roundEnd || endTime < roundStart)) {
+          if (
+            !(startTime > roundEnd || endTime < roundStart) &&
+            round.id !== roundData.id
+          ) {
             return false;
           }
         }
       }
+    } else {
+      for (let level of contestData.educationalLevel) {
+        if (level.round && level.round.length > 0) {
+          for (let round of level.round) {
+            const roundStart = new Date(round.startTime);
+            const roundEnd = new Date(round.endTime);
+            roundEnd.setDate(roundEnd.getDate() + 1);
+            if (!(startTime > roundEnd || endTime < roundStart)) {
+              return false;
+            }
+          }
+        }
+      }
     }
+
     return true;
   };
 
@@ -70,6 +128,19 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
 
     const startDate = new Date(formData.startTime);
     const endDate = new Date(formData.endTime);
+
+    if (selectedLevel.length === 0 && !roundData?.id) {
+      toast.error('Vui lòng chọn đối tượng', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
 
     if (startDate >= endDate) {
       formErrors.startTime = 'Ngày bắt đầu phải nhỏ hơn ngày kết thúc';
@@ -90,55 +161,47 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
   };
 
   const postRound = async () => {
-    axios
-      .post(
-        `https://webapp-240702160733.azurewebsites.net/api/contes2ts`,
-        formData,
-      )
-      .then(res => {
-        if (res.result) {
-          toast.success('Tạo cuộc thi thành công', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
-          onHide();
-        }
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
+    try {
+      formData.listLevel = selectedLevel;
+      const { data } = await createRoundLevel(formData);
+      if (data?.result) {
+        toast.success('Tạo vòng thi thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        onHide();
+      }
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
   const editRound = async () => {
-    axios
-      .post(
-        `https://webapp-240702160733.azurewebsites.net/api/contes2ts`,
-        formData,
-      )
-      .then(res => {
-        if (res.result) {
-          toast.success('Tạo cuộc thi thành công', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
-          onHide();
-        }
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
+    try {
+      formData.id = roundData.id;
+      const { data } = await editRoundLevel(formData);
+      if (data?.result) {
+        toast.success('Chỉnh sửa vòng thi thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        onHide();
+      }
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
   return (
@@ -173,6 +236,28 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
         </Modal.Header>
         <Modal.Body style={{ height: '80vh', overflow: 'hidden' }}>
           <form onSubmit={handleSubmit} className={styles.modalForm}>
+            {!roundData?.id && (
+              <div>
+                <FormControlLabel
+                  label={
+                    <span style={{ fontSize: '16px' }}>
+                      Chọn đối tượng để thêm vòng thi
+                    </span>
+                  }
+                  control={
+                    <Checkbox
+                      checked={
+                        selectedLevel.length > 0 &&
+                        selectedLevel.length ===
+                          contestData.educationalLevel.length
+                      }
+                      onChange={handleCheckall}
+                    />
+                  }
+                />
+                {children}
+              </div>
+            )}
             <h4 className={styles.title}>Tên vòng thi</h4>
             <input
               className={styles.inputModal}

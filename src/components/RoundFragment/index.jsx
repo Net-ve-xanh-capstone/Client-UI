@@ -11,6 +11,8 @@ import RoundForm from '../RoundForm/index.jsx';
 import { Switch } from '@mui/material';
 import { checkActiveDate } from '../../utils/checkActiveDate.js';
 import DeleteModal from '../DeleteModal';
+import { deleteRoundLevel } from '../../api/roundStaffApi.js';
+import { getById } from '../../api/contestStaffApi.js';
 function RoundFragment({ roundFrag, getContestDetail }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -22,6 +24,16 @@ function RoundFragment({ roundFrag, getContestDetail }) {
   const resetDetail = () => {
     setModalShow(false);
     getContestDetail();
+    getRound();
+  };
+
+  const getRound = async () => {
+    try {
+      const { data } = await getById(roundFrag.id);
+      setRound(sortRoundsByStartTime(data?.result.educationalLevel));
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
   const hanldeOpenDelete = id => {
@@ -30,28 +42,25 @@ function RoundFragment({ roundFrag, getContestDetail }) {
   };
 
   const handleDelete = async () => {
-    axios
-      .patch(
-        `https://webapp-240702160733.azurewebsites.net/api/educationallevels?id=${idRoundDelete}`,
-      )
-      .then(res => {
-        if (res.result) {
-          toast.success('Xóa đối tượng dự thi thành công', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
-          getContestDetail();
-        }
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
+    try {
+      const { data } = await deleteRoundLevel(idRoundDelete);
+      if (data?.result) {
+        toast.success('Xóa vòng thi thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        getRound();
+        getContestDetail();
+      }
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
   const handleOpenCreate = () => {
@@ -60,27 +69,31 @@ function RoundFragment({ roundFrag, getContestDetail }) {
   };
 
   const handleOpenEdit = id => {
-    setEditRoundData(round.find(item => item.id === id));
+    const foundRound = round.find(item =>
+      item.round.find(ele => ele.id === id),
+    );
+    const roundData = foundRound.round.find(ele => ele.id === id);
+    setEditRoundData(roundData);
     setModalShow(true);
   };
-  const findRound = levels => {
-    for (const level of levels) {
+  const sortRoundsByStartTime = data => {
+    let sorted = [];
+    data.forEach(level => {
       if (level.round && level.round.length > 0) {
-        return level.round.sort(
-          (a, b) => new Date(a.startTime) - new Date(b.startTime),
-        );
+        sorted.push({
+          ...level,
+          round: level.round.sort(
+            (a, b) => new Date(a.startTime) - new Date(b.startTime),
+          ),
+        });
       }
-    }
-    return null;
+    });
+    return sorted;
   };
 
   useEffect(() => {
-    try {
-      setRound(findRound(roundFrag.educationalLevel));
-    } catch (e) {
-      console.log('err', e);
-    }
-  }, []);
+    getRound();
+  }, [roundFrag]);
   return (
     round && (
       <>
@@ -102,6 +115,7 @@ function RoundFragment({ roundFrag, getContestDetail }) {
         <div className={styles.roundContainer}>
           <ul className={styles.roundTableResponse}>
             <li className={styles.roundHeader}>
+              <div className={styles.col}>Đối tượng</div>
               <div className={styles.col}>Vòng thi</div>
               <div className={styles.col}>bắt đầu</div>
               <div className={styles.col}>kết thúc</div>
@@ -109,58 +123,63 @@ function RoundFragment({ roundFrag, getContestDetail }) {
               <div className={styles.col}>Mô tả</div>
               <div className={styles.col}>Trạng thái</div>
             </li>
-            {round.map(data => (
-              <li key={data.id} className={styles.tableRow}>
-                <div className={styles.col} data-label="Tên vòng thi">
-                  {data.name}
-                </div>
-                <div className={styles.col} data-label="Ngày bắt đầu">
-                  {formatDate(data.startTime)}
-                </div>
-                <div className={styles.col} data-label="Ngày két thúc">
-                  {formatDate(data.endTime)}
-                </div>
-                <div className={styles.col} data-label="Địa điểm">
-                  {data.location || 'Chưa có'}
-                </div>
-                <div className={styles.col} data-label="Mô tả">
-                  {data.description || 'Chưa có'}
-                </div>
-                <div className={styles.col} data-label="Trạng thái">
-                  <div style={{ display: 'flex' }}>
-                    <>
-                      <Switch
-                        checked={checkActiveDate(data)}
-                        color="success"
-                        disabled
-                      />
-                      <button
-                        className={`btn btn-sm ${checkActiveDate(data) ? 'btn-success' : 'btn-secondary'}`}
-                        style={{ width: '45px', textAlign: 'center' }}
-                        disabled>
-                        {checkActiveDate(data) ? 'Active' : 'Inactive'}
-                      </button>
-                    </>
-                    <IconButton
-                      aria-label="edit"
-                      size="large"
-                      color="info"
-                      onClick={() => handleOpenEdit(data.id)}
-                      disabled={isEditing}>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      size="large"
-                      color="error"
-                      onClick={() => hanldeOpenDelete(data.id)}
-                      disabled={isEditing}>
-                      <DeleteIcon />
-                    </IconButton>
+            {round.map(dataRound =>
+              dataRound.round?.map(data => (
+                <li key={data.id} className={styles.tableRow}>
+                  <div className={styles.col} data-label="Đối tượng">
+                    {dataRound.level}
                   </div>
-                </div>
-              </li>
-            ))}
+                  <div className={styles.col} data-label="Tên vòng thi">
+                    {data.name}
+                  </div>
+                  <div className={styles.col} data-label="Ngày bắt đầu">
+                    {formatDate(data.startTime)}
+                  </div>
+                  <div className={styles.col} data-label="Ngày két thúc">
+                    {formatDate(data.endTime)}
+                  </div>
+                  <div className={styles.col} data-label="Địa điểm">
+                    {data.location || 'Chưa có'}
+                  </div>
+                  <div className={styles.col} data-label="Mô tả">
+                    {data.description || 'Chưa có'}
+                  </div>
+                  <div className={styles.col} data-label="Trạng thái">
+                    <div style={{ display: 'flex' }}>
+                      <>
+                        <Switch
+                          checked={checkActiveDate(data)}
+                          color="success"
+                          disabled
+                        />
+                        <button
+                          className={`btn btn-sm ${checkActiveDate(data) ? 'btn-success' : 'btn-secondary'}`}
+                          style={{ width: '45px', textAlign: 'center' }}
+                          disabled>
+                          {checkActiveDate(data) ? 'Active' : 'Inactive'}
+                        </button>
+                      </>
+                      <IconButton
+                        aria-label="edit"
+                        size="large"
+                        color="info"
+                        onClick={() => handleOpenEdit(data.id)}
+                        disabled={isEditing}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        size="large"
+                        color="error"
+                        onClick={() => hanldeOpenDelete(data.id)}
+                        disabled={isEditing}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
+                  </div>
+                </li>
+              )),
+            )}
           </ul>
           <div className="flex justify-content-end mt-20">
             <button

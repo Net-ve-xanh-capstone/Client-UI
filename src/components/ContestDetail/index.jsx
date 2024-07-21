@@ -5,6 +5,7 @@ import {
   ColorLens,
   School,
   Topic,
+  Paid,
 } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import styles from './style.module.css';
@@ -15,6 +16,7 @@ import ContestFragment from '../ContestFragment';
 import LevelFragment from '../LevelFragment';
 import RoundFragment from '../RoundFragment';
 import TopicFragment from '../TopicFragment';
+import ResourceFragment from '../ResourceFragment';
 
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
@@ -63,7 +65,7 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
-      title: 'Topic',
+      title: 'Chủ đề',
       icon: <Topic />,
       component: (
         <TopicFragment
@@ -73,11 +75,15 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
-      title: 'Painting',
-      icon: <Topic />,
-      component: <h1></h1>,
+      title: 'Tài trợ',
+      icon: <Paid />,
+      component: (
+        <ResourceFragment
+          resourceFrag={contestDes}
+          getContestDetail={getContestDetail}
+        />
+      ),
     },
-    { title: 'Schedule', icon: <CalendarMonth />, component: <h1></h1> },
     // Add more tabs here as needed
   ];
   return contestDes ? (

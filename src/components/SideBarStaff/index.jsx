@@ -55,6 +55,12 @@ const SideBarStaff = ({ collapsed, toggled, handleToggleSidebar, handleCollapsed
       path: null,
       name: 'Working schedule',
       new: false
+    },
+    {
+      icon: <FaGem />,
+      path: '/sponsor',
+      name: 'Sponsors',
+      new: false
     }
   ];
 

@@ -1,0 +1,128 @@
+.card {
+    max-width: 40rem;
+    min-height: 30rem;
+    height: auto;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    padding: 0.6rem;
+    box-shadow: 0px 3px 16px rgb(47 83 109 / 12%);
+
+    background-color: transparent;
+    backdrop-filter: blur(15px);
+}
+
+.image {
+    height: 14rem;
+    width: 100%;
+    border-radius: calc(14px - 0.6rem);
+    position: relative;
+}
+
+.child_image {
+    position: absolute;
+    display: block;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff !important;
+}
+
+.code_contest {
+    top: 1rem;
+    left: 1rem;
+}
+
+.date_contest {
+    bottom: 1rem;
+    right: 1rem;
+}
+
+
+.image img {
+    height: 100%;
+    width: 100%;
+    border-radius: calc(14px - 0.6rem);
+    object-fit: cover;
+    object-position: top center;
+}
+
+.content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.content .author_name h5 {
+    color: #5142fc !important;
+}
+
+.topic_content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+.topic_content h6:nth-child(1) {
+    max-width: 50%;
+    word-break: break-word;
+}
+
+.topic_content h6 {
+    color: #1f1f2c !important;
+    font-size: 14px !important;
+}
+
+.round_content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.round_content h6:nth-child(1) {
+    max-width: 50%;
+    word-break: break-word;
+}
+
+.round_content h6:nth-child(2) {
+    color: #eb0014 !important;
+}
+
+.round_content h6 {
+    color: #1f1f2c !important;
+    font-size: 14px !important;
+}
+
+/* Button zone */
+.btn_trigger {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.btn_find {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: calc(2rem - 0.5rem);
+    background-color: #5142fc;
+    color: white;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 1.2rem 1rem;
+}
+
+.btn_find h5 {
+    font-size: 1.6rem !important;
+}
+
+.btn_find:hover {
+    opacity: 0.9;
+}
+
+/* Ending button zone */

@@ -1,21 +1,17 @@
+import React, { useEffect, useState } from 'react';
+import styles from './page.module.css';
+import { deleteSponsor, getAllSponsor } from '../../api/sponsorApi.js';
 import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material';
 import MUIDataTable from 'mui-datatables';
-import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { categoryNotuse, deleteCate } from '../../api/categoryApi.js';
-import AddCatePopup from '../addCatePopup/page.jsx';
-import styles from './page.module.css';
+import AddNewSponsor from '../../components/addNewSponsor/page.jsx';
 
-function CategoryBlog() {
-  const [listCate, setListCate] = useState([]);
-  const [openEdit, setOpenEdit] = useState(null);
-  const [nameCate, setNameCate] = useState('');
-  const [showModal, setOpenModal] = useState(null);
-
+function SponsorManage() {
+  const [listSponsor, setListSponsor] = useState([]);
+  const [idSponsor, setIdSponsor] = useState('');
+  const [openModal, setOpenModal] = useState(null);
   const [addPopup, setAddPopup] = useState(null);
-  const [idCategory, setIdCategory] = useState(null);
-
   const getMuiTheme = () =>
     createTheme({
       typography: {
@@ -45,10 +41,73 @@ function CategoryBlog() {
       }
     });
 
+  // get all category
+  const fetchData = async () => {
+    await getAllSponsor()
+      .then((res) => {
+        const data = res.data.result;
+        setListSponsor(data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // open new screen for editing
+  const triggerEdit = (id) => {
+    setIdSponsor(id);
+    setAddPopup(true);
+  };
+
+  // close model if user dont want do next action
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setIdSponsor(null);
+  };
+
+  // calling api for deleting
+  const triggerDelete = async () => {
+    await deleteSponsor(idSponsor)
+      .then(() => {
+        toast.success('Đã xoá thành công !!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light'
+        });
+        fetchData();
+        handleCloseModal();
+      })
+      .catch((err) => console.log(err));
+  };
+
   const columns = [
     {
       name: 'name',
-      label: 'TÊN THỂ LOẠI',
+      label: 'ĐƠN VỊ TÀI TRỢ',
+      options: {
+        customBodyRender: (value) => <span>{value}</span>
+      }
+    },
+    {
+      name: 'delegate',
+      label: 'NGƯỜI ĐẠI DIỆN',
+      options: {
+        customBodyRender: (value) => <span>{value}</span>
+      }
+    },
+    {
+      name: 'phoneNumber',
+      label: 'SỐ ĐIỆN THOẠI',
+      options: {
+        customBodyRender: (value) => <span>{value}</span>
+      }
+    },
+    {
+      name: 'address',
+      label: 'ĐỊA CHỈ',
       options: {
         customBodyRender: (value) => <span>{value}</span>
       }
@@ -65,11 +124,11 @@ function CategoryBlog() {
                 triggerEdit(value, tableData.rowData[0]);
               }}
             >
-              Sữa
+              Sửa
             </button>
             <button
               onClick={() => {
-                setIdCategory(value);
+                setIdSponsor(value);
                 setOpenModal(true);
               }}
               className="btn btn-danger btn-lg"
@@ -93,67 +152,32 @@ function CategoryBlog() {
     filter: false
   };
 
-  // adding id and value name of category to state
-  const triggerEdit = (id, value) => {
-    setOpenEdit(id);
-    setNameCate(value);
-  };
-
-  // get all category
-  const fetchData = async () => {
-    await categoryNotuse()
-      .then((res) => {
-        const data = res.data.result;
-        const dataEmpty = res.data.result.list;
-        setListCate(dataEmpty !== undefined ? dataEmpty : data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const triggerDelete = async () => {
-    await deleteCate(idCategory)
-      .then(() => {
-        toast.success('Đã xoá thành công !!', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light'
-        });
-        fetchData();
-        handleCloseModal();
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setIdCategory(null);
-  };
-
-  // call data in first time join page
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
     <div className={styles.container}>
-      {!(addPopup || openEdit !== null) && (
+      {addPopup ? (
+        <AddNewSponsor
+          setAddPopup={setAddPopup}
+          idSponsor={idSponsor}
+          setIdSponsor={setIdSponsor}
+          reCallData={fetchData}
+        />
+      ) : (
         <>
           <div className={styles.buttonContainer}>
             <button className={styles.btnCreate} onClick={() => setAddPopup(true)}>
-              <span>Tạo Thể Loại</span>
+              <span>Thêm tài trợ</span>
             </button>
           </div>
           <StyledEngineProvider injectFirst>
             <ThemeProvider theme={getMuiTheme()}>
               <div className={styles.tableContainer}>
                 <MUIDataTable
-                  title={'Quản lý thể loại'}
-                  data={listCate}
+                  title={'Dánh sách tài trợ'}
+                  data={listSponsor}
                   columns={columns}
                   options={options}
                 />
@@ -162,19 +186,7 @@ function CategoryBlog() {
           </StyledEngineProvider>
         </>
       )}
-      {addPopup && <AddCatePopup handleClose={setAddPopup} fetchData={fetchData} />}
-      {openEdit !== null && (
-        <AddCatePopup
-          isEdit
-          handleClose={setAddPopup}
-          fetchData={fetchData}
-          idCategory={openEdit}
-          textCategory={nameCate}
-          setOpenEdit={setOpenEdit}
-        />
-      )}
-      {/* confirm delete button */}
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={openModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Xoá thể loại</Modal.Title>
         </Modal.Header>
@@ -192,4 +204,4 @@ function CategoryBlog() {
   );
 }
 
-export default CategoryBlog;
+export default SponsorManage;

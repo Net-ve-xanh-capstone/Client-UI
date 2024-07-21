@@ -13,6 +13,8 @@ const BlogStaff = lazy(() => import('../components/cardBlogStaff/page.jsx'));
 const CategoryBlog = lazy(() => import('../components/categoryBlog/page.jsx'));
 const ContestManagement = lazy(() => import('../pages/ContestManagement/index.jsx'));
 const StaffManage = lazy(() => import('../pages/StaffManage'));
+const SponsorManage = lazy(() => import('../pages/sponsorPage/page.jsx'));
+const PaintingPage = lazy(() => import('../pages/paintingPage/page.jsx'));
 
 const routes = [
   { path: '/', component: <Home /> },
@@ -33,6 +35,14 @@ const routes = [
       {
         path: 'category',
         component: <CategoryBlog />
+      },
+      {
+        path: 'sponsor',
+        component: <SponsorManage />
+      },
+      {
+        path: 'painting',
+        component: <PaintingPage />
       }
     ]
   },

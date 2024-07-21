@@ -107,7 +107,6 @@ function AddNewBlog({ triggerClose, refetchData }) {
 
   // adding file to state and loading to the UI
   const changeFile = (e) => {
-    console.log('running adding file image');
     if (!(e.target.files.length > 0 && allowedTypes.includes(e.target.files[0].type))) {
       return;
     }

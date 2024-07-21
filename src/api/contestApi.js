@@ -1,3 +1,5 @@
 import axiosApi from './axiosApi';
 
-export const contestApi = {};
+export const contestApi = {
+  getAll: async (endPoint) => await axiosApi.get(endPoint)
+};

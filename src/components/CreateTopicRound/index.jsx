@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { createTopicRound, getAll } from '../../api/topicStaffApi';
 import CreateModal from '../CreateModal';
 import { round } from 'lodash';
+import styles from './style.module.css';
 
 function CreateTopicRound({ modalShow, onHide, roundData }) {
   const { userInfo } = useSelector(state => state.auth);
@@ -136,23 +137,27 @@ function CreateTopicRound({ modalShow, onHide, roundData }) {
             flexDirection: 'column',
             justifyContent: 'space-between',
           }}>
-          <Multiselect
-            displayValue="name"
-            disablePreSelectedValues
-            onKeyPressFn={function noRefCheck() {}}
-            onRemove={e => handleRemove(e)}
-            onSelect={e => handleSelect(e)}
-            options={filteredTopics}
-            selectedValues={selectedTopics}
-            placeholder="Chọn chủ đề"
-            emptyRecordMsg="Không tìm thấy chủ đề nào"
-            avoidHighlightFirstOption="true"
-            style={{
-              chips: {
-                background: 'var(--linear)',
-              },
-            }}
-          />
+          <div>
+            <h4 className={styles.title}>Chọn chủ đề</h4>
+            <Multiselect
+              displayValue="name"
+              disablePreSelectedValues
+              onKeyPressFn={function noRefCheck() {}}
+              onRemove={e => handleRemove(e)}
+              onSelect={e => handleSelect(e)}
+              options={filteredTopics}
+              selectedValues={selectedTopics}
+              placeholder="Chọn chủ đề"
+              emptyRecordMsg="Không tìm thấy chủ đề nào"
+              avoidHighlightFirstOption="true"
+              style={{
+                chips: {
+                  background: 'var(--linear)',
+                },
+              }}
+              showArrow
+            />
+          </div>
           <div className="flex justify-content-end mt-20">
             <button
               className="btn btn-outline-primary btn-lg"

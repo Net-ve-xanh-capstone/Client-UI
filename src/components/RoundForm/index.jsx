@@ -51,6 +51,14 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
           control={<Checkbox onChange={() => handleChangeCheckbox(data.id)} />}
         />
       ))}
+      <FormControlLabel
+        label={<span style={{ fontSize: '16px' }}>Chọn tất cả</span>}
+        checked={
+          selectedLevel.length > 0 &&
+          selectedLevel.length === contestData.educationalLevel.length
+        }
+        control={<Checkbox onChange={handleCheckall} />}
+      />
     </div>
   );
 
@@ -238,23 +246,8 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
           <form onSubmit={handleSubmit} className={styles.modalForm}>
             {!roundData?.id && (
               <div>
-                <FormControlLabel
-                  label={
-                    <span style={{ fontSize: '16px' }}>
-                      Chọn đối tượng để thêm vòng thi
-                    </span>
-                  }
-                  control={
-                    <Checkbox
-                      checked={
-                        selectedLevel.length > 0 &&
-                        selectedLevel.length ===
-                          contestData.educationalLevel.length
-                      }
-                      onChange={handleCheckall}
-                    />
-                  }
-                />
+                <h4 className={styles.title}>Chọn đối tượng</h4>
+
                 {children}
               </div>
             )}

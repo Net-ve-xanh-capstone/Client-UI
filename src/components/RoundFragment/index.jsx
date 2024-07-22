@@ -152,12 +152,6 @@ function RoundFragment({ roundFrag, getContestDetail }) {
                           color="success"
                           disabled
                         />
-                        <button
-                          className={`btn btn-sm ${checkActiveDate(data) ? 'btn-success' : 'btn-secondary'}`}
-                          style={{ width: '45px', textAlign: 'center' }}
-                          disabled>
-                          {checkActiveDate(data) ? 'Active' : 'Inactive'}
-                        </button>
                       </>
                       <IconButton
                         aria-label="edit"

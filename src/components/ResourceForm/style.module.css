@@ -51,44 +51,32 @@
     padding: 5px 5px !important;
 }
 
-.levelBlock {
-    margin: 20px;
-    display: flex;
-    gap: 20px;
-    width: max-content;
+/* Define the default arrow down */
+.arrow-down {
+    content: "\e803";
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 4px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
 }
 
-.levelBlock p {
-    color: black;
-    border: 1px solid black;
-    padding: 0px 5px;
-    border-radius: 10px;
-    width: 100px;
-    text-align: center;
+/* Define the arrow up */
+.arrow-up {
+    content: "\e803";
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 4px;
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
 }
 
-.roundBlock h5 {
-    color: black;
-    font-weight: 500;
-    font-size: 14px;
-    border: 1px solid black;
-    padding: 10px 5px;
-    border-radius: 10px;
-    width: 150px;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.inputAward {
-    width: 100px !important;
-    height: 40px;
-}
-
-.error {
-    color: red;
-    font-size: 14px;
-}
-
-.rankTitle {
-    width: 100px;
+/* Container for custom arrow */
+.multiselect-arrow {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    pointer-events: none;
 }

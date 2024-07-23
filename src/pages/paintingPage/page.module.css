@@ -158,11 +158,12 @@
 .list_paint {
     width: 100%;
     height: auto;
+
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
-    grid-auto-rows: 1fr;
-    column-gap: 2.5rem;
-    row-gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+
+    column-gap: 2rem;
+    row-gap: 3rem;
 }
 
 .btn_add {

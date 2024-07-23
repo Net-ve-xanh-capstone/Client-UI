@@ -18,21 +18,21 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
   const [valueInput, setValueInput] = useState({
     name: {
       value: '',
-      error: ''
+      error: '',
     },
     delegate: {
       value: '',
-      error: ''
+      error: '',
     },
     phoneNumber: {
       value: '',
-      error: ''
+      error: '',
     },
     address: {
       value: '',
-      error: ''
+      error: '',
     },
-    currentUserId: { value: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c' }
+    currentUserId: { value: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c' },
   });
 
   // list of field input for user typing
@@ -40,62 +40,71 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
     {
       name: 'Tên đơn vị tài trợ',
       value: valueInput.name.value,
-      onchange: (e) =>
-        setValueInput((prv) => ({ ...prv, name: { ...prv.name, value: e.target.value } })),
+      onchange: e =>
+        setValueInput(prv => ({
+          ...prv,
+          name: { ...prv.name, value: e.target.value },
+        })),
       placeHolder: 'Xin hãy nhập đơn vị tài trợ',
-      error: valueInput.name.error
+      error: valueInput.name.error,
     },
     {
       name: 'Người dại diện',
       value: valueInput.delegate.value,
-      onchange: (e) =>
-        setValueInput((prv) => ({ ...prv, delegate: { ...prv.delegate, value: e.target.value } })),
+      onchange: e =>
+        setValueInput(prv => ({
+          ...prv,
+          delegate: { ...prv.delegate, value: e.target.value },
+        })),
       placeHolder: 'Xin hãy nhập tên người đại diện',
-      error: valueInput.delegate.error
+      error: valueInput.delegate.error,
     },
     {
       name: 'Số điện thoại',
       value: valueInput.phoneNumber.value,
-      onchange: (e) =>
-        setValueInput((prv) => ({
+      onchange: e =>
+        setValueInput(prv => ({
           ...prv,
-          phoneNumber: { ...prv.phoneNumber, value: e.target.value }
+          phoneNumber: { ...prv.phoneNumber, value: e.target.value },
         })),
       placeHolder: 'Xin hãy nhập số điện thoại liên hệ',
-      error: valueInput.phoneNumber.error
+      error: valueInput.phoneNumber.error,
     },
     {
       name: 'Địa chỉ',
       value: valueInput.address.value,
-      onchange: (e) =>
-        setValueInput((prv) => ({ ...prv, address: { ...prv.address, value: e.target.value } })),
+      onchange: e =>
+        setValueInput(prv => ({
+          ...prv,
+          address: { ...prv.address, value: e.target.value },
+        })),
       placeHolder: 'Xin hãy nhập địa chỉ',
-      error: valueInput.address.error
-    }
+      error: valueInput.address.error,
+    },
   ];
 
-  const validateName = (val) => {
+  const validateName = val => {
     if (val.length < 3 || val.length > 200) {
       return 'độ dài phải từ 3 đến 200 chữ';
     }
     return '';
   };
 
-  const validateDelegate = (val) => {
+  const validateDelegate = val => {
     if (val.length < 3 || val.length > 200) {
       return 'độ dài phải từ 3 đến 200 chữ';
     }
     return '';
   };
 
-  const validatePhoneNumber = (phoneNumber) => {
+  const validatePhoneNumber = phoneNumber => {
     if (!isPhoneNumber(phoneNumber)) {
       return 'Số điện thoại không hợp lệ';
     }
     return '';
   };
 
-  const validateAddress = (address) => {
+  const validateAddress = address => {
     if (address.length < 5 || address.length > 200) {
       return 'độ dài phải từ 3 đến 200 chữ';
     }
@@ -109,12 +118,12 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
     const phoneNumberError = validatePhoneNumber(valueInput.phoneNumber.value);
     const addressError = validateAddress(valueInput.address.value);
 
-    setValueInput((prevState) => ({
+    setValueInput(prevState => ({
       ...prevState,
       name: { ...prevState.name, error: nameError },
       delegate: { ...prevState.delegate, error: delegateError },
       phoneNumber: { ...prevState.phoneNumber, error: phoneNumberError },
-      address: { ...prevState.address, error: addressError }
+      address: { ...prevState.address, error: addressError },
     }));
 
     return !nameError && !delegateError && !phoneNumberError && !addressError;
@@ -124,8 +133,13 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
   // adding file to state and loading to the UI
-  const changeFile = (e) => {
-    if (!(e.target.files.length > 0 && allowedTypes.includes(e.target.files[0].type))) {
+  const changeFile = e => {
+    if (
+      !(
+        e.target.files.length > 0 &&
+        allowedTypes.includes(e.target.files[0].type)
+      )
+    ) {
       return;
     }
     setImagePost(e.target.files[0]);
@@ -133,19 +147,19 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
   };
 
   // binding data when editing
-  const bindingData = (val) => {
-    setValueInput((prevState) => ({
+  const bindingData = val => {
+    setValueInput(prevState => ({
       ...prevState,
       name: { ...prevState.name, value: val.name || '' },
       delegate: { ...prevState.delegate, value: val.delegate || '' },
       phoneNumber: { ...prevState.phoneNumber, value: val.phoneNumber || '' },
-      address: { ...prevState.address, value: val.address || '' }
+      address: { ...prevState.address, value: val.address || '' },
     }));
     setImgLoad(val.logo);
   };
 
   // geting new object without the error field
-  const updateObject = (val) => {
+  const updateObject = val => {
     let currentObject = {};
     for (let index in val) {
       currentObject[index] = val[index].value;
@@ -168,13 +182,13 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
     }
   };
 
   // post with calling api
-  const postSponsor = async (val) => {
+  const postSponsor = async val => {
     try {
       await addSponsor(val);
       toast.success('Nhà tài trợ đã được tạo thành công !!', {
@@ -185,7 +199,7 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
       setAddPopup(null);
       reCallData();
@@ -198,7 +212,7 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
     }
   };
@@ -217,7 +231,7 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
       return;
     }
@@ -231,7 +245,7 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
       setIdSponsor(null);
       setAddPopup(null);
@@ -245,7 +259,7 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
     }
   };
@@ -267,7 +281,7 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light'
+          theme: 'light',
         });
       }
     } else {
@@ -279,7 +293,7 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
     }
   };
@@ -328,8 +342,8 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
                 className={styles.input_hidden}
                 id="add_more_file"
                 accept="image/png, image/gif, image/jpeg"
-                onChange={(e) => changeFile(e)}
-                onClick={(e) => {
+                onChange={e => changeFile(e)}
+                onClick={e => {
                   e.currentTarget.value = null;
                 }}
               />
@@ -344,8 +358,8 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
                 className={styles.input_hidden}
                 id="add_more_file"
                 accept="image/png, image/gif, image/jpeg"
-                onChange={(e) => changeFile(e)}
-                onClick={(e) => {
+                onChange={e => changeFile(e)}
+                onClick={e => {
                   e.currentTarget.value = null;
                 }}
               />
@@ -359,16 +373,14 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
           onClick={() => {
             setAddPopup(null);
             setIdSponsor(null);
-          }}
-        >
+          }}>
           <h5>Huỷ</h5>
         </span>
         <span
           className={styles.btn_find}
           onClick={() => {
             idSponsor ? updateSponsor() : postImage();
-          }}
-        >
+          }}>
           <h5>{idSponsor ? 'Lưu' : 'Thêm mới'}</h5>
         </span>
       </div>

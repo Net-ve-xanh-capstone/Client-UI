@@ -58,11 +58,11 @@ const routes = [
       },
       {
         path: 'sponsor',
-        component: <SponsorManage />
+        component: <SponsorManage />,
       },
       {
         path: 'painting',
-        component: <PaintingPage />
+        component: <PaintingPage />,
       },
     ],
   },

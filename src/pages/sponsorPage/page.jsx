@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styles from './page.module.css';
 import { deleteSponsor, getAllSponsor } from '../../api/sponsorApi.js';
-import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material';
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -15,13 +19,13 @@ function SponsorManage() {
   const getMuiTheme = () =>
     createTheme({
       typography: {
-        fontSize: 20
+        fontSize: 20,
       },
       palette: {
         background: {
-          default: '#0f172a'
+          default: '#0f172a',
         },
-        mode: 'light'
+        mode: 'light',
       },
       components: {
         MuiTableCell: {
@@ -29,30 +33,30 @@ function SponsorManage() {
             head: {
               padding: '10px 10px',
               fontWeight: 'bold',
-              borderBottom: '1px solid black'
+              borderBottom: '1px solid black',
             },
             body: {
               color: '#000',
               fontWeight: 'bold',
-              borderBottom: '1px solid black'
-            }
-          }
-        }
-      }
+              borderBottom: '1px solid black',
+            },
+          },
+        },
+      },
     });
 
   // get all category
   const fetchData = async () => {
     await getAllSponsor()
-      .then((res) => {
+      .then(res => {
         const data = res.data.result;
         setListSponsor(data);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   // open new screen for editing
-  const triggerEdit = (id) => {
+  const triggerEdit = id => {
     setIdSponsor(id);
     setAddPopup(true);
   };
@@ -75,12 +79,12 @@ function SponsorManage() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light'
+          theme: 'light',
         });
         fetchData();
         handleCloseModal();
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   const columns = [
@@ -88,29 +92,29 @@ function SponsorManage() {
       name: 'name',
       label: 'ĐƠN VỊ TÀI TRỢ',
       options: {
-        customBodyRender: (value) => <span>{value}</span>
-      }
+        customBodyRender: value => <span>{value}</span>,
+      },
     },
     {
       name: 'delegate',
       label: 'NGƯỜI ĐẠI DIỆN',
       options: {
-        customBodyRender: (value) => <span>{value}</span>
-      }
+        customBodyRender: value => <span>{value}</span>,
+      },
     },
     {
       name: 'phoneNumber',
       label: 'SỐ ĐIỆN THOẠI',
       options: {
-        customBodyRender: (value) => <span>{value}</span>
-      }
+        customBodyRender: value => <span>{value}</span>,
+      },
     },
     {
       name: 'address',
       label: 'ĐỊA CHỈ',
       options: {
-        customBodyRender: (value) => <span>{value}</span>
-      }
+        customBodyRender: value => <span>{value}</span>,
+      },
     },
     {
       name: 'id',
@@ -122,8 +126,7 @@ function SponsorManage() {
               className="btn btn-info btn-lg"
               onClick={() => {
                 triggerEdit(value, tableData.rowData[0]);
-              }}
-            >
+              }}>
               Sửa
             </button>
             <button
@@ -131,14 +134,13 @@ function SponsorManage() {
                 setIdSponsor(value);
                 setOpenModal(true);
               }}
-              className="btn btn-danger btn-lg"
-            >
+              className="btn btn-danger btn-lg">
               Xóa
             </button>
           </div>
-        )
-      }
-    }
+        ),
+      },
+    },
   ];
 
   const options = {
@@ -149,7 +151,7 @@ function SponsorManage() {
     responsive: 'standard',
     print: false,
     download: false,
-    filter: false
+    filter: false,
   };
 
   useEffect(() => {
@@ -168,7 +170,9 @@ function SponsorManage() {
       ) : (
         <>
           <div className={styles.buttonContainer}>
-            <button className={styles.btnCreate} onClick={() => setAddPopup(true)}>
+            <button
+              className={styles.btnCreate}
+              onClick={() => setAddPopup(true)}>
               <span>Thêm tài trợ</span>
             </button>
           </div>

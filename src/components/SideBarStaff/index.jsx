@@ -66,14 +66,20 @@ const SideBarStaff = ({
       icon: <FaGem />,
       path: null,
       name: 'Working schedule',
-      new: false
+      new: false,
     },
     {
       icon: <FaGem />,
       path: '/sponsor',
       name: 'Sponsors',
-      new: false
-    }
+      new: false,
+    },
+    {
+      icon: <FaGem />,
+      path: '/painting',
+      name: 'Painting',
+      new: false,
+    },
   ];
 
   const handleItemClick = val => {

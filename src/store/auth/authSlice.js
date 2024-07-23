@@ -9,20 +9,20 @@ const initialState = {
     loading: false,
     success: false,
     message: null,
-    error: false
+    error: false,
   },
   register: {
     loading: null,
     success: null,
-    message: null
-  }
+    message: null,
+  },
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: (state) => {
+    logout: state => {
       localStorage.removeItem('userToken');
       state.userInfo = null;
       state.jwtToken = null;
@@ -31,26 +31,25 @@ const authSlice = createSlice({
     setCredentials: (state, { payload }) => {
       state.userInfo = payload;
     },
-    setDefault: (state) => {
+    setDefault: state => {
       state.login = {
         loading: false,
         success: false,
         message: null,
-        error: false
+        error: false,
       };
       state.register = {
         loading: null,
         success: null,
-        message: null
+        message: null,
       };
-    }
+    },
   },
-  extraReducers: (builder) => {
-    builder.addCase(competitorLogin.pending, (state) => {
+  extraReducers: builder => {
+    builder.addCase(competitorLogin.pending, state => {
       state.login.loading = true;
     });
     builder.addCase(competitorLogin.fulfilled, (state, { payload }) => {
-      console.log('payload', payload);
       state.login.loading = false;
       state.jwtToken = payload.jwtToken;
       state.userInfo = payload.jwtToken ? jwtDecode(payload.jwtToken) : null;
@@ -64,7 +63,7 @@ const authSlice = createSlice({
       state.login.message = payload;
       state.login.error = !payload.success;
     });
-    builder.addCase(competitorRegister.pending, (state) => {
+    builder.addCase(competitorRegister.pending, state => {
       state.register.loading = true;
     });
     builder.addCase(competitorRegister.fulfilled, (state, { payload }) => {
@@ -77,7 +76,7 @@ const authSlice = createSlice({
       state.register.success = payload.success;
       state.register.message = payload.message;
     });
-  }
+  },
 });
 
 export const { logout, setCredentials, setDefault } = authSlice.actions;

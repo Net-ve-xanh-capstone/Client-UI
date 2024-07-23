@@ -10,13 +10,16 @@ export const paintingApi = {
   updatePainting: async (endpoint, data, config) => {
     return await axiosApi.put(endpoint, data, config);
   },
-  getAllPaintingByPage: async (endpoint) => {
+  getAllPaintingByPage: async endpoint => {
     return await axiosApi.get(endpoint);
   },
-  getPaintingById: async (endpoint) => {
+  getPaintingById: async endpoint => {
     return await axiosApi.get(endpoint);
   },
-  filterPainting: async (endpoint) => {
+  filterPainting: async endpoint => {
     return await axiosApi.get(endpoint);
-  }
+  },
+  addNewPainting: async (endpoint, payload) => {
+    return await axiosApi.post(endpoint, payload);
+  },
 };

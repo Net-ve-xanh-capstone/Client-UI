@@ -18,7 +18,7 @@ const Login = () => {
   // open dialog
   const schema = yup.object().shape({
     username: yup.string().required('Vui lòng nhập username của bạn'),
-    password: yup.string().required('Vui lòng nhập mật khẩu của bạn')
+    password: yup.string().required('Vui lòng nhập mật khẩu của bạn'),
   });
 
   const {
@@ -26,20 +26,20 @@ const Login = () => {
     control,
     reset,
     trigger,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    reValidateMode: 'onChange'
+    reValidateMode: 'onChange',
   });
 
   const {
     login: { loading, success, error },
-    jwtToken
-  } = useSelector((state) => state.auth);
+    jwtToken,
+  } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogin = async (data) => {
+  const handleLogin = async data => {
     // Trigger validate form
     const isValid = await trigger();
 
@@ -88,7 +88,10 @@ const Login = () => {
           </div>
         </div>
       </section>
-      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+      <BootstrapDialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}>
         <IconButton
           aria-label="close"
           onClick={handleClose}
@@ -96,9 +99,8 @@ const Login = () => {
             position: 'absolute',
             right: 8,
             top: 6,
-            color: (theme) => theme.palette.grey[500]
-          }}
-        >
+            color: theme => theme.palette.grey[500],
+          }}>
           <CloseIcon />
         </IconButton>
         <DialogContent>
@@ -113,7 +115,9 @@ const Login = () => {
             <div className="col-12">
               <div className="flat-form box-login-email">
                 <div className="form-inner">
-                  <form onSubmit={handleSubmit(handleLogin)} className="select-none">
+                  <form
+                    onSubmit={handleSubmit(handleLogin)}
+                    className="select-none">
                     <TextfieldCommon
                       control={control}
                       error={errors.username?.message}
@@ -141,7 +145,11 @@ const Login = () => {
 
                     <button className="submit">
                       {loading ? (
-                        <FadeLoader color={color.purple} loading={loading} size={10} />
+                        <FadeLoader
+                          color={color.purple}
+                          loading={loading}
+                          size={10}
+                        />
                       ) : (
                         'Đăng nhập'
                       )}
@@ -166,14 +174,14 @@ const Login = () => {
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
-    padding: theme.spacing(5)
-  }
+    padding: theme.spacing(5),
+  },
 }));
 
 const TypographyStyled = styled('div')(({ theme }) => ({
   color: theme.palette.text.primary,
   fontSize: 14,
-  fontWeight: theme.typography.fontWeightMedium
+  fontWeight: theme.typography.fontWeightMedium,
 }));
 
 export default Login;

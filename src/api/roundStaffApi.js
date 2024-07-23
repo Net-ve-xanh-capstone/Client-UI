@@ -1,13 +1,21 @@
-import axiosApi from "./axiosApi"
+import axiosApi from './axiosApi';
 
 export const createRoundLevel = payload => {
-    return axiosApi.post('rounds', payload)
-}
+  return axiosApi.post('rounds', payload);
+};
 
 export const editRoundLevel = payload => {
-    return axiosApi.put('rounds', payload)
-}
+  return axiosApi.put('rounds', payload);
+};
 
 export const deleteRoundLevel = id => {
-    return axiosApi.patch(`rounds?id=${id}`)
-}
+  return axiosApi.patch(`rounds?id=${id}`);
+};
+
+export const roundTopicById = id => {
+  return axiosApi.get(`roundtopics/roundtopic/roundid/${id}`);
+};
+
+export const getAllRoundStaff = () => {
+  return axiosApi.get(`rounds/roundsforstaff`);
+};

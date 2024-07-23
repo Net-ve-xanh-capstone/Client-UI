@@ -129,12 +129,12 @@ function ContestManagement() {
 
           return (
             <>
-              <Switch checked={isActive} color="success" disabled />
-              <button
-                className={`btn btn-lg ${isActive ? 'btn-success' : 'btn-secondary'}`}
-                disabled>
-                {isActive ? 'Active' : 'Inactive'}
-              </button>
+              <Switch
+                checked={isActive}
+                size="small"
+                color="success"
+                disabled
+              />
             </>
           );
         },
@@ -148,7 +148,7 @@ function ContestManagement() {
           <div className={styles.btnAction}>
             <IconButton
               aria-label="delete"
-              size="large"
+              size="small"
               color="info"
               onClick={() => handleOpenDetail(value)}>
               <RemoveRedEyeIcon />
@@ -156,7 +156,7 @@ function ContestManagement() {
             {userInfo.role === 'Staff' && (
               <IconButton
                 aria-label="delete"
-                size="large"
+                size="small"
                 color="error"
                 onClick={() => handleOpenDelete(value)}
                 disabled={handleActiveDelete(tableData)}>
@@ -172,8 +172,8 @@ function ContestManagement() {
   const options = {
     selectableRows: 'none',
     elevation: 5,
-    rowsPerPage: 5,
-    rowsPerPageOptions: [5, 10, 20, 30],
+    rowsPerPage: 4,
+    rowsPerPageOptions: [4, 10, 20, 30],
     responsive: 'standard',
     print: false,
     download: false,
@@ -181,6 +181,15 @@ function ContestManagement() {
     textLabels: {
       body: {
         noMatch: 'Không có dữ liệu',
+      },
+      pagination: {
+        rowsPerPage: 'Số hàng mỗi trang:',
+        displayRows: 'của',
+      },
+      toolbar: {
+        search: 'Tìm kiếm',
+        viewColumns: 'Xem cột',
+        filterTable: 'Lọc bảng',
       },
     },
   };
@@ -257,7 +266,7 @@ function ContestManagement() {
             </div>
             <StyledEngineProvider injectFirst>
               <ThemeProvider theme={getMuiTheme()}>
-                <div className="table-contest">
+                <div className="table-contest table-contest-detail">
                   <MUIDataTable
                     //title={'Quản lí cuộc thi'}
                     data={contest}

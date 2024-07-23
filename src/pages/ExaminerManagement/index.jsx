@@ -73,17 +73,12 @@ function ExaminerManagement() {
       },
     },
     {
-      name: 'id',
+      name: 'status',
       label: 'TRẠNG THÁI',
       options: {
         customBodyRender: (value, tableData) => (
           <>
-            <Switch checked={isActive} color="success" disabled />
-            <button
-              className={`btn btn-lg ${isActive ? 'btn-success' : 'btn-secondary'}`}
-              disabled>
-              {isActive ? 'Active' : 'Inactive'}
-            </button>
+            <Switch checked={value === 'Active'} color="success" disabled />
           </>
         ),
       },
@@ -93,8 +88,8 @@ function ExaminerManagement() {
   const options = {
     selectableRows: 'none',
     elevation: 5,
-    rowsPerPage: 5,
-    rowsPerPageOptions: [5, 10, 20, 30],
+    rowsPerPage: 4,
+    rowsPerPageOptions: [4, 10, 20, 30],
     responsive: 'standard',
     print: false,
     download: false,
@@ -102,6 +97,15 @@ function ExaminerManagement() {
     textLabels: {
       body: {
         noMatch: 'Không có dữ liệu',
+      },
+      pagination: {
+        rowsPerPage: 'Số hàng mỗi trang:',
+        displayRows: 'của',
+      },
+      toolbar: {
+        search: 'Tìm kiếm',
+        viewColumns: 'Xem cột',
+        filterTable: 'Lọc bảng',
       },
     },
     onRowClick: (rowData, rowMeta) => {

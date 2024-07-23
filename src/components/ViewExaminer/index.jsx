@@ -10,9 +10,10 @@ import { formatDate } from '../../utils/formatDate';
 import EditModal from '../EditModal';
 import { createTopic, editTopic } from '../../api/topicStaffApi';
 import BanModal from '../BanModal';
-import { banAccount } from '../../api/examinerStaffApi';
+import { banAccount, unBanAccount } from '../../api/examinerStaffApi';
 
 function ViewExaminer({ modalShow, onHide, examData }) {
+  console.log(examData);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
   const { userInfo } = useSelector(state => state.auth);
@@ -32,18 +33,24 @@ function ViewExaminer({ modalShow, onHide, examData }) {
 
   const handleAccount = async () => {
     try {
-      const { data } = await banAccount(examData?.id);
+      const { data } =
+        examData?.status === 'Active'
+          ? await banAccount(examData?.id)
+          : await unBanAccount(examData?.id);
       if (data?.result) {
-        toast.success('Khóa tài khoản thành công', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
+        toast.success(
+          `${examData?.status === 'Active' ? 'Khóa' : 'Mở khóa'} tài khoản thành công`,
+          {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          },
+        );
         onHide();
       }
     } catch (e) {
@@ -56,7 +63,7 @@ function ViewExaminer({ modalShow, onHide, examData }) {
       <BanModal
         show={modal}
         setShow={setModal}
-        title={'khóa tài khoản'}
+        title={`${examData?.status === 'Active' ? 'khóa' : 'mở khóa'} tài khoản`}
         callBack={handleAccount}
       />
       <Modal
@@ -145,7 +152,9 @@ function ViewExaminer({ modalShow, onHide, examData }) {
               </div>
               <div style={{ textAlign: 'end' }}>
                 <button className={styles.btnCreate} type="submit">
-                  {!examData ? 'Mở khóa tài khoản' : 'Khóa tài khoản'}
+                  {examData?.status === 'Inactive'
+                    ? 'Mở khóa tài khoản'
+                    : 'Khóa tài khoản'}
                 </button>
               </div>
             </div>

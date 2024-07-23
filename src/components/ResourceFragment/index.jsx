@@ -94,6 +94,7 @@ function ResourceFragment({ resourceFrag, getContestDetail }) {
             <div className={styles.col}>No.</div>
             <div className={styles.col}>Tài trợ</div>
             <div className={styles.col}>Đơn vị tài trợ</div>
+            <div className={styles.col}>Tương tác</div>
           </li>
           {resource?.resource.length === 0 ? (
             <div className="text-center">
@@ -117,7 +118,13 @@ function ResourceFragment({ resourceFrag, getContestDetail }) {
                   }}
                   data-label="Đơn vị tài trợ">
                   <div>{data.sponsor.name}</div>
-                  <div style={{ display: 'flex' }}>
+                </div>
+                <div className={styles.col}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}>
                     <IconButton
                       aria-label="delete"
                       size="large"

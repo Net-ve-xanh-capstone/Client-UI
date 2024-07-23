@@ -46,7 +46,7 @@ function TopicManagement() {
     try {
       const { data } = await deleteTopic(idTopicDelete);
       if (data?.result) {
-        toast.success('Xóa cuộc thi thành công', {
+        toast.success('Xóa chủ đề thành công', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
@@ -100,7 +100,7 @@ function TopicManagement() {
           <div className={styles.btnAction}>
             <IconButton
               aria-label="delete"
-              size="large"
+              size="small"
               color="info"
               onClick={() => handleOpenEdit(value)}>
               <EditIcon />
@@ -108,7 +108,7 @@ function TopicManagement() {
             {userInfo.role === 'Staff' && (
               <IconButton
                 aria-label="delete"
-                size="large"
+                size="small"
                 color="error"
                 onClick={() => handleOpenDelete(value)}>
                 <DeleteIcon />
@@ -123,8 +123,8 @@ function TopicManagement() {
   const options = {
     selectableRows: 'none',
     elevation: 5,
-    rowsPerPage: 5,
-    rowsPerPageOptions: [5, 10, 20, 30],
+    rowsPerPage: 4,
+    rowsPerPageOptions: [4, 10, 20, 30],
     responsive: 'standard',
     print: false,
     download: false,
@@ -132,6 +132,15 @@ function TopicManagement() {
     textLabels: {
       body: {
         noMatch: 'Không có dữ liệu',
+      },
+      pagination: {
+        rowsPerPage: 'Số hàng mỗi trang:',
+        displayRows: 'của',
+      },
+      toolbar: {
+        search: 'Tìm kiếm',
+        viewColumns: 'Xem cột',
+        filterTable: 'Lọc bảng',
       },
     },
   };

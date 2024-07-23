@@ -11,6 +11,7 @@ import EditModal from '../EditModal';
 import { createTopic, editTopic } from '../../api/topicStaffApi';
 import Multiselect from 'multiselect-react-dropdown';
 import { createResource, editResource } from '../../api/resourceStaffApi';
+import { getAllSponsor } from '../../api/sponsorApi';
 
 function ResourceForm({ modalShow, onHide, resourceData, type }) {
   const [validated, setValidated] = useState(false);
@@ -29,20 +30,13 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
     getSponsor();
   }, []);
 
-  const getSponsor = () => {
-    axios
-      .get('https://netvexanh.azurewebsites.net/api/sponsors/getallsponsor')
-      .then(res => {
-        const data = filterSponsor(res?.result, resourceData.resource);
-        setSponsor(data);
-      });
-  };
-
-  const filterSponsor = (dataApi, existingData) => {
-    return dataApi.filter(
-      data =>
-        !existingData.some(existingId => existingId.sponsor.id === data.id),
-    );
+  const getSponsor = async () => {
+    try {
+      const { data } = await getAllSponsor();
+      setSponsor(data?.result);
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
   const intialState = {
@@ -176,8 +170,9 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
             Thêm tài trợ
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ height: '50vh', overflow: 'hidden' }}>
+        <Modal.Body style={{ height: '55vh', overflow: 'hidden' }}>
           <form onSubmit={handleSubmit} className={styles.modalForm}>
+            <h4 className={styles.title}>Đơn vị tài trợ</h4>
             <Multiselect
               displayValue="name"
               disablePreSelectedValues
@@ -185,10 +180,9 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
               onRemove={e => handleSelect(e)}
               onSelect={e => handleSelect(e)}
               options={sponsor}
-              selectedValues={type !== 'create' && [type?.sponsor]}
               disable={type !== 'create'}
               selectionLimit={1}
-              placeholder="Đơn vị tài trợ"
+              placeholder="Chọn đơn vị tài trợ"
               emptyRecordMsg="Không tìm thấy nhà tài trợ nào"
               avoidHighlightFirstOption="true"
               style={{
@@ -196,7 +190,7 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
                   background: 'var(--linear)',
                 },
               }}
-              singleSelect
+              showArrow
             />
             <h4 className={styles.title}>Tài trợ</h4>
             <textarea

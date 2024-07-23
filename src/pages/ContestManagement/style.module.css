@@ -42,6 +42,7 @@
 
 .btnAction {
     display: flex;
+    justify-content: center;
 }
 
 .btnAction button:hover {

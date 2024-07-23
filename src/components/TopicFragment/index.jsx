@@ -121,6 +121,7 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                       <li className={styles.roundHeader}>
                         <div className={styles.col}>Tên chủ đề</div>
                         <div className={styles.col}>Mô tả</div>
+                        <div className={styles.col}>Tương tác</div>
                       </li>
 
                       {data.roundTopic?.map((topicData, index) => (
@@ -130,25 +131,21 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                           </div>
 
                           <div className={styles.col} data-label="Mô tả">
-                            <div
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                              }}>
+                            <div>
                               <>{topicData.topic.description}</>
-
-                              <IconButton
-                                aria-label="delete"
-                                size="large"
-                                color="error"
-                                onClick={() =>
-                                  hanldeOpenDelete(data?.id, topicData?.topic.id)
-                                }
-                                disabled={isEditing}>
-                                <DeleteIcon />
-                              </IconButton>
                             </div>
+                          </div>
+                          <div className={styles.col} data-label="Tương tác">
+                            <IconButton
+                              aria-label="delete"
+                              size="large"
+                              color="error"
+                              onClick={() =>
+                                hanldeOpenDelete(data?.id, topicData?.topic.id)
+                              }
+                              disabled={isEditing}>
+                              <DeleteIcon />
+                            </IconButton>
                           </div>
                         </li>
                       ))}

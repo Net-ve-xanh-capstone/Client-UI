@@ -69,7 +69,7 @@ const ContestDetail = () => {
             <div className="col-xl-6 col-md-12">
               <div className="content-right">
                 <div className="sc-item-details">
-                  <h2 className="style2">{`"${contest?.name}"`}</h2>
+                  <h2 className="style2">{`${contest?.name}`}</h2>
 
                   <div className="client-infor sc-card-product">
                     <div className="meta-info">
@@ -139,7 +139,7 @@ const ContestDetail = () => {
 
                       <TabPanel>
                         <ul className="bid-history-list">
-                          {contest.educationalLevel.length > 0 &&
+                          {contest?.educationalLevel.length > 0 &&
                             contest.educationalLevel.map((item, index) => (
                               <li key={index}>
                                 <div className="content">
@@ -177,7 +177,7 @@ const ContestDetail = () => {
 
                       <TabPanel>
                         <ul className="bid-history-list">
-                          {contest.resource.length > 0 &&
+                          {contest?.resource.length > 0 &&
                             contest.resource.map((item, index) => (
                               <li key={index}>
                                 <div className="content">
@@ -212,6 +212,7 @@ const ContestDetail = () => {
                             ))}
                         </ul>
                       </TabPanel>
+
                       <TabPanel>
                         <div className="provenance">
                           <p>{contest?.content}</p>

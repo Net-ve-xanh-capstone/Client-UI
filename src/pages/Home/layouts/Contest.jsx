@@ -96,7 +96,8 @@ const Contest = () => {
                                   </div>
                                   <div className="card-title">
                                     <h5>
-                                      <Link to="/item-details-01">
+                                      <Link
+                                        to={`/contest-detail/${contest?.id}`}>
                                         {contest?.name}
                                       </Link>
                                     </h5>

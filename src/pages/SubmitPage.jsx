@@ -33,7 +33,11 @@ const SubmitPage = () => {
   const [paintingCompetitor, setPaintingCompetitor] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
-      const response = await topicApi.getAllTopic('roundtopics/getalltopic', userInfo.Id, contestId);
+      const response = await topicApi.getAllTopic(
+        'roundtopics/getalltopic',
+        userInfo.Id,
+        contestId,
+      );
       setRoundTopicsData(response.data.result);
     };
     fetchData();
@@ -89,11 +93,7 @@ const SubmitPage = () => {
             Swal.fire('Lưu bài thành công', '', 'success');
           })
           .catch(error => {
-            Swal.fire(
-              'Lưu bài thất bại',
-              'Hãy thử lại sau bạn nhé',
-              'error',
-            );
+            Swal.fire('Lưu bài thất bại', 'Hãy thử lại sau bạn nhé', 'error');
           });
       } else if (result.isDenied) {
         Swal.fire('Bạn đã hủy lưu bài', '', 'info');
@@ -122,11 +122,7 @@ const SubmitPage = () => {
             Swal.fire('Nộp bài thành công', '', 'success');
           })
           .catch(error => {
-            Swal.fire(
-              'Nộp bài thất bại',
-              'Hãy thử lại sau bạn nhé',
-              'error',
-            );
+            Swal.fire('Nộp bài thất bại', 'Hãy thử lại sau bạn nhé', 'error');
           });
       } else if (result.isDenied) {
         Swal.fire('Bạn đã hủy nộp bài', '', 'info');
@@ -170,6 +166,8 @@ const SubmitPage = () => {
         setImage(draftPainting.image);
         setValue('name', draftPainting.name);
         setValue('description', draftPainting.description);
+        setValue('topic', draftPainting.topicName);
+        setValue('file', draftPainting.image);
       });
   }, [userInfo?.Id]);
 
@@ -182,9 +180,7 @@ const SubmitPage = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="page-title-heading mg-bt-12">
-                <h1 className="heading text-center">
-                  Đăng ký tham gia
-                </h1>
+                <h1 className="heading text-center">Đăng ký tham gia</h1>
               </div>
               <div className="breadcrumbs style2">
                 <ul>
@@ -214,12 +210,7 @@ const SubmitPage = () => {
                 <div className="sc-card-product">
                   <div className="card-media">
                     <Link className="cursor-none" to="#">
-                      <img
-                        src={
-                          image ? image : defaultImage
-                        }
-                        alt="preview"
-                      />
+                      <img src={image ? image : defaultImage} alt="preview" />
                     </Link>
                   </div>
                   <div className="meta-info">
@@ -239,32 +230,22 @@ const SubmitPage = () => {
             )}
             <div
               className={`${image ? 'col-xl-9 col-lg-6 col-md-12 col-12' : 'col-xl-12 col-lg-12 col-md-12 col-12'}`}>
-              <div
-                className="form-create-item"
-                style={{ left: '50%' }}>
+              <div className="form-create-item" style={{ left: '50%' }}>
                 <form>
-                  <h4 className="title-create-item">
-                    Tải ảnh
-                  </h4>
+                  <h4 className="title-create-item">Tải ảnh</h4>
                   <label
                     className={classNames(
                       'uploadFile',
-                      errors.file?.message?.length > 0
-                        ? 'border-danger'
-                        : '',
+                      errors.file?.message?.length > 0 ? 'border-danger' : '',
                     )}>
                     {image ? (
-                      <span className="filename">
-                                                PNG, JPG. tối đa 20mb.
-                                            </span>
+                      <span className="filename">PNG, JPG. tối đa 20mb.</span>
                     ) : errors.file ? (
                       <span className="text-danger h5">
-                                                {errors.file.message}
-                                            </span>
+                        {errors.file.message}
+                      </span>
                     ) : (
-                      <span className="filename">
-                                                PNG, JPG. tối đa 20mb.
-                                            </span>
+                      <span className="filename">PNG, JPG. tối đa 20mb.</span>
                     )}
                     <input
                       onChange={handlePreviewImage}
@@ -274,9 +255,7 @@ const SubmitPage = () => {
                     />
                   </label>
                   <div>
-                    <h4 className="title-create-item">
-                      Tên bức tranh
-                    </h4>
+                    <h4 className="title-create-item">Tên bức tranh</h4>
                     <TextfieldCommon
                       control={control}
                       error={errors.name?.message}
@@ -287,9 +266,7 @@ const SubmitPage = () => {
                       className="mb-15"
                       autoFocus
                     />
-                    <h4 className="title-create-item">
-                      Mô tả bức tranh
-                    </h4>
+                    <h4 className="title-create-item">Mô tả bức tranh</h4>
                     <TextareaCommon
                       control={control}
                       id="description"
@@ -301,47 +278,35 @@ const SubmitPage = () => {
                     />
 
                     <div className="inner-row-form style-2">
-                      <div
-                        id="item-create"
-                        className="dropdown">
-                        <h4 className="title-create-item">
-                          Chủ đề
-                        </h4>
+                      <div id="item-create" className="dropdown">
+                        <h4 className="title-create-item">Chủ đề</h4>
                         {errors.topic && (
-                          <span className="text-danger h5">{errors.topic.message}</span>
+                          <span className="text-danger h5">
+                            {errors.topic.message}
+                          </span>
                         )}
-                        <Dropdown
-                          errors={
-                            errors.topic?.message
-                          }>
+                        <Dropdown errors={errors.topic?.message}>
                           <Dropdown.Select
                             placeholder={getDropdownOptions(
                               'topic',
                               'Chọn chủ đề',
                             )}></Dropdown.Select>
                           <Dropdown.List>
-                            {roundTopicsData.map(
-                              topic => (
-                                <Dropdown.Option
-                                  key={
-                                    topic.name
-                                  }
-                                  onClick={() =>
-                                    handleSelectDropdownOption(
-                                      'topic',
-                                      topic,
-                                    )
-                                  }>
-                                  {topic.name}
-                                </Dropdown.Option>
-                              ),
-                            )}
+                            {roundTopicsData.map(topic => (
+                              <Dropdown.Option
+                                key={topic.name}
+                                onClick={() =>
+                                  handleSelectDropdownOption('topic', topic)
+                                }>
+                                {topic.name}
+                              </Dropdown.Option>
+                            ))}
                           </Dropdown.List>
                         </Dropdown>
                       </div>
                     </div>
                   </div>
-                  <div className='flex justify-content-center align-items-center mt-5'>
+                  <div className="flex justify-content-center align-items-center mt-5">
                     <button
                       type="submit"
                       className="btn-submit"

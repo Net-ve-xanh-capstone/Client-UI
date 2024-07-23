@@ -52,6 +52,8 @@ const ProfilePage = () => {
   const handleUpdate = async input => {
     const data = {
       id: userInfo.Id,
+      phone: '0919047171',
+      fullname: 'Phạm Ngọc Minh Anh',
       address: input.address,
       avatar: url,
     }
@@ -100,8 +102,12 @@ const ProfilePage = () => {
   );
   const info = data?.data?.result;
   useEffect(() => {
-    if (info) {
-      setImageUrl(info.avatar);
+    if (info !== undefined) {
+      if (info.avatar) {
+        setImageUrl(info.avatar);
+      } else {
+        setImageUrl(defaultAvatar);
+      }
     }
   }, [data]);
 

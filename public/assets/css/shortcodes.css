@@ -4304,7 +4304,7 @@ section.today-picks {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
 }
 
@@ -4652,8 +4652,7 @@ section.today-picks {
 }
 
 .form-create-item button[type='submit'] {
-  width: 40%;
-  margin: 20px 30%;
+  margin-right: 30px;
   background: rgba(81, 66, 252, 0.1);
   border: 1px solid rgba(81, 66, 252, 0.1);
   border: none;

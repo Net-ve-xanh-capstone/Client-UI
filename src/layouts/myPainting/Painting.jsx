@@ -11,6 +11,7 @@ const Painting = props => {
   const { isLoading, isError, data, error }
     = useFetchData('paintings/listpaintingbyaccountid' , `${userInfo.Id}`);
   const painting = data?.data?.result?.list;
+  console.log(painting);
   if (isError) {
     return <span>Error: {error.message}</span>;
   }

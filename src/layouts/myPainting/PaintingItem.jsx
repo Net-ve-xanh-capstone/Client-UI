@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CardModal from '../CardModal';
 import LoadingSkeleton from '../../components/loading/LoadingSkeleton.jsx';
 import { Grid } from '@mui/material';
+import { formatDate } from '../../utils/formatDate.js';
 
 const PaintingItem = props => {
   const data = props.data;
@@ -25,40 +26,47 @@ const PaintingItem = props => {
                     <div className={`sc-card-product explode style2 mg-bt ${item.feature ? 'comingsoon' : ''} `}
                          key={index}>
                       <div className="card-media">
-                        <Link to="/item-details-01"><img src={item.img} alt="Axies" /></Link>
+                        <Link to="/item-details-01"><img src={item?.image} alt="tranh" /></Link>
                         <div className="button-place-bid">
                           <button onClick={() => setModalShow(true)}
-                                  className="sc-button style-place-bid style bag fl-button pri-3"><span>Place Bid</span>
+                                  className="sc-button style-place-bid style fl-button pri-3"><span>Thêm vào bộ sưu tập</span>
                           </button>
                         </div>
-                        <Link to="/login" className="wishlist-button heart"><span
-                          className="number-like">{item.wishlist}</span></Link>
-                        <div className="coming-soon">{item.feature}</div>
                       </div>
                       <div className="card-title">
-                        <h5><Link to="/item-details-01">"{item.title}"</Link></h5>
+                        <h5><Link to="/item-details-01">"{item?.name}"</Link></h5>
                       </div>
-                      <div className="meta-info">
+                      <div className="meta-info" style={{
+                        display: 'flex',
+                        justifyContent: 'space-around !important',
+                        alignItems: 'center'
+                      }}>
                         <div className="author">
-                          <div className="avatar">
-                            <img src={item.imgAuthor} alt="Axies" />
-                          </div>
                           <div className="info">
-                            <span>Creator</span>
-                            <h6><Link to="/author-02">{item.nameAuthor}</Link></h6>
+                            <span>Người vẽ</span>
+                            <h6><Link className="cursor-none">{item?.ownerName}</Link></h6>
                           </div>
                         </div>
-                        <div className="tags">{item.tags}</div>
+                        <div className="author">
+                          <div className="info">
+                            <span>Thời gian nộp</span>
+                            <h6><Link className="cursor-none">{formatDate(item?.submitTime)}</Link></h6>
+                          </div>
+                        </div>
                       </div>
                       <div className="card-bottom style-explode">
                         <div className="price">
-                          <span>Price</span>
+                          <span>Tên chủ đề</span>
                           <div className="price-details">
-                            <h5>{item.price}</h5>
-                            <span>= {item.priceChange}</span>
+                            <h5>{item.topicName}</h5>
                           </div>
                         </div>
-                        <Link to="/activity-01" className="view-history reload">View History</Link>
+                        <div className="price">
+                          <span>Mô tả</span>
+                          <div className="price-details">
+                            <h5>{item?.description}</h5>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )) :

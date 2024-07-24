@@ -74,6 +74,7 @@
     overflow: hidden;
     background: var(--linear);
     color: black;
+    border: none !important;
 }
 
 .btnCreate:hover {
@@ -91,7 +92,7 @@
 }
 
 .btnCreate:focus {
-    color: whitesmoke;
+    color: black;
 }
 
 .btnCreate::before,

@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import styles from './style.module.css';
-import { formatDate } from '../../utils/formatDate.js';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { checkEditButton } from '../../utils/checkEditButton.js';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import RoundForm from '../RoundForm/index.jsx';
+import EditIcon from '@mui/icons-material/Edit';
 import { Switch } from '@mui/material';
-import { checkActiveDate } from '../../utils/checkActiveDate.js';
-import DeleteModal from '../DeleteModal';
-import { deleteRoundLevel } from '../../api/roundStaffApi.js';
+import IconButton from '@mui/material/IconButton';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { getById } from '../../api/contestStaffApi.js';
+import { deleteRoundLevel } from '../../api/roundStaffApi.js';
+import { checkActiveDate } from '../../utils/checkActiveDate.js';
+import { checkEditButton } from '../../utils/checkEditButton.js';
+import { formatDate } from '../../utils/formatDate.js';
+import DeleteModal from '../DeleteModal';
+import RoundForm from '../RoundForm/index.jsx';
+import styles from './style.module.css';
 function RoundFragment({ roundFrag, getContestDetail }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -139,10 +138,10 @@ function RoundFragment({ roundFrag, getContestDetail }) {
                     {formatDate(data.endTime)}
                   </div>
                   <div className={styles.col} data-label="Địa điểm">
-                    {data.location || 'Chưa có'}
+                    {data.location}
                   </div>
                   <div className={styles.col} data-label="Mô tả">
-                    {data.description || 'Chưa có'}
+                    {data.description}
                   </div>
                   <div className={styles.col} data-label="Trạng thái">
                     <div style={{ display: 'flex' }}>

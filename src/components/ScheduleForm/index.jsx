@@ -4,18 +4,18 @@ import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { createResource, editResource } from '../../api/resourceStaffApi';
-import { getAllSponsor } from '../../api/sponsorApi';
+import { createPreliminary, createFinal } from '../../api/scheduleStaffApi';
+import { getAll } from '../../api/examinerStaffApi';
 import CreateModal from '../CreateModal';
 import EditModal from '../EditModal';
 import LoadingButton from '@mui/lab/LoadingButton';
 import styles from './style.module.css';
 
-function ResourceForm({ modalShow, onHide, resourceData, type }) {
+function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
   const [isLoading, setIsLoading] = useState(false);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
-  const [sponsor, setSponsor] = useState();
+  const [examiner, setExaminer] = useState();
   const { userInfo } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
@@ -26,22 +26,23 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
   }, [modalShow]);
 
   useEffect(() => {
-    getSponsor();
+    getExaminer();
   }, []);
 
-  const getSponsor = async () => {
+  const getExaminer = async () => {
     try {
-      const { data } = await getAllSponsor();
-      setSponsor(data?.result);
+      const { data } = await getAll();
+      setExaminer(data?.result);
     } catch (e) {
       console.log('err', e);
     }
   };
 
   const intialState = {
-    sponsorship: type?.sponsorship || '',
-    contestId: resourceData.id,
-    sponsorId: '',
+    description: scheduleData?.description || '',
+    roundId: roundData?.id,
+    endDate: scheduleData?.endDate || '',
+    listExaminer: [],
     currentUserId: userInfo?.Id,
   };
 
@@ -60,9 +61,10 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
   };
 
   const handleSelect = seletedList => {
+    const selectIds = seletedList.map(item => item.id);
     setFormData({
       ...formData,
-      sponsorId: seletedList.length > 0 ? seletedList[0].id : '',
+      listExaminer: selectIds,
     });
   };
 
@@ -70,8 +72,8 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (!formData.sponsorId && type === 'create') {
-      toast.error('Chưa chọn đơn vị tài trợ nào', {
+    if (!formData.listExaminer && type === 'create') {
+      toast.error('Chưa chọn giám khảo nào', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
@@ -98,9 +100,9 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
   const postResource = async () => {
     try {
       setIsLoading(true);
-      const { data } = await createResource(formData);
+      const { data } = await createPreliminary(formData);
       if (data?.result) {
-        toast.success('Thêm tài trợ thành công', {
+        toast.success('Thêm lịch chấm thành công', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
@@ -114,7 +116,7 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
         onHide();
       }
     } catch (e) {
-      toast.error('Có lỗi xảy ra, vui lòng thử lại!!!', {
+      toast.error(e.response?.data?.message, {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
@@ -134,9 +136,9 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
     try {
       setIsLoading(true);
       if (type !== 'create') formData.id = type?.id;
-      const { data } = await editResource(formData);
+      const { data } = await createPreliminary(formData);
       if (data?.result) {
-        toast.success('Chỉnh sửa tài trợ thành công', {
+        toast.success('Chỉnh sửa lịch chấm thành công', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
@@ -171,14 +173,14 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
         <CreateModal
           show={modal}
           setShow={setModal}
-          title={'tài trợ'}
+          title={'lịch chấm'}
           callBack={postResource}
         />
       ) : (
         <EditModal
           show={modal}
           setShow={setModal}
-          title={'tài trợ'}
+          title={'lịch chấm'}
           callBack={handleEditResource}
         />
       )}
@@ -197,19 +199,30 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
         </Modal.Header>
         <Modal.Body style={{ height: '55vh', overflow: 'hidden' }}>
           <form onSubmit={handleSubmit} className={styles.modalForm}>
-            <h4 className={styles.title}>Đơn vị tài trợ</h4>
+            <h4 className={styles.title}>Ngày chấm</h4>
+            <input
+              required
+              type="date"
+              name="endDate"
+              id="endDate"
+              className={styles.formControl}
+              value={formData.endDate}
+              onChange={handleInputChange}
+              // min={roundData?.startTime.split('T')[0]}
+              min={roundData?.endTime.split('T')[0]}
+            />
+            <h4 className={styles.title}>Giám khảo</h4>
             <Multiselect
-              displayValue="name"
+              displayValue="fullName"
               disablePreSelectedValues
               onKeyPressFn={function noRefCheck() {}}
               onRemove={e => handleSelect(e)}
               onSelect={e => handleSelect(e)}
-              options={sponsor}
+              options={examiner}
               disable={type !== 'create'}
-              selectedValues={type === 'create' ? [] : [type?.sponsor]}
-              selectionLimit={1}
-              placeholder="Chọn đơn vị tài trợ"
-              emptyRecordMsg="Không tìm thấy nhà tài trợ nào"
+              //selectedValues={type === 'create' ? [] : [type?.sponsor]}
+              placeholder="Chọn giám khảo"
+              emptyRecordMsg="Không tìm thấy giám khảo nào"
               avoidHighlightFirstOption="true"
               style={{
                 chips: {
@@ -218,12 +231,15 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
               }}
               showArrow
             />
-            <h4 className={styles.title}>Tài trợ</h4>
-            <textarea
+            <h4 className={styles.title}>Mô tả</h4>
+            <input
+              className={styles.inputModal}
               required
-              name="sponsorship"
-              value={formData.sponsorship}
-              onChange={handleInputChange}></textarea>
+              type="text"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+            />
             <div style={{ textAlign: 'end' }}>
               <LoadingButton
                 type="submit"
@@ -244,4 +260,4 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
   );
 }
 
-export default ResourceForm;
+export default ScheduleForm;

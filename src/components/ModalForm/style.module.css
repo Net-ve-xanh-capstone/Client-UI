@@ -40,7 +40,7 @@
 
 .modalForm .btnCreate:hover {
     color: white;
-    background-color: #5142fc70;
+    border: none !important;
 }
 
 .modalForm .btnCreate:focus {

@@ -14,13 +14,15 @@ import styles from './style.module.css';
 import CreateTopicRound from '../CreateTopicRound/index.jsx';
 import { getById } from '../../api/contestStaffApi.js';
 import { deleteTopicRound } from '../../api/topicStaffApi.js';
+import ScheduleForm from '../ScheduleForm/index.jsx';
 
-function TopicFragment({ topicFrag, getContestDetail }) {
+function ScheduleFragment({ scheduleFrag, getContestDetail }) {
+  const [type, setType] = useState();
   const [topic, setTopic] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [topicRoundDelete, setTopicRoundDelete] = useState();
-  const isEditing = checkEditButton(topicFrag.startTime);
+  const isEditing = checkEditButton(scheduleFrag.startTime);
   const [level, setLevel] = useState();
   const [editRoundData, setEditRoundData] = useState();
 
@@ -32,11 +34,11 @@ function TopicFragment({ topicFrag, getContestDetail }) {
 
   useEffect(() => {
     getTopic();
-  }, [topicFrag]);
+  }, [scheduleFrag]);
 
   const getTopic = async () => {
     try {
-      const { data } = await getById(topicFrag.id);
+      const { data } = await getById(scheduleFrag.id);
       setTopic(data?.result);
       setLevel(sortLevel(data?.result.educationalLevel));
     } catch (e) {
@@ -73,6 +75,8 @@ function TopicFragment({ topicFrag, getContestDetail }) {
 
   const handleOpenCreate = data => {
     setEditRoundData(data);
+    console.log(data);
+    setType('create');
     setModalShow(true);
   };
 
@@ -90,10 +94,11 @@ function TopicFragment({ topicFrag, getContestDetail }) {
   return (
     level && (
       <>
-        <CreateTopicRound
+        <ScheduleForm
           modalShow={modalShow}
           onHide={resetDetail}
           roundData={editRoundData}
+          type={type}
         />
         <DeleteModal
           show={deleteModalShow}
@@ -111,16 +116,17 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                   aria-controls="panel1-content"
                   id="panel1-header">
                   <div>
-                    {dataLevel.level} - {dataLevel.description} - {data.name}
+                    {data.name} - {dataLevel.level}
                   </div>
                 </AccordionSummary>
                 <AccordionDetails>
                   <div className={styles.roundContainer}>
                     <ul className={styles.roundTableResponse}>
                       <li className={styles.roundHeader}>
-                        <div className={styles.col}>Tên chủ đề</div>
+                        <div className={styles.col}>Giám khảo</div>
+                        <div className={styles.col}>Ngày chấm</div>
                         <div className={styles.col}>Mô tả</div>
-                        <div className={styles.col}>Tương tác</div>
+                        <div className={styles.col}>Trạng thái</div>
                       </li>
 
                       {data.roundTopic.length === 0 ? (
@@ -139,6 +145,11 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                                 <>{topicData.topic.description}</>
                               </div>
                             </div>
+                            <div className={styles.col} data-label="Mô tả">
+                              <div>
+                                <>{topicData.topic.description}</>
+                              </div>
+                            </div>
                             <div className={styles.col} data-label="Tương tác">
                               <IconButton
                                 aria-label="delete"
@@ -149,8 +160,7 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                                     data?.id,
                                     topicData?.topic.id,
                                   )
-                                }
-                                disabled={isEditing}>
+                                }>
                                 <DeleteIcon />
                               </IconButton>
                             </div>
@@ -162,9 +172,8 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                   <div className="flex justify-content-end mt-20">
                     <button
                       className="btn btn-outline-primary btn-lg"
-                      onClick={() => handleOpenCreate(data)}
-                      disabled={isEditing}>
-                      Thêm
+                      onClick={() => handleOpenCreate(data)}>
+                      Thêm lịch chấm
                     </button>
                   </div>
                 </AccordionDetails>
@@ -177,4 +186,4 @@ function TopicFragment({ topicFrag, getContestDetail }) {
   );
 }
 
-export default TopicFragment;
+export default ScheduleFragment;

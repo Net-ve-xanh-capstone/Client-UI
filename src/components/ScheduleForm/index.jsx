@@ -4,7 +4,11 @@ import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { createPreliminary, createFinal } from '../../api/scheduleStaffApi';
+import {
+  createPreliminary,
+  createFinal,
+  editShedule,
+} from '../../api/scheduleStaffApi';
 import { getAll } from '../../api/examinerStaffApi';
 import CreateModal from '../CreateModal';
 import EditModal from '../EditModal';
@@ -39,9 +43,9 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
   };
 
   const intialState = {
-    description: scheduleData?.description || '',
+    description: type?.description || '',
     roundId: roundData?.id,
-    endDate: scheduleData?.endDate || '',
+    endDate: type?.endDate?.split('T')[0] || '',
     listExaminer: [],
     currentUserId: userInfo?.Id,
   };
@@ -72,7 +76,8 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (!formData.listExaminer && type === 'create') {
+    console.log(formData.listExaminer);
+    if (formData.listExaminer.length === 0 && type === 'create') {
       toast.error('Chưa chọn giám khảo nào', {
         position: 'top-right',
         autoClose: 5000,
@@ -100,7 +105,11 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
   const postResource = async () => {
     try {
       setIsLoading(true);
-      const { data } = await createPreliminary(formData);
+
+      const { data } =
+        roundData?.name === 'Vòng Sơ Khảo'
+          ? await createPreliminary(formData)
+          : await createFinal(formData);
       if (data?.result) {
         toast.success('Thêm lịch chấm thành công', {
           position: 'top-right',
@@ -133,10 +142,11 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
   };
 
   const handleEditResource = async () => {
+    formData.id = type?.id;
     try {
       setIsLoading(true);
       if (type !== 'create') formData.id = type?.id;
-      const { data } = await createPreliminary(formData);
+      const { data } = await editShedule(formData);
       if (data?.result) {
         toast.success('Chỉnh sửa lịch chấm thành công', {
           position: 'top-right',
@@ -167,6 +177,10 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
     }
   };
 
+  const filteredExaminers = examiner?.filter(
+    e => !scheduleData?.some(sd => sd.examinerId === e.id),
+  );
+
   return (
     <>
       {type === 'create' ? (
@@ -194,10 +208,10 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            Thêm tài trợ
+            {type === 'create' ? 'Thêm lịch chấm' : 'Chỉnh sửa lịch chấm'}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ height: '55vh', overflow: 'hidden' }}>
+        <Modal.Body style={{ height: '60vh', overflow: 'hidden' }}>
           <form onSubmit={handleSubmit} className={styles.modalForm}>
             <h4 className={styles.title}>Ngày chấm</h4>
             <input
@@ -208,8 +222,8 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
               className={styles.formControl}
               value={formData.endDate}
               onChange={handleInputChange}
-              // min={roundData?.startTime.split('T')[0]}
-              min={roundData?.endTime.split('T')[0]}
+              min={roundData?.startTime.split('T')[0]}
+              max={roundData?.endTime.split('T')[0]}
             />
             <h4 className={styles.title}>Giám khảo</h4>
             <Multiselect
@@ -218,9 +232,13 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
               onKeyPressFn={function noRefCheck() {}}
               onRemove={e => handleSelect(e)}
               onSelect={e => handleSelect(e)}
-              options={examiner}
+              options={filteredExaminers}
               disable={type !== 'create'}
-              //selectedValues={type === 'create' ? [] : [type?.sponsor]}
+              selectedValues={
+                type === 'create'
+                  ? []
+                  : [{ id: type?.id, fullName: type?.examinerName }]
+              }
               placeholder="Chọn giám khảo"
               emptyRecordMsg="Không tìm thấy giám khảo nào"
               avoidHighlightFirstOption="true"

@@ -31,33 +31,33 @@ function AddNewBlog({ triggerClose, refetchData }) {
       ref: txtTitle,
       placeHoder: 'Tiêu đề bài viết',
       value: txtTitles,
-      onchange: (e) => {
+      onchange: e => {
         setTxtTitles(e.target.value);
         resizeTextArea(e.target.value);
-      }
+      },
     },
     {
       ref: txtSupDes,
       placeHoder: 'Mô tả bài viết',
       value: supDesValue,
-      onchange: (e) => {
+      onchange: e => {
         setSupDes(e.target.value);
         resizeSupDes(e.target.value);
-      }
+      },
     },
     {
       ref: txtDesRef,
       placeHoder: 'Nội dung bài viết',
       value: txtDes,
-      onchange: (e) => {
+      onchange: e => {
         setTxtDes(e.target.value);
         resizeTextDes(e.target.value);
-      }
-    }
+      },
+    },
   ];
 
   // check all field in payload must be fill in
-  const validation = (payload) => {
+  const validation = payload => {
     for (const key in payload) {
       if (payload[key] === '' || payload[key] === null) {
         return false;
@@ -67,7 +67,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
   };
 
   //auto resize fix with the content
-  const resizeTextArea = (value) => {
+  const resizeTextArea = value => {
     if (!txtTitle.current) {
       return;
     }
@@ -84,7 +84,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
   };
 
   //auto resize fix with the content
-  const resizeSupDes = (value) => {
+  const resizeSupDes = value => {
     if (!txtSupDes.current) {
       return;
     }
@@ -95,7 +95,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
   };
 
   //auto resize fix with the content
-  const resizeTextDes = (value) => {
+  const resizeTextDes = value => {
     if (!txtDesRef.current) {
       return;
     }
@@ -106,8 +106,13 @@ function AddNewBlog({ triggerClose, refetchData }) {
   };
 
   // adding file to state and loading to the UI
-  const changeFile = (e) => {
-    if (!(e.target.files.length > 0 && allowedTypes.includes(e.target.files[0].type))) {
+  const changeFile = e => {
+    if (
+      !(
+        e.target.files.length > 0 &&
+        allowedTypes.includes(e.target.files[0].type)
+      )
+    ) {
       return;
     }
     setImagePost(e.target.files[0]);
@@ -117,15 +122,15 @@ function AddNewBlog({ triggerClose, refetchData }) {
   //calling api to getting all of category not use
   const getCategory = async () => {
     await allCategory()
-      .then((res) => {
+      .then(res => {
         const data = res.data.result;
         setListCategory(data);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   // post the blog with calling api
-  const postBlog = async (payload) => {
+  const postBlog = async payload => {
     await addnewBlog(payload)
       .then(() => {
         toast.success('Bài viết đã được tải lên !!!', {
@@ -136,12 +141,12 @@ function AddNewBlog({ triggerClose, refetchData }) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light'
+          theme: 'light',
         });
         triggerClose(null);
         refetchData();
       })
-      .catch((err) => {
+      .catch(err => {
         toast.error(err, {
           position: 'top-right',
           autoClose: 5000,
@@ -150,7 +155,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light'
+          theme: 'light',
         });
       });
   };
@@ -163,7 +168,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
         title: txtTitles,
         description: txtDes,
         categoryId: idCategory,
-        currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c'
+        currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c',
       };
       if (validation(payload)) {
         postBlog(payload);
@@ -176,7 +181,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light'
+          theme: 'light',
         });
       }
     } else {
@@ -188,7 +193,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
     }
   };
@@ -217,7 +222,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
             onClick={() => triggerClose(null)}
             sx={{
               fontSize: '3rem',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           />
         </div>
@@ -234,8 +239,8 @@ function AddNewBlog({ triggerClose, refetchData }) {
                 className={styles.input_hidden}
                 id="add_more_file"
                 accept="image/png, image/gif, image/jpeg"
-                onChange={(e) => changeFile(e)}
-                onClick={(e) => {
+                onChange={e => changeFile(e)}
+                onClick={e => {
                   e.currentTarget.value = null;
                 }}
               />
@@ -250,8 +255,8 @@ function AddNewBlog({ triggerClose, refetchData }) {
                 className={styles.input_hidden}
                 id="add_more_file"
                 accept="image/png, image/gif, image/jpeg"
-                onChange={(e) => changeFile(e)}
-                onClick={(e) => {
+                onChange={e => changeFile(e)}
+                onClick={e => {
                   e.currentTarget.value = null;
                 }}
               />
@@ -265,15 +270,14 @@ function AddNewBlog({ triggerClose, refetchData }) {
           <Form.Group controlId="custom-select" className={styles.box_select}>
             <Form.Control
               value={txtCategory}
-              onChange={(e) => {
+              onChange={e => {
                 const selectedOption = e.target.selectedOptions[0];
                 const selectedId = selectedOption ? selectedOption.id : '';
                 setIdCategory(selectedId);
                 setTxtCategory(e.target.value);
               }}
               as="select"
-              className={`rounded-0 shadow ${styles.form_selected}`}
-            >
+              className={`rounded-0 shadow ${styles.form_selected}`}>
               <option className="d-none" value="">
                 Chọn thể loại bài viết
               </option>
@@ -296,8 +300,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
               className={styles.title_input}
               placeholder={vl.placeHoder}
               value={vl.value}
-              onChange={vl.onchange}
-            ></textarea>
+              onChange={vl.onchange}></textarea>
           </div>
         ))}
         {/*ending text editor */}

@@ -58,10 +58,7 @@
     box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
-.btnAction {
-    display: flex;
-    gap: 2rem;
-}
+
 
 .addmore:hover {
     transform: scale(1.1);
@@ -133,6 +130,28 @@
 }
 
 .buttonContainer {
-    text-align: end;
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.titleHeader {
+    cursor: default;
+    background: var(--linear);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--pink);
+}
+
+.btnAction {
+    display: flex;
+    justify-content: center;
+}
+
+.btnAction button:hover {
+    border: none;
+}
+
+.btnAction button:focus {
+    border: none;
 }

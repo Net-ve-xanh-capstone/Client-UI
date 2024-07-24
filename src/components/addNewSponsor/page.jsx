@@ -5,8 +5,9 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { toast } from 'react-toastify';
 import { addSponsor, getSponsorId, putSponsor } from '../../api/sponsorApi.js';
 import { isPhoneNumber } from '../../utils/validation.js';
+import Modal from 'react-bootstrap/Modal';
 
-function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
+function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
   const [imgLoad, setImgLoad] = useState(null);
   const [imgPost, setImagePost] = useState(null);
 
@@ -201,7 +202,7 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
         progress: undefined,
         theme: 'light',
       });
-      setAddPopup(null);
+      onHide();
       reCallData();
     } catch (error) {
       toast.warning('Có lỗi khi tạo, vui lòng thử lại !!', {
@@ -247,8 +248,7 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
         progress: undefined,
         theme: 'light',
       });
-      setIdSponsor(null);
-      setAddPopup(null);
+      onHide();
       reCallData();
     } catch (error) {
       toast.warning('Không thể cập nhật xin thử lại sau !!', {
@@ -300,91 +300,203 @@ function AddNewSponsor({ setAddPopup, idSponsor, setIdSponsor, reCallData }) {
 
   useEffect(() => {
     if (idSponsor !== null) {
+      console.log('call lan dau');
       getSponsorByID();
     }
   }, [idSponsor]);
 
   return (
-    <div className={styles.container}>
-      <h2 className={`tf-title pb-20 ${styles.title}`}>Thêm nhà tài trợ</h2>
-      <div className={styles.section}>
-        {listField.map((val, idx) => (
-          <div key={idx} className={styles.input_box}>
-            <div className={styles.container_error}>
-              <p className={styles.field_title}>{val.name}</p>
-              <div className={styles.textArea}>
+    <>
+      <Modal
+        show={modalShow}
+        onHide={onHide}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered>
+        <Modal.Header closeButton style={{ margin: '0 auto' }}>
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            style={{ fontWeight: 'bold', fontSize: '20px' }}>
+            Thêm nhà tài trợ
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          style={{
+            height: '80vh',
+            overflow: 'scroll',
+            scrollbarWidth: 'none',
+          }}>
+          <div className={styles.section}>
+            {listField.map((val, idx) => (
+              <div key={idx} className={styles.input_box}>
+                <div className={styles.container_error}>
+                  <p className={styles.field_title}>{val.name}</p>
+                  <div className={styles.textArea}>
+                    <input
+                      className={styles.input_place}
+                      type="text"
+                      placeholder={val.placeHolder}
+                      value={val.value}
+                      onChange={val.onchange}
+                    />
+                  </div>
+                </div>
+                {(val.error !== '' || val.error !== null) && (
+                  <div className={styles.error_text}>
+                    <span></span>
+                    <p className={styles.txt_error}>{val.error}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+            <div className={`${styles.input_box} ${styles.image_box}`}>
+              <p className={`${styles.field_title} ${styles.image_title}`}>
+                Logo
+              </p>
+              {imgLoad !== null ? (
+                <div className={styles.container_image}>
+                  <label htmlFor="add_more_file" className={styles.upload_logo}>
+                    <img src={imgLoad} alt="image" className={styles.image} />
+                  </label>
+                  <input
+                    type="file"
+                    className={styles.input_hidden}
+                    id="add_more_file"
+                    accept="image/png, image/gif, image/jpeg"
+                    onChange={e => changeFile(e)}
+                    onClick={e => {
+                      e.currentTarget.value = null;
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className={styles.container_image}>
+                  <label
+                    htmlFor="add_more_file"
+                    className={styles.onClick_upload}>
+                    <CloudUploadIcon
+                      sx={{ color: '#5142fc', fontSize: '10rem' }}
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className={styles.input_hidden}
+                    id="add_more_file"
+                    accept="image/png, image/gif, image/jpeg"
+                    onChange={e => changeFile(e)}
+                    onClick={e => {
+                      e.currentTarget.value = null;
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+          <div className={styles.btn_action}>
+            <span
+              className={styles.btn_find}
+              onClick={() => {
+                onHide();
+              }}>
+              <h5>Huỷ</h5>
+            </span>
+            <span
+              className={styles.btn_find}
+              onClick={() => {
+                idSponsor ? updateSponsor() : postImage();
+              }}>
+              <h5>{idSponsor ? 'Lưu' : 'Thêm mới'}</h5>
+            </span>
+          </div>
+        </Modal.Body>
+      </Modal>
+      {/* <div className={styles.container}>
+        <h2 className={`tf-title pb-20 ${styles.title}`}>Thêm nhà tài trợ</h2>
+        <div className={styles.section}>
+          {listField.map((val, idx) => (
+            <div key={idx} className={styles.input_box}>
+              <div className={styles.container_error}>
+                <p className={styles.field_title}>{val.name}</p>
+                <div className={styles.textArea}>
+                  <input
+                    className={styles.input_place}
+                    type="text"
+                    placeholder={val.placeHolder}
+                    value={val.value}
+                    onChange={val.onchange}
+                  />
+                </div>
+              </div>
+              {(val.error !== '' || val.error !== null) && (
+                <div className={styles.error_text}>
+                  <span></span>
+                  <p className={styles.txt_error}>{val.error}</p>
+                </div>
+              )}
+            </div>
+          ))}
+          <div className={`${styles.input_box} ${styles.image_box}`}>
+            <p className={`${styles.field_title} ${styles.image_title}`}>
+              Logo
+            </p>
+            {imgLoad !== null ? (
+              <div className={styles.container_image}>
+                <label htmlFor="add_more_file" className={styles.upload_logo}>
+                  <img src={imgLoad} alt="image" className={styles.image} />
+                </label>
                 <input
-                  className={styles.input_place}
-                  type="text"
-                  placeholder={val.placeHolder}
-                  value={val.value}
-                  onChange={val.onchange}
+                  type="file"
+                  className={styles.input_hidden}
+                  id="add_more_file"
+                  accept="image/png, image/gif, image/jpeg"
+                  onChange={e => changeFile(e)}
+                  onClick={e => {
+                    e.currentTarget.value = null;
+                  }}
                 />
               </div>
-            </div>
-            {(val.error !== '' || val.error !== null) && (
-              <div className={styles.error_text}>
-                <span></span>
-                <p className={styles.txt_error}>{val.error}</p>
+            ) : (
+              <div className={styles.container_image}>
+                <label
+                  htmlFor="add_more_file"
+                  className={styles.onClick_upload}>
+                  <CloudUploadIcon
+                    sx={{ color: '#5142fc', fontSize: '10rem' }}
+                  />
+                </label>
+                <input
+                  type="file"
+                  className={styles.input_hidden}
+                  id="add_more_file"
+                  accept="image/png, image/gif, image/jpeg"
+                  onChange={e => changeFile(e)}
+                  onClick={e => {
+                    e.currentTarget.value = null;
+                  }}
+                />
               </div>
             )}
           </div>
-        ))}
-        <div className={`${styles.input_box} ${styles.image_box}`}>
-          <p className={`${styles.field_title} ${styles.image_title}`}>Logo</p>
-          {imgLoad !== null ? (
-            <div className={styles.container_image}>
-              <label htmlFor="add_more_file" className={styles.upload_logo}>
-                <img src={imgLoad} alt="image" className={styles.image} />
-              </label>
-              <input
-                type="file"
-                className={styles.input_hidden}
-                id="add_more_file"
-                accept="image/png, image/gif, image/jpeg"
-                onChange={e => changeFile(e)}
-                onClick={e => {
-                  e.currentTarget.value = null;
-                }}
-              />
-            </div>
-          ) : (
-            <div className={styles.container_image}>
-              <label htmlFor="add_more_file" className={styles.onClick_upload}>
-                <CloudUploadIcon sx={{ color: '#5142fc', fontSize: '10rem' }} />
-              </label>
-              <input
-                type="file"
-                className={styles.input_hidden}
-                id="add_more_file"
-                accept="image/png, image/gif, image/jpeg"
-                onChange={e => changeFile(e)}
-                onClick={e => {
-                  e.currentTarget.value = null;
-                }}
-              />
-            </div>
-          )}
         </div>
-      </div>
-      <div className={styles.btn_action}>
-        <span
-          className={styles.btn_find}
-          onClick={() => {
-            setAddPopup(null);
-            setIdSponsor(null);
-          }}>
-          <h5>Huỷ</h5>
-        </span>
-        <span
-          className={styles.btn_find}
-          onClick={() => {
-            idSponsor ? updateSponsor() : postImage();
-          }}>
-          <h5>{idSponsor ? 'Lưu' : 'Thêm mới'}</h5>
-        </span>
-      </div>
-    </div>
+        <div className={styles.btn_action}>
+          <span
+            className={styles.btn_find}
+            onClick={() => {
+              setAddPopup(null);
+              setIdSponsor(null);
+            }}>
+            <h5>Huỷ</h5>
+          </span>
+          <span
+            className={styles.btn_find}
+            onClick={() => {
+              idSponsor ? updateSponsor() : postImage();
+            }}>
+            <h5>{idSponsor ? 'Lưu' : 'Thêm mới'}</h5>
+          </span>
+        </div>
+      </div> */}
+    </>
   );
 }
 

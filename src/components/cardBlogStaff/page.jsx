@@ -22,8 +22,8 @@ function BlogStaff() {
   const [idDelete, setIdDelete] = useState(null);
   const [isopenCreate, setisopenCreate] = useState(null);
 
-  const handlePopup = (idx) => {
-    setPopup((prev) => (prev === idx ? '' : idx));
+  const handlePopup = idx => {
+    setPopup(prev => (prev === idx ? '' : idx));
   };
 
   // change value of page when navigating
@@ -34,16 +34,16 @@ function BlogStaff() {
   // get all blog by staff
   const fetchDataBlog = async () => {
     await getAllBlog(pageNumber)
-      .then((res) => {
+      .then(res => {
         const data = res.data.result;
         setTotalPage(data.totalPage);
         setBlogList(data.list);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   // open model when click delete button
-  const triggerModal = (id) => {
+  const triggerModal = id => {
     setModalOpen(true);
     setIdDelete(id);
   };
@@ -69,10 +69,10 @@ function BlogStaff() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light'
+          theme: 'light',
         });
       })
-      .catch((err) => {
+      .catch(err => {
         toast.error(err, {
           position: 'top-right',
           autoClose: 5000,
@@ -81,7 +81,7 @@ function BlogStaff() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light'
+          theme: 'light',
         });
       });
   };
@@ -99,12 +99,21 @@ function BlogStaff() {
   return (
     <>
       {isopenCreate ? (
-        <AddNewBlog triggerClose={setisopenCreate} refetchData={fetchDataBlog} />
+        <AddNewBlog
+          triggerClose={setisopenCreate}
+          refetchData={fetchDataBlog}
+        />
       ) : openEdit !== null ? (
-        <PopupBlog setOpenEdit={setOpenEdit} blogId={openEdit} recallBlogData={fetchDataBlog} />
+        <PopupBlog
+          setOpenEdit={setOpenEdit}
+          blogId={openEdit}
+          recallBlogData={fetchDataBlog}
+        />
       ) : (
         <div className={styles.container}>
-          <h2 className={`tf-title pb-20 ${styles.main_title}`}>Blog Của Tôi</h2>
+          <h2 className={`tf-title pb-20 ${styles.main_title}`}>
+            Blog Của Tôi
+          </h2>
           <div className={styles.blog_navigation}>
             <div className={styles.blog_list}>
               {blogList?.length
@@ -117,14 +126,16 @@ function BlogStaff() {
                         <div className={styles.title}>
                           <div className={styles.check_btn}>
                             <h3>
-                              {vl.title?.length > 20 ? cutString(vl.title, 20) + '...' : vl.title}
+                              {vl.title?.length > 20
+                                ? cutString(vl.title, 20) + '...'
+                                : vl.title}
                             </h3>
                             <MoreHorizIcon
                               onClick={() => handlePopup(idx)}
                               sx={{
                                 color: '#9835FB',
                                 fontSize: '3rem',
-                                cursor: 'pointer'
+                                cursor: 'pointer',
                               }}
                             />
                             {popup === idx && (
@@ -148,14 +159,12 @@ function BlogStaff() {
                           <div className={styles.tag}>
                             <span
                               style={{
-                                backgroundColor: '#9835FB'
-                              }}
-                            ></span>
+                                backgroundColor: '#9835FB',
+                              }}></span>
                             <h6
                               style={{
-                                color: '#9835FB'
-                              }}
-                            >
+                                color: '#9835FB',
+                              }}>
                               {vl.categoryName?.length > 20
                                 ? cutString(vl.categoryName, 20) + '...'
                                 : vl.categoryName}
@@ -177,12 +186,12 @@ function BlogStaff() {
                 display: 'flex',
                 justifyContent: 'center',
                 '.MuiPaginationItem-text': {
-                  fontSize: '1.5rem'
+                  fontSize: '1.5rem',
                 },
                 '.Mui-selected': {
                   backgroundColor: '#5142fc !important', // Customize the selected item background color
-                  color: 'white' // Ensure text is readable on selected background
-                }
+                  color: 'white', // Ensure text is readable on selected background
+                },
               }}
             />
           </div>
@@ -210,7 +219,7 @@ function BlogStaff() {
           <AddIcon
             sx={{
               fontSize: '4rem',
-              color: 'white'
+              color: 'white',
             }}
           />
         </div>

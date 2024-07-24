@@ -9,7 +9,7 @@ import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.j
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 import styles from './page.module.css';
 
-function ModalAddPainting({ modalShow, onHide, fetchData }) {
+function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
   const fieldText = useRef(null);
 
   const [imageLoaded, setImageLoaded] = useState(null);
@@ -30,11 +30,28 @@ function ModalAddPainting({ modalShow, onHide, fetchData }) {
     currentUserId: { value: '3fa85f64-5717-4562-b3fc-2c963f66afa6' },
   });
 
+  const [updateField, setUpdateField] = useState({
+    id: { value: '', error: '' },
+    image: { value: '', error: '' }, //this is contain in another state
+    name: { value: '', error: '' },
+    description: { value: '', error: '' },
+    status: { value: '', error: '' },
+    submitTime: { value: '', error: '' },
+    awardId: { value: '', error: '' }, //what is this shit
+    roundTopicId: { value: '', error: '' },
+    accountId: { value: '', error: '' }, //what is this shit
+    scheduleId: { value: '', error: '' }, //what is this shit
+    code: 'string',
+    currentUserId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+  });
+
   const [loadingContest, setLoadingContest] = useState(true);
   const [contest, setContest] = useState([]);
 
   const [loadingRound, setLoadingRound] = useState(true);
-  const [roundTopic, setRoundTopic] = useState([]);
+  const [roundTopic, setRoundTopic] = useState([
+    { value: dataPainting?.topicId, label: dataPainting?.topicName },
+  ]);
 
   // geting new object without the error field
   const updateObject = val => {
@@ -286,6 +303,12 @@ function ModalAddPainting({ modalShow, onHide, fetchData }) {
     };
   }, [fieldInput.description.value]);
 
+  //start edit space
+
+  // get painting by id
+
+  //ending edit space
+
   // addnew painting
   const postPainting = async payload => {
     console.log(payload);
@@ -389,6 +412,24 @@ function ModalAddPainting({ modalShow, onHide, fetchData }) {
   useEffect(() => {
     fetchAllContest();
   }, []);
+
+  useEffect(() => {
+    if (dataPainting !== null) {
+      console.log(dataPainting);
+      setImageLoaded(dataPainting.image);
+      setFieldInput(prv => ({
+        ...prv,
+        fullName: { ...prv.fullName, value: dataPainting.ownerName },
+        email: { ...prv.fullName, value: dataPainting.email },
+        address: { ...prv.address, value: dataPainting.address },
+        birthday: { ...prv.birthday, value: dataPainting.birthday },
+        phone: { ...prv.phone, value: dataPainting.phone },
+        name: { ...prv.name, value: dataPainting.name },
+        description: { ...prv.description, value: dataPainting.description },
+        roundTopicId: { ...prv.roundTopicId, value: dataPainting.topicId },
+      }));
+    }
+  }, [dataPainting]);
 
   return (
     <>
@@ -519,8 +560,10 @@ function ModalAddPainting({ modalShow, onHide, fetchData }) {
                       placeholder={<div>Chủ đề</div>}
                       styles={customStyles}
                       options={roundTopic}
-                      isLoading={loadingRound}
-                      defaultValue={{ value: '', label: 'Chủ đề' }}
+                      defaultValue={{
+                        value: '',
+                        lable: 'Chủ đề',
+                      }}
                       onChange={val => {
                         setFieldInput(prv => ({
                           ...prv,
@@ -602,6 +645,30 @@ function ModalAddPainting({ modalShow, onHide, fetchData }) {
                     </div>
                   )}
                 </div>
+                <div className={styles.field_painting}>
+                  <p style={{ fontWeight: 'normal', fontSize: '14px' }}>
+                    Trạng thái
+                  </p>
+                  <input
+                    type="text"
+                    value={fieldInput.name.value}
+                    onChange={e => {
+                      setFieldInput(prv => ({
+                        ...prv,
+                        name: {
+                          ...prv.name,
+                          value: e.target.value,
+                        },
+                      }));
+                    }}
+                  />
+                </div>
+                <div className={styles.field_painting}>
+                  <p style={{ fontWeight: 'normal', fontSize: '14px' }}>
+                    Ngày nộp bài
+                  </p>
+                  <input type="date" />
+                </div>
               </div>
             </div>
             <div className={styles.btn_trigger}>
@@ -628,4 +695,4 @@ function ModalAddPainting({ modalShow, onHide, fetchData }) {
   );
 }
 
-export default ModalAddPainting;
+export default ModalEditPainting;

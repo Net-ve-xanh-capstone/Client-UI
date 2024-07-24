@@ -6,16 +6,19 @@ import {
   StyledEngineProvider,
   ThemeProvider,
 } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import MUIDataTable from 'mui-datatables';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import AddNewSponsor from '../../components/addNewSponsor/page.jsx';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function SponsorManage() {
   const [listSponsor, setListSponsor] = useState([]);
-  const [idSponsor, setIdSponsor] = useState('');
+  const [idSponsor, setIdSponsor] = useState(null);
   const [openModal, setOpenModal] = useState(null);
-  const [addPopup, setAddPopup] = useState(null);
+  const [addPopup, setAddPopup] = useState(false);
   const getMuiTheme = () =>
     createTheme({
       typography: {
@@ -50,7 +53,8 @@ function SponsorManage() {
     await getAllSponsor()
       .then(res => {
         const data = res.data.result;
-        setListSponsor(data);
+        const fakeData = res.data.result.list;
+        setListSponsor(data ? data : fakeData);
       })
       .catch(err => console.log(err));
   };
@@ -122,21 +126,26 @@ function SponsorManage() {
       options: {
         customBodyRender: (value, tableData) => (
           <div className={styles.btnAction}>
-            <button
-              className="btn btn-info btn-lg"
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="info"
               onClick={() => {
                 triggerEdit(value, tableData.rowData[0]);
               }}>
-              Sửa
-            </button>
-            <button
+              <RemoveRedEyeIcon />
+            </IconButton>
+
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="error"
               onClick={() => {
                 setIdSponsor(value);
                 setOpenModal(true);
-              }}
-              className="btn btn-danger btn-lg">
-              Xóa
-            </button>
+              }}>
+              <DeleteIcon />
+            </IconButton>
           </div>
         ),
       },
@@ -146,12 +155,31 @@ function SponsorManage() {
   const options = {
     selectableRows: 'none',
     elevation: 5,
-    rowsPerPage: 5,
-    rowsPerPageOptions: [5, 10, 20, 30],
+    rowsPerPage: 4,
+    rowsPerPageOptions: [4, 10, 20, 30],
     responsive: 'standard',
     print: false,
     download: false,
     filter: false,
+    textLabels: {
+      body: {
+        noMatch: 'Không có dữ liệu',
+      },
+      pagination: {
+        rowsPerPage: 'Số hàng mỗi trang:',
+        displayRows: 'của',
+      },
+      toolbar: {
+        search: 'Tìm kiếm',
+        viewColumns: 'Xem cột',
+        filterTable: 'Lọc bảng',
+      },
+    },
+  };
+
+  const handlePostDone = () => {
+    setAddPopup(false);
+    setIdSponsor(null);
   };
 
   useEffect(() => {
@@ -160,36 +188,38 @@ function SponsorManage() {
 
   return (
     <div className={styles.container}>
-      {addPopup ? (
-        <AddNewSponsor
-          setAddPopup={setAddPopup}
-          idSponsor={idSponsor}
-          setIdSponsor={setIdSponsor}
-          reCallData={fetchData}
-        />
-      ) : (
-        <>
-          <div className={styles.buttonContainer}>
-            <button
-              className={styles.btnCreate}
-              onClick={() => setAddPopup(true)}>
-              <span>Thêm tài trợ</span>
-            </button>
+      <AddNewSponsor
+        modalShow={addPopup}
+        onHide={handlePostDone}
+        setAddPopup={setAddPopup}
+        idSponsor={idSponsor}
+        setIdSponsor={setIdSponsor}
+        reCallData={fetchData}
+      />
+      <>
+        <div className={styles.buttonContainer}>
+          <div>
+            <h2 className={styles.titleHeader}>Quản lí nhà tài trợ</h2>
           </div>
-          <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={getMuiTheme()}>
-              <div className={styles.tableContainer}>
-                <MUIDataTable
-                  title={'Dánh sách tài trợ'}
-                  data={listSponsor}
-                  columns={columns}
-                  options={options}
-                />
-              </div>
-            </ThemeProvider>
-          </StyledEngineProvider>
-        </>
-      )}
+          <button
+            className={styles.btnCreate}
+            onClick={() => setAddPopup(true)}>
+            <span>Thêm tài trợ</span>
+          </button>
+        </div>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={getMuiTheme()}>
+            <div className={`${styles.tableContainer} table-contest`}>
+              <MUIDataTable
+                // title={'Dánh sách tài trợ'}
+                data={listSponsor}
+                columns={columns}
+                options={options}
+              />
+            </div>
+          </ThemeProvider>
+        </StyledEngineProvider>
+      </>
       <Modal show={openModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Xoá thể loại</Modal.Title>

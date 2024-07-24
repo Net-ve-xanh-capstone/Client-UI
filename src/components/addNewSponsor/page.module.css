@@ -17,7 +17,7 @@
     flex-direction: column;
     gap: 2rem;
     align-items: center;
-    padding: 0 5rem;
+    padding: 0 20px;
 }
 
 .input_box {
@@ -64,11 +64,7 @@
 .textArea {
     flex: 7;
     height: 5rem;
-    border-radius: 3rem;
-
-    background: transparent;
-    backdrop-filter: blur(40px);
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    border-radius: 0.625rem;
 }
 
 .input_place {
@@ -78,6 +74,7 @@
     border: none !important;
     padding: 0 1rem;
     color: #0C0C0C !important;
+    font-size: 18px !important;
 }
 
 .input_place:focus {
@@ -108,7 +105,7 @@
     display: flex;
     justify-content: flex-end;
     gap: 2rem;
-    padding: 0 5rem;
+    margin-top: 2rem;
 }
 
 .btn_find {
@@ -208,12 +205,9 @@
     .textArea {
         flex: unset;
         height: 5rem;
-        border-radius: 3rem;
+        border-radius: 0.625rem;
         width: 100%;
-
-        background: transparent;
-        backdrop-filter: blur(40px);
-        box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+        border: 1px solid rgba(138, 138, 160, 0.3);
     }
 
     .input_box.image_box {

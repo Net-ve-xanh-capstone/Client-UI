@@ -25,33 +25,33 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
       ref: txtTitle,
       placeHoder: 'Tiêu đề bài viết',
       value: txtTitles,
-      onchange: (e) => {
+      onchange: e => {
         setTxtTitles(e.target.value);
         resizeTextArea(e.target.value);
-      }
+      },
     },
     {
       ref: txtSupDes,
       placeHoder: 'Mô tả bài viết',
       value: supDesValue,
-      onchange: (e) => {
+      onchange: e => {
         setSupDes(e.target.value);
         resizeSupDes(e.target.value);
-      }
+      },
     },
     {
       ref: txtDesRef,
       placeHoder: 'Nội dung bài viết',
       value: txtDes,
-      onchange: (e) => {
+      onchange: e => {
         setTxtDes(e.target.value);
         resizeTextDes(e.target.value);
-      }
-    }
+      },
+    },
   ];
 
   // check all field in payload must be fill in
-  const validation = (payload) => {
+  const validation = payload => {
     for (const key in payload) {
       if (payload[key] === '' || payload[key] === null) {
         return false;
@@ -61,7 +61,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
   };
 
   // resize with text whilt typing
-  const resizeTextArea = (value) => {
+  const resizeTextArea = value => {
     if (!txtTitle.current) {
       return;
     }
@@ -71,7 +71,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
     txtTitle.current.style.height = `${txtTitle.current.scrollHeight}px`;
   };
 
-  const resizeSupDes = (value) => {
+  const resizeSupDes = value => {
     if (!txtSupDes.current) {
       return;
     }
@@ -82,7 +82,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
   };
 
   // resize with text whilt typing
-  const resizeTextDes = (value) => {
+  const resizeTextDes = value => {
     if (!txtDesRef.current) {
       return;
     }
@@ -93,8 +93,13 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
   };
 
   // adding new file image to state and loading to UI
-  const changeFile = (e) => {
-    if (!(e.target.files.length > 0 && allowedTypes.includes(e.target.files[0].type))) {
+  const changeFile = e => {
+    if (
+      !(
+        e.target.files.length > 0 &&
+        allowedTypes.includes(e.target.files[0].type)
+      )
+    ) {
       return;
     }
     setImagePost(e.target.files[0]);
@@ -102,19 +107,19 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
   };
 
   // Get blog by id
-  const fetchData = async (id) => {
+  const fetchData = async id => {
     await getBlogId(id)
-      .then((res) => {
+      .then(res => {
         const data = res.data.result;
         setTxtTitles(data.title);
         setTxtDes(data.description);
         setImageUrl(data.url);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   //update the blog with new payload
-  const triggerUpdate = async (payload) => {
+  const triggerUpdate = async payload => {
     try {
       await updateBlog(payload);
       recallBlogData();
@@ -126,7 +131,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
     } catch (error) {
       toast.success(error, {
@@ -137,7 +142,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
     } finally {
       setOpenEdit(null);
@@ -153,7 +158,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
         url: url,
         title: txtTitles,
         description: txtDes,
-        currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c'
+        currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c',
       };
       if (validation(payload)) {
         triggerUpdate(payload);
@@ -166,7 +171,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light'
+          theme: 'light',
         });
       }
     } else {
@@ -175,7 +180,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
         url: imageUrl,
         title: txtTitles,
         description: txtDes,
-        currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c'
+        currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c',
       };
       if (validation(payload)) {
         triggerUpdate(payload);
@@ -188,7 +193,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light'
+          theme: 'light',
         });
       }
     }
@@ -214,12 +219,14 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
       <div className={styles.box}>
         <div className={styles.scroll_place}>
           <div className={styles.title_line}>
-            <h2 className={`tf-title pb-20 ${styles.title_page}`}>Chỉnh sữa bài viết</h2>
+            <h2 className={`tf-title pb-20 ${styles.title_page}`}>
+              Chỉnh sữa bài viết
+            </h2>
             <CloseIcon
               onClick={() => setOpenEdit(null)}
               sx={{
                 fontSize: '3rem',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             />
           </div>
@@ -234,7 +241,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
                   className={styles.input_hidden}
                   id="add_more_file"
                   accept="image/png, image/gif, image/jpeg"
-                  onChange={(e) => changeFile(e)}
+                  onChange={e => changeFile(e)}
                 />
               </>
             )}
@@ -246,8 +253,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
                 className={styles.title_textarea}
                 placeholder={vl.placeHoder}
                 value={vl.value}
-                onChange={vl.onchange}
-              ></textarea>
+                onChange={vl.onchange}></textarea>
             </div>
           ))}
 

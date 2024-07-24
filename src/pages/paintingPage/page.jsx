@@ -7,16 +7,21 @@ import AddPainting from '../../components/addPainting/page.jsx';
 import CardPainting from '../../components/paintingCard/page.jsx';
 import styles from './page.module.css';
 import ModalAddPainting from '../../components/addPainting/page.jsx';
+import ModalEditPainting from '../../components/editPainting/page.jsx';
 
 function PaintingPage() {
   const [totalPage, setTotalPage] = useState(2);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageNumsSearch, setPageNumsSearch] = useState(1);
 
   const [listPainting, setListPainting] = useState([]);
   const [openCreate, setOpenCreate] = useState(false);
+
+  // this is when user want to opent edit popup
+  const [openEdit, setOpenEdit] = useState(false);
   const [paintingByid, setPaintingByid] = useState(null);
 
+  // this is for searching feature
+  const [pageNumsSearch, setPageNumsSearch] = useState(1);
   const [searching, setSearching] = useState({
     code: '',
     topicName: '',
@@ -27,12 +32,17 @@ function PaintingPage() {
     status: '',
   });
 
+  const handleEditDone = () => {
+    setOpenEdit(false);
+  };
+
   const handlePostDone = () => {
     setOpenCreate(false);
   };
 
   const handleChange = (_, value) => {
     setPageNumber(value);
+    fetchData(value);
   };
 
   const options = [
@@ -95,7 +105,7 @@ function PaintingPage() {
     try {
       const res = await paintingApi.getPaintingById(`paintings/${id}`);
       setPaintingByid(res.data.result);
-      setOpenCreate(true);
+      setOpenEdit(true);
     } catch (error) {
       console.log(error);
     }
@@ -105,15 +115,17 @@ function PaintingPage() {
     fetchData(pageNumber);
   }, []);
 
-  useEffect(() => {
-    fetchData(pageNumber);
-  }, [pageNumber]);
-
   return (
     <>
       <ModalAddPainting
         modalShow={openCreate}
         onHide={handlePostDone}
+        fetchData={fetchData}
+      />
+      <ModalEditPainting
+        modalShow={openEdit}
+        onHide={handleEditDone}
+        dataPainting={paintingByid}
         fetchData={fetchData}
       />
       <div className={styles.container}>

@@ -59,7 +59,15 @@
 
 .btnAction {
     display: flex;
-    gap: 2rem;
+    justify-content: center;
+}
+
+.btnAction button:hover {
+    border: none;
+}
+
+.btnAction button:focus {
+    border: none;
 }
 
 .addmore:hover {
@@ -132,6 +140,15 @@
 }
 
 .buttonContainer {
-    text-align: end;
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.titleHeader {
+    cursor: default;
+    background: var(--linear);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--pink);
 }

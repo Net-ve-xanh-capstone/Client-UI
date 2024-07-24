@@ -6,6 +6,7 @@ import {
   School,
   Topic,
   Paid,
+  Schedule,
 } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import styles from './style.module.css';
@@ -17,6 +18,7 @@ import LevelFragment from '../LevelFragment';
 import RoundFragment from '../RoundFragment';
 import TopicFragment from '../TopicFragment';
 import ResourceFragment from '../ResourceFragment';
+import ScheduleFragment from '../ScheduleFragment';
 
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
@@ -80,6 +82,16 @@ function ContestDetail({ contest, handleBack }) {
       component: (
         <ResourceFragment
           resourceFrag={contestDes}
+          getContestDetail={getContestDetail}
+        />
+      ),
+    },
+    {
+      title: 'Lịch trình',
+      icon: <CalendarMonth />,
+      component: (
+        <ScheduleFragment
+          scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
         />
       ),

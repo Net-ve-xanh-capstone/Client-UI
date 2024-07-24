@@ -177,7 +177,10 @@ $icon-size: 35px;
 }
 
 //table cell hover
-
+.tss-bd2lw8-MUIDataTableHeadCell-sortActive,
+.MuiTableSortLabel-icon {
+  color: white !important;
+}
 .css-crgmwz-MuiButtonBase-root-MuiButton-root:hover,
 .css-crgmwz-MuiButtonBase-root-MuiButton-root:focus {
   border: none;

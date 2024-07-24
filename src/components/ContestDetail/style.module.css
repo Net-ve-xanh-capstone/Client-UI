@@ -6,7 +6,7 @@
     --accent: var(--linear);
     --accent-inactive: #bccff7;
 
-    --tab-count: 5;
+    --tab-count: 6;
     --indicator-width: 50px;
     --indicator-height: 4px;
 }
@@ -169,7 +169,8 @@ input[name="tab-control"]:nth-of-type(1):checked~ul>li:nth-child(1) label,
 input[name="tab-control"]:nth-of-type(2):checked~ul>li:nth-child(2) label,
 input[name="tab-control"]:nth-of-type(3):checked~ul>li:nth-child(3) label,
 input[name="tab-control"]:nth-of-type(4):checked~ul>li:nth-child(4) label,
-input[name="tab-control"]:nth-of-type(5):checked~ul>li:nth-child(5) label {
+input[name="tab-control"]:nth-of-type(5):checked~ul>li:nth-child(5) label,
+input[name="tab-control"]:nth-of-type(6):checked~ul>li:nth-child(6) label {
     cursor: default;
     background: var(--linear);
     -webkit-background-clip: text;
@@ -199,12 +200,17 @@ input[name="tab-control"]:nth-of-type(5):checked~.slider {
     transform: translateX(400%);
 }
 
+input[name="tab-control"]:nth-of-type(6):checked~.slider {
+    transform: translateX(500%);
+}
+
 
 input[name="tab-control"]:nth-of-type(1):checked~.content>section:nth-child(1),
 input[name="tab-control"]:nth-of-type(2):checked~.content>section:nth-child(2),
 input[name="tab-control"]:nth-of-type(3):checked~.content>section:nth-child(3),
 input[name="tab-control"]:nth-of-type(4):checked~.content>section:nth-child(4),
-input[name="tab-control"]:nth-of-type(5):checked~.content>section:nth-child(5) {
+input[name="tab-control"]:nth-of-type(5):checked~.content>section:nth-child(5),
+input[name="tab-control"]:nth-of-type(6):checked~.content>section:nth-child(6) {
     display: block;
 }
 

@@ -7,8 +7,10 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CreateModal from '../CreateModal';
 import { createContest } from '../../api/contestStaffApi';
+import { LoadingButton } from '@mui/lab';
 
 function ModalForm({ modalShow, onHide }) {
+  const [isLoading, setIsLoading] = useState(false);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
   const { userInfo } = useSelector(state => state.auth);
@@ -104,6 +106,7 @@ function ModalForm({ modalShow, onHide }) {
 
   const postContest = async () => {
     try {
+      setIsLoading(true);
       const { data } = await createContest(formData);
       if (data?.result) {
         toast.success('Tạo cuộc thi thành công', {
@@ -117,8 +120,20 @@ function ModalForm({ modalShow, onHide }) {
           theme: 'light',
         });
       }
+      setIsLoading(false);
       onHide();
     } catch (e) {
+      toast.error(e.response?.data?.message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      setIsLoading(false);
       console.log('err', e);
     }
   };
@@ -353,9 +368,17 @@ function ModalForm({ modalShow, onHide }) {
               onChange={handleInputChange}
             />
             <div style={{ textAlign: 'end' }}>
-              <button className={styles.btnCreate} type="submit">
-                Tạo
-              </button>
+              <LoadingButton
+                type="submit"
+                className={styles.btnCreate}
+                size="large"
+                loading={isLoading}
+                loadingPosition="center"
+                variant="contained">
+                <span style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                  Tạo
+                </span>
+              </LoadingButton>
             </div>
           </form>
         </Modal.Body>

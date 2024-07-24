@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import CreateLevel from '../CreateLevel';
-import { checkEditButton } from '../../utils/checkEditButton';
-import DeleteModal from '../DeleteModal';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { deleteLevel } from '../../api/levelStaffApi';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import styles from './style.module.css';
-import { RemoveRedEye } from '@mui/icons-material';
-import ResourceForm from '../ResourceForm';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
+import React, { useEffect, useState } from 'react';
+import { DotLoader } from 'react-spinners';
+import { color } from '../../constant/Color.js';
+import { toast } from 'react-toastify';
 import { getById } from '../../api/contestStaffApi.js';
 import { deleteResource } from '../../api/resourceStaffApi.js';
+import { checkEditButton } from '../../utils/checkEditButton';
+import DeleteModal from '../DeleteModal';
+import ResourceForm from '../ResourceForm';
+import styles from './style.module.css';
 
 function ResourceFragment({ resourceFrag, getContestDetail }) {
   const [resource, setResource] = useState();

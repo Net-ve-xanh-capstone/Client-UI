@@ -78,7 +78,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
           progress: undefined,
           theme: 'light',
         });
-        getLevelRound();
+        resetDetail();
       }
     } catch (e) {
       console.log('err', e);

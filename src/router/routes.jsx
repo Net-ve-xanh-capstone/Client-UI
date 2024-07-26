@@ -1,6 +1,15 @@
 import React, { lazy } from 'react';
 import Role from '../constant/Role';
 import ProtectedRoute from './ProtectedRoute';
+import BlogStaff from '../components/cardBlogStaff/page.jsx';
+import CategoryBlog from '../components/categoryBlog/page.jsx';
+import ContestManagement from '../pages/ContestManagement/index.jsx';
+
+import TopicManagement from '../pages/TopicManagement/index.jsx';
+import ExaminerManagement from '../pages/ExaminerManagement/index.jsx';
+import SponsorManage from '../pages/sponsorPage/page.jsx';
+import CompetitorManage from '../pages/competitorManage/page.jsx';
+import PaintingPage from '../pages/paintingPage/page.jsx';
 
 const Home = lazy(() => import('../pages/Home/Home'));
 const BlogPage = lazy(() => import('../pages/blogPage/BlogPage'));
@@ -9,23 +18,9 @@ const SignUp = lazy(() => import('../pages/SignUp'));
 const SubmitPage = lazy(() => import('../pages/SubmitPage'));
 const Explore = lazy(() => import('../pages/Explore'));
 const NoResult = lazy(() => import('../constant/NoResult'));
-const BlogStaff = lazy(() => import('../components/cardBlogStaff/page.jsx'));
-const CategoryBlog = lazy(() => import('../components/categoryBlog/page.jsx'));
-const ContestManagement = lazy(
-  () => import('../pages/ContestManagement/index.jsx'),
-);
 const StaffManage = lazy(() => import('../pages/StaffManage'));
-const SponsorManage = lazy(() => import('../pages/sponsorPage/page.jsx'));
-const PaintingPage = lazy(() => import('../pages/paintingPage/page.jsx'));
 const ContestDetail = lazy(
   () => import('../pages/ContestDetail/ContestDetail.jsx'),
-);
-const TopicManagement = lazy(
-  () => import('../pages/TopicManagement/index.jsx'),
-);
-
-const ExaminerManagement = lazy(
-  () => import('../pages/ExaminerManagement/index.jsx'),
 );
 
 const routes = [
@@ -63,6 +58,10 @@ const routes = [
       {
         path: 'painting',
         component: <PaintingPage />,
+      },
+      {
+        path: 'competitor',
+        component: <CompetitorManage />,
       },
     ],
   },

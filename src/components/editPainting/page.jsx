@@ -8,6 +8,8 @@ import { getAllRoundStaff, roundTopicById } from '../../api/roundStaffApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 import styles from './page.module.css';
+import Multiselect from 'multiselect-react-dropdown';
+import { parseDateEdit } from '../../utils/formatDate.js';
 
 function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
   const fieldText = useRef(null);
@@ -31,27 +33,23 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
   });
 
   const [updateField, setUpdateField] = useState({
-    id: { value: '', error: '' },
-    image: { value: '', error: '' }, //this is contain in another state
-    name: { value: '', error: '' },
-    description: { value: '', error: '' },
-    status: { value: '', error: '' },
-    submitTime: { value: '', error: '' },
-    awardId: { value: '', error: '' }, //what is this shit
-    roundTopicId: { value: '', error: '' },
-    accountId: { value: '', error: '' }, //what is this shit
-    scheduleId: { value: '', error: '' }, //what is this shit
-    code: 'string',
+    id: null,
+    image: null,
+    name: null,
+    description: null,
+    status: null,
+    roundTopicId: null,
     currentUserId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
   });
 
-  const [loadingContest, setLoadingContest] = useState(true);
-  const [contest, setContest] = useState([]);
+  const [contestId, setContestId] = useState(null);
 
   const [loadingRound, setLoadingRound] = useState(true);
-  const [roundTopic, setRoundTopic] = useState([
-    { value: dataPainting?.topicId, label: dataPainting?.topicName },
-  ]);
+  const [roundTopic, setRoundTopic] = useState([]);
+  const [roundId, setRoundId] = useState(null);
+  const [status, setStatus] = useState(null);
+
+  const [dateSubmit, setDateSubmit] = useState(null);
 
   // geting new object without the error field
   const updateObject = val => {
@@ -173,42 +171,6 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
     setImageLoaded(null);
   };
 
-  const validateName = val => {
-    if (val.length < 3 || val.length > 200) {
-      return 'độ dài phải từ 3 đến 200 chữ';
-    }
-    return '';
-  };
-
-  const validateEmail = val => {
-    if (!isEmail(val)) {
-      return 'Email không đúng định dạng';
-    }
-    return '';
-  };
-
-  const validateBirthDay = val => {
-    if (val === '' || val === undefined || val === null) {
-      return 'Không được bỏ trống ngày sinh';
-    }
-    return '';
-  };
-
-  // missing phone number in the API
-  const validatePhoneNumber = phoneNumber => {
-    if (!isPhoneNumber(phoneNumber)) {
-      return 'Số điện thoại không hợp lệ';
-    }
-    return '';
-  };
-
-  const validateAddress = address => {
-    if (address.length < 5 || address.length > 200) {
-      return 'độ dài phải từ 3 đến 200 chữ';
-    }
-    return '';
-  };
-
   const validateNamePainting = val => {
     if (val.length < 3 || val.length > 200) {
       return 'độ dài phải từ 3 đến 200 chữ';
@@ -232,38 +194,18 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
 
   // validation the length of all field
   const validateAllFields = () => {
-    const nameError = validateName(fieldInput.fullName.value);
-    const birthdayError = validateBirthDay(fieldInput.birthday.value);
-    const emailError = validateEmail(fieldInput.email.value);
-    const addressError = validateAddress(fieldInput.address.value);
-    const phoneNumberError = validatePhoneNumber(fieldInput.phone.value);
-
     const namePaintingErr = validateNamePainting(fieldInput.name.value);
     const descriptionError = validateDescription(fieldInput.description.value);
     const roundTopicError = validateRoundTopic(fieldInput.roundTopicId.value);
 
     setFieldInput(prevState => ({
       ...prevState,
-      fullName: { ...prevState.fullName, error: nameError },
-      email: { ...prevState.email, error: emailError },
-      birthday: { ...prevState.birthday, error: birthdayError },
-      address: { ...prevState.address, error: addressError },
-      phone: { ...prevState.phone, error: phoneNumberError },
       name: { ...prevState.name, error: namePaintingErr },
       description: { ...prevState.description, error: descriptionError },
       roundTopicId: { ...prevState.roundTopicId, error: roundTopicError },
     }));
 
-    return (
-      !nameError &&
-      !birthdayError &&
-      !emailError &&
-      !addressError &&
-      !namePaintingErr &&
-      !descriptionError &&
-      !roundTopicError &&
-      !phoneNumberError
-    );
+    return !namePaintingErr && !descriptionError && !roundTopicError;
   };
 
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
@@ -310,17 +252,23 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
   //ending edit space
 
   // addnew painting
-  const postPainting = async payload => {
-    console.log(payload);
+  const updatePainting = async payload => {
     try {
-      await paintingApi.addNewPainting(
-        'paintings/submitepainting1stroundforCompetitor',
-        payload,
-      );
-      resetFieldInputValues();
+      await paintingApi.updatePainting('paintings/satffupdate', payload);
+      toast.success('Đã cập nhật thành công', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       fetchData(1);
       onHide();
-      toast.success('Bài thi đã được thêm vào danh sách', {
+    } catch (error) {
+      toast.warning(error, {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
@@ -330,32 +278,6 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
         progress: undefined,
         theme: 'light',
       });
-    } catch (error) {
-      toast.error(error.response.data.message, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-    }
-  };
-
-  const fetchAllContest = async () => {
-    setLoadingContest(true);
-    try {
-      const res = await getAllRoundStaff();
-      const data = res.data.result;
-      setContest(
-        data !== null ? data.map(vl => ({ value: vl.id, label: vl.name })) : [],
-      );
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingContest(false);
     }
   };
 
@@ -379,20 +301,41 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
     if (validateAllFields()) {
       let payload;
       if (progress) {
-        payload = updateObject(fieldInput);
-        payload = { ...payload, image: url, status: val };
-        postPainting(payload);
+        payload = { ...updateField };
+        payload = {
+          ...payload,
+          id: dataPainting.id,
+          image: url,
+          status: val,
+          name: payload.name !== null ? payload.name : dataPainting.name,
+          description:
+            payload.description !== null
+              ? payload.description
+              : dataPainting.description,
+          roundTopicId:
+            updateField.roundTopicId !== null
+              ? payload.roundTopicId
+              : dataPainting.topicId,
+        };
+        updatePainting(payload);
       } else {
-        toast.warning('Bạn vui lòng bổ sung thêm ảnh nhé !!', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
+        payload = { ...updateField };
+        payload = {
+          ...payload,
+          id: dataPainting.id,
+          image: imageLoaded,
+          name: payload.name !== null ? payload.name : dataPainting.name,
+          description:
+            payload.description !== null
+              ? payload.description
+              : dataPainting.description,
+          status: val,
+          roundTopicId:
+            updateField.roundTopicId !== null
+              ? payload.roundTopicId
+              : dataPainting.topicId,
+        };
+        updatePainting(payload);
       }
     } else {
       toast.warning('Vui lòng kiểm tra lại thông tin !!', {
@@ -408,26 +351,39 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
     }
   };
 
-  // calling data first time
-  useEffect(() => {
-    fetchAllContest();
-  }, []);
+  //update current input with current object
+  const currenInput = state => {
+    setImageLoaded(state.image);
+    setFieldInput(prv => ({
+      ...prv,
+      fullName: { ...prv.fullName, value: state.ownerName },
+      email: { ...prv.fullName, value: state.email },
+      address: { ...prv.address, value: state.address },
+      birthday: {
+        ...prv.birthday,
+        value: parseDateEdit(state.birthday),
+      },
+      phone: { ...prv.phone, value: state.phone },
+      name: { ...prv.name, value: state.name },
+      description: { ...prv.description, value: state.description },
+      roundTopicId: { ...prv.roundTopicId, value: state.topicId },
+    }));
+    setRoundId({
+      value: state.topicId,
+      label: state.topicName,
+    });
+    setContestId({
+      value: state.roundId,
+      label: state.roundName,
+    });
+    setDateSubmit(state.submitTime.split('T')[0]);
+    setStatus(state.status);
+  };
 
   useEffect(() => {
     if (dataPainting !== null) {
-      console.log(dataPainting);
-      setImageLoaded(dataPainting.image);
-      setFieldInput(prv => ({
-        ...prv,
-        fullName: { ...prv.fullName, value: dataPainting.ownerName },
-        email: { ...prv.fullName, value: dataPainting.email },
-        address: { ...prv.address, value: dataPainting.address },
-        birthday: { ...prv.birthday, value: dataPainting.birthday },
-        phone: { ...prv.phone, value: dataPainting.phone },
-        name: { ...prv.name, value: dataPainting.name },
-        description: { ...prv.description, value: dataPainting.description },
-        roundTopicId: { ...prv.roundTopicId, value: dataPainting.topicId },
-      }));
+      currenInput(dataPainting);
+      fetchRoundTopic(dataPainting.roundId);
     }
   }, [dataPainting]);
 
@@ -459,12 +415,10 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
             <div className={styles.round_select}>
               <Select
                 isClearable={true}
+                value={contestId}
                 placeholder={<div>Vòng thi</div>}
-                isLoading={loadingContest}
                 styles={customStyles}
-                options={contest}
-                defaultValue={{ value: '', label: 'Vòng thi' }}
-                onChange={val => fetchRoundTopic(val?.value ? val?.value : '')}
+                isDisabled={true}
               />
             </div>
             <div className={styles.competitor_box}>
@@ -484,6 +438,7 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
                         type={vl.type}
                         value={vl.value}
                         onChange={vl.onchange}
+                        readOnly
                       />
                     </div>
                     {(fieldInput[vl.label].error !== '' ||
@@ -557,14 +512,21 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
                   <div className={styles.select_topic}>
                     <Select
                       isClearable={true}
+                      value={roundId}
                       placeholder={<div>Chủ đề</div>}
                       styles={customStyles}
                       options={roundTopic}
+                      isLoading={loadingRound}
                       defaultValue={{
                         value: '',
                         lable: 'Chủ đề',
                       }}
                       onChange={val => {
+                        setUpdateField(prv => ({
+                          ...prv,
+                          roundTopicId: val.value,
+                        }));
+                        setRoundId({ value: val?.value, label: val?.label });
                         setFieldInput(prv => ({
                           ...prv,
                           roundTopicId: {
@@ -593,6 +555,10 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
                       type="text"
                       value={fieldInput.name.value}
                       onChange={e => {
+                        setUpdateField(prv => ({
+                          ...prv,
+                          name: e.target.value,
+                        }));
                         setFieldInput(prv => ({
                           ...prv,
                           name: {
@@ -624,6 +590,10 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
                         className={styles.title_input}
                         value={fieldInput.description.value}
                         onChange={e => {
+                          setUpdateField(prv => ({
+                            ...prv,
+                            description: e.target.value,
+                          }));
                           resizeTextArea(e.target.value);
                           setFieldInput(prv => ({
                             ...prv,
@@ -645,29 +615,18 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
                     </div>
                   )}
                 </div>
+
                 <div className={styles.field_painting}>
                   <p style={{ fontWeight: 'normal', fontSize: '14px' }}>
                     Trạng thái
                   </p>
-                  <input
-                    type="text"
-                    value={fieldInput.name.value}
-                    onChange={e => {
-                      setFieldInput(prv => ({
-                        ...prv,
-                        name: {
-                          ...prv.name,
-                          value: e.target.value,
-                        },
-                      }));
-                    }}
-                  />
+                  <input type="text" value={status} readOnly />
                 </div>
                 <div className={styles.field_painting}>
                   <p style={{ fontWeight: 'normal', fontSize: '14px' }}>
                     Ngày nộp bài
                   </p>
-                  <input type="date" />
+                  <input type="date" value={dateSubmit} readOnly />
                 </div>
               </div>
             </div>

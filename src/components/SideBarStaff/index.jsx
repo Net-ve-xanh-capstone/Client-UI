@@ -18,6 +18,8 @@ import {
   SidebarHeader,
 } from 'react-pro-sidebar';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 const SideBarStaff = ({
   collapsed,
@@ -69,9 +71,15 @@ const SideBarStaff = ({
       new: false,
     },
     {
-      icon: <FaGem />,
+      icon: <ColorLensIcon />,
       path: '/painting',
       name: 'Painting',
+      new: false,
+    },
+    {
+      icon: <AccountBoxIcon />,
+      path: '/competitor',
+      name: 'Competitor',
       new: false,
     },
   ];

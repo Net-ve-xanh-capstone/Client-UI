@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import styles from './style.module.css';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import CreateModal from '../CreateModal';
 import { createContest } from '../../api/contestStaffApi';
 import { LoadingButton } from '@mui/lab';
 
+// eslint-disable-next-line react-refresh/only-export-components
 function ModalForm({ modalShow, onHide }) {
   const [isLoading, setIsLoading] = useState(false);
   const [validated, setValidated] = useState(false);
@@ -387,4 +388,5 @@ function ModalForm({ modalShow, onHide }) {
   );
 }
 
-export default ModalForm;
+// eslint-disable-next-line react-refresh/only-export-components
+export default memo(ModalForm);

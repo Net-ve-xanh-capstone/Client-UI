@@ -7,8 +7,8 @@ export const paintingApi = {
   getAllPaintingByCompetitorId: async (endpoint, config) => {
     return await axiosApi.get(endpoint, config);
   },
-  updatePainting: async (endpoint, data, config) => {
-    return await axiosApi.put(endpoint, data, config);
+  updatePainting: async (endpoint, payload) => {
+    return await axiosApi.put(endpoint, payload);
   },
   getAllPaintingByPage: async endpoint => {
     return await axiosApi.get(endpoint);
@@ -16,8 +16,8 @@ export const paintingApi = {
   getPaintingById: async endpoint => {
     return await axiosApi.get(endpoint);
   },
-  filterPainting: async endpoint => {
-    return await axiosApi.get(endpoint);
+  filterPainting: async (endpoint, payload) => {
+    return await axiosApi.post(endpoint, payload);
   },
   addNewPainting: async (endpoint, payload) => {
     return await axiosApi.post(endpoint, payload);

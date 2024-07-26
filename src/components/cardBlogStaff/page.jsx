@@ -3,7 +3,7 @@ import styles from './page.module.css';
 import fakeImage from '../../assets/images/blog/herosBlog.png';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { deleteBlog, getAllBlog } from '../../api/blogApi.js';
-import { Pagination } from '@mui/material';
+import { Pagination, Skeleton } from '@mui/material';
 import { cutString } from '../../utils/formatDate.js';
 import PopupBlog from '../modalEditBlog/page.jsx';
 import Modal from 'react-bootstrap/Modal';
@@ -11,7 +11,7 @@ import { Button } from 'react-bootstrap';
 import AddIcon from '@mui/icons-material/Add';
 import AddNewBlog from '../popupAddingBlog/page.jsx';
 import { toast } from 'react-toastify';
-
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 function BlogStaff() {
   const [popup, setPopup] = useState('');
   const [blogList, setBlogList] = useState([]);
@@ -21,6 +21,8 @@ function BlogStaff() {
   const [modalOpent, setModalOpen] = useState(null);
   const [idDelete, setIdDelete] = useState(null);
   const [isopenCreate, setisopenCreate] = useState(null);
+
+  const [loading, setLoading] = useState(false);
 
   const handlePopup = idx => {
     setPopup(prev => (prev === idx ? '' : idx));
@@ -33,13 +35,15 @@ function BlogStaff() {
 
   // get all blog by staff
   const fetchDataBlog = async () => {
+    setLoading(true);
     await getAllBlog(pageNumber)
       .then(res => {
         const data = res.data.result;
         setTotalPage(data.totalPage);
         setBlogList(data.list);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(setLoading(false));
   };
 
   // open model when click delete button
@@ -116,65 +120,80 @@ function BlogStaff() {
           </h2>
           <div className={styles.blog_navigation}>
             <div className={styles.blog_list}>
-              {blogList?.length
-                ? blogList.map((vl, idx) => (
-                    <div key={vl.id} className={styles.card}>
-                      <div className={styles.image}>
-                        <img src={vl.url} alt={vl.title} />
-                      </div>
-                      <div className={styles.text}>
-                        <div className={styles.title}>
-                          <div className={styles.check_btn}>
-                            <h3>
-                              {vl.title?.length > 20
-                                ? cutString(vl.title, 20) + '...'
-                                : vl.title}
-                            </h3>
-                            <MoreHorizIcon
-                              onClick={() => handlePopup(idx)}
-                              sx={{
-                                color: '#9835FB',
-                                fontSize: '3rem',
-                                cursor: 'pointer',
-                              }}
-                            />
-                            {popup === idx && (
-                              <div className={styles.poup}>
-                                <span onClick={() => setOpenEdit(vl.id)}>
-                                  <h6>Edit</h6>
-                                </span>
-                                <span onClick={() => triggerModal(vl.id)}>
-                                  <h6>Delete</h6>
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                          <p>
-                            {vl.description?.length > 200
-                              ? cutString(vl.description, 200) + '...'
-                              : vl.description}
-                          </p>
+              {loading ? (
+                Array.from(new Array(5)).map((_, idx) => (
+                  <Skeleton
+                    className={styles.skeleton_card}
+                    key={idx}
+                    variant="rounded"
+                  />
+                ))
+              ) : blogList?.length ? (
+                blogList.map((vl, idx) => (
+                  <div key={vl.id} className={styles.card}>
+                    <div className={styles.image}>
+                      <img src={vl.url} alt={vl.title} />
+                    </div>
+                    <div className={styles.text}>
+                      <div className={styles.title}>
+                        <div className={styles.check_btn}>
+                          <h3>
+                            {vl.title?.length > 20
+                              ? cutString(vl.title, 20) + '...'
+                              : vl.title}
+                          </h3>
+                          <MoreHorizIcon
+                            onClick={() => handlePopup(idx)}
+                            sx={{
+                              color: '#9835FB',
+                              fontSize: '3rem',
+                              cursor: 'pointer',
+                            }}
+                          />
+                          {popup === idx && (
+                            <div className={styles.poup}>
+                              <span onClick={() => setOpenEdit(vl.id)}>
+                                <h6>Edit</h6>
+                              </span>
+                              <span onClick={() => triggerModal(vl.id)}>
+                                <h6>Delete</h6>
+                              </span>
+                            </div>
+                          )}
                         </div>
-                        <div className={styles.tag_list}>
-                          <div className={styles.tag}>
-                            <span
-                              style={{
-                                backgroundColor: '#9835FB',
-                              }}></span>
-                            <h6
-                              style={{
-                                color: '#9835FB',
-                              }}>
-                              {vl.categoryName?.length > 20
-                                ? cutString(vl.categoryName, 20) + '...'
-                                : vl.categoryName}
-                            </h6>
-                          </div>
+                        <p>
+                          {vl.description?.length > 200
+                            ? cutString(vl.description, 200) + '...'
+                            : vl.description}
+                        </p>
+                      </div>
+                      <div className={styles.tag_list}>
+                        <div className={styles.tag}>
+                          <span
+                            style={{
+                              backgroundColor: '#9835FB',
+                            }}></span>
+                          <h6
+                            style={{
+                              color: '#9835FB',
+                            }}>
+                            {vl.categoryName?.length > 20
+                              ? cutString(vl.categoryName, 20) + '...'
+                              : vl.categoryName}
+                          </h6>
                         </div>
                       </div>
                     </div>
-                  ))
-                : ''}
+                  </div>
+                ))
+              ) : (
+                <div className={styles.not_found}>
+                  <SearchOffIcon sx={{ fontSize: '10rem', color: '#7a798a' }} />
+                  <h2 className={`tf-title pb-20 ${styles.notfound_title}`}>
+                    Không có bài viết nào
+                  </h2>
+                </div>
+              )}
             </div>
             <Pagination
               count={totalPage}

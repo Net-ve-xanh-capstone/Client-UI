@@ -12,7 +12,6 @@ import {
   deleteSchedule,
   getScheduleByContestId,
 } from '../../api/scheduleStaffApi.js';
-import { deleteTopicRound } from '../../api/topicStaffApi.js';
 import { checkEditButton } from '../../utils/checkEditButton.js';
 import { formatDate } from '../../utils/formatDate.js';
 import DeleteModal from '../DeleteModal';

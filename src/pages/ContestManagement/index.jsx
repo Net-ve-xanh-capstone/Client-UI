@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MUIDataTable from 'mui-datatables';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { deleteContest, getAll } from '../../api/contestStaffApi';
@@ -288,4 +288,5 @@ function ContestManagement() {
   );
 }
 
-export default ContestManagement;
+// eslint-disable-next-line react-refresh/only-export-components
+export default memo(ContestManagement);

@@ -13,6 +13,7 @@ import styles from './page.module.css';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteModal from '../DeleteModal/index.jsx';
 
 function CategoryBlog() {
   const [listCate, setListCate] = useState([]);
@@ -100,6 +101,20 @@ function CategoryBlog() {
     print: false,
     download: false,
     filter: false,
+    textLabels: {
+      body: {
+        noMatch: 'Không có dữ liệu',
+      },
+      pagination: {
+        rowsPerPage: 'Số hàng mỗi trang:',
+        displayRows: 'của',
+      },
+      toolbar: {
+        search: 'Tìm kiếm',
+        viewColumns: 'Xem cột',
+        filterTable: 'Lọc bảng',
+      },
+    },
   };
 
   // adding id and value name of category to state
@@ -154,7 +169,7 @@ function CategoryBlog() {
         <>
           <div className={styles.buttonContainer}>
             <div>
-              <h2 className={styles.titleHeader}>Quản lí cuộc thi</h2>
+              <h2 className={styles.titleHeader}>Quản lí thể loại</h2>
             </div>
             <button
               className={styles.btnCreate}
@@ -190,20 +205,12 @@ function CategoryBlog() {
         />
       )}
       {/* confirm delete button */}
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Xoá thể loại</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Bạn có chắc là sẽ xoá thể loại này không ?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={triggerDelete}>
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DeleteModal
+        show={showModal}
+        setShow={setOpenModal}
+        title={'thể loại'}
+        callBack={triggerDelete}
+      />
     </div>
   );
 }

@@ -183,3 +183,132 @@
 
 
 /* End css list painting */
+
+/* responsive */
+
+@media (min-width: 300px) {
+    .list_paint {
+        width: 100%;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(1, 35rem);
+        justify-content: center;
+
+        column-gap: 2rem;
+        row-gap: 3rem;
+    }
+
+    .cared_skeleton {
+        max-width: 50rem;
+        height: 30rem !important;
+    }
+
+    .not_found {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+
+
+    }
+
+    .not_found .notfound_title {
+        color: #7a798a !important;
+        font-size: 20px;
+    }
+}
+
+/* Small devices (phones, 576px and up) */
+@media (min-width: 500px) {
+    .list_paint {
+        width: 100%;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(1, 50rem);
+        justify-content: center;
+
+        column-gap: 2rem;
+        row-gap: 3rem;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 840px) {
+    .list_paint {
+        width: 100%;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+
+        column-gap: 2rem;
+        row-gap: 3rem;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .list_paint {
+        width: 100%;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+
+        column-gap: 2rem;
+        row-gap: 3rem;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .list_paint {
+        width: 100%;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+
+        column-gap: 2rem;
+        row-gap: 3rem;
+    }
+
+    /* CSS cho thiết bị có kích thước từ 1200px trở lên */
+}
+
+/* Extra extra large devices (very large desktops, 1400px and up) */
+@media (min-width: 1400px) {
+    /* CSS cho thiết bị có kích thước từ 1400px trở lên */
+}
+
+/* responsive */
+
+.btn_searching {
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.btn_find {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: calc(2rem - 0.5rem);
+    background-color: #5142fc;
+    color: white;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 1.2rem 1rem;
+}
+
+.btn_find h5 {
+    font-size: 1.6rem !important;
+}
+
+.btn_find:hover {
+    opacity: 0.9;
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatDate } from '../../utils/formatDate.js';
+import { cutString, formatDate } from '../../utils/formatDate.js';
 import styles from './page.module.css';
 
 function CardPainting({ items, getPaintingByID }) {
@@ -55,7 +55,11 @@ function CardPainting({ items, getPaintingByID }) {
             <p>Thông điệp: </p>
           </div>
           <div className={styles.des_field}>
-            <p>{items.description}</p>
+            <p>
+              {items.description.length > 100
+                ? cutString(items.description, 100) + '...'
+                : items.description}
+            </p>
           </div>
         </div>
       </div>

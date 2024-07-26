@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Pagination } from '@mui/material';
+import { Pagination, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { paintingApi } from '../../api/paintingApi.js';
@@ -8,10 +8,15 @@ import CardPainting from '../../components/paintingCard/page.jsx';
 import styles from './page.module.css';
 import ModalAddPainting from '../../components/addPainting/page.jsx';
 import ModalEditPainting from '../../components/editPainting/page.jsx';
+import { topicApi } from '../../api/topicApi.js';
+import { getAllLevel } from '../../api/educationLevel.js';
+import { getAllRoundStaff } from '../../api/roundStaffApi.js';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 
 function PaintingPage() {
   const [totalPage, setTotalPage] = useState(2);
   const [pageNumber, setPageNumber] = useState(1);
+  const [loadingPage, setLoadingPage] = useState(false);
 
   const [listPainting, setListPainting] = useState([]);
   const [openCreate, setOpenCreate] = useState(false);
@@ -21,7 +26,6 @@ function PaintingPage() {
   const [paintingByid, setPaintingByid] = useState(null);
 
   // this is for searching feature
-  const [pageNumsSearch, setPageNumsSearch] = useState(1);
   const [searching, setSearching] = useState({
     code: '',
     topicName: '',
@@ -32,6 +36,34 @@ function PaintingPage() {
     status: '',
   });
 
+  // data round and roundtopic
+  const [loadingTopic, setLoadingTopic] = useState(true);
+  const [clearTopic, setClearTopic] = useState({
+    value: '',
+    label: 'Chọn chủ đề',
+  });
+  const [roundTopic, setRoundTopic] = useState([{ val: null, label: null }]);
+
+  // data educationlevel
+  const [loadingLevel, setLoadingLevel] = useState(true);
+  const [levelList, setlevelList] = useState([{ val: null, label: null }]);
+
+  // data round
+  const [loadingRound, setLoadingRound] = useState(true);
+  const [roundList, setRoundList] = useState([{ val: null, label: null }]);
+
+  const clearInput = () => {
+    setClearTopic(prev => ({ ...prev, label: 'Chọn chủ đề' }));
+    let payload = {};
+    for (let index in searching) {
+      if (index !== 'code') {
+        searching[index] = '';
+      }
+    }
+    payload = { ...searching };
+    payload.code === '' ? fetchData(1) : fetchDataBySearching(payload, 1);
+  };
+
   const handleEditDone = () => {
     setOpenEdit(false);
   };
@@ -40,15 +72,36 @@ function PaintingPage() {
     setOpenCreate(false);
   };
 
+  const isSeaching = () => {
+    for (let index in searching) {
+      if (searching[index] !== '') {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const findBySearching = () => {
+    if (isSeaching()) {
+      fetchDataBySearching(searching, 1);
+    } else {
+      console.log('chạy vào đây');
+      fetchData(1);
+    }
+  };
+
   const handleChange = (_, value) => {
     setPageNumber(value);
+    if (isSeaching()) {
+      fetchDataBySearching(searching, value);
+    }
     fetchData(value);
   };
 
   const options = [
-    { value: 'chocolate', label: 'Blue' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'Submmitted', label: 'Submmitted' },
+    { value: 'Accepted', label: 'Accepted' },
+    { value: 'Rejected', label: 'Rejected' },
   ];
 
   // styling the topic label
@@ -89,6 +142,7 @@ function PaintingPage() {
 
   // get all painting by current page
   const fetchData = async currPage => {
+    setLoadingPage(true);
     try {
       const res = await paintingApi.getAllPaintingByPage(
         `paintings/list?PageSize=6&PageNumber=${currPage}`,
@@ -98,6 +152,50 @@ function PaintingPage() {
       setTotalPage(data.totalPage);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingPage(false);
+    }
+  };
+
+  // get all topic round
+  const fetchAllTopic = async () => {
+    setLoadingTopic(true);
+    try {
+      const res = await topicApi.getAllTopic('roundtopics/getallroundtopic');
+      const data = res.data.result;
+      setRoundTopic(data.map(val => ({ value: val.id, label: val.name })));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingTopic(false);
+    }
+  };
+
+  // get all level
+  const fetchAllLevel = async () => {
+    setLoadingLevel(true);
+    try {
+      const res = await getAllLevel();
+      const data = res.data.result;
+      setlevelList(data.map(val => ({ value: val.id, label: val.level })));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingLevel(false);
+    }
+  };
+
+  // get all round
+  const fetchAllRound = async () => {
+    setLoadingRound(true);
+    try {
+      const res = await getAllRoundStaff();
+      const data = res.data.result;
+      setRoundList(data.map(val => ({ value: val.id, label: val.name })));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingRound(false);
     }
   };
 
@@ -111,8 +209,32 @@ function PaintingPage() {
     }
   };
 
+  const fetchDataBySearching = async (payload, pageNumer) => {
+    setLoadingPage(true);
+    try {
+      const res = await paintingApi.filterPainting(
+        `paintings/filterpainting?PageSize=6&PageNumber=${pageNumer}`,
+        payload,
+      );
+      const data = res.data.result.list;
+      const totalPage = res.data.result.totalPage;
+
+      setTotalPage(totalPage);
+      setListPainting(data);
+
+      console.log(res.data.result);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingPage(false);
+    }
+  };
+
   useEffect(() => {
     fetchData(pageNumber);
+    fetchAllRound();
+    fetchAllLevel();
+    fetchAllTopic();
   }, []);
 
   return (
@@ -138,8 +260,12 @@ function PaintingPage() {
               <div className={styles.searchbox}>
                 <input
                   type="text"
+                  value={searching.code}
                   placeholder="Mã tranh, tên thí sinh"
                   className={styles.search_field}
+                  onChange={e =>
+                    setSearching(prev => ({ ...prev, code: e.target.value }))
+                  }
                 />
               </div>
             </div>
@@ -147,8 +273,15 @@ function PaintingPage() {
               <Select
                 isClearable={true}
                 placeholder={<div>Chọn chủ đề</div>}
+                // defaultInputValue={{ value: '', label: 'Chọn chủ đề' }}
                 styles={customStyles}
-                options={options}
+                options={roundTopic}
+                isLoading={loadingTopic}
+                value={clearTopic}
+                onChange={val => {
+                  setClearTopic(val);
+                  setSearching(prev => ({ ...prev, topicName: val?.label }));
+                }}
               />
               <div className={styles.date_box}>
                 <div className={styles.date_start}>
@@ -159,6 +292,13 @@ function PaintingPage() {
                     name="startTime"
                     id="startTime"
                     className={styles.formControl}
+                    value={searching.startDate}
+                    onChange={e =>
+                      setSearching(prev => ({
+                        ...prev,
+                        startDate: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div className={styles.date_end}>
@@ -169,39 +309,105 @@ function PaintingPage() {
                     name="endTime"
                     id="endTime"
                     className={styles.formControl}
+                    value={searching.endDate}
+                    onChange={e =>
+                      setSearching(prev => ({
+                        ...prev,
+                        endDate: e.target.value,
+                      }))
+                    }
                   />
                 </div>
               </div>
               <Select
                 isClearable={true}
                 placeholder={<div>Chọn câp bậc</div>}
+                // defaultInputValue={{ value: '', label: 'Chọn cấp bậc' }}
                 styles={customStyles}
-                options={options}
+                options={levelList}
+                isLoading={loadingLevel}
+                value={{
+                  value: '',
+                  label: searching.level || 'Chọn cấp bậc',
+                }}
+                onChange={val =>
+                  setSearching(prev => ({
+                    ...prev,
+                    level: val?.label,
+                  }))
+                }
               />
               <Select
                 isClearable={true}
                 placeholder={<div>Chọn vòng thi</div>}
                 styles={customStyles}
-                options={options}
+                options={roundList}
+                isLoading={loadingRound}
+                value={{
+                  value: '',
+                  label: searching.roundName || 'Chọn vòng thi',
+                }}
+                onChange={val =>
+                  setSearching(prev => ({
+                    ...prev,
+                    roundName: val?.label,
+                  }))
+                }
               />
               <Select
                 isClearable={true}
                 placeholder={<div>Chọn trạng thái</div>}
                 styles={customStyles}
                 options={options}
+                value={{
+                  value: '',
+                  label: searching.status || 'Chọn trạng thái',
+                }}
+                onChange={val =>
+                  setSearching(prev => ({
+                    ...prev,
+                    status: val?.label,
+                  }))
+                }
               />
+            </div>
+            <div className={styles.btn_searching}>
+              <span className={styles.btn_find} onClick={() => clearInput()}>
+                <h5>Xoá lọc</h5>
+              </span>
+              <span
+                className={styles.btn_find}
+                onClick={() => findBySearching()}>
+                <h5>Tìm kiếm</h5>
+              </span>
             </div>
           </div>
           <div className={styles.expainting}>
             <div className={styles.list_paint}>
-              {listPainting?.length &&
+              {loadingPage ? (
+                Array.from(new Array(6)).map((_, idx) => (
+                  <Skeleton
+                    className={styles.cared_skeleton}
+                    key={idx}
+                    variant="rounded"
+                  />
+                ))
+              ) : listPainting?.length ? (
                 listPainting.map(val => (
                   <CardPainting
                     key={val.id}
                     items={val}
                     getPaintingByID={getPaintingByID}
                   />
-                ))}
+                ))
+              ) : (
+                <div className={styles.not_found}>
+                  <SearchOffIcon sx={{ fontSize: '10rem', color: '#7a798a' }} />
+                  <h2 className={`tf-title pb-20 ${styles.notfound_title}`}>
+                    Không có bài dự thi nào
+                  </h2>
+                </div>
+              )}
             </div>
             <Pagination
               count={totalPage}

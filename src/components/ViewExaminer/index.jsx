@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import styles from './style.module.css';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import CreateModal from '../CreateModal';
-import { formatDate } from '../../utils/formatDate';
-import EditModal from '../EditModal';
-import { createTopic, editTopic } from '../../api/topicStaffApi';
-import BanModal from '../BanModal';
+import { toast } from 'react-toastify';
 import { banAccount, unBanAccount } from '../../api/examinerStaffApi';
+import { formatDate } from '../../utils/formatDate';
+import BanModal from '../BanModal';
+import styles from './style.module.css';
 
 function ViewExaminer({ modalShow, onHide, examData }) {
-  console.log(examData);
-  const [validated, setValidated] = useState(false);
-  const [errors, setErrors] = useState({});
   const { userInfo } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);

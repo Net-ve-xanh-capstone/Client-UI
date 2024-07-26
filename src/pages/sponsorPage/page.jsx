@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import AddNewSponsor from '../../components/addNewSponsor/page.jsx';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteModal from '../../components/DeleteModal/index.jsx';
 
 function SponsorManage() {
   const [listSponsor, setListSponsor] = useState([]);
@@ -220,20 +221,12 @@ function SponsorManage() {
           </ThemeProvider>
         </StyledEngineProvider>
       </>
-      <Modal show={openModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Xoá thể loại</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Bạn có chắc là sẽ xoá thể loại này không ?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={triggerDelete}>
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DeleteModal
+        show={openModal}
+        setShow={setOpenModal}
+        title={'giám khảo'}
+        callBack={triggerDelete}
+      />
     </div>
   );
 }

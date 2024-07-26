@@ -19,22 +19,23 @@ import { paintingApi } from '../api/paintingApi';
 import Swal from 'sweetalert2';
 
 const draffPaintingEndpoint = 'paintings/draftepainting1stround';
-const getAllPaintingByCompetitorIdEndpoint = 'paintings/listpaintingbyaccountid';
-const topics = await topicApi.getAllTopic('topics');
+const getAllPaintingByCompetitorIdEndpoint =
+  'paintings/listpaintingbyaccountid';
+const topics = topicApi.getAllTopic('topics');
 const topicsData = topics.data.result.list;
 const SubmitPage = () => {
   const [image, setImage] = useState(null);
   const [file, setFile] = useState(null);
   const [topicId, setTopicId] = useState(null);
   const { progress, url, error } = useUploadImage(file);
-  const userInfo = useSelector((state) => state.auth.userInfo);
+  const userInfo = useSelector(state => state.auth.userInfo);
   const today = new Date().toISOString().slice(0, 10);
   const [paintingCompetitor, setPaintingCompetitor] = useState(null);
   const schema = yup.object().shape({
     file: yup.mixed().required('Vui lòng chọn ảnh'),
     name: yup.string().required('Vui lòng nhập tên của bức tranh'),
     description: yup.string(),
-    topic: yup.string().required('Vui lòng chọn chủ đề')
+    topic: yup.string().required('Vui lòng chọn chủ đề'),
   });
 
   const {
@@ -45,12 +46,12 @@ const SubmitPage = () => {
     trigger,
     watch,
     setError,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    reValidateMode: 'onChange'
+    reValidateMode: 'onChange',
   });
-  const handlePreviewImage = (e) => {
+  const handlePreviewImage = e => {
     const file = e.target.files[0];
     file.preview = URL.createObjectURL(file);
     setImage(URL.createObjectURL(file));
@@ -59,7 +60,7 @@ const SubmitPage = () => {
     setFile(file);
   };
 
-  const handleSubmitPainting = async (e) => {
+  const handleSubmitPainting = async e => {
     // Trigger validate form
     const isValid = await trigger();
     if (!isValid) return;
@@ -69,13 +70,13 @@ const SubmitPage = () => {
       description: e.description,
       roundId: '1ff52294-cc72-4781-a73a-042baffb4ced',
       topicId: topicId,
-      currentUserId: userInfo.Id
+      currentUserId: userInfo.Id,
     };
     Swal.fire({
       title: 'Bạn có chắc chắn nộp bài?',
       showCancelButton: true,
-      confirmButtonText: 'Nộp'
-    }).then((result) => {
+      confirmButtonText: 'Nộp',
+    }).then(result => {
       console.log('call');
       if (result.isConfirmed) {
         paintingApi
@@ -83,7 +84,7 @@ const SubmitPage = () => {
           .then(() => {
             Swal.fire('Đã nộp bài thành công', '', 'success');
           })
-          .catch((error) => {
+          .catch(error => {
             Swal.fire('Nộp bài thất bại', 'Hãy thử lại sau bạn nhé', 'error');
           });
       } else if (result.isDenied) {
@@ -114,10 +115,12 @@ const SubmitPage = () => {
 
   useEffect(() => {
     paintingApi
-      .getAllPaintingByCompetitorId(getAllPaintingByCompetitorIdEndpoint + '/' + userInfo.Id)
-      .then((res) => {
+      .getAllPaintingByCompetitorId(
+        getAllPaintingByCompetitorIdEndpoint + '/' + userInfo.Id,
+      )
+      .then(res => {
         const draftPaintings = res.data.result.list.filter(
-          (painting) => painting.status === 'Draft'
+          painting => painting.status === 'Draft',
         );
         setPaintingCompetitor(draftPaintings[0]);
         setImage(draftPaintings[0]?.image);
@@ -155,7 +158,9 @@ const SubmitPage = () => {
           <div className="row">
             {image && (
               <div className="col-xl-3 col-lg-6 col-md-6 col-12">
-                <h4 style={{ marginBottom: '20px' }} className="title-create-item">
+                <h4
+                  style={{ marginBottom: '20px' }}
+                  className="title-create-item">
                   Xem trước
                 </h4>
                 <div className="sc-card-product">
@@ -180,21 +185,21 @@ const SubmitPage = () => {
               </div>
             )}
             <div
-              className={`${image ? 'col-xl-9 col-lg-6 col-md-12 col-12' : 'col-xl-12 col-lg-12 col-md-12 col-12'}`}
-            >
+              className={`${image ? 'col-xl-9 col-lg-6 col-md-12 col-12' : 'col-xl-12 col-lg-12 col-md-12 col-12'}`}>
               <div className="form-create-item" style={{ left: '50%' }}>
                 <form action="#" onSubmit={handleSubmit(handleSubmitPainting)}>
                   <h4 className="title-create-item">Tải ảnh</h4>
                   <label
                     className={classNames(
                       'uploadFile',
-                      errors.file?.message?.length > 0 ? 'border-danger' : ''
-                    )}
-                  >
+                      errors.file?.message?.length > 0 ? 'border-danger' : '',
+                    )}>
                     {image ? (
                       <span className="filename">PNG, JPG. tối đa 20mb.</span>
                     ) : errors.file ? (
-                      <span className="text-danger h5">{errors.file.message}</span>
+                      <span className="text-danger h5">
+                        {errors.file.message}
+                      </span>
                     ) : (
                       <span className="filename">PNG, JPG. tối đa 20mb.</span>
                     )}
@@ -232,18 +237,23 @@ const SubmitPage = () => {
                       <div id="item-create" className="dropdown">
                         <h4 className="title-create-item">Chủ đề</h4>
                         {errors.topic && (
-                          <span className="text-danger h5">{errors.topic.message}</span>
+                          <span className="text-danger h5">
+                            {errors.topic.message}
+                          </span>
                         )}
                         <Dropdown errors={errors.topic?.message}>
                           <Dropdown.Select
-                            placeholder={getDropdownOptions('topic', 'Chọn chủ đề')}
-                          ></Dropdown.Select>
+                            placeholder={getDropdownOptions(
+                              'topic',
+                              'Chọn chủ đề',
+                            )}></Dropdown.Select>
                           <Dropdown.List>
-                            {topicsData.map((topic) => (
+                            {topicsData.map(topic => (
                               <Dropdown.Option
                                 key={topic.name}
-                                onClick={() => handleSelectDropdownOption('topic', topic)}
-                              >
+                                onClick={() =>
+                                  handleSelectDropdownOption('topic', topic)
+                                }>
                                 {topic.name}
                               </Dropdown.Option>
                             ))}

@@ -1,6 +1,8 @@
+import { memo } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
+// eslint-disable-next-line react-refresh/only-export-components
 function CreateModal({ show, setShow, title, callBack }) {
   const handleClose = () => setShow(false);
   const handleCallBack = () => {
@@ -9,7 +11,11 @@ function CreateModal({ show, setShow, title, callBack }) {
   };
   return (
     <>
-      <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>Tạo {title}</Modal.Title>
         </Modal.Header>
@@ -27,4 +33,5 @@ function CreateModal({ show, setShow, title, callBack }) {
   );
 }
 
-export default CreateModal;
+// eslint-disable-next-line react-refresh/only-export-components
+export default memo(CreateModal);

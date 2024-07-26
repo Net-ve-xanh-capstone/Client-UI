@@ -12,8 +12,10 @@ import {
   deleteSchedule,
   getScheduleByContestId,
 } from '../../api/scheduleStaffApi.js';
-import { deleteTopicRound } from '../../api/topicStaffApi.js';
-import { checkEditButton } from '../../utils/checkEditButton.js';
+import {
+  checkActiveScheduleButton,
+  checkEditButton,
+} from '../../utils/checkEditButton.js';
 import { formatDate } from '../../utils/formatDate.js';
 import DeleteModal from '../DeleteModal';
 import ScheduleForm from '../ScheduleForm/index.jsx';
@@ -98,6 +100,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
     setModalShow(true);
   };
   const sortLevel = levels => {
+    console.log(level);
     for (const level of levels) {
       if (level.round && level.round.length > 0) {
         level.round.sort(
@@ -128,6 +131,10 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
           dataLevel.round.map(data => {
             const roundChedule = schedule?.find(
               item => item.roundId === data.id,
+            );
+            const isActive = checkActiveScheduleButton(
+              data.startTime,
+              data.endTime,
             );
             return (
               <div key={data.id} style={{ padding: '10px' }}>
@@ -185,6 +192,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                                   aria-label="delete"
                                   size="large"
                                   color="primary"
+                                  disabled={isActive}
                                   onClick={() =>
                                     handleOpenEdit(data, scheduleData)
                                   }>
@@ -194,6 +202,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                                   aria-label="delete"
                                   size="large"
                                   color="error"
+                                  disabled={isActive}
                                   onClick={() =>
                                     hanldeOpenDelete(scheduleData?.id)
                                   }>
@@ -207,6 +216,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                     </div>
                     <div className="flex justify-content-end mt-20">
                       <button
+                        disabled={isActive}
                         className="btn btn-outline-primary btn-lg"
                         onClick={() => handleOpenCreate(data, roundChedule)}>
                         Thêm lịch chấm

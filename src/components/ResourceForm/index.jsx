@@ -192,7 +192,7 @@ function ResourceForm({ modalShow, onHide, resourceData, type }) {
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            Thêm tài trợ
+            {type === 'create' ? 'Thêm tài trợ' : 'Chỉnh sửa tài trợ'}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ height: '55vh', overflow: 'hidden' }}>

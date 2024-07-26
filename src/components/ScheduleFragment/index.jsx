@@ -1,61 +1,74 @@
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { IconButton } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { checkEditButton } from '../../utils/checkEditButton.js';
-import DeleteModal from '../DeleteModal';
-import RoundForm from '../RoundForm/index.jsx';
-import styles from './style.module.css';
-import CreateTopicRound from '../CreateTopicRound/index.jsx';
 import { getById } from '../../api/contestStaffApi.js';
+import {
+  deleteSchedule,
+  getScheduleByContestId,
+} from '../../api/scheduleStaffApi.js';
 import { deleteTopicRound } from '../../api/topicStaffApi.js';
+import { checkEditButton } from '../../utils/checkEditButton.js';
+import { formatDate } from '../../utils/formatDate.js';
+import DeleteModal from '../DeleteModal';
 import ScheduleForm from '../ScheduleForm/index.jsx';
+import styles from './style.module.css';
 
 function ScheduleFragment({ scheduleFrag, getContestDetail }) {
   const [type, setType] = useState();
-  const [topic, setTopic] = useState();
+  const [schedule, setSchedule] = useState();
+  const [listExam, setListExam] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
-  const [topicRoundDelete, setTopicRoundDelete] = useState();
+  const [scheDuleIdDelete, setScheduleIdDelete] = useState();
   const isEditing = checkEditButton(scheduleFrag.startTime);
   const [level, setLevel] = useState();
   const [editRoundData, setEditRoundData] = useState();
 
   const resetDetail = () => {
     setModalShow(false);
-    //getContestDetail();
-    getTopic();
+    getLevelRound();
+    getSchedule();
   };
 
   useEffect(() => {
-    getTopic();
+    getLevelRound();
+    getSchedule();
   }, [scheduleFrag]);
 
-  const getTopic = async () => {
+  const getLevelRound = async () => {
     try {
       const { data } = await getById(scheduleFrag.id);
-      setTopic(data?.result);
       setLevel(sortLevel(data?.result.educationalLevel));
     } catch (e) {
       console.log('error', e);
     }
   };
 
-  const hanldeOpenDelete = (roundId, topicId) => {
-    setTopicRoundDelete({ roundId: roundId, topicId: topicId });
+  const getSchedule = async () => {
+    try {
+      const { data } = await getScheduleByContestId(scheduleFrag.id);
+      setSchedule(data?.result);
+    } catch (e) {
+      console.log('err', e);
+    }
+  };
+
+  const hanldeOpenDelete = scheduleId => {
+    setScheduleIdDelete(scheduleId);
     setDeleteModalShow(true);
   };
 
   const handleDelete = async () => {
     try {
-      const { data } = await deleteTopicRound(topicRoundDelete);
+      const { data } = await deleteSchedule(scheDuleIdDelete);
       if (data?.result) {
-        toast.success('Xóa chủ đề thi thành công', {
+        toast.success('Xóa lịch chấm thành công', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
@@ -65,21 +78,25 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
           progress: undefined,
           theme: 'light',
         });
-        //getContestDetail();
-        getTopic();
+        getLevelRound();
       }
     } catch (e) {
       console.log('err', e);
     }
   };
 
-  const handleOpenCreate = data => {
+  const handleOpenCreate = (data, roundSchedule) => {
     setEditRoundData(data);
-    console.log(data);
+    setListExam(roundSchedule?.schedules);
     setType('create');
     setModalShow(true);
   };
 
+  const handleOpenEdit = (data, scheduleData) => {
+    setType(scheduleData);
+    setEditRoundData(data);
+    setModalShow(true);
+  };
   const sortLevel = levels => {
     for (const level of levels) {
       if (level.round && level.round.length > 0) {
@@ -98,88 +115,108 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
           modalShow={modalShow}
           onHide={resetDetail}
           roundData={editRoundData}
+          scheduleData={listExam}
           type={type}
         />
         <DeleteModal
           show={deleteModalShow}
           setShow={setDeleteModalShow}
-          title={'vòng thi'}
+          title={'lịch chấm'}
           callBack={handleDelete}
         />
         {level.map(dataLevel =>
-          dataLevel.round.map(data => (
-            <div key={data.id} style={{ padding: '10px' }}>
-              <Accordion>
-                <AccordionSummary
-                  style={{ fontSize: '16px' }}
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1-content"
-                  id="panel1-header">
-                  <div>
-                    {data.name} - {dataLevel.level}
-                  </div>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <div className={styles.roundContainer}>
-                    <ul className={styles.roundTableResponse}>
-                      <li className={styles.roundHeader}>
-                        <div className={styles.col}>Giám khảo</div>
-                        <div className={styles.col}>Ngày chấm</div>
-                        <div className={styles.col}>Mô tả</div>
-                        <div className={styles.col}>Trạng thái</div>
-                      </li>
-
-                      {data.roundTopic.length === 0 ? (
-                        <div className="text-center">
-                          <h4>Chưa chọn chủ đề nào</h4>
-                        </div>
-                      ) : (
-                        data.roundTopic?.map((topicData, index) => (
-                          <li key={index} className={styles.tableRow}>
-                            <div className={styles.col} data-label="Tên chủ đề">
-                              {topicData.topic.name}
-                            </div>
-
-                            <div className={styles.col} data-label="Mô tả">
-                              <div>
-                                <>{topicData.topic.description}</>
+          dataLevel.round.map(data => {
+            const roundChedule = schedule?.find(
+              item => item.roundId === data.id,
+            );
+            return (
+              <div key={data.id} style={{ padding: '10px' }}>
+                <Accordion>
+                  <AccordionSummary
+                    style={{ fontSize: '16px' }}
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1-content"
+                    id="panel1-header">
+                    <div>
+                      {data.name} - {dataLevel.level}
+                    </div>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <div className={styles.roundContainer}>
+                      <ul className={styles.roundTableResponse}>
+                        <li className={styles.roundHeader}>
+                          <div className={styles.col}>Giám khảo</div>
+                          <div className={styles.col}>Ngày chấm</div>
+                          <div className={styles.col}>Mô tả</div>
+                          <div className={styles.col}>Trạng thái</div>
+                        </li>
+                        {roundChedule?.schedules?.length === 0 ? (
+                          <div className="text-center">
+                            <h4>Chưa có giám khảo</h4>
+                          </div>
+                        ) : (
+                          roundChedule?.schedules?.map(scheduleData => (
+                            <li
+                              key={scheduleData.id}
+                              className={styles.tableRow}>
+                              <div
+                                className={styles.col}
+                                data-label="Tên giám khảo">
+                                {scheduleData?.examinerName}
                               </div>
-                            </div>
-                            <div className={styles.col} data-label="Mô tả">
-                              <div>
-                                <>{topicData.topic.description}</>
+
+                              <div
+                                className={styles.col}
+                                data-label="Ngày chấm">
+                                <div>{formatDate(scheduleData?.endDate)}</div>
                               </div>
-                            </div>
-                            <div className={styles.col} data-label="Tương tác">
-                              <IconButton
-                                aria-label="delete"
-                                size="large"
-                                color="error"
-                                onClick={() =>
-                                  hanldeOpenDelete(
-                                    data?.id,
-                                    topicData?.topic.id,
-                                  )
-                                }>
-                                <DeleteIcon />
-                              </IconButton>
-                            </div>
-                          </li>
-                        ))
-                      )}
-                    </ul>
-                  </div>
-                  <div className="flex justify-content-end mt-20">
-                    <button
-                      className="btn btn-outline-primary btn-lg"
-                      onClick={() => handleOpenCreate(data)}>
-                      Thêm lịch chấm
-                    </button>
-                  </div>
-                </AccordionDetails>
-              </Accordion>
-            </div>
-          )),
+                              <div className={styles.col} data-label="Mô tả">
+                                <div>{scheduleData?.description}</div>
+                              </div>
+                              <div
+                                className={styles.col}
+                                data-label="Trạng thái">
+                                <span>
+                                  {scheduleData?.status === 'Rating'
+                                    ? 'Chưa chấm'
+                                    : 'Đã chấm'}
+                                </span>
+                                <IconButton
+                                  aria-label="delete"
+                                  size="large"
+                                  color="primary"
+                                  onClick={() =>
+                                    handleOpenEdit(data, scheduleData)
+                                  }>
+                                  <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                  aria-label="delete"
+                                  size="large"
+                                  color="error"
+                                  onClick={() =>
+                                    hanldeOpenDelete(scheduleData?.id)
+                                  }>
+                                  <DeleteIcon />
+                                </IconButton>
+                              </div>
+                            </li>
+                          ))
+                        )}
+                      </ul>
+                    </div>
+                    <div className="flex justify-content-end mt-20">
+                      <button
+                        className="btn btn-outline-primary btn-lg"
+                        onClick={() => handleOpenCreate(data, roundChedule)}>
+                        Thêm lịch chấm
+                      </button>
+                    </div>
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+            );
+          }),
         )}
       </>
     )

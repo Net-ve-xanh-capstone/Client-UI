@@ -32,7 +32,6 @@ function App() {
             <Route path={data.path} element={data.component} key={index}>
               {data.children &&
                 data.children.map(val => {
-                  console.log('reload');
                   return (
                     <Route
                       path={val.path}

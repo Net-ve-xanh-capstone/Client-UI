@@ -67,14 +67,15 @@
 
 .painting_name {
     width: 100%;
-    display: block;
-    text-align: start;
     margin-bottom: 1rem;
+
+    display: flex;
+    justify-content: space-between;
 }
 
 .content .painting_name>h5 {
     color: #5142fc !important;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold !important;
 }
 
@@ -92,11 +93,11 @@
 }
 
 .field>.title_field p {
-    font-size: 16px;
+    font-size: 13px;
 }
 
 .field>.des_field p {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
 }
 
@@ -112,31 +113,36 @@
 .btn_trigger {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 .btn_find {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border-radius: calc(2rem - 0.5rem);
     background-color: #5142fc;
     color: white;
     transition: all 0.2s ease;
     cursor: pointer;
     padding: 1.2rem 1rem;
+    width: 45%;
+
+    display: flex;
+    justify-content: center;
 }
 
 .status {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: calc(2rem - 0.5rem);
-    background-color: #47a432;
+    border-radius: 0.625rem;
     color: white;
     transition: all 0.2s ease;
     cursor: pointer;
-    padding: 1.2rem 1rem;
+    padding: 0.3rem 1rem;
+}
+
+.status h5 {
+    font-size: 1.2rem !important;
+    color: white;
 }
 
 .btn_find h5 {

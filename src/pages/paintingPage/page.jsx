@@ -99,7 +99,7 @@ function PaintingPage() {
   };
 
   const options = [
-    { value: 'Submmitted', label: 'Submmitted' },
+    { value: 'Submitted', label: 'Submitted' },
     { value: 'Accepted', label: 'Accepted' },
     { value: 'Rejected', label: 'Rejected' },
   ];
@@ -145,7 +145,7 @@ function PaintingPage() {
     setLoadingPage(true);
     try {
       const res = await paintingApi.getAllPaintingByPage(
-        `paintings/list?PageSize=6&PageNumber=${currPage}`,
+        `paintings/list?PageSize=8&PageNumber=${currPage}`,
       );
       const data = await res.data.result;
       setListPainting(data.list);
@@ -213,7 +213,7 @@ function PaintingPage() {
     setLoadingPage(true);
     try {
       const res = await paintingApi.filterPainting(
-        `paintings/filterpainting?PageSize=6&PageNumber=${pageNumer}`,
+        `paintings/filterpainting?PageSize=8&PageNumber=${pageNumer}`,
         payload,
       );
       const data = res.data.result.list;
@@ -243,17 +243,21 @@ function PaintingPage() {
         modalShow={openCreate}
         onHide={handlePostDone}
         fetchData={fetchData}
+        setPageNumber={setPageNumber}
       />
       <ModalEditPainting
         modalShow={openEdit}
         onHide={handleEditDone}
         dataPainting={paintingByid}
         fetchData={fetchData}
+        setPageNumber={setPageNumber}
       />
       <div className={styles.container}>
-        <h2 className={`tf-title pb-20 ${styles.main_title}`}>
-          Quản lý bài thi
-        </h2>
+        <div className={styles.title_box}>
+          <h2 className={`tf-title pb-20 ${styles.main_title}`}>
+            Quản lý bài thi
+          </h2>
+        </div>
         <div className={styles.section}>
           <div className={styles.filter_box}>
             <div className={styles.heros}>
@@ -267,6 +271,16 @@ function PaintingPage() {
                     setSearching(prev => ({ ...prev, code: e.target.value }))
                   }
                 />
+              </div>
+              <div className={styles.btn_searching}>
+                <span
+                  className={styles.btn_find}
+                  onClick={() => findBySearching()}>
+                  <h5>Tìm kiếm</h5>
+                </span>
+                <span className={styles.btn_find} onClick={() => clearInput()}>
+                  <h5>Xoá lọc</h5>
+                </span>
               </div>
             </div>
             <div className={styles.filter_body}>
@@ -371,21 +385,11 @@ function PaintingPage() {
                 }
               />
             </div>
-            <div className={styles.btn_searching}>
-              <span className={styles.btn_find} onClick={() => clearInput()}>
-                <h5>Xoá lọc</h5>
-              </span>
-              <span
-                className={styles.btn_find}
-                onClick={() => findBySearching()}>
-                <h5>Tìm kiếm</h5>
-              </span>
-            </div>
           </div>
           <div className={styles.expainting}>
             <div className={styles.list_paint}>
               {loadingPage ? (
-                Array.from(new Array(6)).map((_, idx) => (
+                Array.from(new Array(8)).map((_, idx) => (
                   <Skeleton
                     className={styles.cared_skeleton}
                     key={idx}
@@ -413,6 +417,7 @@ function PaintingPage() {
               count={totalPage}
               color="secondary"
               size="large"
+              page={pageNumber}
               onChange={handleChange}
               sx={{
                 width: '70%',

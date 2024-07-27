@@ -20,6 +20,8 @@ import {
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../store/auth/authSlice.js';
 
 const SideBarStaff = ({
   collapsed,
@@ -30,7 +32,7 @@ const SideBarStaff = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
-
+  const dispatch = useDispatch();
   const [activeItem, setActiveItem] = useState('contest');
 
   const listContent = [
@@ -67,19 +69,19 @@ const SideBarStaff = ({
     {
       icon: <FaGem />,
       path: '/sponsor',
-      name: 'Sponsors',
+      name: 'Nhà tài trợ',
       new: false,
     },
     {
       icon: <ColorLensIcon />,
       path: '/painting',
-      name: 'Painting',
+      name: 'Bài dự thi',
       new: false,
     },
     {
       icon: <AccountBoxIcon />,
       path: '/competitor',
-      name: 'Competitor',
+      name: 'Thí sinh',
       new: false,
     },
   ];
@@ -88,6 +90,11 @@ const SideBarStaff = ({
     if (val) {
       navigate(`/staff-management${val}`);
     }
+  };
+
+  const triggerLogout = () => {
+    dispatch(logout());
+    navigate('/login');
   };
 
   useEffect(() => {
@@ -144,9 +151,12 @@ const SideBarStaff = ({
       {/* Footer */}
       <SidebarFooter style={{ textAlign: 'center' }}>
         <div className="sidebar-btn-wrapper" style={{ padding: '16px' }}>
-          <Link className="sidebar-btn" style={{ cursor: 'pointer' }} to="/">
+          <div
+            className="sidebar-btn"
+            style={{ cursor: 'pointer' }}
+            onClick={() => triggerLogout()}>
             <span>ĐĂNG XUẤT</span>
-          </Link>
+          </div>
         </div>
       </SidebarFooter>
     </ProSidebar>

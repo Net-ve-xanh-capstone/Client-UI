@@ -15,6 +15,7 @@ import * as yup from 'yup';
 import { color } from '../constant/Color.js';
 const Login = () => {
   const [open, setOpen] = useState(false);
+  const { userInfo } = useSelector(state => state.auth);
   // open dialog
   const schema = yup.object().shape({
     username: yup.string().required('Vui lòng nhập username của bạn'),
@@ -57,8 +58,13 @@ const Login = () => {
 
   useEffect(() => {
     if (success || jwtToken) {
-      reset();
-      navigate('/');
+      if (userInfo.role === 'Staff') {
+        reset();
+        navigate('/staff-management/contest');
+      } else {
+        reset();
+        navigate('/');
+      }
     }
     if (error) {
       setOpen(true);

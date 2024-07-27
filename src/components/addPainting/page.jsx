@@ -9,7 +9,7 @@ import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.j
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 import styles from './page.module.css';
 
-function ModalAddPainting({ modalShow, onHide, fetchData }) {
+function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
   const fieldText = useRef(null);
 
   const [imageLoaded, setImageLoaded] = useState(null);
@@ -295,6 +295,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData }) {
         payload,
       );
       resetFieldInputValues();
+      setPageNumber(1);
       fetchData(1);
       onHide();
       toast.success('Bài thi đã được thêm vào danh sách', {

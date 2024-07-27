@@ -10,6 +10,7 @@ import { Fallback } from '../../../constant/Fallback';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../../store/auth/authSlice';
 
+// eslint-disable-next-line react-refresh/only-export-components
 const HeaderVersion2 = () => {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
@@ -21,11 +22,15 @@ const HeaderVersion2 = () => {
       window.removeEventListener('scroll', isSticky);
     };
   });
-  const isSticky = (e) => {
+  const isSticky = e => {
     const header = document.querySelector('.js-header');
     const scrollTop = window.scrollY;
-    scrollTop >= 300 ? header.classList.add('is-fixed') : header.classList.remove('is-fixed');
-    scrollTop >= 400 ? header.classList.add('is-small') : header.classList.remove('is-small');
+    scrollTop >= 300
+      ? header.classList.add('is-fixed')
+      : header.classList.remove('is-fixed');
+    scrollTop >= 400
+      ? header.classList.add('is-small')
+      : header.classList.remove('is-small');
   };
 
   const menuLeft = useRef(null);
@@ -37,17 +42,17 @@ const HeaderVersion2 = () => {
   };
 
   const [activeIndex, setActiveIndex] = useState(null);
-  const handleOnClick = (index) => {
+  const handleOnClick = index => {
     setActiveIndex(index);
   };
 
-  const { jwtToken, userInfo } = useSelector((state) => state.auth);
+  const { jwtToken, userInfo } = useSelector(state => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
   };
 
-  const hasAccess = (submenu) => {
+  const hasAccess = submenu => {
     if (submenu.public) {
       return true;
     }
@@ -58,7 +63,10 @@ const HeaderVersion2 = () => {
   };
 
   return (
-    <header id="header_main" className="header_1 header_2 style2 js-header" ref={headerRef}>
+    <header
+      id="header_main"
+      className="header_1 header_2 style2 js-header"
+      ref={headerRef}>
       <div className="themesflat-container">
         <div className="row">
           <div className="col-md-12">
@@ -71,28 +79,33 @@ const HeaderVersion2 = () => {
                     </Link>
                   </div>
                 </div>
-                <div className="mobile-button" ref={btnToggle} onClick={menuToggle}>
+                <div
+                  className="mobile-button"
+                  ref={btnToggle}
+                  onClick={menuToggle}>
                   <span></span>
                 </div>
                 <div className="question-form">
                   <form action="#" method="get">
-                    <input type="text" placeholder="Type to search..." required />
+                    <input
+                      type="text"
+                      placeholder="Type to search..."
+                      required
+                    />
                     <button type="submit">
                       <svg
                         width="20"
                         height="20"
                         viewBox="0 0 20 20"
                         fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
+                        xmlns="http://www.w3.org/2000/svg">
                         <mask
                           id="mask0_334_638"
                           maskUnits="userSpaceOnUse"
                           x="1"
                           y="1"
                           width="18"
-                          height="17"
-                        >
+                          height="17">
                           <path
                             fillRule="evenodd"
                             clipRule="evenodd"
@@ -119,8 +132,7 @@ const HeaderVersion2 = () => {
                           x="13"
                           y="13"
                           width="6"
-                          height="6"
-                        >
+                          height="6">
                           <path
                             fillRule="evenodd"
                             clipRule="evenodd"
@@ -153,20 +165,18 @@ const HeaderVersion2 = () => {
                         onClick={() => handleOnClick(index)}
                         className={`menu-item ${
                           data.namesub ? 'menu-item-has-children' : ''
-                        } ${activeIndex === index ? 'active' : ''} `}
-                      >
+                        } ${activeIndex === index ? 'active' : ''} `}>
                         <Link to="#">{data.name}</Link>
                         {data.namesub && (
                           <ul className="sub-menu">
-                            {data.namesub.filter(hasAccess).map((submenu) => (
+                            {data.namesub.filter(hasAccess).map(submenu => (
                               <li
                                 key={submenu.id}
                                 className={
                                   window.location.pathname === submenu.links
                                     ? 'menu-item current-item'
                                     : 'menu-item'
-                                }
-                              >
+                                }>
                                 <Link to={submenu.links}>{submenu.sub}</Link>
                               </li>
                             ))}
@@ -181,15 +191,13 @@ const HeaderVersion2 = () => {
                     {jwtToken ? (
                       <Link
                         to="/"
-                        className="sc-button header-slider style style-1 fl-button pri-1"
-                      >
+                        className="sc-button header-slider style style-1 fl-button pri-1">
                         <span onClick={handleLogout}>Đăng xuất</span>
                       </Link>
                     ) : (
                       <Link
                         to="/login"
-                        className="sc-button header-slider style style-1 fl-button pri-1"
-                      >
+                        className="sc-button header-slider style style-1 fl-button pri-1">
                         <span>Đăng nhập</span>
                       </Link>
                     )}
@@ -212,20 +220,27 @@ const HeaderVersion2 = () => {
                         <div className="d-flex align-items-center mt-10">
                           <img className="coin" src={coin} alt="/" />
                           <div className="info ml-10">
-                            <p className="text-sm font-book text-gray-400">Balance</p>
-                            <p className="w-full text-sm font-bold text-green-500">16.58 ETH</p>
+                            <p className="text-sm font-book text-gray-400">
+                              Balance
+                            </p>
+                            <p className="w-full text-sm font-bold text-green-500">
+                              16.58 ETH
+                            </p>
                           </div>
                         </div>
                         <div className="hr"></div>
                         <div className="links mt-20">
                           <Link to="#">
-                            <i className="fab fa-accusoft"></i> <span> My items</span>
+                            <i className="fab fa-accusoft"></i>{' '}
+                            <span> My items</span>
                           </Link>
                           <a className="mt-10" href="/edit-profile">
-                            <i className="fas fa-pencil-alt"></i> <span> Edit Profile</span>
+                            <i className="fas fa-pencil-alt"></i>{' '}
+                            <span> Edit Profile</span>
                           </a>
                           <a className="mt-10" href="/login" id="logout">
-                            <i className="fal fa-sign-out"></i> <span> Logout</span>
+                            <i className="fal fa-sign-out"></i>{' '}
+                            <span> Logout</span>
                           </a>
                         </div>
                       </div>
@@ -242,5 +257,5 @@ const HeaderVersion2 = () => {
 };
 
 export default withErrorBoundary(HeaderVersion2, {
-  FallbackComponent: Fallback
+  FallbackComponent: Fallback,
 });

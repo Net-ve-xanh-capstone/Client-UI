@@ -1,3 +1,17 @@
+.title_box {
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.title_box .main_title {
+    cursor: default;
+    background: var(--linear);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--pink);
+    width: max-content;
+}
+
 .container {
     width: 100%;
     height: 100vh;
@@ -18,9 +32,6 @@
     gap: 4rem;
 }
 
-.main_title {
-    color: #5142fc !important;
-}
 
 /*--- Line filter ---*/
 .filter_box {
@@ -36,7 +47,7 @@
     height: max-content;
     display: flex;
     gap: 2rem;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
     align-items: center;
 }
@@ -44,14 +55,15 @@
 .heros {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    gap: 2rem;
     height: 5rem;
 }
 
 /* line filter by name */
 .searchbox {
     height: 100%;
-    width: 60rem;
+    width: 80rem;
     border-radius: 2rem;
 
     background: transparent;
@@ -270,7 +282,7 @@
         height: auto;
 
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
 
         column-gap: 2rem;
         row-gap: 3rem;
@@ -287,10 +299,9 @@
 /* responsive */
 
 .btn_searching {
-    width: 100%;
+    width: max-content;
     display: flex;
     gap: 2rem;
-    justify-content: center;
 }
 
 .btn_find {

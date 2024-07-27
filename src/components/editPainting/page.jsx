@@ -4,14 +4,18 @@ import Modal from 'react-bootstrap/Modal';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { paintingApi } from '../../api/paintingApi.js';
-import { getAllRoundStaff, roundTopicById } from '../../api/roundStaffApi.js';
+import { roundTopicById } from '../../api/roundStaffApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
-import { isEmail, isPhoneNumber } from '../../utils/validation.js';
-import styles from './page.module.css';
-import Multiselect from 'multiselect-react-dropdown';
 import { parseDateEdit } from '../../utils/formatDate.js';
+import styles from './page.module.css';
 
-function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
+function ModalEditPainting({
+  modalShow,
+  onHide,
+  fetchData,
+  dataPainting,
+  setPageNumber,
+}) {
   const fieldText = useRef(null);
 
   const [imageLoaded, setImageLoaded] = useState(null);
@@ -265,6 +269,7 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
         progress: undefined,
         theme: 'light',
       });
+      setPageNumber(1);
       fetchData(1);
       onHide();
     } catch (error) {
@@ -402,7 +407,7 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            Tạo bài thi
+            Cập nhật bài dự thi
           </Modal.Title>
         </Modal.Header>
         <Modal.Body
@@ -630,23 +635,25 @@ function ModalEditPainting({ modalShow, onHide, fetchData, dataPainting }) {
                 </div>
               </div>
             </div>
-            <div className={styles.btn_trigger}>
-              <span
-                className={styles.btn_find}
-                onClick={() => postImage('Submitted')}>
-                <h5>Lưu</h5>
-              </span>
-              <span
-                className={styles.btn_find}
-                onClick={() => postImage('Rejected')}>
-                <h5>Không hợp lệ</h5>
-              </span>
-              <span
-                className={styles.btn_find}
-                onClick={() => postImage('Accepted')}>
-                <h5>Hợp lệ</h5>
-              </span>
-            </div>
+            {dataPainting?.status === 'Accepted' && (
+              <div className={styles.btn_trigger}>
+                <span
+                  className={styles.btn_find}
+                  onClick={() => postImage('Submitted')}>
+                  <h5>Lưu</h5>
+                </span>
+                <span
+                  className={styles.btn_find}
+                  onClick={() => postImage('Rejected')}>
+                  <h5>Không hợp lệ</h5>
+                </span>
+                <span
+                  className={styles.btn_find}
+                  onClick={() => postImage('Accepted')}>
+                  <h5>Hợp lệ</h5>
+                </span>
+              </div>
+            )}
           </div>
         </Modal.Body>
       </Modal>

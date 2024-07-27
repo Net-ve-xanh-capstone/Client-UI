@@ -121,24 +121,24 @@ function CompetitorManage() {
         ),
       },
     },
-    {
-      name: 'status',
-      label: 'TRẠNG THÁI',
-      options: {
-        customBodyRender: (value, _) => {
-          return (
-            <>
-              <Switch
-                checked={value === 'Active'}
-                size="small"
-                color="success"
-                disabled
-              />
-            </>
-          );
-        },
-      },
-    },
+    // {
+    //   name: 'status',
+    //   label: 'TRẠNG THÁI',
+    //   options: {
+    //     customBodyRender: (value, _) => {
+    //       return (
+    //         <>
+    //           <Switch
+    //             checked={value === 'Active'}
+    //             size="small"
+    //             color="success"
+    //             disabled
+    //           />
+    //         </>
+    //       );
+    //     },
+    //   },
+    // },
     {
       name: 'id',
       label: 'TƯƠNG TÁC',
@@ -164,16 +164,15 @@ function CompetitorManage() {
                 <LockOpenIcon />
               </IconButton>
             )}
-            {tableData.rowData[4] === 'Active' && (
-              <IconButton
-                aria-label="delete"
-                size="small"
-                color="info"
-                disabled={loadingBlock}
-                onClick={() => handleOpenDetail(value)}>
-                <RemoveRedEyeIcon />
-              </IconButton>
-            )}
+
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="info"
+              disabled={loadingBlock}
+              onClick={() => handleOpenDetail(value)}>
+              <RemoveRedEyeIcon />
+            </IconButton>
           </div>
         ),
       },

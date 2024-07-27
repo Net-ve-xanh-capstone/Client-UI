@@ -17,7 +17,25 @@ function CardPainting({ items, getPaintingByID }) {
       <div className={styles.content}>
         <span className={styles.painting_name}>
           <h5>{items.name}</h5>
+          <span
+            className={styles.status}
+            style={{
+              backgroundColor:
+                items.status === 'Accepted' || items.status === 'Submitted'
+                  ? 'rgba(57, 153, 24, 0.7)'
+                  : 'rgba(255, 0, 0, 0.7)',
+            }}>
+            <h5>{items.status}</h5>
+          </span>
         </span>
+        <div className={`${styles.field} ${styles.title_field}`}>
+          <div className={styles.title_field}>
+            <p>Mã thí sinh: </p>
+          </div>
+          <div className={styles.des_field}>
+            <p>{items.competitorCode}</p>
+          </div>
+        </div>
         <div className={`${styles.field} ${styles.title_field}`}>
           <div className={styles.title_field}>
             <p>Tác giả: </p>
@@ -50,23 +68,8 @@ function CardPainting({ items, getPaintingByID }) {
             <p>{items.roundName}</p>
           </div>
         </div>
-        <div className={`${styles.field} ${styles.title_field}`}>
-          <div className={styles.title_field}>
-            <p>Thông điệp: </p>
-          </div>
-          <div className={styles.des_field}>
-            <p>
-              {items.description.length > 100
-                ? cutString(items.description, 100) + '...'
-                : items.description}
-            </p>
-          </div>
-        </div>
       </div>
       <div className={styles.btn_trigger}>
-        <span className={styles.status}>
-          <h5>{items.status}</h5>
-        </span>
         <span
           className={styles.btn_find}
           onClick={() => getPaintingByID(items.id)}>

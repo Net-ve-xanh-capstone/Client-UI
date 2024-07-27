@@ -87,7 +87,7 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
-      title: 'Lịch trình',
+      title: 'Lịch chấm thi',
       icon: <CalendarMonth />,
       component: (
         <ScheduleFragment

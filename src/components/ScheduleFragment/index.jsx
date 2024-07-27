@@ -12,7 +12,10 @@ import {
   deleteSchedule,
   getScheduleByContestId,
 } from '../../api/scheduleStaffApi.js';
-import { checkEditButton } from '../../utils/checkEditButton.js';
+import {
+  checkActiveScheduleButton,
+  checkEditButton,
+} from '../../utils/checkEditButton.js';
 import { formatDate } from '../../utils/formatDate.js';
 import DeleteModal from '../DeleteModal';
 import ScheduleForm from '../ScheduleForm/index.jsx';
@@ -28,6 +31,8 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
   const isEditing = checkEditButton(scheduleFrag.startTime);
   const [level, setLevel] = useState();
   const [editRoundData, setEditRoundData] = useState();
+  const [preliminaryList, setPreliminaryList] = useState([]);
+  const [finalList, setFinalList] = useState([]);
 
   const resetDetail = () => {
     setModalShow(false);
@@ -97,14 +102,113 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
     setModalShow(true);
   };
   const sortLevel = levels => {
+    const newPreliminaryList = [];
+    const newFinalList = [];
+
     for (const level of levels) {
       if (level.round && level.round.length > 0) {
+        const levelName = level.level;
+        for (const round of level.round) {
+          if (round?.name === 'Vòng Sơ Khảo') {
+            newPreliminaryList.push({ ...round, levelName });
+          } else if (round?.name === 'Vòng Chung Kết') {
+            newFinalList.push({ ...round, levelName });
+          }
+        }
         level.round.sort(
           (a, b) => new Date(a.startTime) - new Date(b.startTime),
         );
       }
     }
+
+    setPreliminaryList(newPreliminaryList);
+    setFinalList(newFinalList);
+
+    console.log('listPe', newPreliminaryList, 'ListFinal', newFinalList);
     return levels;
+  };
+
+  const renderRound = data => {
+    const roundChedule = schedule?.find(item => item.roundId === data.id);
+    const isActive = checkActiveScheduleButton(data.startTime, data.endTime);
+
+    return (
+      <div key={data.id} style={{ padding: '10px' }}>
+        <Accordion>
+          <AccordionSummary
+            style={{ fontSize: '16px' }}
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header">
+            <div>
+              {data.name} - {data.levelName}
+            </div>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div className={styles.roundContainer}>
+              <ul className={styles.roundTableResponse}>
+                <li className={styles.roundHeader}>
+                  <div className={styles.col}>Giám khảo</div>
+                  <div className={styles.col}>Ngày chấm</div>
+                  <div className={styles.col}>Mô tả</div>
+                  <div className={styles.col}>Trạng thái</div>
+                </li>
+                {roundChedule?.schedules?.length === 0 ? (
+                  <div className="text-center">
+                    <h4>Chưa có giám khảo</h4>
+                  </div>
+                ) : (
+                  roundChedule?.schedules?.map(scheduleData => (
+                    <li key={scheduleData.id} className={styles.tableRow}>
+                      <div className={styles.col} data-label="Tên giám khảo">
+                        {scheduleData?.examinerName}
+                      </div>
+                      <div className={styles.col} data-label="Ngày chấm">
+                        <div>{formatDate(scheduleData?.endDate)}</div>
+                      </div>
+                      <div className={styles.col} data-label="Mô tả">
+                        <div>{scheduleData?.description}</div>
+                      </div>
+                      <div className={styles.col} data-label="Trạng thái">
+                        <span>
+                          {scheduleData?.status === 'Rating'
+                            ? 'Chưa chấm'
+                            : 'Đã chấm'}
+                        </span>
+                        <IconButton
+                          aria-label="edit"
+                          size="large"
+                          color="primary"
+                          disabled={isActive}
+                          onClick={() => handleOpenEdit(data, scheduleData)}>
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          aria-label="delete"
+                          size="large"
+                          color="error"
+                          disabled={isActive}
+                          onClick={() => hanldeOpenDelete(scheduleData?.id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </div>
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
+            <div className="flex justify-content-end mt-20">
+              <button
+                disabled={isActive}
+                className="btn btn-outline-primary btn-lg"
+                onClick={() => handleOpenCreate(data, roundChedule)}>
+                Thêm lịch chấm
+              </button>
+            </div>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+    );
   };
 
   return (
@@ -123,100 +227,9 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
           title={'lịch chấm'}
           callBack={handleDelete}
         />
-        {level.map(dataLevel =>
-          dataLevel.round.map(data => {
-            const roundChedule = schedule?.find(
-              item => item.roundId === data.id,
-            );
-            return (
-              <div key={data.id} style={{ padding: '10px' }}>
-                <Accordion>
-                  <AccordionSummary
-                    style={{ fontSize: '16px' }}
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1-content"
-                    id="panel1-header">
-                    <div>
-                      {data.name} - {dataLevel.level}
-                    </div>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <div className={styles.roundContainer}>
-                      <ul className={styles.roundTableResponse}>
-                        <li className={styles.roundHeader}>
-                          <div className={styles.col}>Giám khảo</div>
-                          <div className={styles.col}>Ngày chấm</div>
-                          <div className={styles.col}>Mô tả</div>
-                          <div className={styles.col}>Trạng thái</div>
-                        </li>
-                        {roundChedule?.schedules?.length === 0 ? (
-                          <div className="text-center">
-                            <h4>Chưa có giám khảo</h4>
-                          </div>
-                        ) : (
-                          roundChedule?.schedules?.map(scheduleData => (
-                            <li
-                              key={scheduleData.id}
-                              className={styles.tableRow}>
-                              <div
-                                className={styles.col}
-                                data-label="Tên giám khảo">
-                                {scheduleData?.examinerName}
-                              </div>
 
-                              <div
-                                className={styles.col}
-                                data-label="Ngày chấm">
-                                <div>{formatDate(scheduleData?.endDate)}</div>
-                              </div>
-                              <div className={styles.col} data-label="Mô tả">
-                                <div>{scheduleData?.description}</div>
-                              </div>
-                              <div
-                                className={styles.col}
-                                data-label="Trạng thái">
-                                <span>
-                                  {scheduleData?.status === 'Rating'
-                                    ? 'Chưa chấm'
-                                    : 'Đã chấm'}
-                                </span>
-                                <IconButton
-                                  aria-label="delete"
-                                  size="large"
-                                  color="primary"
-                                  onClick={() =>
-                                    handleOpenEdit(data, scheduleData)
-                                  }>
-                                  <EditIcon />
-                                </IconButton>
-                                <IconButton
-                                  aria-label="delete"
-                                  size="large"
-                                  color="error"
-                                  onClick={() =>
-                                    hanldeOpenDelete(scheduleData?.id)
-                                  }>
-                                  <DeleteIcon />
-                                </IconButton>
-                              </div>
-                            </li>
-                          ))
-                        )}
-                      </ul>
-                    </div>
-                    <div className="flex justify-content-end mt-20">
-                      <button
-                        className="btn btn-outline-primary btn-lg"
-                        onClick={() => handleOpenCreate(data, roundChedule)}>
-                        Thêm lịch chấm
-                      </button>
-                    </div>
-                  </AccordionDetails>
-                </Accordion>
-              </div>
-            );
-          }),
-        )}
+        {preliminaryList.map(renderRound)}
+        {finalList.map(renderRound)}
       </>
     )
   );

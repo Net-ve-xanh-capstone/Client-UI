@@ -70,7 +70,7 @@ const Contest = () => {
                               <div className="slider-item">
                                 <div className="sc-card-product">
                                   <div className="card-media">
-                                    <Link to="/item-details-01">
+                                    <Link to={`/contest-detail/${contest?.id}`}>
                                       <img src={defaultImage} alt="axies" />
                                     </Link>
 

@@ -5,9 +5,9 @@ const DropdownContext = createContext();
 function DropdownProvider(props) {
   const [show, setShow] = useState(false);
   const toggle = () => {
+    if (props.disabled) return;
     setShow(!show);
   };
-
   const errors = props.errors || {};
 
   const form = useForm();

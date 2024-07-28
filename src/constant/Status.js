@@ -4,7 +4,22 @@ export const contestStatus =  {
 }
 
 export const paintingStatus = {
-  SUBMITED: 'Submited',
+  SUBMITTED: 'Submitted',
   DRAFT : 'Draft',
   ACCEPTED: 'Accepted',
 }
+
+export const paintingStatusDisable = [
+  'Submitted', 'Accepted',
+]
+export const paintingStatusArray = [
+  'Draft', 
+  'Submitted',
+  'Delete', 
+  'Accepted', 
+  'Rejected', 
+  'Pass', 
+  'NotPass',
+  'FinalRound',
+  'HasPrizes',
+]

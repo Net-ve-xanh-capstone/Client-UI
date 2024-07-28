@@ -3504,6 +3504,16 @@ input.number::-webkit-inner-spin-button {
     width: 45%;
 }
 
-.color-disabled {
-    color: #b5b5b5 !important;
+.button-read-only {
+    background-color: rgba(173, 173, 173, 0.73) !important;
+    color: rgba(13, 13, 17, 0.71) !important;
+    cursor: not-allowed;
+}
+
+.read-only {
+    cursor: not-allowed;
+}
+
+.select-only {
+    cursor: pointer;
 }

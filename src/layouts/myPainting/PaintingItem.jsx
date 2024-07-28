@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import CardCollectionModal from '../CardCollectionModal.jsx';
+import CardCollectionModal from './CardCollectionModal.jsx';
 import LoadingSkeleton from '../../components/loading/LoadingSkeleton.jsx';
 import { Grid } from '@mui/material';
 import { formatDate } from '../../utils/formatDate.js';

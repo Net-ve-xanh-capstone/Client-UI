@@ -87,7 +87,7 @@ const ProfilePage = () => {
       fullname: input.fullname,
       birthday: birthday,
       address: input.address,
-      avatar: url,
+      avatar: url || imageUrl,
     }
     Swal.fire({
       title: 'Bạn có chắc chắn cập nhật?',

@@ -15,7 +15,9 @@ const List = ({ children }) => {
             lineHeight: '28px',
             borderRadius: '4px',
             background: 'transparent',
-            color: '#8a8aa0'
+            color: '#8a8aa0',
+            overflowY: 'auto',
+            height: '180px',
           }}
         >
           {children}

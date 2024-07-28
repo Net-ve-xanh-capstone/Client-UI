@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
@@ -12,8 +12,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { masterApi } from '../api/masterApi.js';
 import { useSelector } from 'react-redux';
-import { Dialog, DialogContent, IconButton, styled } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close.js';
+import { debounce } from 'lodash';
 
 const GET_ALL_COLLECTIONS_BY_ACCOUNT_ID = 'collections/getcollectionbyaccountid'
 const CREATE_COLLECTION = 'collections'
@@ -36,9 +35,11 @@ const CardCollectionModal = props => {
   
   const [indexTab, setIndexTab] = useState(0);
   const [collections, setCollections] = useState([]);
+  const [filterCollections, setFilterCollections] = useState([]);
   const [open, setOpen] = useState(false);
   const [collectionId, setCollectionId] = useState('');
   const [message, setMessage] = useState('');
+  const [search, setSearch] = useState('');
   const userInfo = useSelector(state => state.auth.userInfo);
   const paintingId = props.paintingId;
 
@@ -51,10 +52,6 @@ const CardCollectionModal = props => {
     setValue(name, value.name);
     setCollectionId(value.id);
     setError(name, '');
-  };
-  
-  const handleClose = () => {
-    setOpen(false);
   };
   
   const handleCreateCollection = (e) => {
@@ -73,10 +70,36 @@ const CardCollectionModal = props => {
       }
     });
   }
+
+  const handleSearch = async (search) => {
+    if (!collections) {
+      return;
+    }
+    const filteredResults = collections.filter((item) => {
+      return item.name.toLowerCase().includes(search.toLowerCase())
+    }
+    );
+    setFilterCollections(filteredResults);
+  };
+
+  const debouncedSearch = useCallback(
+    debounce((query) => handleSearch(query), 500), 
+    [collections] 
+  );
+  
+  // Hàm xử lý sự thay đổi input
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setSearch(value);
+    debouncedSearch(value);
+  };
   
   const onHide = () => {
     props.onHide();
     reset();
+    setMessage('');
+    setSearch('');
+    setFilterCollections(collections);
   };
   
   const { isLoading, isError, data, error } = useFetchData(
@@ -87,6 +110,7 @@ const CardCollectionModal = props => {
     if (collectionRes?.list?.length > 0) {
       setIndexTab(0);
       setCollections(collectionRes?.list);
+      setFilterCollections(collectionRes?.list);
     } else {
       setIndexTab(1);
     }
@@ -112,7 +136,7 @@ const CardCollectionModal = props => {
 
             <TabPanel className="mt-5" selected allowFullScreen>
               <div id="item-create" className="dropdown mt-5">
-                {collections && collections.length > 0 ? (
+                {filterCollections && filterCollections.length > 0 ? (
                   <div>
                     <h3 className='mb-5'>Thêm vào bộ sưu tập</h3>
                     <Dropdown>
@@ -122,7 +146,10 @@ const CardCollectionModal = props => {
                           'Chọn collection của bạn',
                         )}></Dropdown.Select>
                       <Dropdown.List>
-                        {collections.map((collection, index) => (
+                        <Dropdown.Search defaultValue={search} onChange={
+                          handleChange
+                        }/>
+                        {filterCollections.map((collection, index) => (
                           <Dropdown.Option
                             key={index}
                             onClick={() =>
@@ -185,30 +212,13 @@ const CardCollectionModal = props => {
                 data-dismiss="modal"
                 onClick={handleSubmit(handleCreateCollection)}
                 aria-label="Close">
-                Thêm
+                Thêm vào bộ sưu tập mới
               </Link>
-              <BootstrapDialog
-                onClose={handleClose}
-                aria-labelledby="customized-dialog-title"
-                open={open}>
-                <IconButton
-                  aria-label="close"
-                  onClick={handleClose}
-                  sx={{
-                    position: 'absolute',
-                    right: 8,
-                    top: 6,
-                    color: theme =>
-                      theme.palette.grey[500],
-                  }}>
-                  <CloseIcon />
-                </IconButton>
-                <DialogContent>
-                  <TypographyStyled className="h3 text-center">
-                    {message}
-                  </TypographyStyled>
-                </DialogContent>
-              </BootstrapDialog>
+              {message && (
+                <div className="mt-4">
+                  <p>{message}</p>
+                </div>
+              )}
             </TabPanel>
           </Tabs>
         </div>
@@ -217,16 +227,5 @@ const CardCollectionModal = props => {
   );
 };
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(5),
-  },
-}));
-
-const TypographyStyled = styled('div')(({ theme }) => ({
-  color: theme.palette.text.primary,
-  fontSize: 14,
-  fontWeight: theme.typography.fontWeightMedium,
-}));
 
 export default CardCollectionModal;

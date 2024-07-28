@@ -12,7 +12,7 @@ const PaintingItem = props => {
   const [visible, setVisible] = useState(6);
   const [modalShow, setModalShow] = useState(false);
   const [selectedPaintingId, setSelectedPaintingId] = useState(null);
-  
+
   const showMoreItems = () => {
     setVisible(prevValue => prevValue + 6);
   };
@@ -21,7 +21,7 @@ const PaintingItem = props => {
     setSelectedPaintingId(id);
     setModalShow(true);
   };
-  
+
   return (
     <Fragment>
       {loading ? (
@@ -49,34 +49,61 @@ const PaintingItem = props => {
                     </div>
                     <div className="card-title">
                       <h5>
-                        <Link className='cursor-none' to="#">{item?.name}</Link>
+                        <Link className="cursor-none" to="#">{item?.name}</Link>
                       </h5>
                     </div>
                     <div
                       className="meta-info"
                       style={{
                         display: 'flex',
+                        flexDirection: 'row',
                         justifyContent: 'space-around !important',
                         alignItems: 'center',
                       }}>
-                      <div className="author">
-                        <div className="info">
-                          <span>Người vẽ</span>
-                          <h6>
-                            <Link className="cursor-none">
-                              {item?.ownerName}
-                            </Link>
-                          </h6>
+                      <div>
+                        <div className="author">
+                          <div className="info">
+                            <span>Người vẽ</span>
+                            <h6>
+                              <Link className="cursor-none">
+                                {item?.ownerName}
+                              </Link>
+                            </h6>
+                          </div>
+                        </div>
+                        <div className="author">
+                          <div className="info">
+                            <span>Cấp</span>
+                            <h6>
+                              <Link className="cursor-none">
+                                {item?.level}
+                              </Link>
+                            </h6>
+                          </div>
                         </div>
                       </div>
-                      <div className="author">
-                        <div className="info">
-                          <span>Thời gian nộp</span>
-                          <h6>
-                            <Link className="cursor-none">
-                              {formatDate(item?.submitTime)}
-                            </Link>
-                          </h6>
+                      <div>
+                        <div className="author">
+                          <div className="info">
+                            <span>Cuộc thi</span>
+                            <h6>
+                              <Link className="cursor-none">
+                              {item?.contestName}
+                              </Link>
+                            </h6>
+                          </div>
+                        </div>
+                        <div className="author">
+                          <div className="author">
+                            <div className="info">
+                              <span>Thời gian nộp</span>
+                              <h6>
+                                <Link className="cursor-none">
+                                  {formatDate(item?.submitTime)}
+                                </Link>
+                              </h6>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -88,7 +115,7 @@ const PaintingItem = props => {
                         </div>
                       </div>
                       <div className="price">
-                        <span>Mô tả</span>
+                      <span>Mô tả</span>
                         <div className="price-details">
                           <h5>{item?.description}</h5>
                         </div>

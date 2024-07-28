@@ -292,7 +292,6 @@ const SubmitPage = () => {
                       autoFocus
                       disabled={disable}
                       readOnly={disable}
-                      
                     />
                     <h4 className="title-create-item">Mô tả bức tranh</h4>
                     <TextareaCommon

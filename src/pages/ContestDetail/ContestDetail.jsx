@@ -208,7 +208,23 @@ const ContestDetail = () => {
 
                       <TabPanel>
                         <div className="provenance">
-                          <p>{contest?.content}</p>
+                          <p className='mb-5'>Nội dung cuộc thi: {contest?.content}</p>
+                          <p>{contest?.educationalLevel.map(item => {
+                            return (
+                              <div className='mb-5 flex justify-content-between'>
+                                <p>{item?.description}</p>
+                                <p style={{width: '120px'}}>Các giải thưởng:</p>
+                                <p style={{width: '220px'}}>{item?.award.map((award, key) => {
+                                  return (
+                                    <div key={key} className='flex justify-content-center'>
+                                      <p style={{flex: '1', textAlign: 'left'}}>{award?.rank}: </p>
+                                      <p>{award?.quantity}</p>
+                                    </div>
+                                  )
+                                })}</p>
+                              </div>
+                          )
+                          })}</p>
                         </div>
                       </TabPanel>
                     </Tabs>

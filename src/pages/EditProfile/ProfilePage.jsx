@@ -13,6 +13,11 @@ import { defaultAvatar } from '../../constant/imageDefault.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import Swal from 'sweetalert2';
 import { masterApi } from '../../api/masterApi.js';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { regexEmail, regexFullNameVN, regexPhone } from '../../constant/Regex.js';
+import DatepickerCommon from '../../components/datepicker/DatePickerCommon.jsx';
+import dayjs from 'dayjs';
 
 
 const ProfilePage = () => {
@@ -22,11 +27,35 @@ const ProfilePage = () => {
   const [file, setFile] = useState(null);
   const { url } = useUploadImage(file);
   
+  const schema = yup.object().shape({
+    fullname: yup.string()
+      .required('Vui lòng nhập tên của bạn')
+      .matches(regexFullNameVN, 'Tên không hợp lệ'),
+    email: yup
+      .string()
+      .required('Vui lòng nhập email của bạn')
+      .matches(regexEmail, 'Email không hợp lệ'),
+    phone: yup
+      .string()
+      .required('Vui lòng nhập số điện thoại của bạn')
+      .matches(regexPhone, 'Số điện thoại không hợp lệ'),
+    gender: yup
+      .boolean()
+      .required('Vui lòng chọn giới tính')
+      .typeError('Vui lòng chọn giới tính'),
+    birthday: yup
+      .string()
+      .required('Vui lòng chọn ngày sinh')
+      .typeError('Vui lòng chọn ngày sinh'),
+  });
+  
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm({
+    resolver: yupResolver(schema),
+    reValidateMode: 'onSubmit',
   });
 
   const handleKeyDown = e => {
@@ -48,12 +77,15 @@ const ProfilePage = () => {
 
     return `${day}/${month}/${year}`;
   }
-  
   const handleUpdate = async input => {
+    const birthday = dayjs(input.birthday).toISOString();
+    console.log(input);
     const data = {
       id: userInfo.Id,
-      phone: '0919047171',
-      fullname: 'Phạm Ngọc Minh Anh',
+      phone: input.phone,
+      gender: input.gender,
+      fullname: input.fullname,
+      birthday: birthday,
       address: input.address,
       avatar: url,
     }
@@ -172,7 +204,7 @@ const ProfilePage = () => {
                         </div>
                         <div className="col-xl-9 col-lg-9 col-md-12 col-12">
                             <div className="form-upload-profile">
-                                <form className="form-profile" action="#" onSubmit={handleSubmit(handleUpdate)}>
+                                <form className="form-profile" onSubmit={handleSubmit(handleUpdate)}>
                                     <div className="form-infor-profile">
                                       <div className="info-account">
                                         <h4 className="title-create-item">
@@ -184,12 +216,12 @@ const ProfilePage = () => {
                                           </h4>
                                           <TextfieldCommon
                                             control={control}
+                                            error={errors.fullname?.message}
                                             className="color-disabled"
                                             type="text"
                                             name="fullname"
                                             placeholder="Họ và tên"
                                             defaultValue={info?.fullName}
-                                            readOnly
                                           />
                                         </fieldset>
                                         <fieldset>
@@ -198,15 +230,16 @@ const ProfilePage = () => {
                                               <h4 className="title-infor-account">
                                                 Ngày sinh
                                               </h4>
-                                              <TextfieldCommon
-                                                className="color-disabled"
-                                                defaultValue={convertToVietnameseDateFormat(info?.birthday)}
+                                              <DatepickerCommon
+                                                PopperProps={{
+                                                  sx: {'&.MuiPickersPopper-root': {border: '4px solid red'},},
+                                                }}
+                                                defaultValue={dayjs(info?.birthday)}
                                                 control={control}
                                                 error={
                                                   errors.birthday?.message
                                                 }
                                                 name="birthday"
-                                                readOnly
                                               />
                                             </div>
                                             <div className='w-birthday'>
@@ -214,7 +247,6 @@ const ProfilePage = () => {
                                                 Giới tính
                                               </h4>
                                               <RadioCommon
-                                                disabled
                                                 control={control}
                                                 error={
                                                   errors?.gender?.message
@@ -242,7 +274,6 @@ const ProfilePage = () => {
                                             defaultValue={info?.phone}
                                             placeholder="Số điện thoại"
                                             onKeyDown={handleKeyDown}
-                                            readOnly
                                           />
                                         </fieldset>
                                         <fieldset>
@@ -261,7 +292,6 @@ const ProfilePage = () => {
                                             type="email"
                                             defaultValue={info?.email}
                                             placeholder="Nhập email"
-                                            readOnly
                                           />
                                         </fieldset>
                                         <fieldset>

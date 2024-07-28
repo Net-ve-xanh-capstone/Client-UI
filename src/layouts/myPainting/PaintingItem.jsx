@@ -10,11 +10,18 @@ const PaintingItem = props => {
   const loading = props.loading;
 
   const [visible, setVisible] = useState(6);
+  const [modalShow, setModalShow] = useState(false);
+  const [selectedPaintingId, setSelectedPaintingId] = useState(null);
+  
   const showMoreItems = () => {
     setVisible(prevValue => prevValue + 6);
   };
 
-  const [modalShow, setModalShow] = useState(false);
+  const handleShowModal = (id) => {
+    setSelectedPaintingId(id);
+    setModalShow(true);
+  };
+  
   return (
     <Fragment>
       {loading ? (
@@ -26,15 +33,15 @@ const PaintingItem = props => {
               {data.length > 0 ? (
                 data.slice(0, visible).map((item, index) => (
                   <div
-                    className={`sc-card-product mr-6 explode style2 mg-bt ${item.feature ? 'comingsoon' : ''} `}
+                    className={`sc-card-product mr-4 explode style2 mg-bt ${item.feature ? 'comingsoon' : ''} `}
                     key={index}>
                     <div className="card-media">
-                      <Link to="/item-details-01">
+                      <Link onClick={() => handleShowModal(item.id)}>
                         <img src={item?.image} alt="tranh" />
                       </Link>
                       <div className="button-place-bid">
                         <button
-                          onClick={() => setModalShow(true)}
+                          onClick={() => handleShowModal(item.id)}
                           className="sc-button style-place-bid style fl-button pri-3">
                           <span>Thêm vào bộ sưu tập</span>
                         </button>
@@ -42,7 +49,7 @@ const PaintingItem = props => {
                     </div>
                     <div className="card-title">
                       <h5>
-                        <Link to="/item-details-01">"{item?.name}"</Link>
+                        <Link className='cursor-none' to="#">{item?.name}</Link>
                       </h5>
                     </div>
                     <div
@@ -110,6 +117,7 @@ const PaintingItem = props => {
             )}
           </div>
           <CardCollectionModal
+            paintingId={selectedPaintingId}
             show={modalShow}
             onHide={() => setModalShow(false)}
           />

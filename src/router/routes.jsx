@@ -1,6 +1,7 @@
 import React, { lazy } from 'react';
 import Role from '../constant/Role';
 import ProtectedRoute from './ProtectedRoute';
+import CollectionPage from '../pages/collection/CollectionPage.jsx';
 
 const Home = lazy(() => import('../pages/Home/Home'));
 const BlogPage = lazy(() => import('../pages/blogPage/BlogPage'));
@@ -79,6 +80,14 @@ const routes = [
   { path: '/contest-detail/:contestId', component: <ContestDetail /> },
   { path: '/faq', component: <FAQPage /> },
   { path: '/contact', component: <ContactPage /> },
+  { path: '/collection', component: <CollectionPage /> },
+  { path: '/collection/:accountId', 
+    component: (
+      <ProtectedRoute>
+        <CollectionPage />
+      </ProtectedRoute>
+    )
+  },
   { path: '/*', component: <NoResult /> },
 ];
 

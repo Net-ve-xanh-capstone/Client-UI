@@ -18,6 +18,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { Fallback } from '../../../constant/Fallback';
 import PropTypes from 'prop-types';
 import useFetchData from '../../../hooks/useQueryData.js';
+import { defaultAvatar, defaultImage } from '../../../constant/imageDefault.js';
 
 const PopularCollection = () => {
     const {
@@ -34,44 +35,44 @@ const PopularCollection = () => {
     }, [collectionData]);
     const [data] = useState([
         {
-            title: 'Creative Art Collection',
-            imgAuthor: imgAuthor1,
-            name: 'Ralph Garraway',
-            imgleft: img1left,
-            imgright1: img1right1,
-            imgright2: img1right2,
+            title: 'Bộ sưu tập mùa xuân',
+            imgAuthor: defaultAvatar,
+            name: 'Dinh',
+            imgleft: defaultImage,
+            imgright1: defaultImage,
+            imgright2: defaultImage,
+            wishlist: '100',
+        },
+        {
+            title: 'Bộ sưu tập mùa hạ',
+            imgAuthor: defaultAvatar,
+            name: 'Duy',
+            imgleft: defaultImage,
+            imgright1: defaultImage,
+            imgright2: defaultImage,
+            wishlist: '100',
+        },
+        {
+            title: 'Bộ sưu tập mùa thu',
+            imgAuthor: defaultAvatar,
+            name: 'Nhã',
+            imgleft: defaultImage,
+            imgright1: defaultImage,
+            imgright2: defaultImage,
+            wishlist: '100',
+        },
+        {
+            title: 'Bộ sưu tập mùa đông',
+            imgAuthor: defaultAvatar,
+            name: 'Quyên',
+            imgleft: defaultImage,
+            imgright1: defaultImage,
+            imgright2: defaultImage,
             wishlist: '100',
         },
         {
             title: 'Colorful Abstract',
-            imgAuthor: imgAuthor2,
-            name: 'Mason Woodward',
-            imgleft: img2left,
-            imgright1: img2right1,
-            imgright2: img2right2,
-            wishlist: '100',
-        },
-        {
-            title: 'Modern Art Collection',
-            imgAuthor: imgAuthor3,
-            name: 'Freddie Carpenter',
-            imgleft: img3left,
-            imgright1: img3right1,
-            imgright2: img3right2,
-            wishlist: '100',
-        },
-        {
-            title: 'Creative Art Collection',
-            imgAuthor: imgAuthor1,
-            name: 'Ralph Garraway',
-            imgleft: img1left,
-            imgright1: img1right1,
-            imgright2: img1right2,
-            wishlist: '100',
-        },
-        {
-            title: 'Colorful Abstract',
-            imgAuthor: imgAuthor2,
+            imgAuthor: defaultAvatar,
             name: 'Mason Woodward',
             imgleft: img2left,
             imgright1: img2right1,
@@ -182,13 +183,6 @@ const PopularCollectionItem = props => (
                                         alt="Axies"
                                     />
                                 </div>
-                                <Link
-                                    to="/login"
-                                    className="wishlist-button heart">
-                                    <span className="number-like">
-                                        {props.item.wishlist}
-                                    </span>
-                                </Link>
                             </div>
                         </div>
                         <div className="author-avatar">
@@ -205,12 +199,12 @@ const PopularCollectionItem = props => (
                         </div>
                         <div className="content">
                             <h4 className="heading">
-                                <Link to="/authors-01">{props.item.title}</Link>
+                                <Link to="/collection">{props.item.title}</Link>
                             </h4>
                             <div className="description">
                                 <span>Created by</span>
                                 <h6 className="name">
-                                    <Link to="/authors-01">
+                                    <Link className='cursor-none' to="#">
                                         {props.item.name}
                                     </Link>
                                 </h6>

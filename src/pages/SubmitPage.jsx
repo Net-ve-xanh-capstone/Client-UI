@@ -20,17 +20,17 @@ import Swal from 'sweetalert2';
 const draftPaintingEndpoint = 'paintings/draftepainting1stround';
 const submitPaintingEndpoint = 'paintings/submitepainting1stround';
 const getAllPaintingByCompetitorIdEndpoint =
-  'paintings/listpaintingbyaccountid';
+  'paintings/getpaintingbyaccountcontest';
 const SubmitPage = () => {
   const { contestId } = useParams();
   const [image, setImage] = useState(null);
   const [file, setFile] = useState(null);
   const [roundTopicsData, setRoundTopicsData] = useState([]);
   const [topicId, setTopicId] = useState(null);
+  const [disable, setDisable] = useState(false);
   const { progress, url, error } = useUploadImage(file);
   const userInfo = useSelector(state => state.auth.userInfo);
   const today = new Date().toISOString().slice(0, 10);
-  const [paintingCompetitor, setPaintingCompetitor] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       const response = await topicApi.getAllTopic(
@@ -75,59 +75,35 @@ const SubmitPage = () => {
     const isValid = await trigger();
     if (!isValid) return;
     const data = {
-      image: url,
+      image: url || image,
       name: e.name,
       description: e.description,
       roundTopicId: topicId,
       accountId: userInfo.Id,
     };
-    Swal.fire({
-      title: 'Bạn có chắc chắn lưu bài?',
-      showCancelButton: true,
-      confirmButtonText: 'Lưu',
-    }).then(result => {
-      if (result.isConfirmed) {
-        paintingApi
-          .postPainting(draftPaintingEndpoint, data)
-          .then(() => {
-            Swal.fire('Lưu bài thành công', '', 'success');
-          })
-          .catch(error => {
-            Swal.fire('Lưu bài thất bại', 'Hãy thử lại sau bạn nhé', 'error');
-          });
-      } else if (result.isDenied) {
-        Swal.fire('Bạn đã hủy lưu bài', '', 'info');
-      }
-    });
+    SwalComponent(
+      'Bạn có chắc chắn lưu bài?', 
+      draftPaintingEndpoint, data, 
+      'Lưu bài thành công', 
+      'Lưu bài thất bại', 
+      'Bạn đã hủy lưu bài');
   };
   const handleSubmitPainting = async e => {
     const isValid = await trigger();
     if (!isValid) return;
     const data = {
-      image: url,
+      image: url || image,
       name: e.name,
       description: e.description,
       roundTopicId: topicId,
       accountId: userInfo.Id,
     };
-    Swal.fire({
-      title: 'Bạn có chắc chắn nộp bài?',
-      showCancelButton: true,
-      confirmButtonText: 'Nộp',
-    }).then(result => {
-      if (result.isConfirmed) {
-        paintingApi
-          .postPainting(submitPaintingEndpoint, data)
-          .then(() => {
-            Swal.fire('Nộp bài thành công', '', 'success');
-          })
-          .catch(error => {
-            Swal.fire('Nộp bài thất bại', 'Hãy thử lại sau bạn nhé', 'error');
-          });
-      } else if (result.isDenied) {
-        Swal.fire('Bạn đã hủy nộp bài', '', 'info');
-      }
-    });
+    SwalComponent(
+      'Bạn có chắc chắn nộp bài?',
+      submitPaintingEndpoint, data,
+      'Nộp bài thành công',
+      'Nộp bài thất bại',
+      'Bạn đã hủy nộp bài');
   };
   const getDropdownOptions = (data, defaultValue = '') => {
     const value = watch(data) || defaultValue;
@@ -151,25 +127,22 @@ const SubmitPage = () => {
 
   useEffect(() => {
     paintingApi
-      .getAllPaintingByCompetitorId(
-        getAllPaintingByCompetitorIdEndpoint + '/' + userInfo.Id,
+      .getAllPaintingByContestAccountId(
+        getAllPaintingByCompetitorIdEndpoint, contestId, userInfo?.Id,
       )
-      .then(res => {
-        const draftPaintings = res.data.result.list.filter(
-          painting => painting.status === 'Draft',
-        );
-        const submitPaintings = res.data.result.list.filter(
-          painting => painting.status === 'Submitted',
-        );
-        const draftPainting = draftPaintings[0];
-        setPaintingCompetitor(draftPainting);
-        setImage(draftPainting.image);
-        setValue('name', draftPainting.name);
-        setValue('description', draftPainting.description);
-        setValue('topic', draftPainting.topicName);
-        setValue('file', draftPainting.image);
+      .then(result => {
+        const data = result.data.result;
+        setImage(data.image);
+        setValue('name', data.name);
+        setValue('description', data.description);
+        setValue('topic', data.topicName);
+        setTopicId(data.roundTopicId);
+        setValue('file', data.image);
+        if (data?.status === 1) {
+          setDisable(true);
+        }
       });
-  }, [userInfo?.Id]);
+  }, [userInfo?.Id, contestId]);
 
   return (
     <div className="create-item">
@@ -330,5 +303,26 @@ const SubmitPage = () => {
     </div>
   );
 };
+
+const SwalComponent = (title, endpoint, data, successMsg, errorMsg, cancelMsg) => {
+  Swal.fire({
+    title: title,
+    showCancelButton: true,
+    confirmButtonText: 'Lưu',
+  }).then(result => {
+    if (result.isConfirmed) {
+      paintingApi
+        .postPainting(endpoint, data)
+        .then(() => {
+          Swal.fire(successMsg, '', 'success');
+        })
+        .catch(error => {
+          Swal.fire(errorMsg, 'Hãy thử lại sau bạn nhé', 'error');
+        });
+    } else if (result.isDismissed) {
+      Swal.fire(cancelMsg, '', 'info');
+    }
+  });
+}
 
 export default SubmitPage;

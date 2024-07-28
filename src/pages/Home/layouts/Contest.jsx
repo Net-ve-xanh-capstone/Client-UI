@@ -15,6 +15,7 @@ import { defaultAvatar, defaultImage } from '../../../constant/imageDefault.js';
 import LoadingSkeleton from '../../../components/loading/LoadingSkeleton.jsx';
 import useFetchData from '../../../hooks/useQueryData.js';
 import CountdownComponent from '../../../components/CountdownComponent.jsx';
+import { contestStatus } from '../../../constant/Status.js';
 
 const Contest = () => {
   const { isLoading, isError, data, error } = useFetchData(
@@ -76,10 +77,14 @@ const Contest = () => {
                                     <div
                                       style={{ width: '250px' }}
                                       className="featured-countdown">
-                                      <div>
-                                        <CountdownComponent
-                                          endtimeString={contest?.endTime}
-                                        />
+                                      <div> 
+                                        {contest?.status === contestStatus.IN_PROCESS ? (
+                                          <CountdownComponent
+                                            endtimeString={contest?.endTime}
+                                          />
+                                        ) : (
+                                          <span>{contest?.status}</span>
+                                        )}
                                       </div>
                                     </div>
                                     <div className="button-place-bid">
@@ -101,11 +106,6 @@ const Contest = () => {
                                         {contest?.name}
                                       </Link>
                                     </h5>
-                                    <div className="tags tag-flex">
-                                      {contest?.status === 'Active'
-                                        ? 'Diễn ra'
-                                        : 'Kết thúc'}
-                                    </div>
                                   </div>
                                   <div className="meta-info">
                                     <div className="author">

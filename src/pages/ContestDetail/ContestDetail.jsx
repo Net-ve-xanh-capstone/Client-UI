@@ -1,24 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from '../../components/common/header/HeaderVersion2';
 import Footer from '../../components/common/footer/Footer';
 import { Link, useParams } from 'react-router-dom';
-import Countdown from 'react-countdown';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import liveAuctionData from '../../assets/fake-data/data-live-auction';
 import LiveAuction from '../../layouts/auctions/LiveAuction.jsx';
-import img1 from '../../assets/images/avatar/avt-3.jpg';
-import img2 from '../../assets/images/avatar/avt-11.jpg';
-import img3 from '../../assets/images/avatar/avt-1.jpg';
-import img4 from '../../assets/images/avatar/avt-5.jpg';
-import img5 from '../../assets/images/avatar/avt-7.jpg';
-import img6 from '../../assets/images/avatar/avt-8.jpg';
 import levelIcon from '../../assets/images/icon/level.png';
 import useFetchData from '../../hooks/useQueryData.js';
 import { defaultImage, defaultAvatar } from '../../constant/imageDefault.js';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
 import CountdownComponent from '../../components/CountdownComponent.jsx';
-
+import { contestStatus } from './../../constant/Status.js';
 const ContestDetail = () => {
   const { contestId } = useParams();
   const { isLoading, isError, data, error } = useFetchData(
@@ -95,7 +88,7 @@ const ContestDetail = () => {
                           <h6>
                             <Link className="cursor-none">
                               {contest?.account.fullName}
-                            </Link>{' '}
+                            </Link>
                           </h6>
                         </div>
                       </div>
@@ -115,11 +108,11 @@ const ContestDetail = () => {
                       <CountdownComponent endtimeString={contest?.endTime} />
                     </div>
                   </div>
-                  {contest?.status !== 'Active' ? (
+                  {contest?.status !== contestStatus.IN_PROCESS ? (
                     <Link
                       to="#"
                       className="sc-button loadmore style fl-button pri-3 cursor-none">
-                      <span>Đã kết thúc</span>
+                      <span>{contest?.status}</span>
                     </Link>
                   ) : (
                     <Link

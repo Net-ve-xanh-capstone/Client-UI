@@ -2,6 +2,7 @@ import { styled, Tooltip, tooltipClasses } from '@mui/material';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/auth/authSlice';
+import { Link } from 'react-router-dom';
 
 const TitleComponent = props => {
     const dispatch = useDispatch();
@@ -16,16 +17,16 @@ const TitleComponent = props => {
             id="menu-primary-menu"
             className="menu h5">
             <li className="mb-15">
-                <a href="/my-painting">
+                <Link to='/my-painting'>
                     <i className="fab fa-accusoft"></i>{' '}
                     <span>Tranh của tôi</span>
-                </a>
+                </Link>
             </li>
             <li className="mb-15">
-                <a href="/edit-profile">
+              <Link to='/edit-profile'>
                     <i className="fas fa-pencil-alt"></i>{' '}
                     <span> Thông tin cá nhân</span>
-                </a>
+                </Link>
             </li>
             <li>
                 <a href="/#" id="logout" onClick={handleLogout}>

@@ -26,6 +26,7 @@ const Login = () => {
     handleSubmit,
     control,
     trigger,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),

@@ -8,7 +8,7 @@ import { useUploadImage } from '../hooks/firebaseImageUpload/useUploadImage';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import TextfieldCommon from '../components/input/TextfieldCommon';
+import TextFieldCommon from '../components/input/TextfieldCommon';
 import TextareaCommon from '../components/textarea/TextareaCommon';
 import { Dropdown } from '../components/dropdown';
 import classNames from 'classnames';
@@ -281,7 +281,7 @@ const SubmitPage = () => {
                   </label>
                   <div>
                     <h4 className="title-create-item disable-select">Tên bức tranh</h4>
-                    <TextfieldCommon
+                    <TextFieldCommon
                       control={control}
                       error={errors.name?.message}
                       id="name"

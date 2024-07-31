@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import CardModal from '../../components/CardModal';
 import { withErrorBoundary } from 'react-error-boundary';
 import { Fallback } from '../../constant/Fallback';
-const TodayPicks = (props) => {
-  const data = props.data;
+const PaintingPicks = (props) => {
+  const { data } = props;
 
   const [visible, setVisible] = useState(8);
   const showMoreItems = () => {
@@ -123,17 +123,14 @@ const TodayPicks = (props) => {
               <div key={index} className="fl-item col-xl-3 col-lg-4 col-md-6 col-sm-6">
                 <div className={`sc-card-product ${item.feature ? 'comingsoon' : ''} `}>
                   <div className="card-media">
-                    <Link to="/item-details-01">
-                      <img src={item.img} alt="axies" />
-                    </Link>
-                    <Link to="/login" className="wishlist-button heart">
-                      <span className="number-like">{item.wishlist}</span>
+                    <Link to="#" className='cursor-none'>
+                      <img src={item.img} alt="painting" />
                     </Link>
                     <div className="coming-soon">{item.feature}</div>
                   </div>
                   <div className="card-title">
                     <h5 className="style2">
-                      <Link to="/item-details-01">"{item.title}"</Link>
+                      <Link to="/item-details-01">{item.title}</Link>
                     </h5>
                     <div className="tags">{item.tags}</div>
                   </div>
@@ -143,16 +140,16 @@ const TodayPicks = (props) => {
                         <img src={item.imgAuthor} alt="axies" />
                       </div>
                       <div className="info">
-                        <span>Owned By</span>
+                        <span>Người vẽ</span>
                         <h6>
                           {' '}
-                          <Link to="/authors-02">{item.nameAuthor}</Link>{' '}
+                          <Link to="/authors-02">{item?.ownerName}</Link>{' '}
                         </h6>
                       </div>
                     </div>
                     <div className="price">
-                      <span>Current Bid</span>
-                      <h5> {item.price}</h5>
+                      <span>Cuộc thi</span>
+                      <h5> {item.contestName}</h5>
                     </div>
                   </div>
                   <div className="card-bottom">
@@ -189,10 +186,10 @@ const TodayPicks = (props) => {
   );
 };
 
-TodayPicks.propTypes = {
+PaintingPicks.propTypes = {
   data: PropTypes.array.isRequired
 };
 
-export default withErrorBoundary(TodayPicks, {
+export default withErrorBoundary(PaintingPicks, {
   FallbackComponent: Fallback
 });

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import HeaderVersion1 from '../components/common/header/HeaderVersion1';
 import Footer from '../components/common/footer/Footer';
-import TextfieldCommon from '../components/input/TextfieldCommon';
+import TextFieldCommon from '../components/input/TextfieldCommon';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -165,7 +165,7 @@ const SignUp = () => {
                     onSubmit={handleSubmit(handleRegister)}>
                     <Grid container spacing={4}>
                       <Grid item md={6}>
-                        <TextfieldCommon
+                        <TextFieldCommon
                           control={control}
                           error={
                             errors.lastname?.message
@@ -178,7 +178,7 @@ const SignUp = () => {
                         />
                       </Grid>
                       <Grid item md={6}>
-                        <TextfieldCommon
+                        <TextFieldCommon
                           control={control}
                           error={
                             errors.firstname
@@ -228,7 +228,7 @@ const SignUp = () => {
                     </Grid>
                     <Grid container spacing={2}>
                       <Grid item md={6}>
-                        <TextfieldCommon
+                        <TextFieldCommon
                           control={control}
                           error={
                             errors.email?.message
@@ -241,7 +241,7 @@ const SignUp = () => {
                         />
                       </Grid>
                       <Grid item md={6}>
-                        <TextfieldCommon
+                        <TextFieldCommon
                           control={control}
                           error={
                             errors.phone?.message
@@ -261,7 +261,7 @@ const SignUp = () => {
                       sx={{ marginBottom: '12px' }}
                       container>
                       <Grid item md={12}>
-                        <TextfieldCommon
+                        <TextFieldCommon
                           control={control}
                           error={
                             errors.userName?.message
@@ -276,7 +276,7 @@ const SignUp = () => {
                     </Grid>
                     <Grid container>
                       <Grid item md={12}>
-                        <TextfieldCommon
+                        <TextFieldCommon
                           control={control}
                           id="password"
                           error={

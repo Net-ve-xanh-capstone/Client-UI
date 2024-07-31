@@ -6,7 +6,7 @@ import useFetchData from '../../hooks/useQueryData.js';
 import { useSelector } from 'react-redux';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
 import { useForm } from 'react-hook-form';
-import TextfieldCommon from '../../components/input/TextfieldCommon.jsx';
+import TextFieldCommon from '../../components/input/TextfieldCommon.jsx';
 import TextareaCommon  from '../../components/textarea/TextareaCommon.jsx';
 import RadioCommon from '../../components/checkbox/RadioCommon.jsx';
 import { defaultAvatar } from '../../constant/imageDefault.js';
@@ -214,7 +214,7 @@ const ProfilePage = () => {
                                           <h4 className="title-infor-account">
                                             Họ và tên
                                           </h4>
-                                          <TextfieldCommon
+                                          <TextFieldCommon
                                             control={control}
                                             error={errors.fullname?.message}
                                             className="color-disabled"
@@ -262,7 +262,7 @@ const ProfilePage = () => {
                                           <h4 className="title-infor-account">
                                             Số điện thoại
                                           </h4>
-                                          <TextfieldCommon
+                                          <TextFieldCommon
                                             control={control}
                                             error={
                                               errors.phone?.message
@@ -280,7 +280,7 @@ const ProfilePage = () => {
                                           <h4 className="title-infor-account">
                                             Email
                                           </h4>
-                                          <TextfieldCommon
+                                          <TextFieldCommon
                                             control={control}
                                             className="color-disabled"
                                             error={

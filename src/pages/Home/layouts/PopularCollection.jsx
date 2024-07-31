@@ -6,7 +6,6 @@ import imgAuthor1 from '../../../assets/images/avatar/avt-1.jpg';
 import img1left from '../../../assets/images/box-item/collection-item-6.jpg';
 import img1right1 from '../../..//assets/images/box-item/collection-item-7.jpg';
 import img1right2 from '../../..//assets/images/box-item/collection-item-8.jpg';
-import imgAuthor2 from '../../../assets/images/avatar/avt-8.jpg';
 import img2left from '../../../assets/images/box-item/collection-item-9.jpg';
 import img2right1 from '../../../assets/images/box-item/collection-item-12.jpg';
 import img2right2 from '../../../assets/images/box-item/collection-item-8.jpg';

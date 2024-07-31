@@ -87,6 +87,12 @@ const menus = [
       },
       {
         id: 4,
+        sub: 'Bộ sưu tập',
+        links: '/collection',
+        public: true,
+      },
+      {
+        id: 4,
         sub: 'Không có kết quả',
         links: '/no-result',
         public: true,

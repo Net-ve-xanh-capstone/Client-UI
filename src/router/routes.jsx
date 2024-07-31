@@ -11,6 +11,7 @@ import SponsorManage from '../pages/sponsorPage/page.jsx';
 import CompetitorManage from '../pages/competitorManage/page.jsx';
 import PaintingPage from '../pages/paintingPage/page.jsx';
 import CollectionPage from '../pages/collection/CollectionPage.jsx';
+import PaintingOfCollectionPage from '../pages/collection/painting/PaintingOfCollectionPage.jsx';
 
 const Home = lazy(() => import('../pages/Home/Home'));
 const BlogPage = lazy(() => import('../pages/blogPage/BlogPage'));
@@ -111,6 +112,7 @@ const routes = [
   { path: '/faq', component: <FAQPage /> },
   { path: '/contact', component: <ContactPage /> },
   { path: '/collection', component: <CollectionPage /> },
+  { path: '/collection-painting/:collectionId', component: <PaintingOfCollectionPage /> },
   {
     path: '/collection/:accountId',
     component: (

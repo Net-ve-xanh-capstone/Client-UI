@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../../components/common/header/HeaderVersion2';
 import Footer from '../../components/common/footer/Footer';
 import { Link, useParams } from 'react-router-dom';
@@ -12,11 +12,29 @@ import { defaultImage, defaultAvatar } from '../../constant/imageDefault.js';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
 import CountdownComponent from '../../components/CountdownComponent.jsx';
 import { contestStatus } from './../../constant/Status.js';
+import { topicApi } from '../../api/topicApi.js';
+import { useSelector } from 'react-redux';
+
 const ContestDetail = () => {
   const { contestId } = useParams();
+  const userInfo = useSelector(state => state.auth.userInfo);
+  const [check, setCheck] = React.useState(false);
   const { isLoading, isError, data, error } = useFetchData(
     `contests/${contestId}`,
   );
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await topicApi.getAllTopic(
+        'roundtopics/getalltopic',
+        userInfo.Id,
+        contestId,
+      );
+      if (response.data.result.length > 0) {
+        setCheck(true);
+      }
+    };
+    fetchData();
+  }, []);
   const contest = data?.data?.result;
 
   if (isLoading) {
@@ -99,7 +117,7 @@ const ContestDetail = () => {
                       <span className="heading">Tổng số người dự thi:</span>
                       <div className="price">
                         <div className="price-box">
-                          <h5>1,234 người</h5>
+                          <h5>{contest?.competitorCount || 0}</h5>
                         </div>
                       </div>
                     </div>
@@ -111,14 +129,20 @@ const ContestDetail = () => {
                   {contest?.status !== contestStatus.IN_PROCESS ? (
                     <Link
                       to="#"
-                      className="sc-button loadmore style fl-button pri-3 cursor-none">
+                      className="disable-button loadmore style fl-button pri-3 cursor-none">
                       <span>{contest?.status}</span>
                     </Link>
-                  ) : (
+                  ) : check ? (
                     <Link
                       to={`/submit/${contestId}`}
                       className="sc-button loadmore style fl-button pri-3">
                       <span>Đăng ký dự thi</span>
+                    </Link>
+                  ) : (
+                    <Link
+                      to="#"
+                      className="disable-button loadmore style fl-button pri-3 cursor-none">
+                      <span>Bạn chưa đủ tuổi</span>
                     </Link>
                   )}
 
@@ -208,22 +232,22 @@ const ContestDetail = () => {
 
                       <TabPanel>
                         <div className="provenance">
-                          <p className='mb-5'>Nội dung cuộc thi: {contest?.content}</p>
+                          <p className="mb-5">Nội dung cuộc thi: {contest?.content}</p>
                           <p>{contest?.educationalLevel.map(item => {
                             return (
-                              <div className='mb-5 flex justify-content-between'>
+                              <div className="mb-5 flex justify-content-between">
                                 <p>{item?.description}</p>
-                                <p style={{width: '120px'}}>Các giải thưởng:</p>
-                                <p style={{width: '220px'}}>{item?.award.map((award, key) => {
+                                <p style={{ width: '120px' }}>Các giải thưởng:</p>
+                                <p style={{ width: '220px' }}>{item?.award.map((award, key) => {
                                   return (
-                                    <div key={key} className='flex justify-content-center'>
-                                      <p style={{flex: '1', textAlign: 'left'}}>{award?.rank}: </p>
+                                    <div key={key} className="flex justify-content-center">
+                                      <p style={{ flex: '1', textAlign: 'left' }}>{award?.rank}: </p>
                                       <p>{award?.quantity}</p>
                                     </div>
-                                  )
+                                  );
                                 })}</p>
                               </div>
-                          )
+                            );
                           })}</p>
                         </div>
                       </TabPanel>

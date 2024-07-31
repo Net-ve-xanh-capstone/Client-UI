@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import HeaderVersion1 from '../components/common/header/HeaderVersion1';
 import Footer from '../components/common/footer/Footer';
 import { useForm } from 'react-hook-form';
-import TextfieldCommon from '../components/input/TextfieldCommon';
+import TextFieldCommon from '../components/input/TextfieldCommon';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -123,7 +123,7 @@ const Login = () => {
                   <form
                     onSubmit={handleSubmit(handleLogin)}
                     className="select-none">
-                    <TextfieldCommon
+                    <TextFieldCommon
                       control={control}
                       error={errors.username?.message}
                       id="username"
@@ -132,7 +132,7 @@ const Login = () => {
                       placeholder="Tên tài khoản"
                       autoFocus
                     />
-                    <TextfieldCommon
+                    <TextFieldCommon
                       control={control}
                       error={errors.password?.message}
                       id="password"

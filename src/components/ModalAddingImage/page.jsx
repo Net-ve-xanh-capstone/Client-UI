@@ -9,12 +9,12 @@ const ModalAddingImg = ({ modalShow, onHide, setListImage, listImage }) => {
   const [imagePost, setImagePost] = useState(null);
   const { url, progress } = useUploadImage(imagePost);
 
-  const updateImageload = val => {
+  const updateImageload = () => {
     if (progress) {
       setListImage(prev => [
         ...prev,
         {
-          url: val,
+          url: url,
           description: '',
         },
       ]);
@@ -33,13 +33,8 @@ const ModalAddingImg = ({ modalShow, onHide, setListImage, listImage }) => {
       return;
     }
     setImagePost(e.target.files[0]);
-    useUploadImage(e.target.files[0]);
+    updateImageload();
   };
-
-  useEffect(() => {
-    console.log(url);
-    updateImageload(url);
-  }, [imagePost]);
 
   return (
     <>

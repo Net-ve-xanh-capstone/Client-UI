@@ -9,32 +9,32 @@ const ModalAddingImg = ({ modalShow, onHide, setListImage, listImage }) => {
   const [imagePost, setImagePost] = useState(null);
   const { url, progress } = useUploadImage(imagePost);
 
-  const updateImageload = () => {
+  const updateImageload = val => {
     if (progress) {
+      console.log(val);
       setListImage(prev => [
         ...prev,
         {
-          url: url,
+          url: val,
           description: '',
         },
       ]);
     }
-    return;
   };
 
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
   const changeFile = e => {
-    if (
-      !(
-        e.target.files.length > 0 &&
-        allowedTypes.includes(e.target.files[0].type)
-      )
-    ) {
-      return;
+    const file = e.target.files[0];
+    if (file && allowedTypes.includes(file.type)) {
+      setImagePost(file);
     }
-    setImagePost(e.target.files[0]);
-    updateImageload();
   };
+
+  useEffect(() => {
+    if (url) {
+      updateImageload(url);
+    }
+  }, [url]);
 
   return (
     <>
@@ -62,8 +62,8 @@ const ModalAddingImg = ({ modalShow, onHide, setListImage, listImage }) => {
           <div className={styles.container}>
             {listImage?.length > 0 &&
               listImage !== null &&
-              listImage.map((val, _) => (
-                <div key={val} className={styles.card_image}>
+              listImage.map((val, index) => (
+                <div key={index} className={styles.card_image}>
                   <img src={val.url} alt="" className={styles.image} />
                   <div className={styles.delete_icon}>
                     <DeleteIcon sx={{ color: '#eb0014', fontSize: '2rem' }} />
@@ -81,7 +81,7 @@ const ModalAddingImg = ({ modalShow, onHide, setListImage, listImage }) => {
               name="addfile"
               accept="image/png, image/gif, image/jpeg"
               className={styles.hidden_file}
-              onChange={e => changeFile(e)}
+              onChange={changeFile}
               onClick={e => {
                 e.currentTarget.value = null;
               }}

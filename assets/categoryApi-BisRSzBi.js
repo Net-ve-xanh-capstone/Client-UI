@@ -1,1 +1,0 @@
-import{o as t}from"./index-nXpVkrqw.js";const r=()=>t.get("categories/getallcategoryunused"),o=()=>t.get("categories/getallcategory"),s=e=>t.put("categories",e),c=e=>t.patch(`categories?id=${e}`),g=e=>t.post("categories",e);export{o as a,g as b,r as c,c as d,s as u};

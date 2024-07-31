@@ -6,16 +6,16 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CreateModal from '../CreateModal';
+import { createLevel } from '../../api/levelStaffApi';
 
-function ModalForm({ modalShow, onHide, contestId }) {
+function CreateLevel({ modalShow, onHide, contestId }) {
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const [showModalCreate, setShowModalCreate] = useState(false);
 
   useEffect(() => {
-    console.log(userInfo);
     if (userInfo === null) navigate('/login');
     setFormData(intialState);
   }, [modalShow]);
@@ -24,22 +24,24 @@ function ModalForm({ modalShow, onHide, contestId }) {
     description: '',
     level: '',
     contestId: contestId,
-    currentUserId: userInfo?.Id
+    currentUserId: userInfo?.Id,
   };
 
   const [formData, setFormData] = useState(intialState);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = event => {
     try {
       const { name, value } = event.target;
       setFormData({
         ...formData,
-        [name]: value
+        [name]: value,
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -56,26 +58,24 @@ function ModalForm({ modalShow, onHide, contestId }) {
   };
 
   const postContest = async () => {
-    axios
-      .post(`https://webapp-240702160733.azurewebsites.net/api/educationallevels`, formData)
-      .then((res) => {
-        if (res.result) {
-          toast.success('Tạo đối tượng dự thi thành công', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light'
-          });
-          onHide();
-        }
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-      });
+    try {
+      const { data } = await createLevel(formData);
+      if (data?.result) {
+        toast.success('Tạo đối tượng dự thi thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        onHide();
+      }
+    } catch (e) {
+      console.log('err', e);
+    }
   };
 
   return (
@@ -91,13 +91,11 @@ function ModalForm({ modalShow, onHide, contestId }) {
         onHide={onHide}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
+        centered>
         <Modal.Header closeButton style={{ margin: '0 auto' }}>
           <Modal.Title
             id="contained-modal-title-vcenter"
-            style={{ fontWeight: 'bold', fontSize: '20px' }}
-          >
+            style={{ fontWeight: 'bold', fontSize: '20px' }}>
             Tạo đối tượng dự thi
           </Modal.Title>
         </Modal.Header>
@@ -118,8 +116,7 @@ function ModalForm({ modalShow, onHide, contestId }) {
               required
               name="description"
               value={formData.description}
-              onChange={handleInputChange}
-            ></textarea>
+              onChange={handleInputChange}></textarea>
             <div style={{ textAlign: 'end' }}>
               <button className={styles.btnCreate} type="submit">
                 Tạo
@@ -132,4 +129,4 @@ function ModalForm({ modalShow, onHide, contestId }) {
   );
 }
 
-export default ModalForm;
+export default CreateLevel;

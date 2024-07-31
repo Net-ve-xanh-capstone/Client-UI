@@ -4,7 +4,11 @@ import { checkEditButton } from '../../utils/checkEditButton';
 import DeleteModal from '../DeleteModal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
+import { deleteLevel } from '../../api/levelStaffApi';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import styles from './style.module.css';
 function LevelFragment({ levelFrag, getContestDetail }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -15,69 +19,86 @@ function LevelFragment({ levelFrag, getContestDetail }) {
     getContestDetail();
   };
 
-  const hanldeOpenDelete = (id) => {
+  const hanldeOpenDelete = id => {
     setIdLevelDelete(id);
     setDeleteModalShow(true);
   };
 
   const handleDelete = async () => {
-    axios
-      .patch(
-        `https://webapp-240702160733.azurewebsites.net/api/educationallevels?id=${idLevelDelete}`
-      )
-      .then((res) => {
-        if (res.result) {
-          toast.success('Xóa đối tượng dự thi thành công', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light'
-          });
-          getContestDetail();
-        }
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-      });
+    try {
+      const { data } = await deleteLevel(idLevelDelete);
+      if (data?.result) {
+        toast.success('Xóa đối tượng dự thi thành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        getContestDetail();
+      }
+    } catch (e) {
+      console.log('err', e);
+    }
   };
   return (
     <>
-      <CreateLevel modalShow={modalShow} onHide={resetDetail} contestId={levelFrag.id} />
+      <CreateLevel
+        modalShow={modalShow}
+        onHide={resetDetail}
+        contestId={levelFrag.id}
+      />
       <DeleteModal
         show={deleteModalShow}
         setShow={setDeleteModalShow}
         title={'đối tượng dự thi'}
         callBack={handleDelete}
       />
-      {levelFrag.educationalLevel.map((data) => (
-        <div
-          className="flex row pb-10 align-items-center justify-content-center text-center"
-          key={data.id}
-        >
-          <p className="col-md-2">{data.level} :</p>
-          <p className="col-md-8">{data.description || 'None'}</p>
-          <div className="col-md-2">
-            <button
-              className="btn btn-danger"
-              disabled={isEditing}
-              onClick={() => hanldeOpenDelete(data.id)}
-            >
-              Xóa
-            </button>
-          </div>
-        </div>
-      ))}
+      <div className={styles.roundContainer}>
+        <ul className={styles.roundTableResponse}>
+          <li className={styles.roundHeader}>
+            <div className={styles.col}>Nội dung</div>
+            <div className={styles.col}>Mô tả</div>
+          </li>
+
+          {levelFrag.educationalLevel.map(data => (
+            <li key={data.id} className={styles.tableRow}>
+              <div className={styles.col} data-label="Nội dung">
+                {data.level}
+              </div>
+              <div
+                className={styles.col}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+                data-label="Mô tả">
+                <div>{data.description || 'Chưa có'}</div>
+                <div style={{ display: 'flex' }}>
+                  <IconButton
+                    aria-label="delete"
+                    size="large"
+                    color="error"
+                    onClick={() => hanldeOpenDelete(data.id)}
+                    disabled={isEditing}>
+                    <DeleteIcon />
+                  </IconButton>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="flex justify-content-end mt-20">
         <button
           className="btn btn-outline-primary btn-lg"
           onClick={() => setModalShow(true)}
-          disabled={isEditing}
-        >
+          disabled={isEditing}>
           Thêm
         </button>
       </div>

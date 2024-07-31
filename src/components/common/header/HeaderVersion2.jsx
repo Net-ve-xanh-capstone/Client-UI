@@ -8,6 +8,7 @@ import { Fallback } from '../../../constant/Fallback';
 import { useDispatch, useSelector } from 'react-redux';
 import TooltipMenu from '../TooltipMenu';
 
+// eslint-disable-next-line react-refresh/only-export-components
 const HeaderVersion2 = () => {
     const headerRef = useRef(null);
     useEffect(() => {

@@ -18,7 +18,7 @@ $icon-size: 35px;
   color: whitesmoke;
   font-weight: bold;
   .pro-sidebar-inner {
-    background: $sidebar-bg-color;
+    background: linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%);
   }
 }
 
@@ -78,6 +78,7 @@ $icon-size: 35px;
     overflow-y: auto;
     position: absolute;
     display: none;
+    z-index: 100;
 
     header {
       margin-bottom: 16px;
@@ -145,10 +146,134 @@ $icon-size: 35px;
 
 @media (max-width: 800px) {
   .table-contest table:nth-child(1) {
-    width: 200%;
+    width: 150%;
+  }
+
+  .table-contest-topic table:nth-child(1) {
+    width: 130% !important;
+  }
+
+  .table-contest-topic th:nth-child(3) {
+    width: 20%;
+  }
+
+  .table-contest-detail th:nth-child(5),
+  .table-contest-detail th:nth-child(6) {
+    width: 15% !important;
   }
 
   .table-contest {
     margin-top: 20px;
   }
+
+  .table-examiner th:nth-child(5) {
+    width: 15% !important;
+  }
+}
+
+.css-1086bdv-MuiPaper-root-MuiAccordion-root {
+  border: 1px solid black;
+  box-shadow: none !important;
+}
+
+//table cell hover
+.tss-bd2lw8-MUIDataTableHeadCell-sortActive,
+.MuiTableSortLabel-icon {
+  color: white !important;
+}
+.css-crgmwz-MuiButtonBase-root-MuiButton-root:hover,
+.css-crgmwz-MuiButtonBase-root-MuiButton-root:focus {
+  border: none;
+}
+
+.css-crgmwz-MuiButtonBase-root-MuiButton-root:hover div,
+.css-crgmwz-MuiButtonBase-root-MuiButton-root:focus div {
+  color: white !important;
+}
+
+//change width colum
+.table-contest-detail th:nth-child(5),
+.table-contest-detail th:nth-child(6) {
+  width: 10%;
+}
+
+.table-contest-detail td:nth-child(1) div,
+.table-contest-detail td:nth-child(4) div {
+  text-align: left;
+}
+
+.table-contest-topic td:nth-child(1),
+.table-contest-topic td:nth-child(2) {
+  text-align: left;
+}
+
+.table-contest-topic th:nth-child(2) {
+  width: 60%;
+}
+
+.table-contest-topic th:nth-child(3) {
+  width: 15%;
+}
+
+.tss-1fbujeu-MUIDataTableHeadCell-toolButton {
+  margin: 0 !important;
+}
+
+.table-examiner th:nth-child(1) {
+  width: 10%;
+}
+
+.table-examiner td:nth-child(2),
+.table-examiner td:nth-child(3) {
+  text-align: left;
+}
+
+.table-examiner th:nth-child(4) {
+  width: 30%;
+}
+
+.table-examiner th:nth-child(5) {
+  width: 15%;
+}
+
+.tss-1qtl85h-MUIDataTableBodyCell-root span {
+  word-wrap: break-word;
+}
+
+.table-contest thead {
+  background: linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%) !important;
+}
+
+.table-contest .MuiInputBase-root input {
+  height: 5px;
+}
+
+.table-contest th {
+  color: white;
+  border: none;
+}
+
+.table-contest tbody tr {
+  box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+}
+.table-contest tbody td {
+  border: none;
+  text-align: center;
+}
+.table-contest tfoot td {
+  border: none;
+}
+
+.table-contest table {
+  border-collapse: separate !important;
+  border-spacing: 0 15px;
+  border: none;
+}
+
+.optionContainer .highlightOption {
+  background: var(--linear);
+}
+
+.multiSelectContainer li:hover {
+  background: var(--linear) !important;
 }

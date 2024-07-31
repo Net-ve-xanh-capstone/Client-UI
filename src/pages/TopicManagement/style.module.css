@@ -1,0 +1,117 @@
+@media (max-width: 800px) {
+    .btnCreate {
+        font-size: 12px !important;
+        padding: 5px 10px !important;
+    }
+
+    .btnAction {
+        flex-direction: column;
+    }
+
+    .btnAction button {
+        padding: 7px 10px
+    }
+
+    .titleHeader {
+        font-size: 20px;
+    }
+
+    .blur-container {
+        margin-top: 20px;
+    }
+
+    .headerContainer {
+        margin-top: 20px;
+    }
+}
+
+.headerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.titleHeader {
+    cursor: default;
+    background: linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--pink);
+}
+
+.btnAction button:hover {
+    border: none;
+}
+
+.btnAction button:focus {
+    border: none;
+}
+
+.btnAction {
+    display: flex;
+    justify-content: center;
+}
+
+.buttonContainer {
+    text-align: end;
+}
+
+.btnCreate {
+    outline: none;
+    cursor: pointer;
+    border: none;
+    padding: 14px 20px;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    position: relative;
+    display: inline-block;
+    letter-spacing: 0.8px;
+    font-weight: 700;
+    font-size: 17px;
+    border-radius: 500px;
+    overflow: hidden;
+    background: var(--linear);
+    color: black;
+}
+
+.btnCreate:hover {
+    border: none !important;
+}
+
+.btnCreate span {
+    position: relative;
+    z-index: 10;
+    transition: color 0.4s;
+}
+
+.btnCreate:hover span {
+    color: whitesmoke;
+}
+
+.btnCreate:focus {
+    color: whitesmoke;
+}
+
+.btnCreate::before,
+.btnCreate::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.btnCreate::before {
+    content: "";
+    background: #fff;
+    width: 120%;
+    left: -10%;
+    transform: skew(30deg);
+    transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+.btnCreate:hover::before {
+    transform: translate3d(100%, 0, 0);
+}

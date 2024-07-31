@@ -26,11 +26,6 @@ function ContestFragment({ contestFrag, getContestDetail }) {
         <p className="col-md-3">Thời gian kết thúc: </p>
         <p className="col-md-9">{formatDate(contestFrag.endTime)}</p>
       </div>
-
-      <div className="flex row pb-10">
-        <p className="col-md-3">Mô tả ngắn: </p>
-        <p className="col-md-9">{contestFrag.description}</p>
-      </div>
       <div className="flex row pb-10">
         <p className="col-md-3">Nội dung cuộc thi: </p>
         <p className="col-md-9">{contestFrag.content}</p>
@@ -39,8 +34,7 @@ function ContestFragment({ contestFrag, getContestDetail }) {
         <button
           className="btn btn-outline-primary btn-lg"
           onClick={() => setModalShow(true)}
-          disabled={isEditing}
-        >
+          disabled={isEditing}>
           Chỉnh sửa
         </button>
       </div>

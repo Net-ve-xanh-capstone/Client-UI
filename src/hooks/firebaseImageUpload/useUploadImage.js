@@ -28,7 +28,6 @@ export const useUploadImage = (file) => {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setUrl(downloadURL);
-            console.log(downloadURL);
           });
         }
       );

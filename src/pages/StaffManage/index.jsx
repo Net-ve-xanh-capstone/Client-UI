@@ -2,24 +2,18 @@ import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import { useState } from 'react';
 import SidebarStraff from '../../components/SideBarStaff';
 
-import './style.scss';
-import ContestManagement from '../ContestManagement';
-import BlogStaff from '../../components/cardBlogStaff/page.jsx';
-import CategoryBlog from '../../components/categoryBlog/page.jsx';
 import { Outlet } from 'react-router-dom';
+import './style.scss';
 
 function StaffManage() {
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
 
-  function Profile() {
-    return <h1>Profile</h1>;
-  }
   const handleCollapsedChange = () => {
     setCollapsed(!collapsed);
   };
 
-  const handleToggleSidebar = (value) => {
+  const handleToggleSidebar = value => {
     setToggled(value);
   };
 
@@ -34,7 +28,9 @@ function StaffManage() {
             handleCollapsedChange={handleCollapsedChange}
           />
           <main>
-            <div className="btn-toggle" onClick={() => handleToggleSidebar(true)}>
+            <div
+              className="btn-toggle"
+              onClick={() => handleToggleSidebar(true)}>
               <DensityMediumIcon />
             </div>
           </main>
@@ -43,9 +39,8 @@ function StaffManage() {
           style={{
             flex: 1,
             overflow: 'auto',
-            backgroundColor: '#F5F7F8'
-          }}
-        >
+            backgroundColor: '#F5F7F8',
+          }}>
           {/* {componentFragment[type]} */}
           <Outlet />
         </div>

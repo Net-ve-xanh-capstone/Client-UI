@@ -1,0 +1,339 @@
+.title_box {
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.title_box .main_title {
+    cursor: default;
+    background: var(--linear);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--pink);
+    width: max-content;
+}
+
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    position: relative;
+    background-color: #f8f8f8;
+}
+
+.section {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+
+/*--- Line filter ---*/
+.filter_box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    gap: 3rem;
+}
+
+.filter_body {
+    width: 100%;
+    height: max-content;
+    display: flex;
+    gap: 2rem;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.heros {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 2rem;
+    height: 5rem;
+}
+
+/* line filter by name */
+.searchbox {
+    height: 100%;
+    width: 80rem;
+    border-radius: 2rem;
+
+    background: transparent;
+    backdrop-filter: blur(15px);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.search_field {
+    height: 100%;
+    height: 100%;
+    padding-left: 1rem;
+    border: none !important;
+    outline: none !important;
+    color: #070F2B !important;
+    font-size: 1.5rem !important;
+}
+
+.search_field:focus {
+    border: none !important;
+    outline: none !important;
+}
+
+.search_field::placeholder {
+    color: #070F2B !important;
+    opacity: 0.5;
+    /* Firefox */
+}
+
+
+/* ending line filter by name */
+
+/* searching by topic */
+.select_option {
+    padding: 0.4rem;
+    border-radius: 2rem;
+    height: 100%;
+
+    background-color: rgba(152, 53, 251, 0.4);
+    border: none !important;
+    color: #070F2B !important;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    font-size: 1.5rem !important;
+
+    -webkit-appearance: none;
+    /* Safari and Chrome */
+    -moz-appearance: none;
+    /* Firefox */
+    appearance: none;
+    /* Standard */
+}
+
+.select_option:focus {
+    border: none !important;
+    outline: none !important;
+
+}
+
+.date_box {
+    display: flex;
+    gap: 2rem;
+    height: max-content;
+    padding-bottom: 1.25rem;
+}
+
+.date_start {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.date_end {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.title_date {
+    font-size: 1.4rem !important;
+    font-weight: 500;
+}
+
+.formControl {
+    height: 5rem;
+    width: 16rem !important;
+    padding: 1rem 1rem !important;
+
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px !important;
+    border: 1px solid #ccc;
+    border-radius: 2rem !important;
+}
+
+.formControl:focus {
+    border: none !important;
+    outline: none !important;
+}
+
+/*Ending searching by topic */
+
+
+/*--- ending Line filter--- */
+
+/* start css list painting */
+.expainting {
+    width: 100%;
+    min-height: 40rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.list_paint {
+    width: 100%;
+    height: auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    column-gap: 2rem;
+    row-gap: 3rem;
+}
+
+.btn_add {
+    position: fixed;
+    background-color: #5142fc;
+    bottom: 2rem;
+    right: 2rem;
+    cursor: pointer;
+    height: 5rem;
+    width: 5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+
+/* End css list painting */
+
+/* responsive */
+
+@media (min-width: 300px) {
+    .list_paint {
+        width: 100%;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(1, 35rem);
+        justify-content: center;
+
+        column-gap: 2rem;
+        row-gap: 3rem;
+    }
+
+    .cared_skeleton {
+        max-width: 50rem;
+        height: 30rem !important;
+    }
+
+    .not_found {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+
+
+    }
+
+    .not_found .notfound_title {
+        color: #7a798a !important;
+        font-size: 20px;
+    }
+}
+
+/* Small devices (phones, 576px and up) */
+@media (min-width: 500px) {
+    .list_paint {
+        width: 100%;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(1, 50rem);
+        justify-content: center;
+
+        column-gap: 2rem;
+        row-gap: 3rem;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 840px) {
+    .list_paint {
+        width: 100%;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+
+        column-gap: 2rem;
+        row-gap: 3rem;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .list_paint {
+        width: 100%;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+
+        column-gap: 2rem;
+        row-gap: 3rem;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .list_paint {
+        width: 100%;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+
+        column-gap: 2rem;
+        row-gap: 3rem;
+    }
+
+    /* CSS cho thiết bị có kích thước từ 1200px trở lên */
+}
+
+/* Extra extra large devices (very large desktops, 1400px and up) */
+@media (min-width: 1400px) {
+    /* CSS cho thiết bị có kích thước từ 1400px trở lên */
+}
+
+/* responsive */
+
+.btn_searching {
+    width: max-content;
+    display: flex;
+    gap: 2rem;
+}
+
+.btn_find {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: calc(2rem - 0.5rem);
+    background-color: #5142fc;
+    color: white;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 1.2rem 1rem;
+}
+
+.btn_find h5 {
+    font-size: 1.6rem !important;
+}
+
+.btn_find:hover {
+    opacity: 0.9;
+}
+
+.clear_btn {
+    border: none !important;
+}

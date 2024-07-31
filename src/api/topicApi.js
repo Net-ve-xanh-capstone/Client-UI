@@ -9,5 +9,8 @@ export const topicApi = {
       },
       ...config,
     });
-  }
+  },
+  allTopic: async (endpoint, config) => {
+    return await axiosApi.get(endpoint, config);
+  },
 };

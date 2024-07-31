@@ -1,0 +1,84 @@
+.roundTableResponse li {
+    border-radius: 3px;
+    padding: 20px 25px;
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.roundTableResponse .roundHeader {
+    background: var(--linear);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.roundTableResponse .tableRow {
+    background-color: #ffffff;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+}
+
+.roundTableResponse .roundHeader div {
+    text-align: center;
+}
+
+
+.roundTableResponse .col:nth-child(1) {
+    flex-basis: 10%;
+}
+
+.roundTableResponse .col:nth-child(2) {
+    flex-basis: 35%;
+}
+
+.roundTableResponse .col:nth-child(3) {
+    flex-basis: 40%;
+}
+
+.roundTableResponse .col:nth-child(4) {
+    flex-basis: 15%;
+}
+
+.roundTableResponse .col button:hover {
+    border: none;
+}
+
+.roundTableResponse .col button:focus {
+    border: none;
+}
+
+.roundHeader .col {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+@media all and (max-width: 767px) {
+    .roundTableResponse .roundHeader {
+        display: none;
+    }
+
+    .roundTableResponse .tableRow {
+        display: block;
+    }
+
+    .roundTableResponse li {
+        display: block;
+    }
+
+    .roundTableResponse .col {
+        flex-basis: 100%;
+        display: flex;
+        padding: 10px 0;
+    }
+
+    .roundTableResponse .col:before {
+        color: #6C7A89;
+        padding-right: 10px;
+        content: attr(data-label);
+        flex-basis: 50%;
+        text-align: right;
+    }
+}

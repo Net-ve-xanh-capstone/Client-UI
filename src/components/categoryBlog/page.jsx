@@ -1,4 +1,8 @@
-import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material';
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
@@ -6,6 +10,10 @@ import { toast } from 'react-toastify';
 import { categoryNotuse, deleteCate } from '../../api/categoryApi.js';
 import AddCatePopup from '../addCatePopup/page.jsx';
 import styles from './page.module.css';
+import IconButton from '@mui/material/IconButton';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteModal from '../DeleteModal/index.jsx';
 
 function CategoryBlog() {
   const [listCate, setListCate] = useState([]);
@@ -19,13 +27,13 @@ function CategoryBlog() {
   const getMuiTheme = () =>
     createTheme({
       typography: {
-        fontSize: 20
+        fontSize: 20,
       },
       palette: {
         background: {
-          default: '#0f172a'
+          default: '#0f172a',
         },
-        mode: 'light'
+        mode: 'light',
       },
       components: {
         MuiTableCell: {
@@ -33,16 +41,16 @@ function CategoryBlog() {
             head: {
               padding: '10px 10px',
               fontWeight: 'bold',
-              borderBottom: '1px solid black'
+              borderBottom: '1px solid black',
             },
             body: {
               color: '#000',
               fontWeight: 'bold',
-              borderBottom: '1px solid black'
-            }
-          }
-        }
-      }
+              borderBottom: '1px solid black',
+            },
+          },
+        },
+      },
     });
 
   const columns = [
@@ -50,8 +58,8 @@ function CategoryBlog() {
       name: 'name',
       label: 'TÊN THỂ LOẠI',
       options: {
-        customBodyRender: (value) => <span>{value}</span>
-      }
+        customBodyRender: value => <span>{value}</span>,
+      },
     },
     {
       name: 'id',
@@ -59,27 +67,29 @@ function CategoryBlog() {
       options: {
         customBodyRender: (value, tableData) => (
           <div className={styles.btnAction}>
-            <button
-              className="btn btn-info btn-lg"
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="info"
               onClick={() => {
                 triggerEdit(value, tableData.rowData[0]);
-              }}
-            >
-              Sữa
-            </button>
-            <button
+              }}>
+              <RemoveRedEyeIcon />
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="error"
               onClick={() => {
                 setIdCategory(value);
                 setOpenModal(true);
-              }}
-              className="btn btn-danger btn-lg"
-            >
-              Xóa
-            </button>
+              }}>
+              <DeleteIcon />
+            </IconButton>
           </div>
-        )
-      }
-    }
+        ),
+      },
+    },
   ];
 
   const options = {
@@ -90,7 +100,21 @@ function CategoryBlog() {
     responsive: 'standard',
     print: false,
     download: false,
-    filter: false
+    filter: false,
+    textLabels: {
+      body: {
+        noMatch: 'Không có dữ liệu',
+      },
+      pagination: {
+        rowsPerPage: 'Số hàng mỗi trang:',
+        displayRows: 'của',
+      },
+      toolbar: {
+        search: 'Tìm kiếm',
+        viewColumns: 'Xem cột',
+        filterTable: 'Lọc bảng',
+      },
+    },
   };
 
   // adding id and value name of category to state
@@ -102,11 +126,12 @@ function CategoryBlog() {
   // get all category
   const fetchData = async () => {
     await categoryNotuse()
-      .then((res) => {
+      .then(res => {
         const data = res.data.result;
-        setListCate(data);
+        const dataEmpty = res.data.result.list;
+        setListCate(dataEmpty !== undefined ? dataEmpty : data);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   const triggerDelete = async () => {
@@ -120,12 +145,12 @@ function CategoryBlog() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'light'
+          theme: 'light',
         });
         fetchData();
         handleCloseModal();
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   const handleCloseModal = () => {
@@ -143,15 +168,20 @@ function CategoryBlog() {
       {!(addPopup || openEdit !== null) && (
         <>
           <div className={styles.buttonContainer}>
-            <button className={styles.btnCreate} onClick={() => setAddPopup(true)}>
+            <div>
+              <h2 className={styles.titleHeader}>Quản lí thể loại</h2>
+            </div>
+            <button
+              className={styles.btnCreate}
+              onClick={() => setAddPopup(true)}>
               <span>Tạo Thể Loại</span>
             </button>
           </div>
           <StyledEngineProvider injectFirst>
             <ThemeProvider theme={getMuiTheme()}>
-              <div className={styles.tableContainer}>
+              <div className={`${styles.tableContainer} table-contest`}>
                 <MUIDataTable
-                  title={'Quản lý thể loại'}
+                  // title={'Quản lý thể loại'}
                   data={listCate}
                   columns={columns}
                   options={options}
@@ -161,7 +191,9 @@ function CategoryBlog() {
           </StyledEngineProvider>
         </>
       )}
-      {addPopup && <AddCatePopup handleClose={setAddPopup} fetchData={fetchData} />}
+      {addPopup && (
+        <AddCatePopup handleClose={setAddPopup} fetchData={fetchData} />
+      )}
       {openEdit !== null && (
         <AddCatePopup
           isEdit
@@ -173,20 +205,12 @@ function CategoryBlog() {
         />
       )}
       {/* confirm delete button */}
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Xoá thể loại</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Bạn có chắc là sẽ xoá thể loại này không ?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={triggerDelete}>
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DeleteModal
+        show={showModal}
+        setShow={setOpenModal}
+        title={'thể loại'}
+        callBack={triggerDelete}
+      />
     </div>
   );
 }

@@ -121,31 +121,13 @@ function CompetitorManage() {
         ),
       },
     },
-    // {
-    //   name: 'status',
-    //   label: 'TRẠNG THÁI',
-    //   options: {
-    //     customBodyRender: (value, _) => {
-    //       return (
-    //         <>
-    //           <Switch
-    //             checked={value === 'Active'}
-    //             size="small"
-    //             color="success"
-    //             disabled
-    //           />
-    //         </>
-    //       );
-    //     },
-    //   },
-    // },
     {
       name: 'id',
       label: 'TƯƠNG TÁC',
       options: {
         customBodyRender: (value, tableData) => (
           <div className={styles.btnAction}>
-            {tableData.rowData[4] === 'Active' ? (
+            {contest[tableData.rowIndex].status === 'Active' ? (
               <IconButton
                 aria-label="delete"
                 size="small"

@@ -8,8 +8,11 @@ import { getAllRoundStaff, roundTopicById } from '../../api/roundStaffApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 import styles from './page.module.css';
+import { useSelector } from 'react-redux';
 
 function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
+  const { userInfo } = useSelector(state => state.auth);
+
   const fieldText = useRef(null);
 
   const [imageLoaded, setImageLoaded] = useState(null);
@@ -27,7 +30,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
     name: { value: '', error: '' },
     description: { value: '', error: '' },
     roundTopicId: { value: '', error: '' },
-    currentUserId: { value: '3fa85f64-5717-4562-b3fc-2c963f66afa6' },
+    currentUserId: { value: userInfo.Id },
   });
 
   const [loadingContest, setLoadingContest] = useState(true);
@@ -327,8 +330,14 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
     try {
       const res = await getAllRoundStaff();
       const data = res.data.result;
+      console.log(data);
       setContest(
-        data !== null ? data.map(vl => ({ value: vl.id, label: vl.name })) : [],
+        data !== null
+          ? data.map(vl => ({
+              value: vl.id,
+              label: vl.name + ' - ' + vl.educationalLevelName,
+            }))
+          : [],
       );
     } catch (error) {
       console.log(error);

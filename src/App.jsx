@@ -5,6 +5,7 @@ import routes from './router/routes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DotLoader } from 'react-spinners';
 import { color } from './constant/Color.js';
+import ProtectedRoute from './router/ProtectedRoute.jsx';
 const queryClient = new QueryClient();
 function App() {
   return (

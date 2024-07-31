@@ -10,9 +10,6 @@
      background-color: #f8f8f8;
  }
 
- .main_title {
-     color: #5142fc !important;
- }
 
  .poup {
      position: absolute;
@@ -182,6 +179,16 @@
 
  @media (min-width: 300px) {
 
+     .main_title {
+         cursor: default;
+         background: var(--linear);
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+         color: var(--pink);
+         text-align: start !important;
+         width: 100%;
+     }
+
      .not_found {
          width: 100%;
          display: flex;
@@ -285,10 +292,6 @@
          align-items: center;
          gap: 2rem;
          padding: 2rem;
-     }
-
-     .main_title {
-         color: #5142fc !important;
      }
 
      .poup {

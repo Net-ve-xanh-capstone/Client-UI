@@ -16,7 +16,11 @@ function CardPainting({ items, getPaintingByID }) {
       </div>
       <div className={styles.content}>
         <span className={styles.painting_name}>
-          <h5>{items.name}</h5>
+          <h5>
+            {items.name.length > 140
+              ? cutString(items.name, 140) + '...'
+              : items.name}
+          </h5>
           <span
             className={styles.status}
             style={{
@@ -66,6 +70,14 @@ function CardPainting({ items, getPaintingByID }) {
           </div>
           <div className={styles.des_field}>
             <p>{items.roundName}</p>
+          </div>
+        </div>
+        <div className={`${styles.field} ${styles.title_field}`}>
+          <div className={styles.title_field}>
+            <p>Người tạo: </p>
+          </div>
+          <div className={styles.des_field}>
+            <p>{items.ownerRole}</p>
           </div>
         </div>
       </div>

@@ -22,7 +22,7 @@ function BlogStaff() {
   const [idDelete, setIdDelete] = useState(null);
   const [isopenCreate, setisopenCreate] = useState(null);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handlePopup = idx => {
     setPopup(prev => (prev === idx ? '' : idx));
@@ -132,7 +132,7 @@ function BlogStaff() {
                 blogList.map((vl, idx) => (
                   <div key={vl.id} className={styles.card}>
                     <div className={styles.image}>
-                      <img src={vl.url} alt={vl.title} />
+                      <img src={vl.image} alt={vl.title} />
                     </div>
                     <div className={styles.text}>
                       <div className={styles.title}>

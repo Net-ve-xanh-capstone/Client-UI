@@ -29,7 +29,11 @@ const routes = [
   { path: '/sign-up', component: <SignUp /> },
   {
     path: '/staff-management',
-    component: <StaffManage />,
+    component: (
+      <ProtectedRoute role={Role.STAFF}>
+        <StaffManage />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: 'contest',

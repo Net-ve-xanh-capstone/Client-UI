@@ -125,6 +125,7 @@
     display: flex;
     gap: 2rem;
     height: max-content;
+    padding-bottom: 1.25rem;
 }
 
 .date_start {
@@ -150,6 +151,15 @@
     height: 5rem;
     width: 16rem !important;
     padding: 1rem 1rem !important;
+
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px !important;
+    border: 1px solid #ccc;
+    border-radius: 2rem !important;
+}
+
+.formControl:focus {
+    border: none !important;
+    outline: none !important;
 }
 
 /*Ending searching by topic */
@@ -322,4 +332,8 @@
 
 .btn_find:hover {
     opacity: 0.9;
+}
+
+.clear_btn {
+    border: none !important;
 }

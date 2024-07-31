@@ -12,6 +12,8 @@ import { topicApi } from '../../api/topicApi.js';
 import { getAllLevel } from '../../api/educationLevel.js';
 import { getAllRoundStaff } from '../../api/roundStaffApi.js';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function PaintingPage() {
   const [totalPage, setTotalPage] = useState(2);
@@ -300,36 +302,40 @@ function PaintingPage() {
               <div className={styles.date_box}>
                 <div className={styles.date_start}>
                   <h5 className={styles.title_date}>Thời gian bắt đầu</h5>
-                  <input
-                    required
-                    type="date"
-                    name="startTime"
-                    id="startTime"
-                    className={styles.formControl}
-                    value={searching.startDate}
-                    onChange={e =>
+                  <DatePicker
+                    selected={searching.startDate}
+                    onChange={date =>
                       setSearching(prev => ({
                         ...prev,
-                        startDate: e.target.value,
+                        startDate: date,
                       }))
                     }
+                    dateFormat="dd/MM/yyyy"
+                    placeholderText="dd/mm/yyyy"
+                    showYearDropdown
+                    scrollableMonthYearDropdown
+                    className={styles.formControl}
+                    isClearable
+                    clearButtonClassName={styles.clear_btn}
                   />
                 </div>
                 <div className={styles.date_end}>
                   <h5 className={styles.title_date}>Thời gian kết thúc</h5>
-                  <input
-                    required
-                    type="date"
-                    name="endTime"
-                    id="endTime"
-                    className={styles.formControl}
-                    value={searching.endDate}
-                    onChange={e =>
+                  <DatePicker
+                    selected={searching.endDate}
+                    onChange={date =>
                       setSearching(prev => ({
                         ...prev,
-                        endDate: e.target.value,
+                        endDate: date,
                       }))
                     }
+                    dateFormat="dd/MM/yyyy"
+                    placeholderText="dd/mm/yyyy"
+                    isClearable
+                    clearButtonClassName={styles.clear_btn}
+                    showYearDropdown
+                    scrollableMonthYearDropdown
+                    className={styles.formControl}
                   />
                 </div>
               </div>

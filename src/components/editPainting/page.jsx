@@ -8,6 +8,8 @@ import { roundTopicById } from '../../api/roundStaffApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import { parseDateEdit } from '../../utils/formatDate.js';
 import styles from './page.module.css';
+import { useSelector } from 'react-redux';
+import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 
 function ModalEditPainting({
   modalShow,
@@ -16,6 +18,8 @@ function ModalEditPainting({
   dataPainting,
   setPageNumber,
 }) {
+  const { userInfo } = useSelector(state => state.auth);
+
   const fieldText = useRef(null);
 
   const [imageLoaded, setImageLoaded] = useState(null);
@@ -43,7 +47,15 @@ function ModalEditPainting({
     description: null,
     status: null,
     roundTopicId: null,
-    currentUserId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+    currentUserId: userInfo.Id,
+  });
+
+  const [staffUpdate, setStaffUpdate] = useState({
+    fullName: { value: '', error: '' },
+    email: { value: '', error: '' },
+    address: { value: '', error: '' },
+    phone: { value: '', error: '' },
+    birthday: { value: '', error: '' },
   });
 
   const [contestId, setContestId] = useState(null);
@@ -103,9 +115,9 @@ function ModalEditPainting({
     {
       title: 'Tên thí sinh',
       type: 'text',
-      value: fieldInput.fullName.value,
+      value: staffUpdate.fullName.value,
       onchange: e => {
-        setFieldInput(prv => ({
+        setStaffUpdate(prv => ({
           ...prv,
           fullName: { ...prv.fullName, value: e.target.value },
         }));
@@ -115,9 +127,9 @@ function ModalEditPainting({
     {
       title: 'Ngày sinh',
       type: 'date',
-      value: fieldInput.birthday.value,
+      value: staffUpdate.birthday.value,
       onchange: e => {
-        setFieldInput(prv => ({
+        setStaffUpdate(prv => ({
           ...prv,
           birthday: { ...prv.birthday, value: e.target.value },
         }));
@@ -127,9 +139,9 @@ function ModalEditPainting({
     {
       title: 'Email',
       type: 'text',
-      value: fieldInput.email.value,
+      value: staffUpdate.email.value,
       onchange: e => {
-        setFieldInput(prv => ({
+        setStaffUpdate(prv => ({
           ...prv,
           email: { ...prv.email, value: e.target.value },
         }));
@@ -139,9 +151,9 @@ function ModalEditPainting({
     {
       title: 'Số điện thoại',
       type: 'text',
-      value: fieldInput.phone.value,
+      value: staffUpdate.phone.value,
       onchange: e => {
-        setFieldInput(prv => ({
+        setStaffUpdate(prv => ({
           ...prv,
           phone: { ...prv.phone, value: e.target.value },
         }));
@@ -151,9 +163,9 @@ function ModalEditPainting({
     {
       title: 'Địa chỉ',
       type: 'text',
-      value: fieldInput.address.value,
+      value: staffUpdate.address.value,
       onchange: e => {
-        setFieldInput(prv => ({
+        setStaffUpdate(prv => ({
           ...prv,
           address: { ...prv.address, value: e.target.value },
         }));
@@ -172,8 +184,56 @@ function ModalEditPainting({
       }, {});
       return updatedState;
     });
+    setStaffUpdate(prevState => {
+      // Loop through each key in the prevState and set the value to an empty string
+      const updatedState = Object.keys(prevState).reduce((acc, key) => {
+        acc[key] = { ...prevState[key], value: '' };
+        return acc;
+      }, {});
+      return updatedState;
+    });
     setImageLoaded(null);
   };
+
+  // adding new from another file
+
+  const validateName = val => {
+    if (val.length < 3 || val.length > 200) {
+      return 'độ dài phải từ 3 đến 200 chữ';
+    }
+    return '';
+  };
+
+  const validateEmail = val => {
+    if (!isEmail(val)) {
+      return 'Email không đúng định dạng';
+    }
+    return '';
+  };
+
+  const validateBirthDay = val => {
+    if (val === '' || val === undefined || val === null) {
+      return 'Không được bỏ trống ngày sinh';
+    }
+    return '';
+  };
+
+  // missing phone number in the API
+  const validatePhoneNumber = phoneNumber => {
+    if (!isPhoneNumber(phoneNumber)) {
+      return 'Số điện thoại không hợp lệ';
+    }
+    return '';
+  };
+
+  const validateAddress = address => {
+    if (address.length < 5 || address.length > 200) {
+      return 'độ dài phải từ 3 đến 200 chữ';
+    }
+    return '';
+  };
+
+  // ending adding new from another file
 
   const validateNamePainting = val => {
     if (val.length < 3 || val.length > 200) {
@@ -198,6 +258,12 @@ function ModalEditPainting({
 
   // validation the length of all field
   const validateAllFields = () => {
+    const competitorName = validateName(staffUpdate.fullName.value);
+    const competitorEmail = validateEmail(staffUpdate.email.value);
+    const competitorAddress = validateAddress(staffUpdate.address.value);
+    const competitorPhone = validatePhoneNumber(staffUpdate.phone.value);
+    const competitorBirthday = validateBirthDay(staffUpdate.birthday.value);
+
     const namePaintingErr = validateNamePainting(fieldInput.name.value);
     const descriptionError = validateDescription(fieldInput.description.value);
     const roundTopicError = validateRoundTopic(fieldInput.roundTopicId.value);
@@ -209,7 +275,40 @@ function ModalEditPainting({
       roundTopicId: { ...prevState.roundTopicId, error: roundTopicError },
     }));
 
-    return !namePaintingErr && !descriptionError && !roundTopicError;
+    setStaffUpdate(prev => ({
+      ...prev,
+      fullName: {
+        ...prev.fullName,
+        error: competitorName,
+      },
+      email: {
+        ...prev.email,
+        error: competitorEmail,
+      },
+      address: {
+        ...prev.address,
+        error: competitorAddress,
+      },
+      phone: {
+        ...prev.phone,
+        error: competitorPhone,
+      },
+      birthday: {
+        ...prev.birthday,
+        error: competitorBirthday,
+      },
+    }));
+
+    return (
+      !namePaintingErr &&
+      !descriptionError &&
+      !roundTopicError &&
+      !competitorName &&
+      !competitorEmail &&
+      !competitorAddress &&
+      !competitorPhone &&
+      !competitorBirthday
+    );
   };
 
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
@@ -306,7 +405,7 @@ function ModalEditPainting({
     if (validateAllFields()) {
       let payload;
       if (progress) {
-        payload = { ...updateField };
+        payload = { ...updateField, ...updateObject(staffUpdate) };
         payload = {
           ...payload,
           id: dataPainting.id,
@@ -321,10 +420,16 @@ function ModalEditPainting({
             updateField.roundTopicId !== null
               ? payload.roundTopicId
               : dataPainting.topicId,
+
+          fullName: payload.fullName,
+          email: payload.email,
+          address: payload.address,
+          phone: payload.phone,
+          birthday: payload.birthday,
         };
         updatePainting(payload);
       } else {
-        payload = { ...updateField };
+        payload = { ...updateField, ...updateObject(staffUpdate) };
         payload = {
           ...payload,
           id: dataPainting.id,
@@ -339,6 +444,12 @@ function ModalEditPainting({
             updateField.roundTopicId !== null
               ? payload.roundTopicId
               : dataPainting.topicId,
+
+          fullName: payload.fullName,
+          email: payload.email,
+          address: payload.address,
+          phone: payload.phone,
+          birthday: payload.birthday,
         };
         updatePainting(payload);
       }
@@ -361,31 +472,38 @@ function ModalEditPainting({
     setImageLoaded(state.image);
     setFieldInput(prv => ({
       ...prv,
+
+      name: { ...prv.name, value: state.name },
+      description: { ...prv.description, value: state.description },
+      roundTopicId: { ...prv.roundTopicId, value: state.topicId },
+    }));
+
+    setStaffUpdate(prv => ({
+      ...prv,
       fullName: { ...prv.fullName, value: state.ownerName },
-      email: { ...prv.fullName, value: state.email },
+      email: { ...prv.email, value: state.email },
       address: { ...prv.address, value: state.address },
       birthday: {
         ...prv.birthday,
         value: parseDateEdit(state.birthday),
       },
       phone: { ...prv.phone, value: state.phone },
-      name: { ...prv.name, value: state.name },
-      description: { ...prv.description, value: state.description },
-      roundTopicId: { ...prv.roundTopicId, value: state.topicId },
     }));
+
     setRoundId({
       value: state.topicId,
       label: state.topicName,
     });
     setContestId({
       value: state.roundId,
-      label: state.roundName,
+      label: state.roundName + ' - ' + state.level,
     });
     setDateSubmit(state.submitTime.split('T')[0]);
     setStatus(state.status);
   };
 
   useEffect(() => {
+    console.log(dataPainting);
     if (dataPainting !== null) {
       currenInput(dataPainting);
       fetchRoundTopic(dataPainting.roundId);
@@ -443,15 +561,15 @@ function ModalEditPainting({
                         type={vl.type}
                         value={vl.value}
                         onChange={vl.onchange}
-                        readOnly
+                        readOnly={dataPainting?.ownerRole === 'Competitor'}
                       />
                     </div>
-                    {(fieldInput[vl.label].error !== '' ||
-                      fieldInput[vl.label].error !== null) && (
+                    {(staffUpdate[vl.label].error !== '' ||
+                      staffUpdate[vl.label].error !== null) && (
                       <div className={styles.error_text}>
                         <span></span>
                         <p className={styles.txt_error}>
-                          {fieldInput[vl.label].error}
+                          {staffUpdate[vl.label].error}
                         </p>
                       </div>
                     )}

@@ -7,6 +7,7 @@ import { addnewBlog } from '../../api/blogApi.js';
 import { allCategory } from '../../api/categoryApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import styles from './page.module.css';
+import ModalAddingImg from '../ModalAddingImage/page.jsx';
 
 function AddNewBlog({ triggerClose, refetchData }) {
   const [imageLoaded, setImageLoaded] = useState(null);
@@ -20,11 +21,17 @@ function AddNewBlog({ triggerClose, refetchData }) {
   const [supDesValue, setSupDes] = useState('');
   const [idCategory, setIdCategory] = useState('');
 
+  // state handle popup
+  const [openAddingImage, setOpenAddingImage] = useState(false);
+  const [listImage, setListImage] = useState([]);
+
   const txtTitle = useRef(null);
   const txtDesRef = useRef(null);
   const txtSupDes = useRef(null);
 
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+  const listFake = [1, 2, 31, 2, 31, 2, 3];
 
   const inputArea = [
     {
@@ -55,6 +62,11 @@ function AddNewBlog({ triggerClose, refetchData }) {
       },
     },
   ];
+
+  // close popup
+  const handleClosePopup = () => {
+    setOpenAddingImage(false);
+  };
 
   // check all field in payload must be fill in
   const validation = payload => {
@@ -164,7 +176,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
   const postImage = () => {
     if (progress) {
       const payload = {
-        url: url,
+        image: url,
         title: txtTitles,
         description: txtDes,
         categoryId: idCategory,
@@ -214,107 +226,123 @@ function AddNewBlog({ triggerClose, refetchData }) {
   }, [txtTitles, txtDes]);
 
   return (
-    <div className={`${styles.box} scrollbar`}>
-      <div className={styles.scroll_section}>
-        <div className={styles.title_line}>
-          <h2 className={`tf-title pb-20 ${styles.title}`}>Tạo bài viết mới</h2>
-          <CloseIcon
-            onClick={() => triggerClose(null)}
-            sx={{
-              fontSize: '3rem',
-              cursor: 'pointer',
-            }}
-          />
-        </div>
-
-        {/* handle upload image */}
-        <div className={styles.upload_image}>
-          {imageLoaded !== null ? (
-            <>
-              <label htmlFor="add_more_file" className={styles.image_box}>
-                <img src={imageLoaded} alt="image" className={styles.image} />
-              </label>
-              <input
-                type="file"
-                className={styles.input_hidden}
-                id="add_more_file"
-                accept="image/png, image/gif, image/jpeg"
-                onChange={e => changeFile(e)}
-                onClick={e => {
-                  e.currentTarget.value = null;
-                }}
-              />
-            </>
-          ) : (
-            <>
-              <label htmlFor="add_more_file" className={styles.onClick_upload}>
-                <CloudUploadIcon sx={{ color: '#5142fc', fontSize: '20rem' }} />
-              </label>
-              <input
-                type="file"
-                className={styles.input_hidden}
-                id="add_more_file"
-                accept="image/png, image/gif, image/jpeg"
-                onChange={e => changeFile(e)}
-                onClick={e => {
-                  e.currentTarget.value = null;
-                }}
-              />
-            </>
-          )}
-        </div>
-        {/* ending handle upload image */}
-
-        {/* category */}
-        <div className={styles.category_box}>
-          <Form.Group controlId="custom-select" className={styles.box_select}>
-            <Form.Control
-              value={txtCategory}
-              onChange={e => {
-                const selectedOption = e.target.selectedOptions[0];
-                const selectedId = selectedOption ? selectedOption.id : '';
-                setIdCategory(selectedId);
-                setTxtCategory(e.target.value);
+    <>
+      <ModalAddingImg
+        modalShow={openAddingImage}
+        onHide={handleClosePopup}
+        setListImage={setListImage}
+        listImage={listImage}
+      />
+      <div className={`${styles.box} scrollbar`}>
+        <div className={styles.scroll_section}>
+          <div className={styles.title_line}>
+            <h2 className={`tf-title pb-20 ${styles.title}`}>
+              Tạo bài viết mới
+            </h2>
+            <CloseIcon
+              onClick={() => triggerClose(null)}
+              sx={{
+                fontSize: '3rem',
+                cursor: 'pointer',
               }}
-              as="select"
-              className={`rounded-0 shadow ${styles.form_selected}`}>
-              <option className="d-none" value="">
-                Chọn thể loại bài viết
-              </option>
-              {listCategory?.length &&
-                listCategory.map((vl, _) => (
-                  <option id={vl.id} key={vl.id}>
-                    {vl.name}
-                  </option>
-                ))}
-            </Form.Control>
-          </Form.Group>
-        </div>
-        {/* ending category */}
-
-        {/* text editor */}
-        {inputArea.map((vl, _) => (
-          <div key={vl} className={styles.title_box}>
-            <textarea
-              ref={vl.ref}
-              className={styles.title_input}
-              placeholder={vl.placeHoder}
-              value={vl.value}
-              onChange={vl.onchange}></textarea>
+            />
           </div>
-        ))}
-        {/*ending text editor */}
 
-        <div className={styles.btn_click}>
-          <span className={styles.btn_find} onClick={() => closePopup()}>
-            <h5>Cancel</h5>
-          </span>
-          <span className={styles.btn_find} onClick={() => postImage()}>
-            <h5>Post</h5>
-          </span>
+          {/* handle upload image */}
+          <div className={styles.upload_image}>
+            {listImage?.length > 0 ? (
+              <div
+                className={`${styles.grid_container} ${listImage.length <= 2 && styles.grid_second_layout} ${listImage.length >= 3 && styles.grid_third_layout} ${listImage.length === 1 && styles.grid_single_layout}`}>
+                {listImage.slice(0, 3).map((val, idx) => (
+                  <div
+                    key={idx}
+                    className={`${styles.grid_item} ${listImage.length >= 3 && idx === 0 && styles.scale_grid}`}
+                    onClick={() => setOpenAddingImage(true)}>
+                    <img
+                      src={val.url}
+                      alt="null"
+                      className={styles.grid_image}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <>
+                <label
+                  htmlFor="add_more_file"
+                  onClick={() => setOpenAddingImage(true)}
+                  className={styles.onClick_upload}>
+                  <CloudUploadIcon
+                    sx={{ color: '#5142fc', fontSize: '20rem' }}
+                  />
+                </label>
+                {/* <input
+                  type="file"
+                  className={styles.input_hidden}
+                  id="add_more_file"
+                  accept="image/png, image/gif, image/jpeg"
+                  onChange={e => changeFile(e)}
+                  onClick={e => {
+                    e.currentTarget.value = null;
+                    setOpenAddingImage(true);
+                  }}
+                /> */}
+              </>
+            )}
+          </div>
+          {/* ending handle upload image */}
+
+          {/* category */}
+          <div className={styles.category_box}>
+            <Form.Group controlId="custom-select" className={styles.box_select}>
+              <Form.Control
+                value={txtCategory}
+                onChange={e => {
+                  const selectedOption = e.target.selectedOptions[0];
+                  const selectedId = selectedOption ? selectedOption.id : '';
+                  setIdCategory(selectedId);
+                  setTxtCategory(e.target.value);
+                }}
+                as="select"
+                className={`rounded-0 shadow ${styles.form_selected}`}>
+                <option className="d-none" value="">
+                  Chọn thể loại bài viết
+                </option>
+                {listCategory?.length &&
+                  listCategory.map((vl, _) => (
+                    <option id={vl.id} key={vl.id}>
+                      {vl.name}
+                    </option>
+                  ))}
+              </Form.Control>
+            </Form.Group>
+          </div>
+          {/* ending category */}
+
+          {/* text editor */}
+          {inputArea.map((vl, _) => (
+            <div key={vl} className={styles.title_box}>
+              <textarea
+                ref={vl.ref}
+                className={styles.title_input}
+                placeholder={vl.placeHoder}
+                value={vl.value}
+                onChange={vl.onchange}></textarea>
+            </div>
+          ))}
+          {/*ending text editor */}
+
+          <div className={styles.btn_click}>
+            <span className={styles.btn_find} onClick={() => closePopup()}>
+              <h5>Cancel</h5>
+            </span>
+            <span className={styles.btn_find} onClick={() => postImage()}>
+              <h5>Post</h5>
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

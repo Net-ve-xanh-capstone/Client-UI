@@ -3,20 +3,20 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 const ProtectedRoute = ({ children, role }) => {
-  const { userInfo } = useSelector(state => state.auth);
-  console.log('userInfor', userInfo);
-  if (!userInfo) {
-    return <Navigate to="/login" replace />;
-  }
-  if (role && userInfo.role !== role) {
-    return <Navigate to="/" replace />;
-  }
+    const { userInfo } = useSelector(state => state.auth);
 
-  return children;
+    if (!userInfo) {
+        return <Navigate to="/login" replace />;
+    }
+    if (role && userInfo.role !== role) {
+        return <Navigate to="/" replace />;
+    }
+
+    return children;
 };
 
 ProtectedRoute.propTypes = {
-  children: PropTypes.node.isRequired,
+    children: PropTypes.node.isRequired,
 };
 
 export default ProtectedRoute;

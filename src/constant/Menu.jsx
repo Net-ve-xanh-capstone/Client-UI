@@ -10,149 +10,108 @@ const menus = [
         id: 1,
         sub: 'Trang chủ',
         links: '/',
-        public: true
-      }
-    ]
+        public: true,
+      },
+    ],
   },
   {
     id: 2,
-    name: 'Explore',
+    name: 'Tìm hiểu',
     links: '#',
     namesub: [
       {
         id: 1,
         sub: 'Explore',
         links: '/explore',
-        public: true
+        public: true,
       },
       {
         id: 2,
         sub: 'Live Auctions',
         links: '/live-auctions',
-        public: true
+        public: true,
       },
-      {
-        id: 3,
-        sub: 'Item Details 02',
-        links: '/item-details-02',
-        public: true
-      }
-    ]
+    ],
   },
   {
     id: 3,
-    name: 'Activity',
-    links: '#',
-    namesub: [
-      {
-        id: 1,
-        sub: 'Activity 01',
-        links: '/activity-01',
-        public: true
-      },
-      {
-        id: 2,
-        sub: 'Activity 02',
-        links: '/activity-02',
-        public: true
-      }
-    ]
-  },
-  {
-    id: 4,
-    name: 'Community',
+    name: 'Cộng đồng',
     links: '#',
     namesub: [
       {
         id: 1,
         sub: 'Blog',
         links: '/blog',
-        public: true
+        public: true,
       },
       {
         id: 2,
         sub: 'Blog Details',
         links: '/blog-details',
-        public: true
+        public: true,
       },
-      {
-        id: 3,
-        sub: 'Help Center',
-        links: '/help-center',
-        public: true
-      }
-    ]
+    ],
   },
   {
-    id: 5,
+    id: 4,
     name: 'Trang',
     links: '#',
     namesub: [
       {
         id: 1,
-        sub: 'Authors 01',
-        links: '/authors-01',
-        public: false
+        sub: 'Chỉnh sửa thông tin',
+        links: '/edit-profile',
+        public: false,
+        role: [
+          Role.COMPETITOR,
+          Role.ADMIN,
+          Role.STAFF,
+          Role.EXAMINER,
+          Role.GUARDIAN,
+        ],
       },
       {
         id: 2,
-        sub: 'nộp bài',
-        links: '/submit',
+        sub: 'Tranh của tôi',
+        links: '/my-painting',
         public: false,
-        role: [Role.COMPETITOR]
+        role: [
+          Role.COMPETITOR,
+        ],
       },
       {
         id: 3,
-        sub: 'Edit Profile',
-        links: '/edit-profile',
-        public: false,
-        role: [Role.COMPETITOR, Role.ADMIN, Role.STAFF, Role.EXAMINER, Role.GUARDIAN]
-      },
-      {
-        id: 6,
-        sub: 'Ranking',
+        sub: 'Bảng xếp hạng',
         links: '/ranking',
-        public: true
+        public: true,
       },
       {
-        id: 7,
-        sub: 'Đăng nhập',
-        links: '/login',
-        public: true
-      },
-      {
-        id: 8,
-        sub: 'Đăng ký',
-        links: '/sign-up',
-        public: true
-      },
-      {
-        id: 9,
-        sub: 'No Result',
+        id: 4,
+        sub: 'Không có kết quả',
         links: '/no-result',
-        public: true
+        public: true,
       },
       {
-        id: 10,
+        id: 5,
         sub: 'FAQ',
         links: '/faq',
-        public: true
-      }
-    ]
+        public: true,
+      },
+    ],
   },
   {
-    id: 7,
-    name: 'Contact',
-    links: '/contact-01',
+    id: 5,
+    name: 'Liên hệ',
+    links: '/contact',
     namesub: [
       {
         id: 1,
-        sub: 'Contact 1',
-        links: '/contact-01',
-        public: true
-      }
-    ]
-  }
+        sub: 'Liên hệ',
+        links: '/contact',
+        public: true,
+      },
+    ],
+  },
 ];
 
 export default menus;

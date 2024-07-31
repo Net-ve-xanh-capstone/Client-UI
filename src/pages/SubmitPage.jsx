@@ -1,5 +1,4 @@
-// import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import HeaderVersion2 from '../components/common/header/HeaderVersion2';
 import Footer from '../components/common/footer/Footer';
 import 'react-tabs/style/react-tabs.css';
@@ -16,21 +15,34 @@ import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import { topicApi } from '../api/topicApi';
 import { paintingApi } from '../api/paintingApi';
+import { paintingStatus, paintingStatusDisable } from '../constant/Status.js';
 import Swal from 'sweetalert2';
 
-const draffPaintingEndpoint = 'paintings/draftepainting1stround';
 const getAllPaintingByCompetitorIdEndpoint =
-  'paintings/listpaintingbyaccountid';
-const topics = topicApi.getAllTopic('topics');
-const topicsData = topics.data.result.list;
+  'paintings/getpaintingbyaccountcontest';
 const SubmitPage = () => {
+  const { contestId } = useParams();
   const [image, setImage] = useState(null);
   const [file, setFile] = useState(null);
+  const [paintingId, setPaintingId] = useState(null);
+  const [roundTopicsData, setRoundTopicsData] = useState([]);
   const [topicId, setTopicId] = useState(null);
+  const [disable, setDisable] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(false);
   const { progress, url, error } = useUploadImage(file);
   const userInfo = useSelector(state => state.auth.userInfo);
   const today = new Date().toISOString().slice(0, 10);
-  const [paintingCompetitor, setPaintingCompetitor] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await topicApi.getAllTopic(
+        'roundtopics/getalltopic',
+        userInfo.Id,
+        contestId,
+      );
+      setRoundTopicsData(response.data.result);
+    };
+    fetchData();
+  }, []);
   const schema = yup.object().shape({
     file: yup.mixed().required('Vui lòng chọn ảnh'),
     name: yup.string().required('Vui lòng nhập tên của bức tranh'),
@@ -41,7 +53,6 @@ const SubmitPage = () => {
   const {
     handleSubmit,
     control,
-    reset,
     setValue,
     trigger,
     watch,
@@ -60,39 +71,87 @@ const SubmitPage = () => {
     setFile(file);
   };
 
-  const handleSubmitPainting = async e => {
+  const handleDraftPainting = async e => {
     // Trigger validate form
     const isValid = await trigger();
     if (!isValid) return;
-    const data = {
-      image: url,
-      name: e.name,
-      description: e.description,
-      roundId: '1ff52294-cc72-4781-a73a-042baffb4ced',
-      topicId: topicId,
-      currentUserId: userInfo.Id,
-    };
-    Swal.fire({
-      title: 'Bạn có chắc chắn nộp bài?',
-      showCancelButton: true,
-      confirmButtonText: 'Nộp',
-    }).then(result => {
-      console.log('call');
-      if (result.isConfirmed) {
-        paintingApi
-          .submitPainting(draffPaintingEndpoint, data)
-          .then(() => {
-            Swal.fire('Đã nộp bài thành công', '', 'success');
-          })
-          .catch(error => {
-            Swal.fire('Nộp bài thất bại', 'Hãy thử lại sau bạn nhé', 'error');
-          });
-      } else if (result.isDenied) {
-        Swal.fire('Bạn đã hủy nộp bài', '', 'info');
+    let data = {};
+    let endpoint = '';
+    let method = '';
+    if (paintingId) {
+      method = 'PUT';
+      endpoint = 'paintings/update';
+      data = {
+        id: paintingId,
+        image: image,
+        name: e.name,
+        description: e.description,
+        status: paintingStatus.DRAFT,
+        roundTopicId: topicId,
+        currentUserId: userInfo.Id,
+      };
+    } else {
+      method = 'POST';
+      endpoint = 'paintings/draftepainting1stround';
+      data = {
+        image: url,
+        name: e.name,
+        description: e.description,
+        roundTopicId: topicId,
+        accountId: userInfo.Id,
       }
-    });
+    }
+    SwalComponent(
+      'Bạn có chắc chắn lưu bài?',
+      endpoint,
+      method,
+      data, 
+      'Lưu bài thành công', 
+      'Lưu bài thất bại', 
+      'Bạn đã hủy lưu bài',
+      setRefreshTrigger
+    );
   };
-
+  const handleSubmitPainting = async e => {
+    const isValid = await trigger();
+    if (!isValid) return;
+    let data = {};
+    let endpoint = '';
+    let method = '';
+    if (paintingId) {
+      method = 'PUT';
+      endpoint = 'paintings/update';
+      data = {
+        id: paintingId,
+        image: image,
+        name: e.name,
+        description: e.description,
+        status: paintingStatus.SUBMITTED,
+        roundTopicId: topicId,
+        currentUserId: userInfo.Id,
+      };
+    } else {
+      method = 'POST';
+      endpoint = 'paintings/submitepainting1stround';
+      data = {
+        image: url,
+        name: e.name,
+        description: e.description,
+        roundTopicId: topicId,
+        accountId: userInfo.Id,
+      }
+    }
+    SwalComponent(
+      'Bạn có chắc chắn nộp bài?',
+      endpoint,
+      method,
+      data,
+      'Nộp bài thành công',
+      'Nộp bài thất bại',
+      'Bạn đã hủy nộp bài',
+      setRefreshTrigger
+    );
+  };
   const getDropdownOptions = (data, defaultValue = '') => {
     const value = watch(data) || defaultValue;
     return value;
@@ -111,21 +170,29 @@ const SubmitPage = () => {
         URL.revokeObjectURL(image.preview);
       }
     };
-  }, [image, userInfo.Id]);
+  }, [image, userInfo?.Id]);
 
   useEffect(() => {
     paintingApi
-      .getAllPaintingByCompetitorId(
-        getAllPaintingByCompetitorIdEndpoint + '/' + userInfo.Id,
+      .getAllPaintingByContestAccountId(
+        getAllPaintingByCompetitorIdEndpoint, contestId, userInfo?.Id,
       )
-      .then(res => {
-        const draftPaintings = res.data.result.list.filter(
-          painting => painting.status === 'Draft',
-        );
-        setPaintingCompetitor(draftPaintings[0]);
-        setImage(draftPaintings[0]?.image);
+      .then(result => {
+        const data = result.data.result;
+        setImage(data.image);
+        setPaintingId(data.id);
+        setValue('name', data.name);
+        setValue('description', data.description);
+        setValue('topic', data.topicName);
+        setTopicId(data.roundTopicId);
+        setValue('file', data.image);
+        if(paintingStatusDisable.some(status => status === data.status)) {
+          setDisable(true);
+        } else {
+          setDisable(false);
+        }
       });
-  }, [userInfo.Id]);
+  }, [userInfo?.Id, contestId, refreshTrigger]);
 
   return (
     <div className="create-item">
@@ -187,10 +254,11 @@ const SubmitPage = () => {
             <div
               className={`${image ? 'col-xl-9 col-lg-6 col-md-12 col-12' : 'col-xl-12 col-lg-12 col-md-12 col-12'}`}>
               <div className="form-create-item" style={{ left: '50%' }}>
-                <form action="#" onSubmit={handleSubmit(handleSubmitPainting)}>
+                <form>
                   <h4 className="title-create-item">Tải ảnh</h4>
                   <label
                     className={classNames(
+                      disable ? 'read-only' : '',
                       'uploadFile',
                       errors.file?.message?.length > 0 ? 'border-danger' : '',
                     )}>
@@ -206,12 +274,13 @@ const SubmitPage = () => {
                     <input
                       onChange={handlePreviewImage}
                       type="file"
-                      className="inputfile form-control"
+                      className={`${disable ? 'read-only' : ''} inputfile form-control`}
                       name="file"
+                      disabled={disable}
                     />
                   </label>
                   <div>
-                    <h4 className="title-create-item">Tên bức tranh</h4>
+                    <h4 className="title-create-item disable-select">Tên bức tranh</h4>
                     <TextfieldCommon
                       control={control}
                       error={errors.name?.message}
@@ -219,8 +288,10 @@ const SubmitPage = () => {
                       name="name"
                       tabIndex="1"
                       placeholder="Nhập tên của bức tranh"
-                      className="mb-15"
+                      className={`${disable ? 'read-only' : ''} mb-15`}
                       autoFocus
+                      disabled={disable}
+                      readOnly={disable}
                     />
                     <h4 className="title-create-item">Mô tả bức tranh</h4>
                     <TextareaCommon
@@ -229,8 +300,9 @@ const SubmitPage = () => {
                       name="description"
                       tabIndex="1"
                       placeholder="Nhập mô tả của bức tranh"
-                      className="mb-15"
+                      className={`${disable ? 'read-only' : ''} mb-15`}
                       autoFocus
+                      disabled={disable}
                     />
 
                     <div className="inner-row-form style-2">
@@ -241,14 +313,16 @@ const SubmitPage = () => {
                             {errors.topic.message}
                           </span>
                         )}
-                        <Dropdown errors={errors.topic?.message}>
+                        <Dropdown 
+                          disabled={disable}
+                          errors={errors.topic?.message}>
                           <Dropdown.Select
                             placeholder={getDropdownOptions(
                               'topic',
                               'Chọn chủ đề',
                             )}></Dropdown.Select>
                           <Dropdown.List>
-                            {topicsData.map(topic => (
+                            {roundTopicsData.map(topic => (
                               <Dropdown.Option
                                 key={topic.name}
                                 onClick={() =>
@@ -262,9 +336,22 @@ const SubmitPage = () => {
                       </div>
                     </div>
                   </div>
-                  <button type="submit" className="btn-submit">
-                    Nộp bản vẽ mềm
-                  </button>
+                  <div className="flex justify-content-center align-items-center mt-5">
+                    <button
+                      type="submit"
+                      className={`${disable ? 'button-read-only' : ''} btn-submit`}
+                      disabled={disable}
+                      onClick={handleSubmit(handleDraftPainting)}>
+                      Lưu bản vẽ
+                    </button>
+                    <button
+                      type="submit"
+                      className={`${disable ? 'button-read-only' : ''} btn-submit`}
+                      disabled={disable}
+                      onClick={handleSubmit(handleSubmitPainting)}>
+                      Nộp bản vẽ
+                    </button>
+                  </div>
                 </form>
               </div>
             </div>
@@ -275,5 +362,46 @@ const SubmitPage = () => {
     </div>
   );
 };
+
+const SwalComponent = (title, endpoint, method, data, successMsg, errorMsg, cancelMsg, setRefreshTrigger) => {
+  Swal.fire({
+    title: title,
+    showCancelButton: true,
+    confirmButtonText: 'Lưu',
+  }).then(result => {
+    if (result.isConfirmed) {
+      if (method === 'POST') {
+        paintingApi
+          .postPainting(endpoint, data)
+          .then(() => {
+            Swal.fire(successMsg, '', 'success').then(
+              () => {
+                setRefreshTrigger(prev => !prev);
+              }
+            );
+          })
+          .catch(error => {
+            Swal.fire(errorMsg, 'Hãy thử lại sau bạn nhé', 'error');
+          });
+      } else if(method === 'PUT') {
+        paintingApi
+          .updatePainting(endpoint, data)
+          .then(() => {
+            Swal.fire(successMsg, '', 'success').then(
+              () => {
+                setRefreshTrigger(prev => !prev);
+              }
+            );
+          })
+          .catch(error => {
+            Swal.fire(errorMsg, 'Hãy thử lại sau bạn nhé', 'error');
+          });
+      }
+      
+    } else if (result.isDismissed) {
+      Swal.fire(cancelMsg, '', 'info');
+    }
+  });
+}
 
 export default SubmitPage;

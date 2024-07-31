@@ -1,4 +1,4 @@
-import { useState, Fragment, useEffect } from 'react';
+import { Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
@@ -12,19 +12,17 @@ import { Fallback } from '../../../constant/Fallback';
 import PropTypes from 'prop-types';
 import { withErrorBoundary } from 'react-error-boundary';
 import { defaultAvatar, defaultImage } from '../../../constant/imageDefault.js';
-import useFetchData from '../hooks/useQueryData.js';
 import LoadingSkeleton from '../../../components/loading/LoadingSkeleton.jsx';
-const Contest = () => {
-  const { isLoading, isError, data, error } = useFetchData('contests');
-  const [contest, setContest] = useState(null);
-  
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (data) {
-      setContest(data?.data?.result);
-    }
-  }, [data]);
+import useFetchData from '../../../hooks/useQueryData.js';
+import CountdownComponent from '../../../components/CountdownComponent.jsx';
+import { contestStatus } from '../../../constant/Status.js';
 
+const Contest = () => {
+  const { isLoading, isError, data, error } = useFetchData(
+    'contests/getallcontest',
+  );
+  const contests = data?.data?.result;
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <ContestLoading></ContestLoading>;
@@ -49,79 +47,95 @@ const Contest = () => {
                 spaceBetween={30}
                 breakpoints={{
                   0: {
-                    slidesPerView: 1
+                    slidesPerView: 1,
                   },
                   767: {
-                    slidesPerView: 2
+                    slidesPerView: 2,
                   },
                   991: {
-                    slidesPerView: 3
-                  }
+                    slidesPerView: 3,
+                  },
                 }}
-                navigation
+                //disable
+                navigation={false}
                 pagination={{ clickable: true }}
-                scrollbar={{ draggable: true }}
-              >
-                {contest && (
-                  <SwiperSlide>
-                    <div className="swiper-container show-shadow carousel auctions">
-                      <div className="swiper-wrapper">
-                        <div className="swiper-slide">
-                          <div className="slider-item">
-                            <div className="sc-card-product">
-                              <div className="card-media">
-                                <Link to="/item-details-01">
-                                  <img src={defaultImage} alt="axies" />
-                                </Link>
-                    
-                                <div className="featured-countdown">
-                                  <span className="slogan"></span>
-                                  <Countdown
-                                    date={Date.now() + new Date(contest?.endTime).getTime() / 1000}
-                                  >
-                                    <span>You are good to go!</span>
-                                  </Countdown>
-                                </div>
-                                <div className="button-place-bid">
-                                  <button
-                                    onClick={() => navigate(`/contest-detail/${contest?.id}`)}
-                                    className="sc-button style-place-bid style fl-button pri-3"
-                                  >
-                                    <span>Chi tiết</span>
-                                  </button>
-                                </div>
-                              </div>
-                              <div className="card-title">
-                                <h5>
-                                  <Link to="/item-details-01">{contest?.name}</Link>
-                                </h5>
-                                <div className="tags tag-flex">{contest?.status === 'ACTIVE' ? 'Diễn ra' : 'Kết thúc'}</div>
-                              </div>
-                              <div className="meta-info">
-                                <div className="author">
-                                  <div className="avatar">
-                                    <img src={defaultAvatar} alt="axies" />
+                scrollbar={{ draggable: true }}>
+                {contests.length > 0 &&
+                  contests.map(contest => {
+                    return (
+                      <SwiperSlide key={contest.id}>
+                        <div className="swiper-container show-shadow carousel auctions">
+                          <div className="swiper-wrapper">
+                            <div className="swiper-slide">
+                              <div className="slider-item">
+                                <div className="sc-card-product">
+                                  <div className="card-media">
+                                    <Link to={`/contest-detail/${contest?.id}`}>
+                                      <img src={defaultImage} alt="axies" />
+                                    </Link>
+
+                                    <div
+                                      style={{ width: '250px' }}
+                                      className="featured-countdown">
+                                      <div> 
+                                        {contest?.status === contestStatus.IN_PROCESS ? (
+                                          <CountdownComponent
+                                            endtimeString={contest?.endTime}
+                                          />
+                                        ) : (
+                                          <span>{contest?.status}</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div className="button-place-bid">
+                                      <button
+                                        onClick={() =>
+                                          navigate(
+                                            `/contest-detail/${contest?.id}`,
+                                          )
+                                        }
+                                        className="sc-button style-place-bid style fl-button pri-3">
+                                        <span>Chi tiết</span>
+                                      </button>
+                                    </div>
                                   </div>
-                                  <div className="info">
-                                    <span>Người tạo</span>
-                                    <h6>
-                                      {' '}
-                                      <Link to="/authors-02">{contest?.staffId}</Link>{' '}
-                                    </h6>
+                                  <div className="card-title">
+                                    <h5>
+                                      <Link
+                                        to={`/contest-detail/${contest?.id}`}>
+                                        {contest?.name}
+                                      </Link>
+                                    </h5>
                                   </div>
-                                </div>
-                                <div style={{ width: '100px' }} className="price">
-                                  <span>Mô tả</span>
-                                  <h5> {contest?.content}</h5>
+                                  <div className="meta-info">
+                                    <div className="author">
+                                      <div className="avatar">
+                                        <img src={defaultAvatar} alt="axies" />
+                                      </div>
+                                      <div className="info">
+                                        <span>Người tạo</span>
+                                        <h6>
+                                          {' '}
+                                          <Link to="/authors-02">
+                                            {contest?.accountFullName}
+                                          </Link>{' '}
+                                        </h6>
+                                      </div>
+                                    </div>
+                                    <div
+                                      style={{
+                                        width: '100px',
+                                      }}
+                                      className="price"></div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                )}
+                      </SwiperSlide>
+                    );
+                  })}
               </Swiper>
             </div>
           </div>
@@ -142,32 +156,21 @@ const ContestLoading = () => {
                 <LoadingSkeleton
                   width="100%"
                   height="400px"
-                  radius="16px"
-                >
-                </LoadingSkeleton>
-                
+                  radius="16px"></LoadingSkeleton>
+
                 <div className="button-place-bid">
                   <LoadingSkeleton
                     width="100%"
                     height="100%"
-                    radius="16px">
-                  </LoadingSkeleton>
+                    radius="16px"></LoadingSkeleton>
                 </div>
               </div>
               <div className="card-title">
                 <h5>
-                  <LoadingSkeleton
-                    width="250px"
-                    height="50px"
-                    radius="16px"
-                  />
+                  <LoadingSkeleton width="250px" height="50px" radius="16px" />
                 </h5>
                 <div className="tag-flex">
-                  <LoadingSkeleton
-                    width="90px"
-                    height="70px"
-                    radius="16px"
-                  />
+                  <LoadingSkeleton width="90px" height="70px" radius="16px" />
                 </div>
               </div>
               <div className="meta-info">
@@ -176,9 +179,7 @@ const ContestLoading = () => {
                     <LoadingSkeleton
                       width="100%"
                       height="100%"
-                      radius="50%"
-                    >
-                    </LoadingSkeleton>
+                      radius="50%"></LoadingSkeleton>
                   </div>
                   <div className="info">
                     <span>
@@ -189,7 +190,7 @@ const ContestLoading = () => {
                       />
                     </span>
                     <h6>
-                      <LoadingSkeleton/>
+                      <LoadingSkeleton />
                     </h6>
                   </div>
                 </div>
@@ -202,7 +203,7 @@ const ContestLoading = () => {
                     />
                   </span>
                   <h5>
-                    <LoadingSkeleton/>
+                    <LoadingSkeleton />
                   </h5>
                 </div>
               </div>
@@ -212,13 +213,13 @@ const ContestLoading = () => {
       </div>
     </div>
   );
-}
+};
 
 Contest.propTypes = {
   show: PropTypes.bool,
-  onHide: PropTypes.func
+  onHide: PropTypes.func,
 };
 
 export default withErrorBoundary(Contest, {
-  FallbackComponent: Fallback
+  FallbackComponent: Fallback,
 });

@@ -163,7 +163,7 @@ function PaintingPage() {
   const fetchAllTopic = async () => {
     setLoadingTopic(true);
     try {
-      const res = await topicApi.getAllTopic('roundtopics/getallroundtopic');
+      const res = await topicApi.allTopic('roundtopics/getallroundtopic');
       const data = res.data.result;
       setRoundTopic(data.map(val => ({ value: val.id, label: val.name })));
     } catch (error) {

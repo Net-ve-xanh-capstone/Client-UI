@@ -25,12 +25,11 @@ const Login = () => {
   const {
     handleSubmit,
     control,
-    reset,
     trigger,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    reValidateMode: 'onChange',
+    reValidateMode: 'onSubmit',
   });
 
   const {
@@ -154,7 +153,7 @@ const Login = () => {
                         <FadeLoader
                           color={color.purple}
                           loading={loading}
-                          size={10}
+                          size={2}
                         />
                       ) : (
                         'Đăng nhập'

@@ -5,7 +5,14 @@ import TextfieldCommon from '../components/input/TextfieldCommon';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { FormControlLabel, Grid, styled, Dialog, DialogContent, IconButton } from '@mui/material';
+import {
+  FormControlLabel,
+  Grid,
+  styled,
+  Dialog,
+  DialogContent,
+  IconButton,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import DatepickerCommon from '../components/datepicker/DatePickerCommon';
@@ -18,6 +25,7 @@ import { competitorRegister } from '../store/auth/authAction';
 import { FadeLoader } from 'react-spinners';
 import { setDefault } from '../store/auth/authSlice';
 import { color } from '../constant/Color.js';
+import { regexEmail, regexFullNameVN, regexPhone } from '../constant/Regex.js';
 
 const SignUp = () => {
   dayjs.extend(utc);
@@ -33,40 +41,53 @@ const SignUp = () => {
   };
   const {
     register: { success, message, loading },
-    jwtToken
-  } = useSelector((state) => state.auth);
+    jwtToken,
+  } = useSelector(state => state.auth);
 
-  const regexPhoneNumber = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
   const schema = yup.object().shape({
-    lastname: yup.string().required('Vui lòng nhập Họ của bạn'),
-    firstname: yup.string().required('Vui lòng nhập Tên của bạn'),
-    email: yup.string().required('Vui lòng nhập email của bạn').email('Email không hợp lệ'),
+    lastname: yup.string()
+      .required('Vui lòng nhập Họ của bạn')
+      .matches(regexFullNameVN, 'Họ không hợp lệ'),
+    firstname: yup.string()
+      .required('Vui lòng nhập Tên của bạn')
+      .matches(regexFullNameVN, 'Tên không hợp lệ'),
+    email: yup
+      .string()
+      .matches(regexEmail, 'Email không hợp lệ')
+      .required('Vui lòng nhập email của bạn'),
     phone: yup
       .string()
-      .matches(regexPhoneNumber, 'Số điện thoại không hợp lệ')
+      .matches(regexPhone, 'Số điện thoại không hợp lệ')
       .required('Vui lòng nhập số điện thoại của bạn'),
     userName: yup.string().required('Vui lòng nhập tên tài khoản của bạn'),
     password: yup.string().required('Vui lòng nhập mật khẩu của bạn'),
-    gender: yup.boolean().required('Vui lòng chọn giới tính').typeError('Vui lòng chọn giới tính'),
-    birthday: yup.string().required('Vui lòng chọn ngày sinh').typeError('Vui lòng chọn ngày sinh')
+    gender: yup
+      .boolean()
+      .required('Vui lòng chọn giới tính')
+      .typeError('Vui lòng chọn giới tính'),
+    birthday: yup
+      .string()
+      .required('Vui lòng chọn ngày sinh')
+      .typeError('Vui lòng chọn ngày sinh'),
   });
 
   const {
     handleSubmit,
     control,
-    reset,
     trigger,
-    formState: { errors }
+    setValue,
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    reValidateMode: 'onSubmit'
+    reValidateMode: 'onSubmit',
   });
 
-  if (jwtToken) {
-    navigate('/');
-  }
+  setValue('gender', 0);
 
   useEffect(() => {
+    if (jwtToken) {
+      navigate('/');
+    }
     if (success !== null) {
       setOpen(true);
       setTimeout(() => {
@@ -75,7 +96,6 @@ const SignUp = () => {
       }, 3000);
     }
     if (success) {
-      reset();
       setTimeout(() => {
         setOpen(false);
         dispatch(setDefault());
@@ -88,18 +108,17 @@ const SignUp = () => {
     };
   }, [success]);
 
-  const handleRegister = async (data) => {
+  const handleRegister = async data => {
     const isValid = await trigger();
     if (!isValid) return;
     else {
-      dispatch(competitorRegister(data)).then(() => {
+      await dispatch(competitorRegister(data)).then(() => {
         if (message) setOpen(true);
       });
-      reset();
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = e => {
     if (e.key === '-' || e.key === '+') {
       e.preventDefault();
     }
@@ -107,7 +126,7 @@ const SignUp = () => {
 
   const valueArray = [
     { value: '0', label: 'Nam' },
-    { value: '1', label: 'Nữ' }
+    { value: '1', label: 'Nữ' },
   ];
 
   return (
@@ -143,13 +162,14 @@ const SignUp = () => {
                     action="#"
                     id="contactform"
                     className="select-none"
-                    onSubmit={handleSubmit(handleRegister)}
-                  >
+                    onSubmit={handleSubmit(handleRegister)}>
                     <Grid container spacing={4}>
                       <Grid item md={6}>
                         <TextfieldCommon
                           control={control}
-                          error={errors.lastname?.message}
+                          error={
+                            errors.lastname?.message
+                          }
                           id="lastname"
                           name="lastname"
                           aria-required="true"
@@ -160,7 +180,10 @@ const SignUp = () => {
                       <Grid item md={6}>
                         <TextfieldCommon
                           control={control}
-                          error={errors.firstname?.message}
+                          error={
+                            errors.firstname
+                              ?.message
+                          }
                           id="firstname"
                           name="firstname"
                           aria-required="true"
@@ -169,21 +192,35 @@ const SignUp = () => {
                         />
                       </Grid>
                     </Grid>
-                    <Grid sx={{ marginTop: '-10px', marginBottom: '24px' }} container spacing={2}>
+                    <Grid
+                      sx={{
+                        marginTop: '-10px',
+                        marginBottom: '24px',
+                      }}
+                      container
+                      spacing={2}>
                       <Grid item md={6}>
-                        <p className="font-weight-bold h5">Ngày sinh</p>
+                        <p className="font-weight-bold h5">
+                          Ngày sinh
+                        </p>
                         <DatepickerCommon
                           defaultValue={currentDate}
                           control={control}
-                          error={errors.birthday?.message}
+                          error={
+                            errors.birthday?.message
+                          }
                           name="birthday"
                         />
                       </Grid>
                       <Grid item md={6}>
-                        <p className="font-weight-bold h5">Giới tính</p>
+                        <p className="font-weight-bold h5">
+                          Giới tính
+                        </p>
                         <RadioCommon
                           control={control}
-                          error={errors?.gender?.message}
+                          error={
+                            errors?.gender?.message
+                          }
                           name="gender"
                           valueArray={valueArray}
                         />
@@ -193,7 +230,9 @@ const SignUp = () => {
                       <Grid item md={6}>
                         <TextfieldCommon
                           control={control}
-                          error={errors.email?.message}
+                          error={
+                            errors.email?.message
+                          }
                           id="email"
                           name="email"
                           aria-required="true"
@@ -204,7 +243,9 @@ const SignUp = () => {
                       <Grid item md={6}>
                         <TextfieldCommon
                           control={control}
-                          error={errors.phone?.message}
+                          error={
+                            errors.phone?.message
+                          }
                           id="phone"
                           name="phone"
                           aria-required="true"
@@ -216,11 +257,15 @@ const SignUp = () => {
                       </Grid>
                       <Grid item md={3}></Grid>
                     </Grid>
-                    <Grid sx={{ marginBottom: '12px' }} container>
+                    <Grid
+                      sx={{ marginBottom: '12px' }}
+                      container>
                       <Grid item md={12}>
                         <TextfieldCommon
                           control={control}
-                          error={errors.userName?.message}
+                          error={
+                            errors.userName?.message
+                          }
                           id="userName"
                           name="userName"
                           aria-required="true"
@@ -234,7 +279,9 @@ const SignUp = () => {
                         <TextfieldCommon
                           control={control}
                           id="password"
-                          error={errors.password?.message}
+                          error={
+                            errors.password?.message
+                          }
                           name="password"
                           aria-required="true"
                           type="password"
@@ -246,8 +293,7 @@ const SignUp = () => {
                     <BootstrapDialog
                       onClose={handleClose}
                       aria-labelledby="customized-dialog-title"
-                      open={open}
-                    >
+                      open={open}>
                       <IconButton
                         aria-label="close"
                         onClick={handleClose}
@@ -255,28 +301,34 @@ const SignUp = () => {
                           position: 'absolute',
                           right: 8,
                           top: 6,
-                          color: (theme) => theme.palette.grey[500]
-                        }}
-                      >
+                          color: theme =>
+                            theme.palette.grey[500],
+                        }}>
                         <CloseIcon />
                       </IconButton>
                       <DialogContent>
                         <TypographyStyled className="h3 text-center">
-                          {success === true ? 'Đăng ký thành công' : 'Đăng ký thất bại'}
+                          {message ? message : ''}
                         </TypographyStyled>
                       </DialogContent>
                     </BootstrapDialog>
 
                     <button className="submit">
                       {loading ? (
-                        <FadeLoader color={color.purple} loading={loading} size={10} />
+                        <FadeLoader
+                          color={color.purple}
+                          loading={loading}
+                          size={2}
+                        />
                       ) : (
                         'Đăng ký'
                       )}
                     </button>
                     <div className="mt-5 text-right h5">
                       Bạn đã có tài khoản? {''}
-                      <Link to={'/login'} className="font-weight-bold">
+                      <Link
+                        to={'/login'}
+                        className="font-weight-bold">
                         đăng nhập
                       </Link>
                     </div>
@@ -294,24 +346,24 @@ const SignUp = () => {
 
 const FormControlLabelStyled = styled(FormControlLabel)({
   '& .MuiSvgIcon-root': {
-    fontSize: 24
+    fontSize: 24,
   },
   //Font size
   '& .MuiTypography-root': {
     fontSize: 16,
-    fontFamily: 'REM'
-  }
+    fontFamily: 'REM',
+  },
 });
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
-    padding: theme.spacing(5)
-  }
+    padding: theme.spacing(5),
+  },
 }));
 
 const TypographyStyled = styled('div')(({ theme }) => ({
   color: theme.palette.text.primary,
   fontSize: 14,
-  fontWeight: theme.typography.fontWeightMedium
+  fontWeight: theme.typography.fontWeightMedium,
 }));
 export default SignUp;

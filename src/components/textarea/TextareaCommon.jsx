@@ -5,18 +5,14 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { Fallback } from '../../constant/Fallback';
 
 export const TextareaCommon = (props) => {
-  const { control, name, placeholder, className, error = '', children, ...rest } = props;
+  const { control, name, placeholder, className, error = '', children, defaultValue, ...rest } = props;
 
-  const { field } = useController({
+  const { field: {value, onChange}  } = useController({
     control,
     name,
-    defaultValue: ''
+    defaultValue,
   });
-
-  const handleOnChange = (e) => {
-    e.target.classList.remove('border-danger placeholder-danger');
-  };
-
+  
   return (
     <div>
       {error ? <span className="text-danger h5">{error}</span> : null}
@@ -24,8 +20,8 @@ export const TextareaCommon = (props) => {
         id={name}
         name={name}
         placeholder={placeholder}
-        onChange={handleOnChange}
-        {...field}
+        value={value}
+        onChange={onChange}
         {...rest}
         className={classNames(className, error.length > 0 ? 'border-danger' : '', children)}
       />

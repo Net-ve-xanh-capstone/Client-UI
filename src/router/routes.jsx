@@ -10,18 +10,24 @@ import ExaminerManagement from '../pages/ExaminerManagement/index.jsx';
 import SponsorManage from '../pages/sponsorPage/page.jsx';
 import CompetitorManage from '../pages/competitorManage/page.jsx';
 import PaintingPage from '../pages/paintingPage/page.jsx';
+import CollectionPage from '../pages/collection/CollectionPage.jsx';
 
 const Home = lazy(() => import('../pages/Home/Home'));
 const BlogPage = lazy(() => import('../pages/blogPage/BlogPage'));
 const Login = lazy(() => import('../pages/Login'));
 const SignUp = lazy(() => import('../pages/SignUp'));
 const SubmitPage = lazy(() => import('../pages/SubmitPage'));
-const Explore = lazy(() => import('../pages/Explore'));
 const NoResult = lazy(() => import('../constant/NoResult'));
 const StaffManage = lazy(() => import('../pages/StaffManage'));
-const ContestDetail = lazy(
-  () => import('../pages/ContestDetail/ContestDetail.jsx'),
+const ContestDetail = lazy(() =>
+  import('../pages/ContestDetail/ContestDetail.jsx'),
 );
+const ProfilePage = lazy(() => import('../pages/EditProfile/ProfilePage.jsx'));
+const MyPaintingPage = lazy(() =>
+  import('../pages/myPainting/MyPaintingPage.jsx'),
+);
+const FAQPage = lazy(() => import('../pages/FAQ/FAQPage.jsx'));
+const ContactPage = lazy(() => import('../pages/contact/ContactPage.jsx'));
 
 const routes = [
   { path: '/', component: <Home /> },
@@ -70,7 +76,7 @@ const routes = [
     ],
   },
   {
-    path: '/submit',
+    path: '/submit/:contestId',
     component: (
       <ProtectedRoute role={Role.COMPETITOR}>
         <SubmitPage />
@@ -78,10 +84,18 @@ const routes = [
     ),
   },
   {
-    path: '/explore',
+    path: '/edit-profile',
     component: (
       <ProtectedRoute>
-        <Explore />
+        <ProfilePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/my-painting',
+    component: (
+      <ProtectedRoute>
+        <MyPaintingPage />
       </ProtectedRoute>
     ),
   },
@@ -93,7 +107,18 @@ const routes = [
       </ProtectedRoute>
     ),
   },
-  { path: '/contest-detail/:id', component: <ContestDetail /> },
+  { path: '/contest-detail/:contestId', component: <ContestDetail /> },
+  { path: '/faq', component: <FAQPage /> },
+  { path: '/contact', component: <ContactPage /> },
+  { path: '/collection', component: <CollectionPage /> },
+  {
+    path: '/collection/:accountId',
+    component: (
+      <ProtectedRoute>
+        <CollectionPage />
+      </ProtectedRoute>
+    ),
+  },
   { path: '/*', component: <NoResult /> },
 ];
 

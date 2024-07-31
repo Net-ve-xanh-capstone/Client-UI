@@ -4304,12 +4304,12 @@ section.today-picks {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
 }
 
 .box-epxlore .sc-card-product {
-  width: 31.5%;
+  width: 28.5%;
 }
 
 /* switch mode */
@@ -4652,8 +4652,7 @@ section.today-picks {
 }
 
 .form-create-item button[type='submit'] {
-  width: 40%;
-  margin: 20px 30%;
+  margin-right: 30px;
   background: rgba(81, 66, 252, 0.1);
   border: 1px solid rgba(81, 66, 252, 0.1);
   border: none;
@@ -4932,7 +4931,7 @@ button.accordion-button {
 
 .form-infor-profile .info-account,
 .form-infor-profile .info-social {
-  width: calc(50% - 40px);
+  width: 100%;
   margin-left: 40px;
 }
 
@@ -8285,6 +8284,5 @@ button.accordion-button {
   -khtml-user-select: none; /* Konqueror HTML */
   -moz-user-select: none; /* Old versions of Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
-                                    supported by Chrome, Edge, Opera and Firefox */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }

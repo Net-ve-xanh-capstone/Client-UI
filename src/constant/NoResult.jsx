@@ -1,15 +1,64 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import Countdown from 'react-countdown';
 import HeaderVersion1 from '../components/common/header/HeaderVersion1';
 import Footer from '../components/common/footer/Footer';
-import liveAuctionData from '../assets/fake-data/data-live-auction';
-import CardModal from '../components/CardModal';
+import { useState } from 'react';
+import { Book, Home, InsertChart, Telegram, Window } from '@mui/icons-material';
+import { color } from './Color.js';
 const NoResult = () => {
-  const [data] = useState(liveAuctionData);
-  const [modalShow, setModalShow] = useState(false);
+  const [dataBox] = useState(
+    [
+      {
+        icon: <Home sx={
+          {
+            color: color.white,
+          }
+        } />,
+        url: '/',
+        title: 'Trang chủ',
+        description: 'Quay về trang chủ'
+      },
+      {
+        icon: <Book sx={
+          {
+            color: color.white,
+          }
+        } />,
+        url: 'blog',
+        title: 'Bài đọc',
+        description: 'Đọc thêm thông tin về các cuộc thi cũng như nhà tài trợ'
+      },
+      {
+        icon: <InsertChart sx={
+          {
+            color: color.white,
+          }
+        } />,
+        url: 'ranking',
+        title: 'Bảng xếp hạng',
+        description: 'Bảng xếp hạng thành tích của các thí sinh'
+      },
+      {
+        icon: <Window sx={
+          {
+            color: color.white,
+          }
+        } />,
+        url: 'collection',
+        title: 'Bô sưu tập',
+        description: 'Tham quan, chiêm ngưỡng bộ sưu tập từng mùa'
+      },
+      {
+        icon: <Telegram sx={
+          {
+            color: color.white,
+          }
+        } />,
+        url: 'contact',
+        title: 'Liên hệ',
+        description: 'Gửi lời nhắn cho chúng tôi nếu bạn cần sự giúp đỡ'
+      },
+    ]
+  )
   return (
     <div>
       <HeaderVersion1 />
@@ -19,17 +68,17 @@ const NoResult = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="page-title-heading mg-bt-12">
-                <h1 className="heading text-center">No Result</h1>
+                <h1 className="heading text-center">Không Có Kết Quả</h1>
               </div>
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/">Home</Link>
+                    <Link to="/">Trang chủ</Link>
                   </li>
                   <li>
-                    <Link to="#">Pages</Link>
+                    <Link to="#">Trang</Link>
                   </li>
-                  <li>No Result</li>
+                  <li>Không có kết quả</li>
                 </ul>
               </div>
             </div>
@@ -41,111 +90,30 @@ const NoResult = () => {
           <div className="row">
             <div className="col-12">
               <h2 className="tf-title-heading ct style-2 fs-30 mg-bt-10">
-                Sorry, We Couldn’t Find Any Results For This Search.
+                Xin lỗi, có thể nội dung bạn tìm không có trong hệ thống của chúng tôi
               </h2>
               <h5 className="sub-title help-center mg-bt-32 ">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum obcaecati
-                dignissimos quae quo ad iste ipsum officiis deleniti asperiores sit.
+                Hãy thử lại sau bạn nhé.
               </h5>
             </div>
           </div>
         </div>
-      </section>
-      <section className="tf-section live-auctions result">
-        <div className="themesflat-container">
-          <div className="row">
-            <div className="col-md-12">
-              <h2 className="tf-title">Live Auctions</h2>
-              <div className="heading-line"></div>
-            </div>
-            <div className="col-md-12">
-              <Swiper
-                modules={[Navigation, Pagination, Scrollbar, A11y]}
-                spaceBetween={30}
-                breakpoints={{
-                  0: {
-                    slidesPerView: 1
-                  },
-                  767: {
-                    slidesPerView: 2
-                  },
-                  991: {
-                    slidesPerView: 3
-                  },
-                  1300: {
-                    slidesPerView: 4
-                  }
-                }}
-                navigation
-                pagination={{ clickable: true }}
-                scrollbar={{ draggable: true }}
-              >
-                {data.slice(0, 7).map((item, index) => (
-                  <SwiperSlide key={index}>
-                    <div className="swiper-container show-shadow carousel auctions">
-                      <div className="swiper-wrapper">
-                        <div className="swiper-slide">
-                          <div className="slider-item">
-                            <div className="sc-card-product">
-                              <div className="card-media">
-                                <Link to="/item-details-01">
-                                  <img src={item.img} alt="axies" />
-                                </Link>
-                                <Link to="/login" className="wishlist-button heart">
-                                  <span className="number-like">{item.wishlist}</span>
-                                </Link>
-                                <div className="featured-countdown">
-                                  <span className="slogan"></span>
-                                  <Countdown date={Date.now() + 500000000}>
-                                    <span>You are good to go!</span>
-                                  </Countdown>
-                                </div>
-                                <div className="button-place-bid">
-                                  <button
-                                    onClick={() => setModalShow(true)}
-                                    className="sc-button style-place-bid style bag fl-button pri-3"
-                                  >
-                                    <span>Place Bid</span>
-                                  </button>
-                                </div>
-                              </div>
-                              <div className="card-title">
-                                <h5>
-                                  <Link to="/item-details-01">{item.title}</Link>
-                                </h5>
-                                <div className="tags">{item.tags}</div>
-                              </div>
-                              <div className="meta-info">
-                                <div className="author">
-                                  <div className="avatar">
-                                    <img src={item.imgAuthor} alt="axies" />
-                                  </div>
-                                  <div className="info">
-                                    <span>Creator</span>
-                                    <h6>
-                                      {' '}
-                                      <Link to="/authors-02">{item.nameAuthor}</Link>{' '}
-                                    </h6>
-                                  </div>
-                                </div>
-                                <div className="price">
-                                  <span>Current Bid</span>
-                                  <h5> {item.price}</h5>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          </div>
+        <div className="sc-box-icon-inner style-3">
+          {
+            dataBox.map((item, index) => (
+              <div key={index} className={`sc-box-icon ${item.classnone}`}>
+                <div className="icon">
+                  <div className="icon-item">
+                    {item.icon}
+                  </div>
+                </div>
+                <h4 className="heading"><Link to={`${item.url}`}>{item.title}</Link></h4>
+                <p className="content">{item.description}</p>
+              </div>
+            ))
+          }
         </div>
       </section>
-      <CardModal show={modalShow} onHide={() => setModalShow(false)} />
       <Footer />
     </div>
   );

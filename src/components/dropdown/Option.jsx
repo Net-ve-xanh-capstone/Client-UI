@@ -10,6 +10,9 @@ const Option = (props) => {
   };
   return (
     <div
+      style={{
+        height: '40px',
+      }}
       className="py-4 px-5 cursor-pointer flex items-center justify-between option transition-all text-sm"
       onClick={handleClick}
     >

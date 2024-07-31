@@ -1,88 +1,55 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import logodark from "../../../assets/images/logo/logo_dark.png";
-import logofooter from "../../../assets/images/logo/logo2.png";
-import { withErrorBoundary } from "react-error-boundary";
-import { Fallback } from "../../../constant/Fallback";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import logodark from '../../../assets/images/logo/net-ve-xanh-logo.png';
+import logofooter from '../../../assets/images/logo/net-ve-xanh-logo.png';
+import { withErrorBoundary } from 'react-error-boundary';
+import { Fallback } from '../../../constant/Fallback';
 const Footer = () => {
   const accountList = [
     {
-      title: "Authors",
-      link: "/authors-01",
+      title: 'Thí sinh',
+      link: '/authors-01',
     },
     {
-      title: "Collection",
-      link: "/wallet-connect",
+      title: 'Bô sưu tập',
+      link: '/wallet-connect',
     },
     {
-      title: "Author Profile",
-      link: "/edit-profile",
+      title: 'Thông tin tài khoản',
+      link: '/edit-profile',
     },
     {
-      title: "Create Item",
-      link: "/create-item",
-    },
-  ];
-  const resourcesList = [
-    {
-      title: "Help & Support",
-      link: "/help-center",
-    },
-    {
-      title: "Live Auctions",
-      link: "/live-auctions",
-    },
-    {
-      title: "Item Details",
-      link: "/item-details-01",
-    },
-    {
-      title: "Activity",
-      link: "/activity-01",
+      title: 'Nộp bài',
+      link: '/create-item',
     },
   ];
   const companyList = [
     {
-      title: "Explore",
-      link: "/explore-01",
+      title: 'Tìm hiểu',
+      link: '/explore-01',
     },
     {
-      title: "Contact Us",
-      link: "/contact-01",
+      title: 'Liên hệ',
+      link: '/contact-01',
     },
     {
-      title: "Our Blog",
-      link: "/blog",
+      title: 'Bài đọc',
+      link: '/blog',
     },
     {
-      title: "FAQ",
-      link: "/faq",
+      title: 'FAQ',
+      link: '/faq',
     },
   ];
   const socialList = [
     {
-      icon: "fab fa-twitter",
-      link: "#",
+      icon: 'fab fa-facebook',
+      link: '#',
     },
+
     {
-      icon: "fab fa-facebook",
-      link: "#",
-    },
-    {
-      icon: "fab fa-telegram-plane",
-      link: "#",
-    },
-    {
-      icon: "fab fa-youtube",
-      link: "#",
-    },
-    {
-      icon: "icon-fl-tik-tok-2",
-      link: "#",
-    },
-    {
-      icon: "icon-fl-vt",
-      link: "#",
+      icon: 'icon-fl-tik-tok-2',
+      link: '#',
     },
   ];
 
@@ -91,7 +58,7 @@ const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   };
 
@@ -104,16 +71,16 @@ const Footer = () => {
       }
     };
 
-    window.addEventListener("scroll", toggleVisibility);
+    window.addEventListener('scroll', toggleVisibility);
 
-    return () => window.removeEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
   return (
     <div>
       <footer id="footer" className="footer-light-style clearfix bg-style">
         <div className="themesflat-container">
-          <div className="row">
+          <div className="row justify-content-between">
             <div className="col-lg-3 col-md-12 col-12">
               <div className="widget widget-logo">
                 <div className="logo-footer" id="logo-footer">
@@ -132,39 +99,11 @@ const Footer = () => {
                     />
                   </Link>
                 </div>
-                <p className="sub-widget-logo">
-                  Lorem ipsum dolor sit amet,consectetur adipisicing elit. Quis
-                  non, fugit totam vel laboriosam vitae.
-                </p>
               </div>
             </div>
-            <div className="col-lg-2 col-md-4 col-sm-5 col-5">
-              <div className="widget widget-menu style-1">
-                <h5 className="title-widget">My Account</h5>
-                <ul>
-                  {accountList.map((item, index) => (
-                    <li key={index}>
-                      <Link to={item.link}>{item.title}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div className="col-lg-2 col-md-4 col-sm-7 col-7">
-              <div className="widget widget-menu style-2">
-                <h5 className="title-widget">Resources</h5>
-                <ul>
-                  {resourcesList.map((item, index) => (
-                    <li key={index}>
-                      <Link to={item.link}>{item.title}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div className="col-lg-2 col-md-4 col-sm-5 col-5">
+            <div className="col-lg-3 col-md-4 col-sm-5 col-5">
               <div className="widget widget-menu fl-st-3">
-                <h5 className="title-widget">Company</h5>
+                <h5 className="title-widget">Thông tin</h5>
                 <ul>
                   {companyList.map((item, index) => (
                     <li key={index}>
@@ -176,15 +115,14 @@ const Footer = () => {
             </div>
             <div className="col-lg-3 col-md-6 col-sm-7 col-12">
               <div className="widget widget-subcribe">
-                <h5 className="title-widget">Subscribe Us</h5>
+                <h5 className="title-widget">Gửi email cho chúng tôi:</h5>
                 <div className="form-subcribe">
                   <form
                     id="subscribe-form"
                     action="#"
                     method="GET"
                     acceptCharset="utf-8"
-                    className="form-submit"
-                  >
+                    className="form-submit">
                     <input
                       name="email"
                       className="email"
@@ -198,7 +136,7 @@ const Footer = () => {
                   </form>
                 </div>
                 <div className="widget-social style-1 mg-t32">
-                  <ul>
+                  <ul style={{ justifyContent: 'center' }}>
                     {socialList.map((item, index) => (
                       <li key={index}>
                         <Link to={item.link}>
@@ -220,22 +158,20 @@ const Footer = () => {
         id="popup_bid"
         tabIndex="-1"
         role="dialog"
-        aria-hidden="true"
-      >
+        aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <button
               type="button"
               className="close"
               data-dismiss="modal"
-              aria-label="Close"
-            >
+              aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
             <div className="modal-body space-y-20 pd-40">
               <h3>Place a Bid</h3>
               <p className="text-center">
-                You must bid at least{" "}
+                You must bid at least{' '}
                 <span className="price color-popup">4.89 ETH</span>
               </p>
               <input
@@ -266,9 +202,8 @@ const Footer = () => {
                 data-toggle="modal"
                 data-target="#popup_bid_success"
                 data-dismiss="modal"
-                aria-label="Close"
-              >
-                {" "}
+                aria-label="Close">
+                {' '}
                 Place a bid
               </Link>
             </div>

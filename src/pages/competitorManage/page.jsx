@@ -155,6 +155,7 @@ function CompetitorManage() {
               onClick={() => handleOpenDetail(value)}>
               <RemoveRedEyeIcon />
             </IconButton>
+            <span style={{ display: 'none' }}>{value}</span>
           </div>
         ),
       },
@@ -183,6 +184,12 @@ function CompetitorManage() {
         viewColumns: 'Xem cột',
         filterTable: 'Lọc bảng',
       },
+    },
+    onRowClick: (rowData, rowMeta) => {
+      const obj = rowData[4]?.props?.children?.find(
+        item => item.type === 'span',
+      );
+      handleOpenDetail(obj?.props?.children);
     },
   };
 

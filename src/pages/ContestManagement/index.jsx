@@ -146,6 +146,9 @@ function ContestManagement() {
       options: {
         customBodyRender: (value, tableData) => (
           <div className={styles.btnAction}>
+            <span style={{ display: 'none' }} name="id">
+              {value}
+            </span>
             <IconButton
               aria-label="delete"
               size="small"
@@ -191,6 +194,12 @@ function ContestManagement() {
         viewColumns: 'Xem cột',
         filterTable: 'Lọc bảng',
       },
+    },
+    onRowClick: (rowData, rowMeta) => {
+      const obj = rowData[5]?.props?.children?.find(
+        item => item.type === 'span',
+      );
+      handleOpenDetail(obj?.props?.children);
     },
   };
 

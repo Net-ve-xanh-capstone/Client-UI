@@ -1,5 +1,4 @@
-import { RemoveRedEye } from '@mui/icons-material';
-import { IconButton, Switch } from '@mui/material';
+import { Switch } from '@mui/material';
 import {
   createTheme,
   StyledEngineProvider,
@@ -9,8 +8,8 @@ import MUIDataTable from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getAll } from '../../api/examinerStaffApi';
-import styles from './style.module.css';
 import ViewExaminer from '../../components/ViewExaminer';
+import styles from './style.module.css';
 
 function ExaminerManagement() {
   const [modalShow, setModalShow] = useState(false);

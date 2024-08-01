@@ -1,9 +1,10 @@
-import { useState, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import CardModal from '../../components/CardModal';
 import { withErrorBoundary } from 'react-error-boundary';
 import { Fallback } from '../../constant/Fallback';
+import { defaultAvatar } from '../../constant/imageDefault.js';
 const PaintingPicks = (props) => {
   const { data } = props;
 
@@ -121,29 +122,29 @@ const PaintingPicks = (props) => {
             </div>
             {data.slice(0, visible).map((item, index) => (
               <div key={index} className="fl-item col-xl-3 col-lg-4 col-md-6 col-sm-6">
-                <div className={`sc-card-product ${item.feature ? 'comingsoon' : ''} `}>
+                <div className="sc-card-product explode style2 mg-bt">
                   <div className="card-media">
-                    <Link to="#" className='cursor-none'>
-                      <img src={item.img} alt="painting" />
+                    <Link to="#" className="cursor-none">
+                      <img className="img-painting" src={item.image} alt="painting" />
                     </Link>
-                    <div className="coming-soon">{item.feature}</div>
                   </div>
                   <div className="card-title">
                     <h5 className="style2">
-                      <Link to="/item-details-01">{item.title}</Link>
+                      <Link className="cursor-none" to="#">{item.name}</Link>
                     </h5>
-                    <div className="tags">{item.tags}</div>
+                    <div className="tags" style={{ lineHeight: 4 }}>{item.rank}</div>
                   </div>
                   <div className="meta-info">
                     <div className="author">
                       <div className="avatar">
-                        <img src={item.imgAuthor} alt="axies" />
+                        <img src={item?.ownerImage || defaultAvatar} alt="axies" />
                       </div>
                       <div className="info">
                         <span>Người vẽ</span>
                         <h6>
                           {' '}
-                          <Link to="/authors-02">{item?.ownerName}</Link>{' '}
+                          <div>{item?.ownerName}</div>
+                          {' '}
                         </h6>
                       </div>
                     </div>
@@ -152,16 +153,19 @@ const PaintingPicks = (props) => {
                       <h5> {item.contestName}</h5>
                     </div>
                   </div>
-                  <div className="card-bottom">
-                    <button
-                      onClick={() => setModalShow(true)}
-                      className="sc-button style bag fl-button pri-3 no-bg"
-                    >
-                      <span>Place Bid</span>
-                    </button>
-                    <Link to="/activity-01" className="view-history reload">
-                      View History
-                    </Link>
+                  <div className="card-bottom style-explode">
+                    <div className="price">
+                      <span>Tên chủ đề</span>
+                      <div className="price-details">
+                        <h5>{item.topicName}</h5>
+                      </div>
+                    </div>
+                    <div className="price">
+                      <span>Mô tả</span>
+                      <div className="price-details">
+                        <h5>{item?.description}</h5>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

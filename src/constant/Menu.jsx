@@ -72,21 +72,12 @@ const menus = [
       },
       {
         id: 2,
-        sub: 'Tranh của tôi',
-        links: '/my-painting',
-        public: false,
-        role: [
-          Role.COMPETITOR,
-        ],
-      },
-      {
-        id: 3,
         sub: 'Bảng xếp hạng',
         links: '/ranking',
         public: true,
       },
       {
-        id: 4,
+        id: 3,
         sub: 'Bộ sưu tập',
         links: '/collection',
         public: true,

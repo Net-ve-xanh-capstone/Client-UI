@@ -648,7 +648,9 @@
 .sc-card-article .meta-info,
 .sc-card-article .meta-info .author,
 .sc-card-product .meta-info,
-.sc-card-product .meta-info .author {
+.sc-card-product .meta-info .author,
+.sc-card-contest .meta-info,
+.sc-card-contest .meta-info .author {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -660,7 +662,8 @@
 }
 
 .sc-card-article .meta-info .author .avatar,
-.sc-card-product .meta-info .author .avatar {
+.sc-card-product .meta-info .author .avatar,
+.sc-card-contest .meta-info .author .avatar{
   width: 44px;
   height: 44px;
   border-radius: 15px;
@@ -671,14 +674,17 @@
 
 .sc-card-article .meta-info .author .info span,
 .sc-card-product .meta-info .author .info span,
-.sc-card-product .price span {
+.sc-card-product .price span,
+.sc-card-contest .meta-info .author .info,
+.sc-card-contest .price span {
   color: var(--primary-color9);
   font-size: 13px;
   line-height: 21px;
 }
 
 .sc-card-article .meta-info .author .info h6,
-.sc-card-product .meta-info .author .info h6 {
+.sc-card-product .meta-info .author .info h6,
+.sc-card-contest .meta-info .author .info h6 {
   line-height: 22px;
 }
 
@@ -880,6 +886,22 @@
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
+  height: 600px;
+  max-height: 600px;
+}
+
+.sc-card-contest {
+    padding: 20px;
+    background: var(--primary-color);
+    box-shadow: 0px 3px 16px rgba(47, 83, 109, 0.12);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    overflow: hidden;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .sc-card-product:hover {
@@ -2090,6 +2112,22 @@
 
 .sc-card-product .meta-info .text h5 {
   margin-top: 6px;
+}
+
+.sc-card-contest .meta-info .price {
+    text-align: right;
+}
+
+.sc-card-contest .meta-info .price h5 {
+    margin-top: 6px;
+}
+
+.sc-card-contest .meta-info .text {
+    text-align: left;
+}
+
+.sc-card-contest .meta-info .text h5 {
+    margin-top: 6px;
 }
 
 /* Blog Page

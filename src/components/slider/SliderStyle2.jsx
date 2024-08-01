@@ -4,11 +4,28 @@ import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 import { Autoplay } from 'swiper/modules';
 import img1 from '../../assets/images/box-item/item-h5.1.png';
+import useFetchData from '../../hooks/useQueryData.js';
+import DotLoaderCustom from '../dotLoader/DotLoader.jsx';
+import React from 'react';
 
+const GET_16_PAINTINGS = 'paintings/list16winingpainting';
 const SliderStyle2 = () => {
   const subtitle = 'Cuộc thi sáng tạo nghệ thuật';
   const title = 'Nét Vẽ Xanh thành phố Hồ Chí Minh';
   const description = 'Khơi dậy sự sáng tạo, Vươn xa cùng đam mê';
+  const { isLoading, isError, data, error } = useFetchData(
+    GET_16_PAINTINGS
+  );
+  const contests = data?.data?.result;
+  
+  if (isLoading) {
+    return <DotLoaderCustom />;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+  
   return (
     <section className="flat-title-page home5">
       <div className="overlay"></div>
@@ -39,17 +56,44 @@ const SliderStyle2 = () => {
             slidesPerView={4}
             loop
             autoplay={{
-              delay: 1000,
+              delay: 500,
               disableOnInteraction: false,
               pauseOnMouseEnter: true
             }}
-            speed={2000}
+            speed={2800}
           >
-            {Array(5)
-              .fill()
-              .map((_, index) => (
+            {contests.slice(0, 5).map((contest, index) => (
+              <SwiperSlide key={index}>
+                <img
+                  className='img-painting-slider'
+                  src={contest?.image}
+                  loading={'lazy'}
+                  srcSet={contest?.image}
+                  alt="Painting" />
+              </SwiperSlide>
+              ))}
+          </Swiper>
+          <Swiper
+            modules={[Autoplay]}
+            direction={'vertical'}
+            spaceBetween={10}
+            slidesPerView={4}
+            loop
+            autoplay={{
+              delay: 1,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true
+            }}
+            speed={2900}
+          >
+            {contests.slice(5, 10).map((contest, index) => (
                 <SwiperSlide key={index}>
-                  <img src={img1} alt="Axies" />
+                  <img 
+                    className='img-painting-slider' 
+                    src={contest?.image}
+                    loading={'lazy'}
+                    srcSet={contest?.image}
+                    alt="Painting" />
                 </SwiperSlide>
               ))}
           </Swiper>
@@ -64,14 +108,17 @@ const SliderStyle2 = () => {
               disableOnInteraction: false,
               pauseOnMouseEnter: true
             }}
-            speed={2100}
+            speed={3000}
           >
-            {Array(5)
-              .fill()
-              .map((_, index) => (
-                <SwiperSlide key={index}>
-                  <img src={img1} alt="Axies" />
-                </SwiperSlide>
+            {contests.slice(10, 15).map((contest, index) => (
+              <SwiperSlide key={index}>
+                <img
+                  className='img-painting-slider'
+                  src={contest?.image}
+                  loading={'lazy'}
+                  srcSet={contest?.image}
+                  alt="Painting" />
+              </SwiperSlide>
               ))}
           </Swiper>
           <Swiper
@@ -85,37 +132,19 @@ const SliderStyle2 = () => {
               disableOnInteraction: false,
               pauseOnMouseEnter: true
             }}
-            speed={2200}
-          >
-            {Array(5)
-              .fill()
-              .map((_, index) => (
-                <SwiperSlide key={index}>
-                  <img src={img1} alt="Axies" />
-                </SwiperSlide>
-              ))}
-          </Swiper>
-          <Swiper
-            modules={[Autoplay]}
-            direction={'vertical'}
-            spaceBetween={10}
-            slidesPerView={4}
-            loop
-            autoplay={{
-              delay: 1,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true
-            }}
-            speed={2000}
+            speed={3100}
             className="end"
           >
-            {Array(5)
-              .fill()
-              .map((_, index) => (
-                <SwiperSlide key={index}>
-                  <img src={img1} alt="Axies" />
-                </SwiperSlide>
-              ))}
+            {contests.slice(9, 15).map((contest, index) => (
+              <SwiperSlide key={index}>
+                <img
+                  className='img-painting-slider'
+                  src={contest?.image}
+                  loading={'lazy'}
+                  srcSet={contest?.image}
+                  alt="Painting" />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </div>

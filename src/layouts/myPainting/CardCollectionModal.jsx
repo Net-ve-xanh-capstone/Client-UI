@@ -19,19 +19,32 @@ const GET_ALL_COLLECTIONS_BY_ACCOUNT_ID = 'collections/getcollectionbyaccountid'
 const CREATE_COLLECTION = 'collections'
 const ADD_COLLECTION = 'paintingcollections/addpaintingtocollection'
 const CardCollectionModal = props => {
-  const schema = yup.object().shape({
+  const schemaAddCollection = yup.object().shape({
     collection: yup.string().required('Vui lòng chọn bộ sưu tập'),
   });
+  const schemaCreateNewCollection = yup.object().shape({
+    name: yup.string().required('Vui lòng nhập tên của bộ sưu tập'),
+  });
   const {
-    watch,
-    formState: { errors },
-    setValue,
-    setError,
-    control,
-    reset,
-    handleSubmit
+    watch: watchAddCollection,
+    formState: { errors: errorsAddCollection},
+    setValue: setValueAddCollection,
+    setError: setErrorAddCollection,
+    reset: resetAddCollection,
+    handleSubmit: handleSubmitAddCollection,
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schemaAddCollection),
+    reValidateMode: 'onChange',
+  });
+
+  const {
+    formState: { errors: errorsCreateCollection},
+    setError: setErrorCreateCollection,
+    control: createCollectionControl,
+    reset: resetCreateCollection,
+    handleSubmit: handleSubmitCreateCollection,
+  } = useForm({
+    resolver: yupResolver(schemaCreateNewCollection),
     reValidateMode: 'onChange',
   });
   
@@ -47,14 +60,14 @@ const CardCollectionModal = props => {
   const paintingId = props.paintingId;
 
   const getDropdownOptions = (data, defaultValue = '') => {
-    const value = watch(data) || defaultValue;
+    const value = watchAddCollection(data) || defaultValue;
     return value;
   };
 
   const handleSelectDropdownOption = (name, value) => {
-    setValue(name, value.name);
+    setValueAddCollection(name, value.name);
     setCollectionId(value.id);
-    setError(name, '');
+    setErrorAddCollection(name, '');
   };
 
   const useCustomMutation = (mutationFn, onSuccessMessage, onErrorMessage) => {
@@ -125,7 +138,8 @@ const CardCollectionModal = props => {
   
   const onHide = () => {
     props.onHide();
-    reset();
+    resetAddCollection();
+    resetCreateCollection();
     setMessage('');
     setSearch('');
     setFilterCollections(collections);
@@ -133,11 +147,11 @@ const CardCollectionModal = props => {
   
   const handleChangeTab = (index) => {
     setIndexTab(index);
-    reset();
     setMessage('');
     setSearch('');
+    setErrorCreateCollection('name', '');
+    setErrorAddCollection('collection', '');
     setFilterCollections(collections);
-    setCollectionId('');
   };
   
   const { isLoading, isError, data, error } = useFetchData(
@@ -177,9 +191,9 @@ const CardCollectionModal = props => {
                 {filterCollections && filterCollections.length > 0 ? (
                   <div>
                     <h3 className='mb-5'>Thêm vào bộ sưu tập</h3>
-                    {errors.collection && (
+                    {errorsAddCollection.collection && (
                       <span className="text-danger h5">
-                            {errors.collection.message}
+                            {errorsAddCollection.collection.message}
                           </span>
                     )}
                     <Dropdown>
@@ -205,7 +219,7 @@ const CardCollectionModal = props => {
                     </Dropdown>
                     <Link
                       to="#"
-                      onClick={handleSubmit(handleAddCollection)}
+                      onClick={handleSubmitAddCollection(handleAddCollection)}
                       className="btn btn-primary mt-4"
                       data-toggle="modal"
                       data-target="#popup_bid_success"
@@ -234,18 +248,18 @@ const CardCollectionModal = props => {
             <TabPanel className="mt-5" allowFullScreen>
               <h3 className='mb-15'>Tạo bộ sưu tập mới</h3>
               <TextFieldCommon
-                control={control}
-                error={errors.name?.message}
+                control={createCollectionControl}
+                error={errorsCreateCollection.name?.message}
                 id="name"
                 name="name"
                 tabIndex="1"
-                placeholder="Nhập tên của bức tranh"
+                placeholder="Nhập tên của bộ sưu tập"
                 className='mb-15'
                 autoFocus
               />
               <div className="hr"></div>
               <TextareaCommon
-                control={control}
+                control={createCollectionControl}
                 id="description"
                 name="description"
                 tabIndex="1"
@@ -259,7 +273,7 @@ const CardCollectionModal = props => {
                 data-toggle="modal"
                 data-target="#popup_bid_success"
                 data-dismiss="modal"
-                onClick={handleSubmit(handleCreateCollection)}
+                onClick={handleSubmitCreateCollection(handleCreateCollection)}
                 aria-label="Close">
                 Thêm và tạo bộ sưu tập mới
               </Link>

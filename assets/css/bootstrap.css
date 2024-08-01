@@ -9891,3 +9891,7 @@ a.text-gray-dark:hover {
 .w-150 {
   width: 150px !important;
 }
+
+.cursor-pointer {
+    cursor: pointer !important;
+}

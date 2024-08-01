@@ -6,8 +6,11 @@ import { toast } from 'react-toastify';
 import { addSponsor, getSponsorId, putSponsor } from '../../api/sponsorApi.js';
 import { isPhoneNumber } from '../../utils/validation.js';
 import Modal from 'react-bootstrap/Modal';
+import { useSelector } from 'react-redux';
 
 function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
+  const { userInfo } = useSelector(state => state.auth);
+
   const [imgLoad, setImgLoad] = useState(null);
   const [imgPost, setImagePost] = useState(null);
 
@@ -33,7 +36,7 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
       value: '',
       error: '',
     },
-    currentUserId: { value: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c' },
+    currentUserId: { value: userInfo.Id },
   });
 
   // list of field input for user typing

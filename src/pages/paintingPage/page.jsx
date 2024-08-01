@@ -31,8 +31,6 @@ function PaintingPage() {
   const [searching, setSearching] = useState({
     code: '',
     topicName: '',
-    startDate: '',
-    endDate: '',
     level: '',
     roundName: '',
     status: '',
@@ -104,6 +102,12 @@ function PaintingPage() {
     { value: 'Submitted', label: 'Submitted' },
     { value: 'Accepted', label: 'Accepted' },
     { value: 'Rejected', label: 'Rejected' },
+    { value: 'Draft', label: 'Draft' },
+    { value: 'Delete', label: 'Delete' },
+    { value: 'Pass', label: 'Pass' },
+    { value: 'NotPass', label: 'NotPass' },
+    { value: 'FinalRound', label: 'FinalRound' },
+    { value: 'HasPrizes ', label: 'HasPrizes ' },
   ];
 
   // styling the topic label
@@ -299,46 +303,6 @@ function PaintingPage() {
                   setSearching(prev => ({ ...prev, topicName: val?.label }));
                 }}
               />
-              <div className={styles.date_box}>
-                <div className={styles.date_start}>
-                  <h5 className={styles.title_date}>Thời gian bắt đầu</h5>
-                  <DatePicker
-                    selected={searching.startDate}
-                    onChange={date =>
-                      setSearching(prev => ({
-                        ...prev,
-                        startDate: date,
-                      }))
-                    }
-                    dateFormat="dd/MM/yyyy"
-                    placeholderText="dd/mm/yyyy"
-                    showYearDropdown
-                    scrollableMonthYearDropdown
-                    className={styles.formControl}
-                    isClearable
-                    clearButtonClassName={styles.clear_btn}
-                  />
-                </div>
-                <div className={styles.date_end}>
-                  <h5 className={styles.title_date}>Thời gian kết thúc</h5>
-                  <DatePicker
-                    selected={searching.endDate}
-                    onChange={date =>
-                      setSearching(prev => ({
-                        ...prev,
-                        endDate: date,
-                      }))
-                    }
-                    dateFormat="dd/MM/yyyy"
-                    placeholderText="dd/mm/yyyy"
-                    isClearable
-                    clearButtonClassName={styles.clear_btn}
-                    showYearDropdown
-                    scrollableMonthYearDropdown
-                    className={styles.formControl}
-                  />
-                </div>
-              </div>
               <Select
                 isClearable={true}
                 placeholder={<div>Chọn câp bậc</div>}

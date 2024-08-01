@@ -7,7 +7,11 @@ import MUIDataTable from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { categoryNotuse, deleteCate } from '../../api/categoryApi.js';
+import {
+  allCategory,
+  categoryNotuse,
+  deleteCate,
+} from '../../api/categoryApi.js';
 import AddCatePopup from '../addCatePopup/page.jsx';
 import styles from './page.module.css';
 import IconButton from '@mui/material/IconButton';
@@ -125,7 +129,7 @@ function CategoryBlog() {
 
   // get all category
   const fetchData = async () => {
-    await categoryNotuse()
+    await allCategory()
       .then(res => {
         const data = res.data.result;
         const dataEmpty = res.data.result.list;

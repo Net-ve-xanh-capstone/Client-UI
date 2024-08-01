@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './page.module.css';
 import { addnewCategory, updateCate } from '../../api/categoryApi.js';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 function AddCatePopup({
   handleClose,
@@ -9,12 +10,13 @@ function AddCatePopup({
   isEdit = false,
   idCategory,
   textCategory,
-  setOpenEdit
+  setOpenEdit,
 }) {
+  const { userInfo } = useSelector(state => state.auth);
   const [txtValue, setTxtValue] = useState(`${isEdit ? textCategory : ''}`);
 
   // check all field in payload must be fill in
-  const validation = (payload) => {
+  const validation = payload => {
     for (const key in payload) {
       if (payload[key] === '' || payload[key] === null) {
         return false;
@@ -28,7 +30,7 @@ function AddCatePopup({
     const payload = {
       id: idCategory,
       name: txtValue,
-      currentUserId: '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+      currentUserId: userInfo.Id,
     };
     if (validation(payload)) {
       await updateCate(payload)
@@ -41,12 +43,12 @@ function AddCatePopup({
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light'
+            theme: 'light',
           });
           fetchData();
           setOpenEdit(null);
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     } else {
       toast.error('Xin hãy điền đầy đủ thông tin !!!', {
         position: 'top-right',
@@ -56,7 +58,7 @@ function AddCatePopup({
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
     }
   };
@@ -64,8 +66,8 @@ function AddCatePopup({
   // Add new category
   const triggerAdding = async () => {
     const payload = {
-      currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c',
-      name: txtValue
+      currentUserId: userInfo.Id,
+      name: txtValue,
     };
     if (validation(payload)) {
       await addnewCategory(payload)
@@ -78,12 +80,12 @@ function AddCatePopup({
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light'
+            theme: 'light',
           });
           fetchData();
           handleClose(null);
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     } else {
       toast.error('Xin hãy điền đầy đủ thông tin !!!', {
         position: 'top-right',
@@ -93,7 +95,7 @@ function AddCatePopup({
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light'
+        theme: 'light',
       });
     }
   };
@@ -113,7 +115,7 @@ function AddCatePopup({
         <input
           type="text"
           value={txtValue}
-          onChange={(e) => setTxtValue(e.target.value)}
+          onChange={e => setTxtValue(e.target.value)}
           className={styles.txt_input}
         />
       </div>

@@ -129,18 +129,18 @@ const CollectionPage = () => {
                                className="sc-card-collection style-2 home5">
                             <div className="media-images-collection">
                               <div className="box-left">
-                                <img src={item.img || defaultImage} alt="painting" />
+                                <img src={item.image[0] || defaultImage} alt="painting" />
                               </div>
                               <div className="box-right">
                                 <div className="top-img">
                                   <img
-                                    src={item.img || defaultImage}
+                                    src={item.image[1] || defaultImage}
                                     alt="painting"
                                   />
                                 </div>
                                 <div className="bottom-img">
                                   <img
-                                    src={item.img || defaultImage}
+                                    src={item.image[2] || defaultImage}
                                     alt="painting"
                                   />
                                 </div>

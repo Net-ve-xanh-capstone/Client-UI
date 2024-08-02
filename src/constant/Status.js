@@ -12,6 +12,10 @@ export const paintingStatus = {
 export const paintingStatusDisable = [
   'Submitted', 'Accepted',
 ]
+
+export const paintingStatusEnable = [
+  'Draft', 'New'
+]
 export const paintingStatusArray = [
   'Draft', 
   'Submitted',

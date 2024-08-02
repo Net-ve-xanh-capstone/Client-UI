@@ -30,6 +30,5 @@ const MyPaintingPage = () => {
             <Footer />
         </div>
     );
-}
-
+};
 export default MyPaintingPage;

@@ -11,14 +11,18 @@ import useFetchData from '../../hooks/useQueryData.js';
 import { defaultImage, defaultAvatar } from '../../constant/imageDefault.js';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
 import CountdownComponent from '../../components/CountdownComponent.jsx';
-import { contestStatus } from './../../constant/Status.js';
+import { contestStatus, paintingStatusEnable } from './../../constant/Status.js';
 import { topicApi } from '../../api/topicApi.js';
 import { useSelector } from 'react-redux';
+import { paintingApi } from '../../api/paintingApi.js';
 
+const getAllPaintingByCompetitorIdEndpoint =
+  'paintings/getpaintingbyaccountcontest';
 const ContestDetail = () => {
   const { contestId } = useParams();
   const userInfo = useSelector(state => state.auth.userInfo);
   const [check, setCheck] = React.useState(false);
+  const [status, setStatus] = React.useState('');
   const { isLoading, isError, data, error } = useFetchData(
     `contests/${contestId}`,
   );
@@ -29,9 +33,18 @@ const ContestDetail = () => {
         userInfo.Id,
         contestId,
       );
+      const paintingResponse = await paintingApi.getAllPaintingByContestAccountId(
+        getAllPaintingByCompetitorIdEndpoint, contestId, userInfo?.Id,
+      )
       if (response.data.result.length > 0) {
         setCheck(true);
       }
+      if (paintingResponse.data.result.status) {
+        setStatus(paintingResponse.data.result.status);
+      } else {
+        setStatus('New');
+      }
+      console.log(paintingResponse);
     };
     fetchData();
   }, []);
@@ -82,7 +95,7 @@ const ContestDetail = () => {
                 <div className="sc-item-details">
                   <h2 className="style2">{`${contest?.name}`}</h2>
 
-                  <div className="client-infor sc-card-product">
+                  <div className="client-infor sc-card-contest">
                     <div className="meta-info">
                       <div className="author">
                         <div className="avatar">
@@ -127,24 +140,12 @@ const ContestDetail = () => {
                     </div>
                   </div>
                   {contest?.status !== contestStatus.IN_PROCESS ? (
-                    <Link
-                      to="#"
-                      className="disable-button loadmore style fl-button pri-3 cursor-none">
-                      <span>{contest?.status}</span>
-                    </Link>
-                  ) : check ? (
-                    <Link
-                      to={`/submit/${contestId}`}
-                      className="sc-button loadmore style fl-button pri-3">
-                      <span>Đăng ký dự thi</span>
-                    </Link>
-                  ) : (
-                    <Link
-                      to="#"
-                      className="disable-button loadmore style fl-button pri-3 cursor-none">
-                      <span>Bạn chưa đủ tuổi</span>
-                    </Link>
-                  )}
+                      <Link
+                        to="#"
+                        className="disable-button loadmore style fl-button pri-3 cursor-none">
+                        <span>{contest?.status}</span>
+                      </Link>
+                    ): registerButton({ status, check, contestId })}
 
                   <div className="flat-tabs themesflat-tabs">
                     <Tabs>
@@ -265,4 +266,32 @@ const ContestDetail = () => {
   );
 };
 
+const registerButton = ({ status, check, contestId }) => {
+  if (paintingStatusEnable.includes(status)) {
+    if (check) {
+      return (
+        <Link
+          to={`/submit/${contestId}`}
+          className="sc-button loadmore style fl-button pri-3">
+          <span>Đăng ký dự thi</span>
+        </Link>
+      );
+    } else {
+      return (
+        <Link
+          to="#"
+          className="disable-button loadmore style fl-button pri-3 cursor-none">
+          <span>Bạn chưa đủ tuổi</span>
+        </Link>
+      )
+    }
+  }
+  return (
+    <Link
+      to="#"
+      className="disable-button loadmore style fl-button pri-3 cursor-none">
+      <span>Bạn đã đăng ký</span>
+    </Link>
+  );
+};
 export default ContestDetail;

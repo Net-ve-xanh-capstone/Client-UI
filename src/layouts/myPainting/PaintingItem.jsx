@@ -1,9 +1,11 @@
 import React, { useState, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CardCollectionModal from './CardCollectionModal.jsx';
 import LoadingSkeleton from '../../components/loading/LoadingSkeleton.jsx';
 import { Grid } from '@mui/material';
 import { formatDate } from '../../utils/formatDate.js';
+import { paintingStatusEnable } from '../../constant/Status.js';
+import { Modal } from 'react-bootstrap';
 
 const PaintingItem = props => {
   const data = props.data;
@@ -11,8 +13,9 @@ const PaintingItem = props => {
 
   const [visible, setVisible] = useState(6);
   const [modalShow, setModalShow] = useState(false);
+  const [modalReject, setModalReject] = useState(false);
   const [selectedPaintingId, setSelectedPaintingId] = useState(null);
-
+  const navigate = useNavigate();
   const showMoreItems = () => {
     setVisible(prevValue => prevValue + 6);
   };
@@ -21,6 +24,14 @@ const PaintingItem = props => {
     setSelectedPaintingId(id);
     setModalShow(true);
   };
+  
+  const handleEditPainting = (status, contestId) => {
+    if (paintingStatusEnable.includes(status)) {
+      navigate(`/submit/${contestId}`);
+    } else {
+      setModalReject(true);
+    }
+  }
 
   return (
     <Fragment>
@@ -36,20 +47,29 @@ const PaintingItem = props => {
                     className={`sc-card-product mr-4 explode style2 mg-bt ${item.feature ? 'comingsoon' : ''} `}
                     key={index}>
                     <div className="card-media">
-                      <Link onClick={() => handleShowModal(item.id)}>
-                        <img src={item?.image} alt="tranh" />
-                      </Link>
+                      <div>
+                        <img className='img-painting' src={item?.image} alt="tranh" />
+                      </div>
                       <div className="button-place-bid">
                         <button
                           onClick={() => handleShowModal(item.id)}
-                          className="sc-button style-place-bid style fl-button pri-3">
+                          className="sc-button style-place-bid style fl-button pri-3"
+                          style={{ width: '220px'}}
+                        >
                           <span>Thêm vào bộ sưu tập</span>
+                        </button>
+                        <button
+                          onClick={() => handleEditPainting(item?.status, item?.contestId)}
+                          className="sc-button style-place-bid style fl-button pri-3 mt-5"
+                          style={{ width: '220px'}}
+                        >
+                          <span>Chỉnh sửa bài nộp</span>
                         </button>
                       </div>
                     </div>
-                    <div className="card-title">
+                    <div onClick={() => handleEditPainting(item?.status, item?.contestId)} className="card-title">
                       <h5>
-                        <Link className="cursor-none" to="#">{item?.name}</Link>
+                        <div className="cursor-pointer">{item?.name}</div>
                       </h5>
                     </div>
                     <div
@@ -65,9 +85,9 @@ const PaintingItem = props => {
                           <div className="info">
                             <span>Người vẽ</span>
                             <h6>
-                              <Link className="cursor-none">
+                              <div className="cursor-none">
                                 {item?.ownerName}
-                              </Link>
+                              </div>
                             </h6>
                           </div>
                         </div>
@@ -75,9 +95,9 @@ const PaintingItem = props => {
                           <div className="info">
                             <span>Cấp</span>
                             <h6>
-                              <Link className="cursor-none">
+                              <div className="cursor-none">
                                 {item?.level}
-                              </Link>
+                              </div>
                             </h6>
                           </div>
                         </div>
@@ -87,9 +107,9 @@ const PaintingItem = props => {
                           <div className="info">
                             <span>Cuộc thi</span>
                             <h6>
-                              <Link className="cursor-none">
+                              <div className="cursor-none">
                               {item?.contestName}
-                              </Link>
+                              </div>
                             </h6>
                           </div>
                         </div>
@@ -98,9 +118,9 @@ const PaintingItem = props => {
                             <div className="info">
                               <span>Thời gian nộp</span>
                               <h6>
-                                <Link className="cursor-none">
+                                <div className="price-details">
                                   {formatDate(item?.submitTime)}
-                                </Link>
+                                </div>
                               </h6>
                             </div>
                           </div>
@@ -147,6 +167,10 @@ const PaintingItem = props => {
             paintingId={selectedPaintingId}
             show={modalShow}
             onHide={() => setModalShow(false)}
+          />
+          <RejectModal
+            showReject={modalReject}
+            onHide={() => setModalReject(false)}
           />
         </div>
       )}
@@ -211,4 +235,22 @@ const PaintingItemSkeleton = () => {
   );
 };
 
+const RejectModal = ({ showReject, onHide }) => {
+  return (
+    <Modal 
+      animation 
+      scrollable 
+      show={showReject} 
+      onHide={onHide} 
+      centered
+    >
+      <Modal.Header closeButton></Modal.Header>
+      <Modal.Body>
+        <div className="space-y-20 pd-40">
+          <h4 className="text-center font-weight-bold">Tranh của bạn không thể chỉnh sửa</h4>
+        </div>
+      </Modal.Body>
+    </Modal>
+  );
+};
 export default PaintingItem;

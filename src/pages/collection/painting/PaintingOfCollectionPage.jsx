@@ -15,7 +15,8 @@ const PaintingOfCollectionPage = () => {
     data,
     error,
   } = useFetchData(GET_ALL_PAITING_OF_COLLECTION, collectionId);
-  const paintingData = data?.data?.result?.list;
+  const paintingData = data?.data?.result?.painting;
+  const collectionName = data?.data?.result?.name;
   if (isLoading) {
     return <span><DotLoaderCustom /></span>;
   }
@@ -32,12 +33,12 @@ const PaintingOfCollectionPage = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="page-title-heading mg-bt-12">
-                                <h1 className="heading text-center">Bộ sưu tập</h1>
+                                <h1 className="heading text-center">Bộ sưu tập {collectionName}</h1>
                             </div>
                             <div className="breadcrumbs style2">
                                 <ul>
                                     <li><Link to="/">Trang</Link></li>
-                                    <li>Bộ sưu tập</li>
+                                    <li>Bộ sưu tập {collectionName}</li>
                                 </ul>
                             </div>
                         </div>

@@ -19,7 +19,6 @@ const ContactPage = () => {
                             <div className="breadcrumbs style2">
                                 <ul>
                                     <li><Link to="/">Trang chủ</Link></li>
-                                    <li><Link to="#">Trang</Link></li>
                                     <li>Liên hệ</li>
                                 </ul>
                             </div>

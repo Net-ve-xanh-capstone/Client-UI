@@ -8,7 +8,7 @@ import liveAuctionData from '../../assets/fake-data/data-live-auction';
 import LiveAuction from '../../layouts/auctions/LiveAuction.jsx';
 import levelIcon from '../../assets/images/icon/level.png';
 import useFetchData from '../../hooks/useQueryData.js';
-import { defaultImage, defaultAvatar } from '../../constant/imageDefault.js';
+import { defaultImage, defaultAvatar, userAvatar } from '../../constant/imageDefault.js';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
 import CountdownComponent from '../../components/CountdownComponent.jsx';
 import { contestStatus, paintingStatusEnable } from './../../constant/Status.js';
@@ -113,7 +113,7 @@ const ContestDetail = () => {
                     <div className="meta-info">
                       <div className="author">
                         <div className="avatar">
-                          <img src={defaultAvatar} alt="Axies" />
+                          <img src={userAvatar} alt="Axies" />
                         </div>
                         <div className="info">
                           <span>Tạo bởi</span>
@@ -261,7 +261,6 @@ const ContestDetail = () => {
           </div>
         </div>
       </div>
-      <LiveAuction data={liveAuctionData} />
       <Footer />
     </div>
   );

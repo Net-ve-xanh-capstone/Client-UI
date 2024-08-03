@@ -8,14 +8,13 @@ import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 
 import { Fallback } from '../../../constant/Fallback';
-import PropTypes from 'prop-types';
 import { withErrorBoundary } from 'react-error-boundary';
-import { defaultAvatar, defaultImage } from '../../../constant/imageDefault.js';
 import LoadingSkeleton from '../../../components/loading/LoadingSkeleton.jsx';
 import useFetchData from '../../../hooks/useQueryData.js';
-import CountdownComponent from '../../../components/CountdownComponent.jsx';
-import { contestStatus } from '../../../constant/Status.js';
 import { formatDate } from '../../../utils/formatDate.js';
+import { color } from '../../../constant/Color.js';
+import { userAvatar } from '../../../constant/imageDefault.js';
+import PropTypes from 'prop-types';
 
 const Contest = () => {
   const { isLoading, isError, data, error } = useFetchData(
@@ -96,15 +95,16 @@ const Contest = () => {
                                   <div className="meta-info mb-4">
                                     <div className="author">
                                       <div className="avatar">
-                                        <img src={defaultAvatar} alt="axies" />
+                                        <img src={userAvatar} alt="avatar" />
                                       </div>
                                       <div className="info">
-                                        <span>Người tạo</span>
+                                        <span className='font-weight-bold'>Người tạo</span>
                                         <h6>
-                                          <div>
+                                          <div style={{
+                                            color: color.black,
+                                          }}>
                                             {contest?.accountFullName}
                                           </div>
-                                          {' '}
                                         </h6>
                                       </div>
                                     </div>

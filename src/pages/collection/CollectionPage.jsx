@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from '../../components/common/header/HeaderVersion2';
 import Footer from '../../components/common/footer/Footer';
 import useFetchData from '../../hooks/useQueryData.js';
-import { defaultAvatar, defaultImage } from '../../constant/imageDefault.js';
+import { defaultAvatar, defaultImage, whiteScreen } from '../../constant/imageDefault.js';
 import { formatDate } from '../../utils/formatDate.js';
 import { useForm } from 'react-hook-form';
 import TextFieldCommon from '../../components/input/TextfieldCommon.jsx';
@@ -108,18 +108,18 @@ const CollectionPage = () => {
                                className="sc-card-collection style-2 home5">
                             <div className="media-images-collection">
                               <div className="box-left">
-                                <img src={item.image[0] || defaultImage} alt="painting" />
+                                <img src={item.image[0] || whiteScreen} alt="painting" />
                               </div>
                               <div className="box-right">
                                 <div className="top-img">
                                   <img
-                                    src={item.image[1] || defaultImage}
+                                    src={item.image[1] || whiteScreen}
                                     alt="painting"
                                   />
                                 </div>
                                 <div className="bottom-img">
                                   <img
-                                    src={item.image[2] || defaultImage}
+                                    src={item.image[2] || whiteScreen}
                                     alt="painting"
                                   />
                                 </div>

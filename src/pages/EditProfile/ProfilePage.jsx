@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import TextFieldCommon from '../../components/input/TextfieldCommon.jsx';
 import TextareaCommon  from '../../components/textarea/TextareaCommon.jsx';
 import RadioCommon from '../../components/checkbox/RadioCommon.jsx';
-import { defaultAvatar } from '../../constant/imageDefault.js';
+import { userAvatar } from '../../constant/imageDefault.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import { masterApi } from '../../api/masterApi.js';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -130,7 +130,7 @@ const ProfilePage = () => {
       if (info.avatar) {
         setImageUrl(info.avatar);
       } else {
-        setImageUrl(defaultAvatar);
+        setImageUrl(userAvatar);
       }
     }
   }, [data]);
@@ -177,7 +177,7 @@ const ProfilePage = () => {
                                     <img
                                         id="profileimg"
                                         src={imageUrl}
-                                        alt="Axies"
+                                        alt="avatar"
                                     />
                                 </div>
                                 <div id="upload-profile">

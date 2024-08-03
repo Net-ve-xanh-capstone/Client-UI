@@ -48,7 +48,9 @@ const PaintingItem = props => {
                     key={index}>
                     <div className="card-media">
                       <div>
-                        <img className='img-painting' src={item?.image} alt="tranh" />
+                        <img className='img-painting object-fit-contain' style={{
+                          height: '320px',
+                        }} src={item?.image} alt="tranh" />
                       </div>
                       <div className="button-place-bid">
                         <button
@@ -127,14 +129,14 @@ const PaintingItem = props => {
                         </div>
                       </div>
                     </div>
-                    <div className="card-bottom style-explode">
-                      <div className="price">
+                    <div className="card-bottom style-explode justify-content-around">
+                      <div className="price w-50">
                         <span>Tên chủ đề</span>
                         <div className="price-details">
                           <h5>{item.topicName}</h5>
                         </div>
                       </div>
-                      <div className="price">
+                      <div className="price w-50">
                       <span>Mô tả</span>
                         <div className="price-details">
                           <h5>{item?.description}</h5>
@@ -158,7 +160,7 @@ const PaintingItem = props => {
                   id="load-more"
                   className="sc-button loadmore fl-button pri-3"
                   onClick={showMoreItems}>
-                  <span>Load More</span>
+                  <span>Xem thêm</span>
                 </Link>
               </div>
             )}
@@ -247,7 +249,7 @@ const RejectModal = ({ showReject, onHide }) => {
       <Modal.Header closeButton></Modal.Header>
       <Modal.Body>
         <div className="space-y-20 pd-40">
-          <h4 className="text-center font-weight-bold">Tranh của bạn không thể chỉnh sửa</h4>
+          <h4 className="text-center font-weight-bold">Tranh của bạn không thể chỉnh sửa sau khi nộp</h4>
         </div>
       </Modal.Body>
     </Modal>

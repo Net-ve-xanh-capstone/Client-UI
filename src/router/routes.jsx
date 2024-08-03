@@ -103,9 +103,7 @@ const routes = [
   {
     path: '/blog',
     component: (
-      <ProtectedRoute>
-        <BlogPage />
-      </ProtectedRoute>
+      <BlogPage />
     ),
   },
   { path: '/contest-detail/:contestId', component: <ContestDetail /> },

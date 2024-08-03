@@ -234,6 +234,7 @@ const ProfilePage = () => {
                                                 PopperProps={{
                                                   sx: {'&.MuiPickersPopper-root': {border: '4px solid red'},},
                                                 }}
+                                                future={false}
                                                 defaultValue={dayjs(info?.birthday)}
                                                 control={control}
                                                 error={

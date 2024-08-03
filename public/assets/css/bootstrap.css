@@ -7964,6 +7964,10 @@ a.bg-inverse:hover {
   width: 25% !important;
 }
 
+.w-45 {
+    width: 45% !important;
+}
+
 .w-50 {
   width: 50% !important;
 }
@@ -9894,4 +9898,8 @@ a.text-gray-dark:hover {
 
 .cursor-pointer {
     cursor: pointer !important;
+}
+
+.object-fit-contain {
+    object-fit: contain !important;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/common/header/HeaderVersion2';
 import Footer from '../../components/common/footer/Footer';
@@ -8,91 +8,71 @@ import { formatDate } from '../../utils/formatDate.js';
 import { useForm } from 'react-hook-form';
 import TextFieldCommon from '../../components/input/TextfieldCommon.jsx';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
+import lodash from 'lodash';
 
 const GET_ALL_COLLECTION = 'collections/getallcollection';
 const CollectionPage = () => {
-  const [dataFilter] = useState(
-    [
-      {
-        name: 'Listings',
-        checked: 'checked',
-      },
-      {
-        name: 'Purchases',
-        checked: 'checked',
-      },
-      {
-        name: 'Sales',
-        checked: '',
-      },
-      {
-        name: 'Transfer',
-        checked: '',
-      },
-
-      {
-        name: 'Burns',
-        checked: 'checked',
-      },
-      {
-        name: 'Bids',
-        checked: '',
-      },
-      {
-        name: 'Followings',
-        checked: '',
-      },
-    ],
-  );
-  const [collection, setCollection] = useState([]);
-  const [filterCollection, setFilterCollection] = useState([]);
   const [message, setMessage] = useState('');
-  const [visible, setVisible] = useState(8);
+  const [visible, setVisible] = useState(6);
+  const [query, setQuery] = useState('');
+  const [collection, setCollection] = useState([]); // Danh sách ảnh ban đầu
+  const [filterCollection, setFilterCollection] = useState([]); // Danh sách ảnh đã lọc
+  
   const showMoreItems = () => {
     setVisible((prevValue) => prevValue + 4);
   };
-  const handleSearch = (data) => {
-    const { name } = data;
-    if (!name) setFilterCollection(collection);
-    const filteredResults = collection.filter((item) => {
-      return item.name.toLowerCase().includes(name.toLowerCase())
-    });
-    if (filteredResults.length === 0) { 
-      setMessage('Không tìm thấy bộ sưu tập nào!'); 
+
+  const { control } = useForm({});
+  const { isLoading, isError, data, error } = useFetchData(GET_ALL_COLLECTION);
+
+  // Debounced filter function
+  const debouncedFilter = useMemo(() => lodash.debounce((query) => {
+    
+    if (!collection.length) return;
+    
+    if (query.toString().trim() === '') {
+      setFilterCollection(collection);
+      setMessage(null);
+      setVisible(6);
+      return;
+    }
+    
+    const filtered = collection.filter(image =>
+      image.name.toLowerCase().includes(query.toString().toLowerCase())
+    );
+    
+    console.log('filter', filtered)
+    
+    if (filtered.length === 0) {
+      setMessage('Không tìm thấy bộ sưu tập nào');
+      setVisible(0);
       setFilterCollection([]);
     } else {
-      setMessage('');
-      setFilterCollection(filteredResults);
+      setMessage(null);
+      setVisible(6);
+      setFilterCollection(filtered);
     }
-    console.log(filteredResults);
-  }
-
-  const {
-    control,
-    handleSubmit,
-  } = useForm({});
-
-  const {
-    isLoading,
-    isError,
-    data,
-    error,
-  } = useFetchData(GET_ALL_COLLECTION);
+    
+  }, 300), [collection]);
 
   useEffect(() => {
     if (data) {
-      setCollection(data?.data?.result?.list);
-      setFilterCollection(data?.data?.result?.list);
+      const initialCollection = data?.data?.result?.list || [];
+      setCollection(initialCollection);
+      setFilterCollection(initialCollection);
     }
   }, [data]);
 
-  if (isLoading) {
-    return <span><DotLoaderCustom /></span>;
-  }
+  useEffect(() => {
+    debouncedFilter(query);
+    return () => {
+      debouncedFilter.cancel();
+    };
+  }, [query, debouncedFilter  ]);
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
+  if (isLoading) return <span><DotLoaderCustom /></span>;
+  
+  if (isError) return <p>Error: {error.message}</p>;
   return (
     <div>
       <Header />
@@ -172,7 +152,7 @@ const CollectionPage = () => {
               <div id="side-bar" className="side-bar style-2">
 
                 <div className="widget widget-search mgbt-24">
-                  <form onSubmit={handleSubmit(handleSearch)}>
+                  <form>
                     <TextFieldCommon
                       control={control}
                       id="name"
@@ -180,10 +160,9 @@ const CollectionPage = () => {
                       className="style-2"
                       type="text"
                       placeholder="Tìm tên bộ sưu tập"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
                     />
-                    <button className="style-2">
-                      <i className="icon-fl-search-filled"></i>
-                    </button>
                   </form>
                 </div>
 

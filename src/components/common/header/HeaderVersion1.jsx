@@ -145,49 +145,6 @@ const HeaderVersion1 = () => {
                                         ))}
                                     </ul>
                                 </nav>
-                                <div className="flat-search-btn flex">
-                                    <div
-                                        className="header-search flat-show-search"
-                                        id="s1">
-                                        <div
-                                            className="top-search"
-                                            ref={btnSearch}>
-                                            <form
-                                                action="#"
-                                                method="get"
-                                                role="search"
-                                                className="search-form">
-                                                <input
-                                                    type="search"
-                                                    id="s"
-                                                    className="search-field"
-                                                    placeholder="Search..."
-                                                    name="s"
-                                                    title="Search for"
-                                                    required=""
-                                                />
-                                                <button
-                                                    className="search search-submit"
-                                                    type="submit"
-                                                    title="Search">
-                                                    <i className="icon-fl-search-filled"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div className="flat-search-btn flex">
-                                        {
-                                            <div
-                                              style={{width: '150px'}}
-                                                className="sc-btn-top mg-r-12"
-                                                id="site-header">
-                                                {jwtToken ? (
-                                                    <TooltipMenu />
-                                                ) : null}
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

@@ -2,7 +2,6 @@ import { Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import Countdown from 'react-countdown';
 
 import 'swiper/scss';
 import 'swiper/scss/navigation';
@@ -16,6 +15,7 @@ import LoadingSkeleton from '../../../components/loading/LoadingSkeleton.jsx';
 import useFetchData from '../../../hooks/useQueryData.js';
 import CountdownComponent from '../../../components/CountdownComponent.jsx';
 import { contestStatus } from '../../../constant/Status.js';
+import { formatDate } from '../../../utils/formatDate.js';
 
 const Contest = () => {
   const { isLoading, isError, data, error } = useFetchData(
@@ -68,25 +68,11 @@ const Contest = () => {
                           <div className="swiper-wrapper">
                             <div className="swiper-slide">
                               <div className="slider-item">
-                                <div className="sc-card-product">
+                                <div className="sc-card-contest">
                                   <div className="card-media">
                                     <Link to={`/contest-detail/${contest?.id}`}>
-                                      <img src={defaultImage} alt="axies" />
+                                      <img className='object-fit-contain' src={contest?.logo} alt="Logo cuộc thi" />
                                     </Link>
-
-                                    <div
-                                      style={{ width: '250px' }}
-                                      className="featured-countdown">
-                                      <div> 
-                                        {contest?.status === contestStatus.IN_PROCESS ? (
-                                          <CountdownComponent
-                                            endtimeString={contest?.endTime}
-                                          />
-                                        ) : (
-                                          <span>{contest?.status}</span>
-                                        )}
-                                      </div>
-                                    </div>
                                     <div className="button-place-bid">
                                       <button
                                         onClick={() =>
@@ -107,7 +93,7 @@ const Contest = () => {
                                       </Link>
                                     </h5>
                                   </div>
-                                  <div className="meta-info">
+                                  <div className="meta-info mb-4">
                                     <div className="author">
                                       <div className="avatar">
                                         <img src={defaultAvatar} alt="axies" />
@@ -115,18 +101,47 @@ const Contest = () => {
                                       <div className="info">
                                         <span>Người tạo</span>
                                         <h6>
-                                          {' '}
-                                          <Link to="/authors-02">
+                                          <div>
                                             {contest?.accountFullName}
-                                          </Link>{' '}
+                                          </div>
+                                          {' '}
                                         </h6>
                                       </div>
                                     </div>
                                     <div
-                                      style={{
-                                        width: '100px',
-                                      }}
-                                      className="price"></div>
+                                      className="price">
+                                      <div className="flex flex-column align-items-start justify-content-center">
+                                        <span className="text-start">Trạng thái</span>
+                                        <h6>
+                                          <div>
+                                            {contest?.status}
+                                          </div>
+                                        </h6>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="meta-info">
+                                    <div className="price w-100">
+                                      <div className="flex justify-content-between">
+                                        <div className="">
+                                          <span>Thời gian bắt đầu</span>
+                                          <h6>
+                                            <div className='text-left'>
+                                              {formatDate(contest?.startTime)}
+                                            </div>
+                                          </h6>
+                                        </div>
+
+                                        <div className="">
+                                          <span>Thời gian kết thúc</span>
+                                          <h6>
+                                            <div className='text-left'>
+                                              {formatDate(contest?.endTime)}
+                                            </div>
+                                          </h6>
+                                        </div>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -151,7 +166,7 @@ const ContestLoading = () => {
       <div className="swiper-wrapper">
         <div className="swiper-slide">
           <div className="slider-item">
-            <div className="sc-card-product">
+            <div className="sc-card-product" style={{ maxHeight: '500px !important'}}>
               <div className="card-media">
                 <LoadingSkeleton
                   width="100%"
@@ -174,7 +189,7 @@ const ContestLoading = () => {
                 </div>
               </div>
               <div className="meta-info">
-                <div className="author">
+              <div className="author">
                   <div className="avatar">
                     <LoadingSkeleton
                       width="100%"

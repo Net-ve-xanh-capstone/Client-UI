@@ -17,6 +17,7 @@ import { topicApi } from '../api/topicApi';
 import { paintingApi } from '../api/paintingApi';
 import { paintingStatus, paintingStatusDisable } from '../constant/Status.js';
 import Swal from 'sweetalert2';
+import { addressApi } from '../api/addressApi.js';
 
 const getAllPaintingByCompetitorIdEndpoint =
   'paintings/getpaintingbyaccountcontest';
@@ -32,6 +33,14 @@ const SubmitPage = () => {
   const { progress, url, error } = useUploadImage(file);
   const userInfo = useSelector(state => state.auth.userInfo);
   const today = new Date().toISOString().slice(0, 10);
+  const [address, setAddress] = useState({
+    cities: [],
+    districts: [],
+    wards: [],
+    selectedCity: '',
+    selectedDistrict: '',
+  });
+  
   useEffect(() => {
     const fetchData = async () => {
       const response = await topicApi.getAllTopic(
@@ -39,7 +48,10 @@ const SubmitPage = () => {
         userInfo.Id,
         contestId,
       );
+      const address = await addressApi.get();
+      
       setRoundTopicsData(response.data.result);
+      setAddress(prevState => ({ ...prevState, cities: address.data }));
     };
     fetchData();
   }, []);
@@ -62,6 +74,7 @@ const SubmitPage = () => {
     resolver: yupResolver(schema),
     reValidateMode: 'onChange',
   });
+  
   const handlePreviewImage = e => {
     const file = e.target.files[0];
     file.preview = URL.createObjectURL(file);
@@ -70,7 +83,7 @@ const SubmitPage = () => {
     setError('file', '');
     setFile(file);
   };
-
+  
   const handleDraftPainting = async e => {
     // Trigger validate form
     const isValid = await trigger();
@@ -112,6 +125,7 @@ const SubmitPage = () => {
       setRefreshTrigger
     );
   };
+  
   const handleSubmitPainting = async e => {
     const isValid = await trigger();
     if (!isValid) return;
@@ -152,15 +166,36 @@ const SubmitPage = () => {
       setRefreshTrigger
     );
   };
+  
   const getDropdownOptions = (data, defaultValue = '') => {
     const value = watch(data) || defaultValue;
     return value;
   };
-
+  
   const handleSelectDropdownOption = (name, value) => {
     setValue(name, value.name);
     setTopicId(value.id);
     setError(name, '');
+  };
+
+  const handleCityChange = (e) => {
+    const cityId = e.target.value;
+    setAddress(prevState => ({
+      ...prevState,
+      selectedCity: cityId,
+      selectedDistrict: '',
+      districts: cityId ? prevState.cities.find(c => c.Id === cityId)?.Districts || [] : [],
+      wards: []
+    }));
+  };
+
+  const handleDistrictChange = (e) => {
+    const districtId = e.target.value;
+    setAddress(prevState => ({
+      ...prevState,
+      selectedDistrict: districtId,
+      wards: districtId ? prevState.districts.find(d => d.Id === districtId)?.Wards || [] : []
+    }));
   };
 
   useEffect(() => {
@@ -279,7 +314,9 @@ const SubmitPage = () => {
                       disabled={disable}
                     />
                   </label>
+                  
                   <div>
+                    {/* Tên tranh */}
                     <h4 className="title-create-item disable-select">Tên bức tranh</h4>
                     <TextFieldCommon
                       control={control}
@@ -293,6 +330,8 @@ const SubmitPage = () => {
                       disabled={disable}
                       readOnly={disable}
                     />
+                    
+                    {/* Mô tả */}
                     <h4 className="title-create-item">Mô tả bức tranh</h4>
                     <TextareaCommon
                       control={control}
@@ -304,7 +343,8 @@ const SubmitPage = () => {
                       autoFocus
                       disabled={disable}
                     />
-
+                    
+                    {/* Chủ đề */}
                     <div className="inner-row-form style-2">
                       <div id="item-create" className="dropdown">
                         <h4 className="title-create-item">Chủ đề</h4>
@@ -313,8 +353,9 @@ const SubmitPage = () => {
                             {errors.topic.message}
                           </span>
                         )}
-                        <Dropdown 
+                        <Dropdown
                           disabled={disable}
+                          classname="mb-15"
                           errors={errors.topic?.message}>
                           <Dropdown.Select
                             placeholder={getDropdownOptions(
@@ -335,6 +376,87 @@ const SubmitPage = () => {
                         </Dropdown>
                       </div>
                     </div>
+                    
+                    {/* địa chỉ */}
+                    <div className='flex align-items-start mb-15'>
+                      {/* Quận */}
+                      <div className="inner-row-form style-2 w-50 mr-5">
+                        <div id="item-create" className="dropdown">
+                          <h4 className="title-create-item">Quận</h4>
+                          {errors.district && (
+                            <span className="text-danger h5">
+                              {errors.district.message}
+                            </span>
+                          )}
+                          <Dropdown
+                            disabled={disable}
+                            errors={errors.district?.message}>
+                            <Dropdown.Select
+                              placeholder={getDropdownOptions(
+                                'district',
+                                'Chọn quận',
+                              )}></Dropdown.Select>
+                            <Dropdown.List>
+                              {roundTopicsData.map(topic => (
+                                <Dropdown.Option
+                                  key={topic.name}
+                                  onClick={() =>
+                                    handleSelectDropdownOption('topic', topic)
+                                  }>
+                                  {topic.name}
+                                </Dropdown.Option>
+                              ))}
+                            </Dropdown.List>
+                          </Dropdown>
+                        </div>
+                      </div>
+                      
+                      {/* Phường */}
+                      <div className="inner-row-form style-2 w-50">
+                        <div id="item-create" className="dropdown">
+                        <h4 className="title-create-item">Phường</h4>
+                        {errors.ward && (
+                          <span className="text-danger h5">
+                              {errors.ward.message}
+                            </span>
+                        )}
+                        <Dropdown
+                          disabled={disable}
+                          errors={errors.ward?.message}>
+                          <Dropdown.Select
+                            placeholder={getDropdownOptions(
+                              'ward',
+                              'Chọn phường',
+                            )}></Dropdown.Select>
+                          <Dropdown.List>
+                            {roundTopicsData.map(topic => (
+                              <Dropdown.Option
+                                key={topic.name}
+                                onClick={() =>
+                                  handleSelectDropdownOption('topic', topic)
+                                }>
+                                {topic.name}
+                              </Dropdown.Option>
+                            ))}
+                          </Dropdown.List>
+                        </Dropdown>
+                      </div>
+                      </div>
+                    </div>
+                    
+                    {/* địa chỉ cụ thể */}
+                    <h4 className="title-create-item disable-select">Địa chỉ cụ thể</h4>
+                    <TextFieldCommon
+                      control={control}
+                      error={errors.adress?.message}
+                      id="adress"
+                      name="adress"
+                      placeholder="Nhập địa chỉ cụ thể như số nhà, tên đường, trường, lớp, ...."
+                      className={`${disable ? 'read-only' : ''} mb-15`}
+                      autoFocus
+                      disabled={disable}
+                      readOnly={disable}
+                    />
                   </div>
                   <div className="flex justify-content-center align-items-center mt-5">
                     <button

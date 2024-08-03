@@ -139,13 +139,13 @@ const ContestDetail = () => {
                       <CountdownComponent endtimeString={contest?.endTime} />
                     </div>
                   </div>
-                  {contest?.status !== contestStatus.IN_PROCESS ? (
+                  {contest?.status !== contestStatus.IN_PROCESS && userInfo ? (
                       <Link
                         to="#"
                         className="disable-button loadmore style fl-button pri-3 cursor-none">
                         <span>{contest?.status}</span>
                       </Link>
-                    ): registerButton({ status, check, contestId })}
+                    ): registerButton({ status, check, contestId, userInfo })}
 
                   <div className="flat-tabs themesflat-tabs">
                     <Tabs>
@@ -266,7 +266,7 @@ const ContestDetail = () => {
   );
 };
 
-const registerButton = ({ status, check, contestId }) => {
+const registerButton = ({ status, check, contestId, userInfo }) => {
   if (paintingStatusEnable.includes(status)) {
     if (check) {
       return (
@@ -285,6 +285,15 @@ const registerButton = ({ status, check, contestId }) => {
         </Link>
       )
     }
+  }
+  if (!userInfo) {
+    return (
+      <Link
+        to={`/submit/${contestId}`}
+        className="sc-button loadmore style fl-button pri-3">
+        <span>Đăng ký dự thi</span>
+      </Link>
+    );
   }
   return (
     <Link

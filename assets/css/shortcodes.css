@@ -886,8 +886,6 @@
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
-  height: 600px;
-  max-height: 600px;
 }
 
 .sc-card-contest {
@@ -1236,6 +1234,26 @@
   font-size: 20px;
   vertical-align: text-bottom;
   padding-right: 8px;
+}
+
+.sc-card-product .view-history {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary-color9);
+}
+
+.sc-card-product .view-history:hover {
+    color: var(--primary-color3);
+}
+
+.sc-card-product .reload::before {
+    content: '\e91c';
+    font-family: 'nfts';
+    color: var(--primary-color2);
+    font-weight: 500;
+    font-size: 20px;
+    vertical-align: text-bottom;
+    padding-right: 8px;
 }
 
 /* style explode */

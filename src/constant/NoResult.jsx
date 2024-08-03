@@ -4,6 +4,7 @@ import Footer from '../components/common/footer/Footer';
 import { useState } from 'react';
 import { Book, Home, InsertChart, Telegram, Window } from '@mui/icons-material';
 import { color } from './Color.js';
+
 const NoResult = () => {
   const [dataBox] = useState(
     [
@@ -11,54 +12,59 @@ const NoResult = () => {
         icon: <Home sx={
           {
             color: color.white,
+            fontSize: '32px',
           }
         } />,
         url: '/',
         title: 'Trang chủ',
-        description: 'Quay về trang chủ'
+        description: 'Quay về trang chủ',
       },
       {
         icon: <Book sx={
           {
             color: color.white,
+            fontSize: '32px',
           }
         } />,
         url: 'blog',
         title: 'Bài đọc',
-        description: 'Đọc thêm thông tin về các cuộc thi cũng như nhà tài trợ'
+        description: 'Đọc thêm thông tin về các cuộc thi cũng như nhà tài trợ',
       },
       {
         icon: <InsertChart sx={
           {
             color: color.white,
+            fontSize: '32px',
           }
         } />,
         url: 'ranking',
         title: 'Bảng xếp hạng',
-        description: 'Bảng xếp hạng thành tích của các thí sinh'
+        description: 'Bảng xếp hạng thành tích của các thí sinh',
       },
       {
         icon: <Window sx={
           {
             color: color.white,
+            fontSize: '32px',
           }
         } />,
         url: 'collection',
         title: 'Bô sưu tập',
-        description: 'Tham quan, chiêm ngưỡng bộ sưu tập từng mùa'
+        description: 'Tham quan, chiêm ngưỡng bộ sưu tập từng mùa',
       },
       {
         icon: <Telegram sx={
           {
             color: color.white,
+            fontSize: '32px',
           }
         } />,
         url: 'contact',
         title: 'Liên hệ',
-        description: 'Gửi lời nhắn cho chúng tôi nếu bạn cần sự giúp đỡ'
+        description: 'Gửi lời nhắn cho chúng tôi nếu bạn cần sự giúp đỡ',
       },
-    ]
-  )
+    ],
+  );
   return (
     <div>
       <HeaderVersion1 />

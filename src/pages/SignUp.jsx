@@ -13,7 +13,7 @@ import {
   DialogContent,
   IconButton,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import DatepickerCommon from '../components/datepicker/DatePickerCommon';
 import dayjs from 'dayjs';
@@ -138,7 +138,7 @@ const SignUp = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="page-title-heading mg-bt-12">
-                <h1 className="heading text-center">Đăng ký</h1>
+                <h1 className="heading text-center">ĐĂNG KÝ</h1>
               </div>
               <div className="breadcrumbs style2">
                 <ul>
@@ -307,9 +307,9 @@ const SignUp = () => {
                         <CloseIcon />
                       </IconButton>
                       <DialogContent>
-                        <TypographyStyled className="h3 text-center">
-                          {message ? message : ''}
-                        </TypographyStyled>
+                        <div className="space-y-20 pd-40">
+                          <h4 className="text-center font-weight-bold">{message ? message : ''}</h4>
+                        </div>
                       </DialogContent>
                     </BootstrapDialog>
 

@@ -14,7 +14,7 @@ const MyPaintingPage = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="page-title-heading mg-bt-12">
-                                <h1 className="heading text-center">Tranh Của Tôi</h1>
+                                <h1 className="heading text-center">TRANH CỦA TÔI</h1>
                             </div>
                             <div className="breadcrumbs style2">
                                 <ul>

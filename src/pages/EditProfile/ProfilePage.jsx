@@ -11,13 +11,13 @@ import TextareaCommon  from '../../components/textarea/TextareaCommon.jsx';
 import RadioCommon from '../../components/checkbox/RadioCommon.jsx';
 import { defaultAvatar } from '../../constant/imageDefault.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
-import Swal from 'sweetalert2';
 import { masterApi } from '../../api/masterApi.js';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { regexEmail, regexFullNameVN, regexPhone } from '../../constant/Regex.js';
 import DatepickerCommon from '../../components/datepicker/DatePickerCommon.jsx';
 import dayjs from 'dayjs';
+import Swal from 'sweetalert2';
+import * as yup from 'yup';
 
 
 const ProfilePage = () => {
@@ -69,14 +69,6 @@ const ProfilePage = () => {
     { value: '1', label: 'Nữ' },
   ];
   
-  function convertToVietnameseDateFormat(isoDateString) {
-    const dateObject = new Date(isoDateString);
-    const day = dateObject.getDate();
-    const month = dateObject.getMonth() + 1;
-    const year = dateObject.getFullYear();
-
-    return `${day}/${month}/${year}`;
-  }
   const handleUpdate = async input => {
     const birthday = dayjs(input.birthday).toISOString();
     console.log(input);
@@ -160,7 +152,7 @@ const ProfilePage = () => {
                         <div className="col-md-12">
                             <div className="page-title-heading mg-bt-12">
                                 <h1 className="heading text-center">
-                                    Thông tin cá nhân
+                                    THÔNG TIN CÁ NHÂN
                                 </h1>
                             </div>
                             <div className="breadcrumbs style2">

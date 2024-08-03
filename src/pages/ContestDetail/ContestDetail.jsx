@@ -48,6 +48,7 @@ const ContestDetail = () => {
     };
     fetchData();
   }, []);
+  
   const contest = data?.data?.result;
 
   if (isLoading) {
@@ -66,7 +67,7 @@ const ContestDetail = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="page-title-heading mg-bt-12">
-                <h1 className="heading text-center">Chi tiết cuộc thi</h1>
+                <h1 className="heading text-center">CHI TIẾT CUỘC THI</h1>
               </div>
               <div className="breadcrumbs style2">
                 <ul>
@@ -86,7 +87,7 @@ const ContestDetail = () => {
             <div className="col-xl-6 col-md-12">
               <div className="content-left">
                 <div className="media">
-                  <img src={defaultImage} alt="Axies" />
+                  <img src={contest?.logo} alt="Contest" />
                 </div>
               </div>
             </div>
@@ -139,7 +140,7 @@ const ContestDetail = () => {
                       <CountdownComponent endtimeString={contest?.endTime} />
                     </div>
                   </div>
-                  {contest?.status !== contestStatus.IN_PROCESS && userInfo ? (
+                  {contest?.status !== contestStatus.IN_PROCESS ? (
                       <Link
                         to="#"
                         className="disable-button loadmore style fl-button pri-3 cursor-none">
@@ -205,7 +206,7 @@ const ContestDetail = () => {
                                         <Link to="#">
                                           <img
                                             src={item.sponsor?.logo}
-                                            alt="Axies"
+                                            alt="logo"
                                             className="avatar"
                                           />
                                         </Link>

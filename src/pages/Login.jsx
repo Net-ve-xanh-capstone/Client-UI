@@ -6,7 +6,7 @@ import TextFieldCommon from '../components/input/TextfieldCommon';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { competitorLogin } from '../store/auth/authAction';
 import { FadeLoader } from 'react-spinners';
 import CloseIcon from '@mui/icons-material/Close';
@@ -80,7 +80,7 @@ const Login = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="page-title-heading mg-bt-12">
-                <h1 className="heading text-center">Đăng nhập</h1>
+                <h1 className="heading text-center">ĐĂNG NHẬP</h1>
               </div>
               <div className="breadcrumbs style2">
                 <ul>
@@ -110,15 +110,15 @@ const Login = () => {
           <CloseIcon />
         </IconButton>
         <DialogContent>
-          <TypographyStyled className="h3 text-center">
-            Sai tài khoản hoặc mật khẩu, vui lòng nhập lại
-          </TypographyStyled>
+          <div className="space-y-20 pd-40">
+            <h4 className="text-center font-weight-bold">Sai tài khoản hoặc mật khẩu, xin nhập lại</h4>
+          </div>
         </DialogContent>
       </BootstrapDialog>
       <section className="tf-login tf-section">
         <div className="themesflat-container">
           <div className="row">
-            <div className="col-12">
+          <div className="col-12">
               <div className="flat-form box-login-email">
                 <div className="form-inner">
                   <form

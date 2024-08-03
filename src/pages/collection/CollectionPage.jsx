@@ -41,8 +41,6 @@ const CollectionPage = () => {
       image.name.toLowerCase().includes(query.toString().toLowerCase())
     );
     
-    console.log('filter', filtered)
-    
     if (filtered.length === 0) {
       setMessage('Không tìm thấy bộ sưu tập nào');
       setVisible(0);
@@ -73,6 +71,7 @@ const CollectionPage = () => {
   if (isLoading) return <span><DotLoaderCustom /></span>;
   
   if (isError) return <p>Error: {error.message}</p>;
+  
   return (
     <div>
       <Header />
@@ -82,7 +81,7 @@ const CollectionPage = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="page-title-heading mg-bt-12">
-                <h1 className="heading text-center">Bộ sưu tập</h1>
+                <h1 className="heading text-center">BỘ SƯU TẬP</h1>
               </div>
               <div className="breadcrumbs style2">
                 <ul>

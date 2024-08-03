@@ -1,6 +1,6 @@
 export const contestStatus =  {
-  NOT_STARTED: 'NotStarted',
-  IN_PROCESS: 'InProcess',
+  NOT_STARTED: 'Đã hoàn thành',
+  IN_PROCESS: 'Đang tiến hành',
 }
 
 export const paintingStatus = {

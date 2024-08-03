@@ -9899,3 +9899,7 @@ a.text-gray-dark:hover {
 .cursor-pointer {
     cursor: pointer !important;
 }
+
+.object-fit-contain {
+    object-fit: contain !important;
+}

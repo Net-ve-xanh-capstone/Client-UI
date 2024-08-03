@@ -4441,7 +4441,7 @@ section.today-picks {
 }
 
 .box-epxlore .sc-card-product {
-  width: 28.5%;
+  width: auto;
 }
 
 /* switch mode */

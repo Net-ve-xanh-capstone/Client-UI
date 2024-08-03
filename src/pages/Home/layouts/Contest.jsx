@@ -71,7 +71,7 @@ const Contest = () => {
                                 <div className="sc-card-contest">
                                   <div className="card-media">
                                     <Link to={`/contest-detail/${contest?.id}`}>
-                                      <img src={contest?.logo} alt="axies" />
+                                      <img className='object-fit-contain' src={contest?.logo} alt="Logo cuộc thi" />
                                     </Link>
                                     <div className="button-place-bid">
                                       <button

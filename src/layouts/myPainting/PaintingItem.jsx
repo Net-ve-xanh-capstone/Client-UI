@@ -247,7 +247,7 @@ const RejectModal = ({ showReject, onHide }) => {
       <Modal.Header closeButton></Modal.Header>
       <Modal.Body>
         <div className="space-y-20 pd-40">
-          <h4 className="text-center font-weight-bold">Tranh của bạn không thể chỉnh sửa</h4>
+          <h4 className="text-center font-weight-bold">Tranh của bạn không thể chỉnh sửa sau khi nộp</h4>
         </div>
       </Modal.Body>
     </Modal>

@@ -21,14 +21,8 @@ const menus = [
     namesub: [
       {
         id: 1,
-        sub: 'Explore',
-        links: '/explore',
-        public: true,
-      },
-      {
-        id: 2,
-        sub: 'Live Auctions',
-        links: '/live-auctions',
+        sub: 'Câu hỏi thường gặp',
+        links: '/faq',
         public: true,
       },
     ],
@@ -40,13 +34,13 @@ const menus = [
     namesub: [
       {
         id: 1,
-        sub: 'Blog',
+        sub: 'Bài đọc',
         links: '/blog',
         public: true,
       },
       {
         id: 2,
-        sub: 'Blog Details',
+        sub: 'Chi tiết bài đọc',
         links: '/blog-details',
         public: true,
       },
@@ -72,26 +66,14 @@ const menus = [
       },
       {
         id: 2,
-        sub: 'Bảng xếp hạng',
-        links: '/ranking',
-        public: true,
-      },
-      {
-        id: 3,
         sub: 'Bộ sưu tập',
         links: '/collection',
         public: true,
       },
       {
-        id: 4,
+        id: 3,
         sub: 'Không có kết quả',
         links: '/no-result',
-        public: true,
-      },
-      {
-        id: 5,
-        sub: 'FAQ',
-        links: '/faq',
         public: true,
       },
     ],

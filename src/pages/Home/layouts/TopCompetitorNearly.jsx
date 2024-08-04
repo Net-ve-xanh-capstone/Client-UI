@@ -1,25 +1,21 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-import img1 from '../../../assets/images/avatar/avt-1.jpg';
-import img2 from '../../../assets/images/avatar/avt-2.jpg';
-import img3 from '../../../assets/images/avatar/avt-3.jpg';
-import img4 from '../../../assets/images/avatar/avt-4.jpg';
 import { Fallback } from '../../../constant/Fallback';
 import { withErrorBoundary } from 'react-error-boundary';
+import { userAvatar } from '../../../constant/imageDefault.js';
 import PropTypes from 'prop-types';
-
+import 'react-tabs/style/react-tabs.css';
 const TopCompetitorNearly = () => {
   const [dataTopSellerTab] = useState([
     {
-      title: '1 Year'
+      title: '1 năm'
     },
     {
-      title: '3 Years'
+      title: '3 năm'
     },
     {
-      title: '5 Years'
+      title: '5 năm'
     }
   ]);
   const [dataTopSellerPanel] = useState([
@@ -27,105 +23,105 @@ const TopCompetitorNearly = () => {
       id: 1,
       dataTopSellerContent: [
         {
-          img: img1,
-          name: 'Crispin Berry',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img1,
-          name: 'Crispin Berry',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img2,
-          name: 'Monica Lucas',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img2,
-          name: 'Monica Lucas',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img3,
-          name: 'Crispin Berry',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img3,
-          name: 'Crispin Berry',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img4,
-          name: 'Windsor Lane',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img4,
-          name: 'Windsor Lane',
-          price: '214.2 ETH'
-        }
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
+        },
       ]
     },
     {
       id: 2,
       dataTopSellerContent: [
         {
-          img: img2,
-          name: 'Monica Lucas',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img2,
-          name: 'Monica Lucas',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img3,
-          name: 'Crispin Berry',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img3,
-          name: 'Crispin Berry',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img4,
-          name: 'Windsor Lane',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img4,
-          name: 'Windsor Lane',
-          price: '214.2 ETH'
-        }
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
+        },
       ]
     },
     {
       id: 3,
       dataTopSellerContent: [
         {
-          img: img3,
-          name: 'Crispin Berry',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img3,
-          name: 'Crispin Berry',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img4,
-          name: 'Windsor Lane',
-          price: '214.2 ETH'
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
         },
         {
-          img: img4,
-          name: 'Windsor Lane',
-          price: '214.2 ETH'
-        }
+          img: userAvatar,
+          name: 'Nhật Vy',
+          price: '1 giải'
+        },
       ]
     }
   ]);

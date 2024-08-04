@@ -14,12 +14,11 @@ const ContactPage = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="page-title-heading mg-bt-12">
-                                <h1 className="heading text-center">Liên Hệ</h1>
+                                <h1 className="heading text-center">LIÊN HỆ</h1>
                             </div>
                             <div className="breadcrumbs style2">
                                 <ul>
                                     <li><Link to="/">Trang chủ</Link></li>
-                                    <li><Link to="#">Trang</Link></li>
                                     <li>Liên hệ</li>
                                 </ul>
                             </div>

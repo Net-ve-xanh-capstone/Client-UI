@@ -11,7 +11,7 @@ const GET_16_PAINTINGS = 'paintings/list16winingpainting';
 const SliderStyle2 = () => {
   const subtitle = 'Cuộc thi sáng tạo nghệ thuật';
   const title = 'Nét Vẽ Xanh';
-  const subTitle = 'thành phố Hồ Chí Minh';
+  const city = 'thành phố Hồ Chí Minh';
   const description = 'Khơi dậy sự sáng tạo, Vươn xa cùng đam mê';
   const { isLoading, isError, data, error } = useFetchData(
     GET_16_PAINTINGS
@@ -37,15 +37,15 @@ const SliderStyle2 = () => {
                 <strong>{subtitle}</strong>
               </span>
             </h4>
-            <h1 className="heading">{title}</h1>
-            <h1 className="heading">{subTitle}</h1>
+            <h1 className="heading font-slider">{title}</h1>
+            <h1 className="heading font-slider">{city}</h1>
             <p className="sub-heading mg-t-7 mg-bt-39">{description}</p>
             <div className="flat-bt-slider style2 flex">
               <a
-                href="/explore"
+                href="/login"
                 className="sc-button header-slider style style-1 note fl-button pri-1"
               >
-                <span>Tìm hiểu</span>
+                <span>Đăng ký ngay</span>
               </a>
             </div>
           </div>

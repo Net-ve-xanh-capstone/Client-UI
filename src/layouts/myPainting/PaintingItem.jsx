@@ -129,7 +129,7 @@ const PaintingItem = props => {
                         </div>
                       </div>
                     </div>
-                    <div className="card-bottom style-explode justify-content-around">
+                    <div className="card-bottom style-explode justify-content-around mb-4">
                       <div className="price w-50">
                         <span>Tên chủ đề</span>
                         <div className="price-details">
@@ -143,6 +143,7 @@ const PaintingItem = props => {
                         </div>
                       </div>
                     </div>
+                    <Link to={`/history/${item.id}`} className="view-history reload">Xem lịch sử</Link>
                   </div>
                 ))
               ) : (

@@ -29,6 +29,7 @@ const MyPaintingPage = lazy(() =>
 );
 const FAQPage = lazy(() => import('../pages/FAQ/FAQPage.jsx'));
 const ContactPage = lazy(() => import('../pages/contact/ContactPage.jsx'));
+const HistoryPage = lazy(() => import('../pages/history/HistoryPage.jsx'));
 
 const routes = [
   { path: '/', component: <Home /> },
@@ -116,6 +117,14 @@ const routes = [
     component: (
       <ProtectedRoute>
         <CollectionPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/history/:paintingId',
+    component: (
+      <ProtectedRoute>
+        <HistoryPage />
       </ProtectedRoute>
     ),
   },

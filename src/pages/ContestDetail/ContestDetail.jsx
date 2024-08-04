@@ -8,7 +8,7 @@ import liveAuctionData from '../../assets/fake-data/data-live-auction';
 import LiveAuction from '../../layouts/auctions/LiveAuction.jsx';
 import levelIcon from '../../assets/images/icon/level.png';
 import useFetchData from '../../hooks/useQueryData.js';
-import { defaultImage, defaultAvatar } from '../../constant/imageDefault.js';
+import { defaultImage, defaultAvatar, userAvatar } from '../../constant/imageDefault.js';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
 import CountdownComponent from '../../components/CountdownComponent.jsx';
 import { contestStatus, paintingStatusEnable } from './../../constant/Status.js';
@@ -48,6 +48,7 @@ const ContestDetail = () => {
     };
     fetchData();
   }, []);
+  
   const contest = data?.data?.result;
 
   if (isLoading) {
@@ -66,7 +67,7 @@ const ContestDetail = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="page-title-heading mg-bt-12">
-                <h1 className="heading text-center">Chi tiết cuộc thi</h1>
+                <h1 className="heading text-center">CHI TIẾT CUỘC THI</h1>
               </div>
               <div className="breadcrumbs style2">
                 <ul>
@@ -86,7 +87,7 @@ const ContestDetail = () => {
             <div className="col-xl-6 col-md-12">
               <div className="content-left">
                 <div className="media">
-                  <img src={defaultImage} alt="Axies" />
+                  <img src={contest?.logo} alt="Contest" />
                 </div>
               </div>
             </div>
@@ -112,7 +113,7 @@ const ContestDetail = () => {
                     <div className="meta-info">
                       <div className="author">
                         <div className="avatar">
-                          <img src={defaultAvatar} alt="Axies" />
+                          <img src={userAvatar} alt="Axies" />
                         </div>
                         <div className="info">
                           <span>Tạo bởi</span>
@@ -139,7 +140,7 @@ const ContestDetail = () => {
                       <CountdownComponent endtimeString={contest?.endTime} />
                     </div>
                   </div>
-                  {contest?.status !== contestStatus.IN_PROCESS && userInfo ? (
+                  {contest?.status !== contestStatus.IN_PROCESS ? (
                       <Link
                         to="#"
                         className="disable-button loadmore style fl-button pri-3 cursor-none">
@@ -205,7 +206,7 @@ const ContestDetail = () => {
                                         <Link to="#">
                                           <img
                                             src={item.sponsor?.logo}
-                                            alt="Axies"
+                                            alt="logo"
                                             className="avatar"
                                           />
                                         </Link>
@@ -260,7 +261,6 @@ const ContestDetail = () => {
           </div>
         </div>
       </div>
-      <LiveAuction data={liveAuctionData} />
       <Footer />
     </div>
   );

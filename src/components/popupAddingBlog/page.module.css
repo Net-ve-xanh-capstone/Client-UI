@@ -214,6 +214,10 @@
     grid-template-columns: repeat(1, 1fr);
 }
 
+.grid_item {
+    position: relative;
+}
+
 .grid_item.scale_grid {
     grid-row: 1 / 3;
     grid-column: 1 / 3;
@@ -223,4 +227,17 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.quanliti_image {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 6rem;
+    font-weight: 800;
+    color: white;
+    user-select: none;
 }

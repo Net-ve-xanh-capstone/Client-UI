@@ -8,15 +8,15 @@ export const allCategory = () => {
   return axiosApi.get(`categories/getallcategory`);
 };
 
-export const updateCate = (payload) => {
+export const updateCate = payload => {
   return axiosApi.put(`categories`, payload);
 };
 
-export const deleteCate = (id) => {
+export const deleteCate = id => {
   return axiosApi.patch(`categories?id=${id}`);
 };
 
-export const addnewCategory = (payload) => {
+export const addnewCategory = payload => {
   return axiosApi.post(`categories`, payload);
 };
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import styles from './page.module.css';
+import { parseDateEdit } from '../../utils/formatDate.js';
 
 function ModalInforUser({ onHide, modalShow, items }) {
   const listField = [
@@ -17,7 +18,7 @@ function ModalInforUser({ onHide, modalShow, items }) {
       label: 'Giới tính',
     },
     {
-      value: items?.birthday,
+      value: parseDateEdit(items?.birthday),
       label: 'Ngày sinh',
     },
     {

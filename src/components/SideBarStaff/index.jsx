@@ -1,5 +1,6 @@
 import BookIcon from '@mui/icons-material/Book';
 import CategoryIcon from '@mui/icons-material/Category';
+import LogoutIcon from '@mui/icons-material/Logout';
 import TopicIcon from '@mui/icons-material/Topic';
 import React, { useEffect, useState } from 'react';
 import {
@@ -22,6 +23,7 @@ import ColorLensIcon from '@mui/icons-material/ColorLens';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/auth/authSlice.js';
+import { IconButton } from '@mui/material';
 
 const SideBarStaff = ({
   collapsed,
@@ -40,7 +42,13 @@ const SideBarStaff = ({
       icon: <FaPalette />,
       path: '/contest',
       name: ' Cuộc thi',
-      new: true,
+      new: false,
+    },
+    {
+      icon: <ColorLensIcon />,
+      path: '/painting',
+      name: 'Bài dự thi',
+      new: false,
     },
     {
       icon: <BookIcon />,
@@ -72,12 +80,7 @@ const SideBarStaff = ({
       name: 'Nhà tài trợ',
       new: false,
     },
-    {
-      icon: <ColorLensIcon />,
-      path: '/painting',
-      name: 'Bài dự thi',
-      new: false,
-    },
+
     {
       icon: <AccountBoxIcon />,
       path: '/competitor',
@@ -124,7 +127,7 @@ const SideBarStaff = ({
                   padding: '9px',
                   textTransform: 'uppercase',
                   fontWeight: 'bold',
-                  fontSize: 15,
+                  fontSize: 18,
                   letterSpacing: '1px',
                 }}>
                 Nét vẽ xanh
@@ -151,12 +154,12 @@ const SideBarStaff = ({
       {/* Footer */}
       <SidebarFooter style={{ textAlign: 'center' }}>
         <div className="sidebar-btn-wrapper" style={{ padding: '16px' }}>
-          <div
+          <IconButton
             className="sidebar-btn"
-            style={{ cursor: 'pointer' }}
-            onClick={() => triggerLogout()}>
-            <span>ĐĂNG XUẤT</span>
-          </div>
+            onClick={() => triggerLogout()}
+            size="large">
+            <LogoutIcon color="action" style={{ color: 'white' }} />
+          </IconButton>
         </div>
       </SidebarFooter>
     </ProSidebar>

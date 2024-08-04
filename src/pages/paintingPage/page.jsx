@@ -14,6 +14,7 @@ import { getAllRoundStaff } from '../../api/roundStaffApi.js';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { contestApi } from '../../api/contestApi.js';
 
 function PaintingPage() {
   const [totalPage, setTotalPage] = useState(2);
@@ -31,11 +32,10 @@ function PaintingPage() {
   const [searching, setSearching] = useState({
     code: '',
     topicName: '',
-    startDate: '',
-    endDate: '',
     level: '',
     roundName: '',
     status: '',
+    contestId: '',
   });
 
   // data round and roundtopic
@@ -47,12 +47,25 @@ function PaintingPage() {
   const [roundTopic, setRoundTopic] = useState([{ val: null, label: null }]);
 
   // data educationlevel
-  const [loadingLevel, setLoadingLevel] = useState(true);
-  const [levelList, setlevelList] = useState([{ val: null, label: null }]);
+  const [levelList] = useState([
+    { value: 'Bảng A', label: 'Bảng A' },
+    { value: 'Bảng B', label: 'Bảng B' },
+  ]);
 
   // data round
   const [loadingRound, setLoadingRound] = useState(true);
-  const [roundList, setRoundList] = useState([{ val: null, label: null }]);
+  const [roundList, setRoundList] = useState([
+    { value: 'Vòng Chung Kết', label: 'Vòng Chung Kết' },
+    { value: 'Vòng Sơ Khảo', label: 'Vòng Sơ Khảo' },
+  ]);
+
+  // data contest
+  const [loadingContest, setLoadingContest] = useState(true);
+  const [contest, setContestList] = useState([{ val: null, label: null }]);
+  const [clearContest, setClearContest] = useState({
+    value: '',
+    label: 'Chọn cuộc thi',
+  });
 
   const clearInput = () => {
     setClearTopic(prev => ({ ...prev, label: 'Chọn chủ đề' }));
@@ -96,14 +109,22 @@ function PaintingPage() {
     setPageNumber(value);
     if (isSeaching()) {
       fetchDataBySearching(searching, value);
+    } else {
+      console.log('running this code');
+      fetchData(value);
     }
-    fetchData(value);
   };
 
   const options = [
     { value: 'Submitted', label: 'Submitted' },
     { value: 'Accepted', label: 'Accepted' },
     { value: 'Rejected', label: 'Rejected' },
+    { value: 'Draft', label: 'Draft' },
+    { value: 'Delete', label: 'Delete' },
+    { value: 'Pass', label: 'Pass' },
+    { value: 'NotPass', label: 'NotPass' },
+    { value: 'FinalRound', label: 'FinalRound' },
+    { value: 'HasPrizes ', label: 'HasPrizes ' },
   ];
 
   // styling the topic label
@@ -173,41 +194,30 @@ function PaintingPage() {
     }
   };
 
-  // get all level
-  const fetchAllLevel = async () => {
-    setLoadingLevel(true);
-    try {
-      const res = await getAllLevel();
-      const data = res.data.result;
-      setlevelList(data.map(val => ({ value: val.id, label: val.level })));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingLevel(false);
-    }
-  };
-
-  // get all round
-  const fetchAllRound = async () => {
-    setLoadingRound(true);
-    try {
-      const res = await getAllRoundStaff();
-      const data = res.data.result;
-      setRoundList(data.map(val => ({ value: val.id, label: val.name })));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingRound(false);
-    }
-  };
-
   const getPaintingByID = async id => {
     try {
       const res = await paintingApi.getPaintingById(`paintings/${id}`);
+
       setPaintingByid(res.data.result);
       setOpenEdit(true);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  // fetch all contest
+  const fetchContest = async () => {
+    setLoadingContest(true);
+    try {
+      const res = await contestApi.getAll(
+        'contests/getcontestforfilterpainting',
+      );
+      const data = res.data.result;
+      setContestList(data.map(val => ({ value: val.id, label: val.name })));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingContest(false);
     }
   };
 
@@ -233,10 +243,14 @@ function PaintingPage() {
   };
 
   useEffect(() => {
-    fetchData(pageNumber);
-    fetchAllRound();
-    fetchAllLevel();
-    fetchAllTopic();
+    if (isSeaching()) {
+      return;
+    } else {
+      console.log('calling');
+      fetchData(pageNumber);
+      fetchAllTopic();
+      fetchContest();
+    }
   }, []);
 
   return (
@@ -288,6 +302,19 @@ function PaintingPage() {
             <div className={styles.filter_body}>
               <Select
                 isClearable={true}
+                placeholder={<div>Chọn cuộc thi</div>}
+                // defaultInputValue={{ value: '', label: 'Chọn chủ đề' }}
+                styles={customStyles}
+                options={contest}
+                isLoading={loadingContest}
+                value={clearContest}
+                onChange={val => {
+                  setClearContest(val);
+                  setSearching(prev => ({ ...prev, contestId: val?.value }));
+                }}
+              />
+              <Select
+                isClearable={true}
                 placeholder={<div>Chọn chủ đề</div>}
                 // defaultInputValue={{ value: '', label: 'Chọn chủ đề' }}
                 styles={customStyles}
@@ -299,53 +326,12 @@ function PaintingPage() {
                   setSearching(prev => ({ ...prev, topicName: val?.label }));
                 }}
               />
-              <div className={styles.date_box}>
-                <div className={styles.date_start}>
-                  <h5 className={styles.title_date}>Thời gian bắt đầu</h5>
-                  <DatePicker
-                    selected={searching.startDate}
-                    onChange={date =>
-                      setSearching(prev => ({
-                        ...prev,
-                        startDate: date,
-                      }))
-                    }
-                    dateFormat="dd/MM/yyyy"
-                    placeholderText="dd/mm/yyyy"
-                    showYearDropdown
-                    scrollableMonthYearDropdown
-                    className={styles.formControl}
-                    isClearable
-                    clearButtonClassName={styles.clear_btn}
-                  />
-                </div>
-                <div className={styles.date_end}>
-                  <h5 className={styles.title_date}>Thời gian kết thúc</h5>
-                  <DatePicker
-                    selected={searching.endDate}
-                    onChange={date =>
-                      setSearching(prev => ({
-                        ...prev,
-                        endDate: date,
-                      }))
-                    }
-                    dateFormat="dd/MM/yyyy"
-                    placeholderText="dd/mm/yyyy"
-                    isClearable
-                    clearButtonClassName={styles.clear_btn}
-                    showYearDropdown
-                    scrollableMonthYearDropdown
-                    className={styles.formControl}
-                  />
-                </div>
-              </div>
               <Select
                 isClearable={true}
                 placeholder={<div>Chọn câp bậc</div>}
                 // defaultInputValue={{ value: '', label: 'Chọn cấp bậc' }}
                 styles={customStyles}
                 options={levelList}
-                isLoading={loadingLevel}
                 value={{
                   value: '',
                   label: searching.level || 'Chọn cấp bậc',
@@ -362,7 +348,6 @@ function PaintingPage() {
                 placeholder={<div>Chọn vòng thi</div>}
                 styles={customStyles}
                 options={roundList}
-                isLoading={loadingRound}
                 value={{
                   value: '',
                   label: searching.roundName || 'Chọn vòng thi',

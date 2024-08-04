@@ -3,22 +3,25 @@ import styles from './page.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 import { getBlogId, updateBlog } from '../../api/blogApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
+import ModalAddingImg from '../ModalAddingImage/page.jsx';
 import { toast } from 'react-toastify';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { useSelector } from 'react-redux';
 
 function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
+  const { userInfo } = useSelector(state => state.auth);
+
   const [txtTitles, setTxtTitles] = useState('');
   const [txtDes, setTxtDes] = useState('');
-  const [imageUrl, setImageUrl] = useState(null);
-  const [imagePost, setImagePost] = useState('');
+  const [imageUrl, setImageUrl] = useState([]);
   const [supDesValue, setSupDes] = useState('');
+  const [url, setUrl] = useState('');
 
-  const { progress, url } = useUploadImage(imagePost);
+  const [openEditImage, setOpenEditImage] = useState(false);
 
   const txtTitle = useRef(null);
   const txtDesRef = useRef(null);
   const txtSupDes = useRef(null);
-
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
   const inputArea = [
     {
@@ -50,6 +53,11 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
     },
   ];
 
+  // close popup
+  const handleClosePopup = () => {
+    setOpenEditImage(false);
+  };
+
   // check all field in payload must be fill in
   const validation = payload => {
     for (const key in payload) {
@@ -62,13 +70,12 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
 
   // resize with text whilt typing
   const resizeTextArea = value => {
-    if (!txtTitle.current) {
-      return;
+    if (txtTitle.current) {
+      if (value === '') {
+        txtTitle.current.style.height = 'auto';
+      }
+      txtTitle.current.style.height = `${txtTitle.current.scrollHeight}px`;
     }
-    if (value === ' ') {
-      txtTitle.current.style.height = 'auto';
-    }
-    txtTitle.current.style.height = `${txtTitle.current.scrollHeight}px`;
   };
 
   const resizeSupDes = value => {
@@ -92,20 +99,6 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
     txtDesRef.current.style.height = `${txtDesRef.current.scrollHeight}px`;
   };
 
-  // adding new file image to state and loading to UI
-  const changeFile = e => {
-    if (
-      !(
-        e.target.files.length > 0 &&
-        allowedTypes.includes(e.target.files[0].type)
-      )
-    ) {
-      return;
-    }
-    setImagePost(e.target.files[0]);
-    setImageUrl(URL.createObjectURL(e.target.files[0]));
-  };
-
   // Get blog by id
   const fetchData = async id => {
     await getBlogId(id)
@@ -113,7 +106,8 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
         const data = res.data.result;
         setTxtTitles(data.title);
         setTxtDes(data.description);
-        setImageUrl(data.url);
+        setImageUrl(data.images);
+        setUrl(data.url);
       })
       .catch(err => console.log(err));
   };
@@ -152,13 +146,14 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
   // get the url from custom hook with firebase
   const updateImage = () => {
     let payload;
-    if (progress) {
+    if (imageUrl.length !== null && imageUrl.length > 0) {
       payload = {
         id: blogId,
         url: url,
         title: txtTitles,
         description: txtDes,
-        currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c',
+        currentUserId: userInfo.Id,
+        newImages: [...imageUrl],
       };
       if (validation(payload)) {
         triggerUpdate(payload);
@@ -201,8 +196,8 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
 
   // rerender and calling the event for resize the box input
   useEffect(() => {
-    window.addEventListener('resize', resizeTextArea);
-    window.addEventListener('resize', resizeTextDes);
+    window.addEventListener('resize', resizeTextArea(txtTitles));
+    window.addEventListener('resize', resizeTextDes(txtDes));
     return () => {
       window.removeEventListener('resize', () => resizeTextArea(txtTitles));
       window.removeEventListener('resize', () => resizeTextDes(txtDes));
@@ -215,59 +210,94 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.box}>
-        <div className={styles.scroll_place}>
-          <div className={styles.title_line}>
-            <h2 className={`tf-title pb-20 ${styles.title_page}`}>
-              Chỉnh sữa bài viết
-            </h2>
-            <CloseIcon
-              onClick={() => setOpenEdit(null)}
-              sx={{
-                fontSize: '3rem',
-                cursor: 'pointer',
-              }}
-            />
-          </div>
-          <div className={styles.image_line}>
-            {imageUrl !== null && (
-              <>
-                <label htmlFor="add_more_file" className={styles.image_box}>
-                  <img src={imageUrl} alt="image" className={styles.image} />
-                </label>
-                <input
-                  type="file"
-                  className={styles.input_hidden}
-                  id="add_more_file"
-                  accept="image/png, image/gif, image/jpeg"
-                  onChange={e => changeFile(e)}
-                />
-              </>
-            )}
-          </div>
-          {inputArea.map((vl, _) => (
-            <div key={vl} className={styles.input_title}>
-              <textarea
-                ref={vl.ref}
-                className={styles.title_textarea}
-                placeholder={vl.placeHoder}
-                value={vl.value}
-                onChange={vl.onchange}></textarea>
+    <>
+      <ModalAddingImg
+        modalShow={openEditImage}
+        onHide={handleClosePopup}
+        setListImage={setImageUrl}
+        listImage={imageUrl}
+      />
+      <div className={styles.container}>
+        <div className={styles.box}>
+          <div className={styles.scroll_place}>
+            <div className={styles.title_line}>
+              <h2 className={`tf-title pb-20 ${styles.title_page}`}>
+                Chỉnh sữa bài viết
+              </h2>
+              <CloseIcon
+                onClick={() => setOpenEdit(null)}
+                sx={{
+                  fontSize: '3rem',
+                  cursor: 'pointer',
+                }}
+              />
             </div>
-          ))}
+            <div className={styles.image_line}>
+              {imageUrl.length !== null && imageUrl.length > 0 ? (
+                <div
+                  className={`${styles.grid_container} ${
+                    imageUrl.length <= 2 && styles.grid_second_layout
+                  } ${imageUrl.length >= 3 && styles.grid_third_layout} ${
+                    imageUrl.length === 1 && styles.grid_single_layout
+                  }`}>
+                  {imageUrl.slice(0, 3).map((val, idx) => (
+                    <div
+                      key={val}
+                      className={`${styles.grid_item} ${
+                        imageUrl.length >= 3 && idx === 0 && styles.scale_grid
+                      }`}
+                      onClick={() => setOpenEditImage(true)}>
+                      <img
+                        src={val.url}
+                        alt="null"
+                        className={styles.grid_image}
+                      />
+                      {idx === 2 && imageUrl.length > 3 && (
+                        <div className={styles.quanliti_image}>
+                          {`+${imageUrl.length - 3}`}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <label
+                    htmlFor="add_more_file"
+                    onClick={() => setOpenEditImage(true)}
+                    className={styles.onClick_upload}>
+                    <CloudUploadIcon
+                      sx={{ color: '#5142fc', fontSize: '20rem' }}
+                    />
+                  </label>
+                </>
+              )}
+            </div>
+            {inputArea.map((val, _) => (
+              <div key={val} className={styles.input_title}>
+                <textarea
+                  ref={val.ref}
+                  className={styles.title_textarea}
+                  placeholder={val.placeHoder}
+                  value={val.value}
+                  onChange={val.onchange}></textarea>
+              </div>
+            ))}
 
-          <div className={styles.button_trigger}>
-            <span className={styles.btn_find} onClick={() => setOpenEdit(null)}>
-              <h5>Cancel</h5>
-            </span>
-            <span className={styles.btn_find} onClick={() => updateImage()}>
-              <h5>Save</h5>
-            </span>
+            <div className={styles.button_trigger}>
+              <span
+                className={styles.btn_find}
+                onClick={() => setOpenEdit(null)}>
+                <h5>Cancel</h5>
+              </span>
+              <span className={styles.btn_find} onClick={() => updateImage()}>
+                <h5>Save</h5>
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

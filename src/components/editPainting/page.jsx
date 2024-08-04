@@ -419,7 +419,7 @@ function ModalEditPainting({
           roundTopicId:
             updateField.roundTopicId !== null
               ? payload.roundTopicId
-              : dataPainting.topicId,
+              : dataPainting.roundTopicId,
 
           fullName: payload.fullName,
           email: payload.email,
@@ -443,7 +443,7 @@ function ModalEditPainting({
           roundTopicId:
             updateField.roundTopicId !== null
               ? payload.roundTopicId
-              : dataPainting.topicId,
+              : dataPainting.roundTopicId,
 
           fullName: payload.fullName,
           email: payload.email,
@@ -475,7 +475,7 @@ function ModalEditPainting({
 
       name: { ...prv.name, value: state.name },
       description: { ...prv.description, value: state.description },
-      roundTopicId: { ...prv.roundTopicId, value: state.topicId },
+      roundTopicId: { ...prv.roundTopicId, value: state.roundTopicId },
     }));
 
     setStaffUpdate(prv => ({
@@ -491,7 +491,7 @@ function ModalEditPainting({
     }));
 
     setRoundId({
-      value: state.topicId,
+      value: state.roundTopicId,
       label: state.topicName,
     });
     setContestId({
@@ -503,8 +503,9 @@ function ModalEditPainting({
   };
 
   useEffect(() => {
-    console.log(dataPainting);
     if (dataPainting !== null) {
+      console.log(dataPainting);
+
       currenInput(dataPainting);
       fetchRoundTopic(dataPainting.roundId);
     }
@@ -632,33 +633,38 @@ function ModalEditPainting({
                 </div>
                 {/* end adding image zone */}
                 <div className={styles.topic_error}>
-                  <div className={styles.select_topic}>
-                    <Select
-                      isClearable={true}
-                      value={roundId}
-                      placeholder={<div>Chủ đề</div>}
-                      styles={customStyles}
-                      options={roundTopic}
-                      isLoading={loadingRound}
-                      defaultValue={{
-                        value: '',
-                        lable: 'Chủ đề',
-                      }}
-                      onChange={val => {
-                        setUpdateField(prv => ({
-                          ...prv,
-                          roundTopicId: val.value,
-                        }));
-                        setRoundId({ value: val?.value, label: val?.label });
-                        setFieldInput(prv => ({
-                          ...prv,
-                          roundTopicId: {
-                            ...prv.roundTopicId,
-                            value: val?.value,
-                          },
-                        }));
-                      }}
-                    />
+                  <div className={styles.field_painting}>
+                    <p style={{ fontWeight: 'normal', fontSize: '14px' }}>
+                      Chọn chủ đề
+                    </p>
+                    <div className={styles.select_topic}>
+                      <Select
+                        isClearable={true}
+                        value={roundId}
+                        placeholder={<div>Chủ đề</div>}
+                        styles={customStyles}
+                        options={roundTopic}
+                        isLoading={loadingRound}
+                        defaultValue={{
+                          value: '',
+                          lable: 'Chủ đề',
+                        }}
+                        onChange={val => {
+                          setUpdateField(prv => ({
+                            ...prv,
+                            roundTopicId: val?.value,
+                          }));
+                          setRoundId({ value: val?.value, label: val?.label });
+                          setFieldInput(prv => ({
+                            ...prv,
+                            roundTopicId: {
+                              ...prv.roundTopicId,
+                              value: val?.value,
+                            },
+                          }));
+                        }}
+                      />
+                    </div>
                   </div>
                   {(fieldInput.roundTopicId.error !== '' ||
                     fieldInput.roundTopicId.error !== null) && (
@@ -753,7 +759,7 @@ function ModalEditPainting({
                 </div>
               </div>
             </div>
-            {dataPainting?.status === 'Accepted' && (
+            {dataPainting?.status === 'Submitted' && (
               <div className={styles.btn_trigger}>
                 <span
                   className={styles.btn_find}

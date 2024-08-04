@@ -6,8 +6,11 @@ import { toast } from 'react-toastify';
 import { addSponsor, getSponsorId, putSponsor } from '../../api/sponsorApi.js';
 import { isPhoneNumber } from '../../utils/validation.js';
 import Modal from 'react-bootstrap/Modal';
+import { useSelector } from 'react-redux';
 
 function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
+  const { userInfo } = useSelector(state => state.auth);
+
   const [imgLoad, setImgLoad] = useState(null);
   const [imgPost, setImagePost] = useState(null);
 
@@ -33,7 +36,7 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
       value: '',
       error: '',
     },
-    currentUserId: { value: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c' },
+    currentUserId: { value: userInfo.Id },
   });
 
   // list of field input for user typing
@@ -83,6 +86,13 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
       error: valueInput.address.error,
     },
   ];
+
+  const clearAllField = () => {
+    setImgLoad(null);
+    for (let index in valueInput) {
+      valueInput[index].value = '';
+    }
+  };
 
   const validateName = val => {
     if (val.length < 3 || val.length > 200) {
@@ -165,6 +175,7 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
     for (let index in val) {
       currentObject[index] = val[index].value;
     }
+
     return currentObject;
   };
 
@@ -202,6 +213,7 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
         progress: undefined,
         theme: 'light',
       });
+      clearAllField();
       onHide();
       reCallData();
     } catch (error) {
@@ -267,10 +279,14 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
   // while click post check it  was validate or not
   const postImage = () => {
     if (validateAllFields()) {
+      const listJson = updateObject(valueInput);
       let payload;
       if (progress) {
-        payload = updateObject(valueInput);
-        payload = { ...payload, logo: url };
+        payload = {
+          ...listJson,
+          logo: url,
+          currentUserId: userInfo.Id,
+        };
         postSponsor(payload);
       } else {
         toast.warning('Bạn vui lòng bổ sung thêm ảnh nhé !!', {
@@ -309,7 +325,10 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
     <>
       <Modal
         show={modalShow}
-        onHide={onHide}
+        onHide={() => {
+          clearAllField();
+          onHide();
+        }}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered>
@@ -317,7 +336,7 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            Thêm nhà tài trợ
+            {idSponsor ? 'Cập nhật nhà tài trợ' : 'Thêm nhà tài trợ'}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body

@@ -19,6 +19,7 @@ import {
 import ModalInforUser from '../../components/ModalInforUser/page.jsx';
 import { formatDate } from '../../utils/formatDate';
 import styles from './page.module.css';
+import { toast } from 'react-toastify';
 
 function CompetitorManage() {
   const [modalShow, setModalShow] = useState(false);
@@ -43,6 +44,16 @@ function CompetitorManage() {
     setLoadingBlock(true);
     try {
       await blockCompetitor(value);
+      toast.success('Đã khoá tài khoản thành công', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       getContest();
     } catch (error) {
       console.log(error);
@@ -58,6 +69,16 @@ function CompetitorManage() {
     try {
       await activeCompetitor(value);
       getContest();
+      toast.success('Đã mở khoá tài khoản', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -134,7 +155,7 @@ function CompetitorManage() {
                 color="info"
                 disabled={loadingBlock}
                 onClick={() => fetchBlockCompetitor(value)}>
-                <LockIcon />
+                <LockOpenIcon />
               </IconButton>
             ) : (
               <IconButton
@@ -143,7 +164,7 @@ function CompetitorManage() {
                 color="error"
                 disabled={loadingBlock}
                 onClick={() => fetchUnBlockCompetitor(value)}>
-                <LockOpenIcon />
+                <LockIcon />
               </IconButton>
             )}
 
@@ -155,6 +176,7 @@ function CompetitorManage() {
               onClick={() => handleOpenDetail(value)}>
               <RemoveRedEyeIcon />
             </IconButton>
+            <span style={{ display: 'none' }}>{value}</span>
           </div>
         ),
       },
@@ -183,6 +205,11 @@ function CompetitorManage() {
         viewColumns: 'Xem cột',
         filterTable: 'Lọc bảng',
       },
+    },
+    onRowClick: (rowData, rowMeta) => {
+      const obj = rowData[4]?.props?.children?.find(
+        item => item.type === 'span',
+      );
     },
   };
 

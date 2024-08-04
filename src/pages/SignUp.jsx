@@ -26,6 +26,7 @@ import { FadeLoader } from 'react-spinners';
 import { setDefault } from '../store/auth/authSlice';
 import { color } from '../constant/Color.js';
 import { regexEmail, regexFullNameVN, regexPhone } from '../constant/Regex.js';
+import { Dropdown } from '../components/dropdown';
 
 const SignUp = () => {
   dayjs.extend(utc);
@@ -76,6 +77,8 @@ const SignUp = () => {
     control,
     trigger,
     setValue,
+    setError,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -122,6 +125,16 @@ const SignUp = () => {
     if (e.key === '-' || e.key === '+') {
       e.preventDefault();
     }
+  };
+
+  const getDropdownOptions = (data, defaultValue = '') => {
+    const value = watch(data) || defaultValue;
+    return value;
+  };
+
+  const handleSelectDropdownOption = (name, value) => {
+    setValue(name, value.name);
+    setError(name, '');
   };
 
   const valueArray = [
@@ -290,6 +303,86 @@ const SignUp = () => {
                       </Grid>
                     </Grid>
 
+                    <Grid container>
+                      <Grid item md={12}>
+                        {/* địa chỉ */}
+                        <div className="flex align-items-start mb-15">
+                          {/* Quận */}
+                          <div className="inner-row-form style-2 w-50 mr-5">
+                            <div id="item-create" className="dropdown">
+                              {errors.district && (
+                                <span className="text-danger h5">
+                              {errors.district.message}
+                            </span>
+                              )}
+                              <Dropdown
+                                errors={errors.district?.message}>
+                                <Dropdown.Select
+                                  placeholder={getDropdownOptions(
+                                    'district',
+                                    'Chọn quận',
+                                  )}></Dropdown.Select>
+                                <Dropdown.List>
+                                  {valueArray.map(topic => (
+                                    <Dropdown.Option
+                                      key={topic?.name}
+                                      onClick={() =>
+                                        handleSelectDropdownOption('topic', topic)
+                                      }>
+                                      {topic?.name}
+                                    </Dropdown.Option>
+                                  ))}
+                                </Dropdown.List>
+                              </Dropdown>
+                            </div>
+                          </div>
+
+                          {/* Phường */}
+                          <div className="inner-row-form style-2 w-50">
+                            <div id="item-create" className="dropdown">
+                              {errors.ward && (
+                                <span className="text-danger h5">
+                              {errors.ward.message}
+                            </span>
+                              )}
+                              <Dropdown
+                                errors={errors.ward?.message}>
+                                <Dropdown.Select
+                                  placeholder={getDropdownOptions(
+                                    'ward',
+                                    'Chọn phường',
+                                  )}></Dropdown.Select>
+                                <Dropdown.List>
+                                  {valueArray.map(topic => (
+                                    <Dropdown.Option
+                                      key={topic?.name}
+                                      onClick={() =>
+                                        handleSelectDropdownOption('topic', topic)
+                                      }>
+                                      {topic?.name}
+                                    </Dropdown.Option>
+                                  ))}
+                                </Dropdown.List>
+                              </Dropdown>
+                            </div>
+                          </div>
+                        </div>
+                      </Grid>
+                    </Grid>
+                    <Grid container>
+                      <Grid item md={12}>
+                        {/* địa chỉ cụ thể */}
+                        <TextFieldCommon
+                          control={control}
+                          error={errors.adress?.message}
+                          id="adress"
+                          name="adress"
+                          placeholder="Nhập địa chỉ cụ thể như số nhà, tên đường, trường, lớp, ...."
+                          className="mb-15 mt-3"
+                          autoFocus
+                        />
+                      </Grid>
+                    </Grid>
                     <BootstrapDialog
                       onClose={handleClose}
                       aria-labelledby="customized-dialog-title"

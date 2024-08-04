@@ -87,6 +87,13 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
     },
   ];
 
+  const clearAllField = () => {
+    setImgLoad(null);
+    for (let index in valueInput) {
+      valueInput[index].value = '';
+    }
+  };
+
   const validateName = val => {
     if (val.length < 3 || val.length > 200) {
       return 'độ dài phải từ 3 đến 200 chữ';
@@ -168,6 +175,7 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
     for (let index in val) {
       currentObject[index] = val[index].value;
     }
+
     return currentObject;
   };
 
@@ -205,6 +213,7 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
         progress: undefined,
         theme: 'light',
       });
+      clearAllField();
       onHide();
       reCallData();
     } catch (error) {
@@ -270,10 +279,14 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
   // while click post check it  was validate or not
   const postImage = () => {
     if (validateAllFields()) {
+      const listJson = updateObject(valueInput);
       let payload;
       if (progress) {
-        payload = updateObject(valueInput);
-        payload = { ...payload, logo: url };
+        payload = {
+          ...listJson,
+          logo: url,
+          currentUserId: userInfo.Id,
+        };
         postSponsor(payload);
       } else {
         toast.warning('Bạn vui lòng bổ sung thêm ảnh nhé !!', {
@@ -312,7 +325,10 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
     <>
       <Modal
         show={modalShow}
-        onHide={onHide}
+        onHide={() => {
+          clearAllField();
+          onHide();
+        }}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered>
@@ -320,7 +336,7 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            Thêm nhà tài trợ
+            {idSponsor ? 'Cập nhật nhà tài trợ' : 'Thêm nhà tài trợ'}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body

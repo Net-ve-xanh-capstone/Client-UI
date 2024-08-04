@@ -177,13 +177,13 @@ function SponsorManage() {
         filterTable: 'Lọc bảng',
       },
     },
-    onRowClick: (rowData, rowMeta) => {
-      const obj = rowData[4]?.props?.children?.find(
-        item => item.type === 'span',
-      );
-      setIdSponsor(obj?.props?.children);
-      setAddPopup(true);
-    },
+    // onRowClick: (rowData, rowMeta) => {
+    //   const obj = rowData[4]?.props?.children?.find(
+    //     item => item.type === 'span',
+    //   );
+    //   setIdSponsor(obj?.props?.children);
+    //   setAddPopup(true);
+    // },
   };
 
   const handlePostDone = () => {

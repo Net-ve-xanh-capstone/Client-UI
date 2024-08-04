@@ -8,8 +8,8 @@ export const paintingApi = {
     return await axiosApi.get(endpoint, {
       params: {
         contestId: contestId,
-        accountId: accountId
-      }
+        accountId: accountId,
+      },
     });
   },
   updatePainting: async (endpoint, payload) => {
@@ -25,6 +25,9 @@ export const paintingApi = {
     return await axiosApi.post(endpoint, payload);
   },
   addNewPainting: async (endpoint, payload) => {
+    return await axiosApi.post(endpoint, payload);
+  },
+  addNewFinalRound: async (endpoint, payload) => {
     return await axiosApi.post(endpoint, payload);
   },
 };

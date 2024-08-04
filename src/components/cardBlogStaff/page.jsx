@@ -31,19 +31,22 @@ function BlogStaff() {
   // change value of page when navigating
   const handleChange = (_, value) => {
     setPageNumber(value);
+    fetchDataBlog(value);
   };
 
   // get all blog by staff
-  const fetchDataBlog = async () => {
+  const fetchDataBlog = async val => {
     setLoading(true);
-    await getAllBlog(pageNumber)
+    await getAllBlog(val)
       .then(res => {
         const data = res.data.result;
         setTotalPage(data.totalPage);
         setBlogList(data.list);
       })
       .catch(err => console.log(err))
-      .finally(setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   // open model when click delete button
@@ -92,13 +95,8 @@ function BlogStaff() {
 
   // fetch data when re-render
   useEffect(() => {
-    fetchDataBlog();
+    fetchDataBlog(pageNumber);
   }, []);
-
-  // call api get all blog while navigating
-  useEffect(() => {
-    fetchDataBlog();
-  }, [pageNumber]);
 
   return (
     <>
@@ -130,7 +128,7 @@ function BlogStaff() {
                 ))
               ) : blogList?.length ? (
                 blogList.map((vl, idx) => (
-                  <div key={vl.id} className={styles.card}>
+                  <div key={vl} className={styles.card}>
                     <div className={styles.image}>
                       <img src={vl.image} alt={vl.title} />
                     </div>

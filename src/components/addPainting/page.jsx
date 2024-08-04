@@ -1,6 +1,8 @@
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import { useSelector } from 'react-redux';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { paintingApi } from '../../api/paintingApi.js';
@@ -8,7 +10,7 @@ import { getAllRoundStaff, roundTopicById } from '../../api/roundStaffApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 import styles from './page.module.css';
-import { useSelector } from 'react-redux';
+import { parseDateEdit } from '../../utils/formatDate.js';
 
 function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
   const { userInfo } = useSelector(state => state.auth);
@@ -38,6 +40,12 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
 
   const [loadingRound, setLoadingRound] = useState(true);
   const [roundTopic, setRoundTopic] = useState([]);
+
+  const [isFinalRound, setIsFinalRound] = useState(false);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [codeStudent, setCodeStudent] = useState([{ value: '', label: '' }]);
+  const [listUser, setListUser] = useState([]);
+  const [idCompetitor, setIdCompetitor] = useState('');
 
   // geting new object without the error field
   const updateObject = val => {
@@ -157,6 +165,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
       return updatedState;
     });
     setImageLoaded(null);
+    setIsFinalRound(false);
   };
 
   const validateName = val => {
@@ -291,7 +300,6 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
 
   // addnew painting
   const postPainting = async payload => {
-    console.log(payload);
     try {
       await paintingApi.addNewPainting(
         'paintings/submitepainting1stroundforCompetitor',
@@ -325,12 +333,85 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
     }
   };
 
+  const postingFinalRound = async payload => {
+    try {
+      await paintingApi.addNewFinalRound(
+        'paintings/createpaintingfinalround',
+        payload,
+      );
+      resetFieldInputValues();
+      setPageNumber(1);
+      fetchData(1);
+      onHide();
+      toast.success('Thêm thành công!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    } catch (error) {
+      toast.warning('Thêm cuộc thi không thành công vui lòng thử lại!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
+  };
+
+  // post painting by final round
+  const postFinal = () => {
+    if (validateAllFields()) {
+      if (progress) {
+        let payload = {
+          competitorId: idCompetitor,
+          currentUserId: userInfo.Id,
+          image: url,
+          name: fieldInput.name.value,
+          description: fieldInput.description.value,
+          roundTopicId: fieldInput.roundTopicId.value,
+        };
+        postingFinalRound(payload);
+      } else {
+        toast.warning('Bạn vui lòng bổ sung thêm ảnh nhé !!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      }
+    } else {
+      toast.warning('Vui lòng kiểm tra lại thông tin !!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
+  };
+
+  // get all contest
   const fetchAllContest = async () => {
     setLoadingContest(true);
     try {
       const res = await getAllRoundStaff();
       const data = res.data.result;
-      console.log(data);
       setContest(
         data !== null
           ? data.map(vl => ({
@@ -346,7 +427,58 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
     }
   };
 
-  const fetchRoundTopic = async id => {
+  // filter user when select user code and set information to current state
+  const filterUserByCode = id => {
+    const competitorById = listUser.filter(vl => vl.id === id);
+    setIdCompetitor(id);
+    for (let index in competitorById[0]) {
+      setFieldInput(prv => ({
+        ...prv,
+        [index]: {
+          ...prv[index],
+          value:
+            index === 'birthday'
+              ? parseDateEdit(competitorById[0][index])
+              : competitorById[0][index],
+        },
+      }));
+    }
+  };
+
+  // get competitor by finalround
+  const getCompetitorByRound = async id => {
+    setLoadingUser(true);
+    try {
+      const res = await axios.get(
+        `https://netvexanh.azurewebsites.net/finalround/${id}`,
+      );
+      setCodeStudent(
+        res.result.length
+          ? res.result.map(vl => ({ value: vl.id, label: vl.code }))
+          : [],
+      );
+      setListUser(res.result);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingUser(false);
+    }
+  };
+
+  //final round condition
+  const finalCondition = (isFinal, id) => {
+    if (isFinal) {
+      setIsFinalRound(true);
+      getCompetitorByRound(id);
+    } else {
+      setIsFinalRound(false);
+      resetFieldInputValues();
+      return;
+    }
+  };
+
+  const fetchRoundTopic = async (id, label) => {
+    finalCondition(label.split(' -')[0] === 'Vòng Chung Kết', id);
     setLoadingRound(true);
     try {
       const res = await roundTopicById(id);
@@ -433,7 +565,9 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                 styles={customStyles}
                 options={contest}
                 defaultValue={{ value: '', label: 'Vòng thi' }}
-                onChange={val => fetchRoundTopic(val?.value ? val?.value : '')}
+                onChange={val =>
+                  fetchRoundTopic(val?.value ? val?.value : '', val?.label)
+                }
               />
             </div>
             <div className={styles.competitor_box}>
@@ -443,6 +577,24 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                 </p>
               </div>
               <div className={styles.field_competitor}>
+                {isFinalRound && (
+                  <div className={styles.input_competitor}>
+                    <p style={{ fontWeight: 'normal', fontSize: '14px' }}>
+                      Mã thí sinh
+                    </p>
+                    <div className={styles.select_topic}>
+                      <Select
+                        isClearable={true}
+                        placeholder={<div>Mã thí sinh</div>}
+                        styles={customStyles}
+                        options={codeStudent}
+                        isLoading={loadingUser}
+                        defaultValue={{ value: '', label: 'Mã thí sinh' }}
+                        onChange={val => filterUserByCode(val?.value)}
+                      />
+                    </div>
+                  </div>
+                )}
                 {competitorList.map((vl, idx) => (
                   <div key={idx} className={styles.conpetitor_error}>
                     <div className={styles.input_competitor}>
@@ -453,6 +605,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                         type={vl.type}
                         value={vl.value}
                         onChange={vl.onchange}
+                        readOnly={isFinalRound}
                       />
                     </div>
                     {(fieldInput[vl.label].error !== '' ||
@@ -523,24 +676,29 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                 </div>
                 {/* end adding image zone */}
                 <div className={styles.topic_error}>
-                  <div className={styles.select_topic}>
-                    <Select
-                      isClearable={true}
-                      placeholder={<div>Chủ đề</div>}
-                      styles={customStyles}
-                      options={roundTopic}
-                      isLoading={loadingRound}
-                      defaultValue={{ value: '', label: 'Chủ đề' }}
-                      onChange={val => {
-                        setFieldInput(prv => ({
-                          ...prv,
-                          roundTopicId: {
-                            ...prv.roundTopicId,
-                            value: val?.value,
-                          },
-                        }));
-                      }}
-                    />
+                  <div className={styles.field_painting}>
+                    <p style={{ fontWeight: 'normal', fontSize: '14px' }}>
+                      Chọn chủ đề
+                    </p>
+                    <div className={styles.select_topic}>
+                      <Select
+                        isClearable={true}
+                        placeholder={<div>Chủ đề</div>}
+                        styles={customStyles}
+                        options={roundTopic}
+                        isLoading={loadingRound}
+                        defaultValue={{ value: '', label: 'Chủ đề' }}
+                        onChange={val => {
+                          setFieldInput(prv => ({
+                            ...prv,
+                            roundTopicId: {
+                              ...prv.roundTopicId,
+                              value: val?.value,
+                            },
+                          }));
+                        }}
+                      />
+                    </div>
                   </div>
                   {(fieldInput.roundTopicId.error !== '' ||
                     fieldInput.roundTopicId.error !== null) && (
@@ -615,21 +773,29 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
               </div>
             </div>
             <div className={styles.btn_trigger}>
-              <span
-                className={styles.btn_find}
-                onClick={() => postImage('Submitted')}>
-                <h5>Lưu</h5>
-              </span>
-              <span
-                className={styles.btn_find}
-                onClick={() => postImage('Rejected')}>
-                <h5>Không hợp lệ</h5>
-              </span>
-              <span
-                className={styles.btn_find}
-                onClick={() => postImage('Accepted')}>
-                <h5>Hợp lệ</h5>
-              </span>
+              {isFinalRound ? (
+                <span className={styles.btn_find} onClick={() => postFinal()}>
+                  <h5>Lưu</h5>
+                </span>
+              ) : (
+                <>
+                  <span
+                    className={styles.btn_find}
+                    onClick={() => postImage('Submitted')}>
+                    <h5>Lưu</h5>
+                  </span>
+                  <span
+                    className={styles.btn_find}
+                    onClick={() => postImage('Rejected')}>
+                    <h5>Không hợp lệ</h5>
+                  </span>
+                  <span
+                    className={styles.btn_find}
+                    onClick={() => postImage('Accepted')}>
+                    <h5>Hợp lệ</h5>
+                  </span>
+                </>
+              )}
             </div>
           </div>
         </Modal.Body>

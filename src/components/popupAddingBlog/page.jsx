@@ -2,20 +2,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import React, { useEffect, useRef, useState } from 'react';
 import Form from 'react-bootstrap/Form';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { addnewBlog } from '../../api/blogApi.js';
 import { allCategory } from '../../api/categoryApi.js';
-import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
-import styles from './page.module.css';
 import ModalAddingImg from '../ModalAddingImage/page.jsx';
+import styles from './page.module.css';
 
 function AddNewBlog({ triggerClose, refetchData }) {
-  const [imageLoaded, setImageLoaded] = useState(null);
+  const { userInfo } = useSelector(state => state.auth);
   const [listCategory, setListCategory] = useState([]);
   const [txtCategory, setTxtCategory] = useState('');
 
-  const [imagePost, setImagePost] = useState(null);
-  const { progress, url } = useUploadImage(imagePost);
   const [txtTitles, setTxtTitles] = useState('');
   const [txtDes, setTxtDes] = useState('');
   const [supDesValue, setSupDes] = useState('');
@@ -28,10 +26,6 @@ function AddNewBlog({ triggerClose, refetchData }) {
   const txtTitle = useRef(null);
   const txtDesRef = useRef(null);
   const txtSupDes = useRef(null);
-
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-
-  const listFake = [1, 2, 31, 2, 31, 2, 3];
 
   const inputArea = [
     {
@@ -117,20 +111,6 @@ function AddNewBlog({ triggerClose, refetchData }) {
     txtDesRef.current.style.height = `${txtDesRef.current.scrollHeight}px`;
   };
 
-  // adding file to state and loading to the UI
-  const changeFile = e => {
-    if (
-      !(
-        e.target.files.length > 0 &&
-        allowedTypes.includes(e.target.files[0].type)
-      )
-    ) {
-      return;
-    }
-    setImagePost(e.target.files[0]);
-    setImageLoaded(URL.createObjectURL(e.target.files[0]));
-  };
-
   //calling api to getting all of category not use
   const getCategory = async () => {
     await allCategory()
@@ -174,13 +154,14 @@ function AddNewBlog({ triggerClose, refetchData }) {
 
   // accept the custom hook to get the url from firebase and go to post
   const postImage = () => {
-    if (progress) {
+    if (listImage.length > 0 && listImage.length !== null) {
       const payload = {
-        image: url,
+        images: [...listImage],
         title: txtTitles,
+        url: 'https://dantri.com.vn/giai-tri/hoa-si-nguyen-the-dung-toi-ve-tranh-don-gian-khong-triet-ly-20231203044856389.htm',
         description: txtDes,
         categoryId: idCategory,
-        currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c',
+        currentUserId: userInfo.Id,
       };
       if (validation(payload)) {
         postBlog(payload);
@@ -252,17 +233,28 @@ function AddNewBlog({ triggerClose, refetchData }) {
           <div className={styles.upload_image}>
             {listImage?.length > 0 ? (
               <div
-                className={`${styles.grid_container} ${listImage.length <= 2 && styles.grid_second_layout} ${listImage.length >= 3 && styles.grid_third_layout} ${listImage.length === 1 && styles.grid_single_layout}`}>
+                className={`${styles.grid_container} ${
+                  listImage.length <= 2 && styles.grid_second_layout
+                } ${listImage.length >= 3 && styles.grid_third_layout} ${
+                  listImage.length === 1 && styles.grid_single_layout
+                }`}>
                 {listImage.slice(0, 3).map((val, idx) => (
                   <div
                     key={idx}
-                    className={`${styles.grid_item} ${listImage.length >= 3 && idx === 0 && styles.scale_grid}`}
+                    className={`${styles.grid_item} ${
+                      listImage.length >= 3 && idx === 0 && styles.scale_grid
+                    }`}
                     onClick={() => setOpenAddingImage(true)}>
                     <img
                       src={val.url}
                       alt="null"
                       className={styles.grid_image}
                     />
+                    {idx === 2 && listImage.length > 3 && (
+                      <div className={styles.quanliti_image}>
+                        {`+${listImage.length - 3}`}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -276,17 +268,6 @@ function AddNewBlog({ triggerClose, refetchData }) {
                     sx={{ color: '#5142fc', fontSize: '20rem' }}
                   />
                 </label>
-                {/* <input
-                  type="file"
-                  className={styles.input_hidden}
-                  id="add_more_file"
-                  accept="image/png, image/gif, image/jpeg"
-                  onChange={e => changeFile(e)}
-                  onClick={e => {
-                    e.currentTarget.value = null;
-                    setOpenAddingImage(true);
-                  }}
-                /> */}
               </>
             )}
           </div>
@@ -309,7 +290,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
                   Chọn thể loại bài viết
                 </option>
                 {listCategory?.length &&
-                  listCategory.map((vl, _) => (
+                  listCategory.map(vl => (
                     <option id={vl.id} key={vl.id}>
                       {vl.name}
                     </option>
@@ -320,7 +301,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
           {/* ending category */}
 
           {/* text editor */}
-          {inputArea.map((vl, _) => (
+          {inputArea.map(vl => (
             <div key={vl} className={styles.title_box}>
               <textarea
                 ref={vl.ref}

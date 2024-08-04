@@ -123,8 +123,6 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
 
     setPreliminaryList(newPreliminaryList);
     setFinalList(newFinalList);
-
-    console.log('listPe', newPreliminaryList, 'ListFinal', newFinalList);
     return levels;
   };
 

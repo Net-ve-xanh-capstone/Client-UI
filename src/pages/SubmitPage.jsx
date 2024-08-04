@@ -146,13 +146,13 @@ const SubmitPage = () => {
       };
     } else {
       method = 'POST';
-      endpoint = 'paintings/submitepainting1stround';
+      endpoint = 'paintings/submitpainting1stround';
       data = {
+        accountId: userInfo.Id,
         image: url,
         name: e.name,
         description: e.description,
         roundTopicId: topicId,
-        accountId: userInfo.Id,
       }
     }
     SwalComponent(

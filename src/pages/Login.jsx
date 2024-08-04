@@ -46,7 +46,8 @@ const Login = () => {
 
     if (!isValid) return;
     else {
-      dispatch(competitorLogin(data)).then(() => {
+      dispatch(competitorLogin(data)).then(res => {
+        console.log(res);
         if (error) setOpen(true);
       });
     }
@@ -111,14 +112,16 @@ const Login = () => {
         </IconButton>
         <DialogContent>
           <div className="space-y-20 pd-40">
-            <h4 className="text-center font-weight-bold">Sai tài khoản hoặc mật khẩu, xin nhập lại</h4>
+            <h4 className="text-center font-weight-bold">
+              Sai tài khoản hoặc mật khẩu, xin nhập lại
+            </h4>
           </div>
         </DialogContent>
       </BootstrapDialog>
       <section className="tf-login tf-section">
         <div className="themesflat-container">
           <div className="row">
-          <div className="col-12">
+            <div className="col-12">
               <div className="flat-form box-login-email">
                 <div className="form-inner">
                   <form

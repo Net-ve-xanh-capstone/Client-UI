@@ -24,6 +24,8 @@ function PaintingPage() {
   const [openEdit, setOpenEdit] = useState(false);
   const [paintingByid, setPaintingByid] = useState(null);
 
+  const [newFilter, setNewFilter] = useState('');
+
   // this is for searching feature
   const [searching, setSearching] = useState({
     code: '',
@@ -362,14 +364,15 @@ function PaintingPage() {
                 options={options}
                 value={{
                   value: '',
-                  label: searching.status || 'Chọn trạng thái',
+                  label: newFilter || 'Chọn trạng thái',
                 }}
-                onChange={val =>
+                onChange={val => {
                   setSearching(prev => ({
                     ...prev,
                     status: val?.value,
-                  }))
-                }
+                  }));
+                  setNewFilter(val?.label);
+                }}
               />
             </div>
           </div>

@@ -10,7 +10,7 @@ import {
   REGISTER,
   REHYDRATE,
   persistReducer,
-  persistStore
+  persistStore,
 } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
@@ -18,31 +18,31 @@ const persistedConfig = {
   key: 'root',
   storage: storage,
   blacklist: ['auth'],
-  stateReconciler: autoMergeLevel2
+  stateReconciler: autoMergeLevel2,
 };
 
 const authPersistedConfig = {
   key: 'auth',
   storage: storage,
   whitelist: ['jwtToken', 'userInfo'],
-  blacklist: ['login', 'register']
+  blacklist: ['login', 'register'],
 };
 
 const reducer = combineReducers({
   // key: value
-  auth: persistReducer(authPersistedConfig, authSlice)
+  auth: persistReducer(authPersistedConfig, authSlice),
 });
 
 const persistedReducer = persistReducer(persistedConfig, reducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-      }
-    }).concat(logger)
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(logger),
 });
 
 export const persistor = persistStore(store);

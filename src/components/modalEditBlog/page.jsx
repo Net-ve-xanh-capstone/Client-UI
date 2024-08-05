@@ -273,7 +273,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
           <div className={styles.scroll_place}>
             <div className={styles.title_line}>
               <h2 className={`tf-title pb-20 ${styles.title_page}`}>
-                Chỉnh sữa bài viết
+                Chỉnh sửa bài viết
               </h2>
               <CloseIcon
                 onClick={() => setOpenEdit(null)}
@@ -362,10 +362,10 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
               <span
                 className={styles.btn_find}
                 onClick={() => setOpenEdit(null)}>
-                <h5>Cancel</h5>
+                <h5>Huỷ</h5>
               </span>
               <span className={styles.btn_find} onClick={() => updateImage()}>
-                <h5>Save</h5>
+                <h5>Lưu</h5>
               </span>
             </div>
           </div>

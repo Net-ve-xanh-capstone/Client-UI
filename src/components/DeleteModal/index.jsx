@@ -9,7 +9,11 @@ function DeleteModal({ show, setShow, title, callBack }) {
   };
   return (
     <>
-      <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>Xóa {title}</Modal.Title>
         </Modal.Header>
@@ -18,7 +22,7 @@ function DeleteModal({ show, setShow, title, callBack }) {
           <Button variant="secondary" size="lg" onClick={handleClose}>
             Không
           </Button>
-          <Button variant="danger" size="lg" onClick={handleCallBack}>
+          <Button variant="danger" size="lg" onClick={() => handleCallBack()}>
             Có
           </Button>
         </Modal.Footer>

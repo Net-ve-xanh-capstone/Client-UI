@@ -103,15 +103,16 @@ const routes = [
   },
   {
     path: '/blog',
-    component: (
-      <BlogPage />
-    ),
+    component: <BlogPage />,
   },
   { path: '/contest-detail/:contestId', component: <ContestDetail /> },
   { path: '/faq', component: <FAQPage /> },
   { path: '/contact', component: <ContactPage /> },
   { path: '/collection', component: <CollectionPage /> },
-  { path: '/collection-painting/:collectionId', component: <PaintingOfCollectionPage /> },
+  {
+    path: '/collection-painting/:collectionId',
+    component: <PaintingOfCollectionPage />,
+  },
   {
     path: '/collection/:accountId',
     component: (

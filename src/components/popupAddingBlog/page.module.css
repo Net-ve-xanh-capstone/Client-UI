@@ -1,8 +1,4 @@
 .box {
-    background: url('../../../public/assets/images/backgroup-secsion/bg-gradient1.png') no-repeat;
-    background-size: cover;
-    background-position: center;
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -84,9 +80,26 @@
     object-position: top center;
 }
 
+
+/* text area css */
+.box_field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    gap: 1rem;
+}
+
+.box_field>p {
+    flex: 1;
+    color: #1f1f2c !important;
+    padding-left: 2rem;
+    font-weight: 700;
+}
+
 .title_box {
     width: 100%;
-    min-height: 10rem;
+    min-height: 20rem;
     height: auto;
     border-radius: 3rem;
     padding: 2px;
@@ -101,10 +114,11 @@
     font-size: 2rem;
     color: black;
     width: 100%;
+    min-height: 20rem;
     word-break: break-word;
     resize: none;
     overflow: hidden;
-    border: none;
+    border: none !important;
     outline: none !important;
 }
 
@@ -240,4 +254,8 @@
     font-weight: 800;
     color: white;
     user-select: none;
+}
+
+.select_topic {
+    height: 5rem;
 }

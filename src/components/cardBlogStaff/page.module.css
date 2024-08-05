@@ -177,6 +177,17 @@
      transform: scale(1.2);
  }
 
+ .main_title {
+     cursor: default;
+     background: var(--linear);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+     color: var(--pink);
+     text-align: start !important;
+     width: 100%;
+ }
+
+
  @media (min-width: 300px) {
 
      .main_title {

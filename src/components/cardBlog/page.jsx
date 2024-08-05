@@ -6,14 +6,18 @@ function CardBlog({ blogList }) {
   return (
     <>
       {blogList?.length
-        ? blogList.map((vl, _) => (
-            <div key={vl.id} className={styles.card}>
+        ? blogList.map(vl => (
+            <div key={vl} className={styles.card}>
               <div className={styles.image}>
                 <img src={vl.url} alt={vl.title} />
               </div>
               <div className={styles.card_content}>
                 <div className={styles.text_box}>
-                  <h3>{vl.title?.length > 35 ? cutString(vl.title, 35) + '...' : vl.title}</h3>
+                  <h3>
+                    {vl.title?.length > 35
+                      ? cutString(vl.title, 35) + '...'
+                      : vl.title}
+                  </h3>
                   <p>
                     {vl.description?.length > 200
                       ? cutString(vl.description, 200) + '...'
@@ -24,14 +28,12 @@ function CardBlog({ blogList }) {
                   <div className={styles.tag}>
                     <span
                       style={{
-                        backgroundColor: '#9835FB'
-                      }}
-                    ></span>
+                        backgroundColor: '#9835FB',
+                      }}></span>
                     <h6
                       style={{
-                        color: '#9835FB'
-                      }}
-                    >
+                        color: '#9835FB',
+                      }}>
                       {vl.categoryName?.length > 20
                         ? cutString(vl.categoryName, 20) + '...'
                         : vl.categoryName}

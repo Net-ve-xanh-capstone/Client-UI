@@ -759,7 +759,7 @@ function ModalEditPainting({
                 </div>
               </div>
             </div>
-            {dataPainting?.status === 'Submitted' && (
+            {dataPainting?.status === 'Đã nộp' && (
               <div className={styles.btn_trigger}>
                 <span
                   className={styles.btn_find}

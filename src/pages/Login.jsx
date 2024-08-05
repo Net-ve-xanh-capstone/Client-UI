@@ -187,10 +187,4 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const TypographyStyled = styled('div')(({ theme }) => ({
-  color: theme.palette.text.primary,
-  fontSize: 14,
-  fontWeight: theme.typography.fontWeightMedium,
-}));
-
 export default Login;

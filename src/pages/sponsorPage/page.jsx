@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import MUIDataTable from 'mui-datatables';
-import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import AddNewSponsor from '../../components/addNewSponsor/page.jsx';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';

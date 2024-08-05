@@ -233,8 +233,13 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
   // calling api for update sponsor
   const updateSponsor = async () => {
     let payload;
-    payload = updateObject(valueInput);
-    payload = { ...payload, logo: url || imgLoad, id: idSponsor };
+    const newInfo = updateObject(valueInput);
+    payload = {
+      ...newInfo,
+      logo: url || imgLoad,
+      id: idSponsor,
+      currentUserId: userInfo.Id,
+    };
     if (!validateAllFields()) {
       toast.warning('Bạn vui lòng bổ sung thêm ảnh nhé !!', {
         position: 'top-right',
@@ -315,8 +320,9 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
   };
 
   useEffect(() => {
+    console.log('calling new', idSponsor);
+
     if (idSponsor !== null) {
-      console.log('call lan dau');
       getSponsorByID();
     }
   }, [idSponsor]);

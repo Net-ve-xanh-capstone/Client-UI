@@ -150,7 +150,7 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                                     topicData?.topic.id,
                                   )
                                 }
-                                disabled={isEditing}>
+                                disabled={checkEditButton(data.startTime)}>
                                 <DeleteIcon />
                               </IconButton>
                             </div>
@@ -163,7 +163,7 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                     <button
                       className="btn btn-outline-primary btn-lg"
                       onClick={() => handleOpenCreate(data)}
-                      disabled={isEditing}>
+                      disabled={checkEditButton(data.startTime)}>
                       Thêm
                     </button>
                   </div>

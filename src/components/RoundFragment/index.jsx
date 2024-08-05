@@ -121,6 +121,7 @@ function RoundFragment({ roundFrag, getContestDetail }) {
               <div className={styles.col}>Địa điểm</div>
               <div className={styles.col}>Mô tả</div>
               <div className={styles.col}>Trạng thái</div>
+              <div className={styles.col}>Tương tác</div>
             </li>
             {round.map(dataRound =>
               dataRound.round?.map(data => (
@@ -144,44 +145,44 @@ function RoundFragment({ roundFrag, getContestDetail }) {
                     {data.description}
                   </div>
                   <div className={styles.col} data-label="Trạng thái">
-                    <div style={{ display: 'flex' }}>
-                      <>
-                        <Switch
-                          checked={checkActiveDate(data)}
-                          color="success"
-                          disabled
-                        />
-                      </>
-                      <IconButton
-                        aria-label="edit"
-                        size="large"
-                        color="info"
-                        onClick={() => handleOpenEdit(data.id)}
-                        disabled={isEditing}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
+                    <>
+                      <Switch
+                        checked={checkActiveDate(data)}
+                        color="success"
+                        disabled
+                      />
+                    </>
+                  </div>
+                  <div className={styles.col} data-label="Tương tác">
+                    <IconButton
+                      aria-label="edit"
+                      size="large"
+                      color="info"
+                      onClick={() => handleOpenEdit(data.id)}
+                      disabled={checkEditButton(data.startTime)}>
+                      <EditIcon />
+                    </IconButton>
+                    {/* <IconButton
                         aria-label="delete"
                         size="large"
                         color="error"
                         onClick={() => hanldeOpenDelete(data.id)}
                         disabled={isEditing}>
                         <DeleteIcon />
-                      </IconButton>
-                    </div>
+                      </IconButton> */}
                   </div>
                 </li>
               )),
             )}
           </ul>
-          <div className="flex justify-content-end mt-20">
+          {/* <div className="flex justify-content-end mt-20">
             <button
               className="btn btn-outline-primary btn-lg"
               onClick={() => handleOpenCreate()}
               disabled={isEditing}>
               Thêm
             </button>
-          </div>
+          </div> */}
         </div>
       </>
     )

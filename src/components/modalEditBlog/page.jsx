@@ -194,28 +194,41 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
         });
       }
     } else {
-      payload = {
-        id: blogId,
-        url: imageUrl,
-        title: txtTitles,
-        description: txtDes,
-        currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c',
-      };
-      if (validation(payload)) {
-        triggerUpdate(payload);
-      } else {
-        toast.error('Không được để trống bất cứ trường dữ liệu nào !!!', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-      }
+      toast.warning('Hãy thêm ảnh!!!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
+    // else {
+    //   payload = {
+    //     id: blogId,
+    //     url: [...imageUrl],
+    //     title: txtTitles,
+    //     description: txtDes,
+    //     categoryId:'',
+    //     currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c',
+    //   };
+    //   if (validation(payload)) {
+    //     triggerUpdate(payload);
+    //   } else {
+    //     toast.error('Không được để trống bất cứ trường dữ liệu nào !!!', {
+    //       position: 'top-right',
+    //       autoClose: 5000,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //       theme: 'light',
+    //     });
+    //   }
+    // }
   };
 
   //calling api to getting all of category not use

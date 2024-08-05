@@ -150,6 +150,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                   <div className={styles.col}>Ngày chấm</div>
                   <div className={styles.col}>Mô tả</div>
                   <div className={styles.col}>Trạng thái</div>
+                  <div className={styles.col}>Tương tác</div>
                 </li>
                 {roundChedule?.schedules?.length === 0 ? (
                   <div className="text-center">
@@ -173,22 +174,31 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                             ? 'Chưa chấm'
                             : 'Đã chấm'}
                         </span>
-                        <IconButton
-                          aria-label="edit"
-                          size="large"
-                          color="primary"
-                          disabled={isActive}
-                          onClick={() => handleOpenEdit(data, scheduleData)}>
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          aria-label="delete"
-                          size="large"
-                          color="error"
-                          disabled={isActive}
-                          onClick={() => hanldeOpenDelete(scheduleData?.id)}>
-                          <DeleteIcon />
-                        </IconButton>
+                      </div>
+                      <div className={styles.col} data-label="Tương tác">
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}>
+                          <IconButton
+                            aria-label="edit"
+                            size="large"
+                            color="primary"
+                            disabled={scheduleData?.status === 'Done'}
+                            onClick={() => handleOpenEdit(data, scheduleData)}>
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            aria-label="delete"
+                            size="large"
+                            color="error"
+                            disabled={scheduleData?.status === 'Done'}
+                            onClick={() => hanldeOpenDelete(scheduleData?.id)}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </div>
                       </div>
                     </li>
                   ))

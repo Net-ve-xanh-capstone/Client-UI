@@ -16,6 +16,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import styles from './style.module.css';
 
 function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
+  let currentDate = new Date().toJSON().slice(0, 10);
   const [isLoading, setIsLoading] = useState(false);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
@@ -76,7 +77,6 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
     event.preventDefault();
     event.stopPropagation();
 
-    console.log(formData.listExaminer);
     if (formData.listExaminer.length === 0 && type === 'create') {
       toast.error('Chưa chọn giám khảo nào', {
         position: 'top-right',
@@ -222,7 +222,7 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
               className={styles.formControl}
               value={formData.endDate}
               onChange={handleInputChange}
-              min={roundData?.startTime.split('T')[0]}
+              min={currentDate}
               max={roundData?.endTime.split('T')[0]}
             />
             <h4 className={styles.title}>Giám khảo</h4>
@@ -252,7 +252,6 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
             <h4 className={styles.title}>Mô tả</h4>
             <input
               className={styles.inputModal}
-              required
               type="text"
               name="description"
               value={formData.description}

@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import styles from './page.module.css';
-import fakeImage from '../../assets/images/blog/herosBlog.png';
+import AddIcon from '@mui/icons-material/Add';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { deleteBlog, getAllBlog } from '../../api/blogApi.js';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { Pagination, Skeleton } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import { toast } from 'react-toastify';
+import { deleteBlog, getAllBlog } from '../../api/blogApi.js';
 import { cutString } from '../../utils/formatDate.js';
 import PopupBlog from '../modalEditBlog/page.jsx';
-import Modal from 'react-bootstrap/Modal';
-import { Button } from 'react-bootstrap';
-import AddIcon from '@mui/icons-material/Add';
 import AddNewBlog from '../popupAddingBlog/page.jsx';
-import { toast } from 'react-toastify';
-import SearchOffIcon from '@mui/icons-material/SearchOff';
+import styles from './page.module.css';
 function BlogStaff() {
   const [popup, setPopup] = useState('');
   const [blogList, setBlogList] = useState([]);
@@ -96,6 +95,7 @@ function BlogStaff() {
   // fetch data when re-render
   useEffect(() => {
     fetchDataBlog(pageNumber);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

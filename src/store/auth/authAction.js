@@ -4,29 +4,20 @@ import Role from '../../constant/Role';
 
 export const competitorLogin = createAsyncThunk(
   'login',
-  async ({ username, password }, { rejectWithValue, getState }) => {
+  async ({ username, password }, { rejectWithValue }) => {
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      };
       const { data } = await authenApi.competitorLogin(
         'authentications/login',
         { username, password },
-        config
       );
-
       return data;
     } catch (error) {
       // return custom error message from API if any
-      if (error.response && error.response.message) {
-        return rejectWithValue(error.response.message);
-      } else {
-        return rejectWithValue(error.message);
+      if (error.response || error.response.message) {
+        return rejectWithValue(error.response.message || error.message);
       }
     }
-  }
+  },
 );
 
 export const competitorRegister = createAsyncThunk(
@@ -35,8 +26,8 @@ export const competitorRegister = createAsyncThunk(
     try {
       const config = {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       };
       const fullName = payload.lastname + ' ' + payload.firstname;
       const role = Role.COMPETITOR;
@@ -46,10 +37,14 @@ export const competitorRegister = createAsyncThunk(
         ...payload,
         fullName,
         role,
-        birthday
+        birthday,
       };
 
-      const { data } = await authenApi.competitorRegister('/authentications/register', req, config);
+      const { data } = await authenApi.competitorRegister(
+        '/authentications/register',
+        req,
+        config,
+      );
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -58,5 +53,5 @@ export const competitorRegister = createAsyncThunk(
         return rejectWithValue(error.message);
       }
     }
-  }
+  },
 );

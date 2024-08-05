@@ -1,20 +1,16 @@
 import AddIcon from '@mui/icons-material/Add';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { Pagination, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
+import { contestApi } from '../../api/contestApi.js';
 import { paintingApi } from '../../api/paintingApi.js';
-import AddPainting from '../../components/addPainting/page.jsx';
-import CardPainting from '../../components/paintingCard/page.jsx';
-import styles from './page.module.css';
+import { topicApi } from '../../api/topicApi.js';
 import ModalAddPainting from '../../components/addPainting/page.jsx';
 import ModalEditPainting from '../../components/editPainting/page.jsx';
-import { topicApi } from '../../api/topicApi.js';
-import { getAllLevel } from '../../api/educationLevel.js';
-import { getAllRoundStaff } from '../../api/roundStaffApi.js';
-import SearchOffIcon from '@mui/icons-material/SearchOff';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { contestApi } from '../../api/contestApi.js';
+import CardPainting from '../../components/paintingCard/page.jsx';
+import styles from './page.module.css';
 
 function PaintingPage() {
   const [totalPage, setTotalPage] = useState(2);
@@ -53,8 +49,7 @@ function PaintingPage() {
   ]);
 
   // data round
-  const [loadingRound, setLoadingRound] = useState(true);
-  const [roundList, setRoundList] = useState([
+  const [roundList] = useState([
     { value: 'Vòng Chung Kết', label: 'Vòng Chung Kết' },
     { value: 'Vòng Sơ Khảo', label: 'Vòng Sơ Khảo' },
   ]);
@@ -116,15 +111,15 @@ function PaintingPage() {
   };
 
   const options = [
-    { value: 'Submitted', label: 'Submitted' },
-    { value: 'Accepted', label: 'Accepted' },
-    { value: 'Rejected', label: 'Rejected' },
-    { value: 'Draft', label: 'Draft' },
-    { value: 'Delete', label: 'Delete' },
-    { value: 'Pass', label: 'Pass' },
-    { value: 'NotPass', label: 'NotPass' },
-    { value: 'FinalRound', label: 'FinalRound' },
-    { value: 'HasPrizes ', label: 'HasPrizes ' },
+    { value: 'Submitted', label: 'Đã nộp' },
+    { value: 'Accepted', label: 'Đã chấp nhận' },
+    { value: 'Rejected', label: 'Đã từ chối' },
+    { value: 'Draft', label: 'Bản nháp' },
+    { value: 'Delete', label: 'Đã xóa' },
+    { value: 'Pass', label: 'Qua Vòng 1' },
+    { value: 'NotPass', label: 'Không qua vòng 1' },
+    { value: 'FinalRound', label: 'Vòng chung kết' },
+    { value: 'HasPrizes ', label: 'Có giải thưởng' },
   ];
 
   // styling the topic label
@@ -251,6 +246,7 @@ function PaintingPage() {
       fetchAllTopic();
       fetchContest();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

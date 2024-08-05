@@ -21,16 +21,18 @@ function CardPainting({ items, getPaintingByID }) {
               ? cutString(items.name, 140) + '...'
               : items.name}
           </h5>
-          <span
-            className={styles.status}
-            style={{
-              backgroundColor:
-                items.status === 'Accepted' || items.status === 'Submitted'
-                  ? 'rgba(57, 153, 24, 0.7)'
-                  : 'rgba(255, 0, 0, 0.7)',
-            }}>
-            <h5>{items.status}</h5>
-          </span>
+          <div className={styles.container_status}>
+            <span
+              className={styles.status}
+              style={{
+                backgroundColor:
+                  items.status === 'Accepted' || items.status === 'Submitted'
+                    ? 'rgba(57, 153, 24, 0.7)'
+                    : 'rgba(255, 0, 0, 0.7)',
+              }}>
+              <h5>{items.status}</h5>
+            </span>
+          </div>
         </span>
         <div className={`${styles.field} ${styles.title_field}`}>
           <div className={styles.title_field}>

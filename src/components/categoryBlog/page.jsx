@@ -1,23 +1,18 @@
+import DeleteIcon from '@mui/icons-material/Delete';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import {
   createTheme,
   StyledEngineProvider,
   ThemeProvider,
 } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import MUIDataTable from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import {
-  allCategory,
-  categoryNotuse,
-  deleteCate,
-} from '../../api/categoryApi.js';
+import { allCategory, deleteCate } from '../../api/categoryApi.js';
 import AddCatePopup from '../addCatePopup/page.jsx';
-import styles from './page.module.css';
-import IconButton from '@mui/material/IconButton';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteModal from '../DeleteModal/index.jsx';
+import styles from './page.module.css';
 
 function CategoryBlog() {
   const [listCate, setListCate] = useState([]);

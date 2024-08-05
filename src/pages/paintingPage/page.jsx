@@ -367,7 +367,7 @@ function PaintingPage() {
                 onChange={val =>
                   setSearching(prev => ({
                     ...prev,
-                    status: val?.label,
+                    status: val?.value,
                   }))
                 }
               />

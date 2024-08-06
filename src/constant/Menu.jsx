@@ -38,12 +38,12 @@ const menus = [
         links: '/Client-UI/blog',
         public: true,
       },
-      {
-        id: 2,
-        sub: 'Chi tiết bài đọc',
-        links: '/Client-UI/blog-details',
-        public: true,
-      },
+      // {
+      //   id: 2,
+      //   sub: 'Chi tiết bài đọc',
+      //   links: '/Client-UI/blog-details',
+      //   public: true,
+      // },
     ],
   },
   {

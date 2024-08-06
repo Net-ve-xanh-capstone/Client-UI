@@ -87,7 +87,7 @@ const HeaderVersion2 = () => {
                 </div>
                 <nav
                   id="main-nav"
-                  className="main-nav"
+                  className="main-nav select-none"
                   ref={menuLeft}>
                   <ul id="menu-primary-menu" className="menu">
                     {menus.map((data, index) => (
@@ -145,7 +145,7 @@ const HeaderVersion2 = () => {
                       ) : (
                         <Link
                           to="/Client-UI/login"
-                          className="sc-button header-slider style style-1 fl-button pri-1">
+                          className="sc-button header-slider style style-1 fl-button pri-1 select-none">
                           <span>Đăng nhập</span>
                         </Link>
                       )}

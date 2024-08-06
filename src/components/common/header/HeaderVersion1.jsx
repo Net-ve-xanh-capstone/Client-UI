@@ -94,7 +94,7 @@ const HeaderVersion1 = () => {
                 </div>
                 <nav
                   id="main-nav"
-                  className="main-nav"
+                  className="main-nav select-none"
                   ref={menuLeft}>
                   <ul id="menu-primary-menu" className="menu">
                     {menus.map((data, index) => (

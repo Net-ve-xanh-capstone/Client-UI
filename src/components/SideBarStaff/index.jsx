@@ -97,7 +97,7 @@ const SideBarStaff = ({
 
   const triggerLogout = () => {
     dispatch(logout());
-    navigate('/login');
+    navigate('/Client-UI/login');
   };
 
   useEffect(() => {

@@ -78,7 +78,7 @@ function LevelFragment({ levelFrag, getContestDetail }) {
                 }}
                 data-label="Mô tả">
                 <div>{data.description || 'Chưa có'}</div>
-                <div style={{ display: 'flex' }}>
+                {/* <div style={{ display: 'flex' }}>
                   <IconButton
                     aria-label="delete"
                     size="large"
@@ -87,21 +87,21 @@ function LevelFragment({ levelFrag, getContestDetail }) {
                     disabled={isEditing}>
                     <DeleteIcon />
                   </IconButton>
-                </div>
+                </div> */}
               </div>
             </li>
           ))}
         </ul>
       </div>
 
-      <div className="flex justify-content-end mt-20">
+      {/* <div className="flex justify-content-end mt-20">
         <button
           className="btn btn-outline-primary btn-lg"
           onClick={() => setModalShow(true)}
           disabled={isEditing}>
           Thêm
         </button>
-      </div>
+      </div> */}
     </>
   );
 }

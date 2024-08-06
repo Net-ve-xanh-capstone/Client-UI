@@ -32,7 +32,7 @@
 
 .roundTableResponse .col:nth-child(2) {
     text-align: center;
-    flex-basis: 20%;
+    flex-basis: 15%;
 }
 
 .roundTableResponse .col:nth-child(3) {
@@ -42,8 +42,12 @@
 
 .roundTableResponse .col:nth-child(4) {
     text-align: center;
-    flex-basis: 25%;
+    flex-basis: 15%;
+}
+
+.roundTableResponse .col:nth-child(5) {
     text-align: center;
+    flex-basis: 10%;
 }
 
 

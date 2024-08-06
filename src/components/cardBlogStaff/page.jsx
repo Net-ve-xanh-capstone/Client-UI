@@ -2,16 +2,18 @@ import AddIcon from '@mui/icons-material/Add';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { Pagination, Skeleton } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import Modal from 'react-bootstrap/Modal';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { toast } from 'react-toastify';
 import { deleteBlog, getAllBlog } from '../../api/blogApi.js';
 import { cutString } from '../../utils/formatDate.js';
 import PopupBlog from '../modalEditBlog/page.jsx';
 import AddNewBlog from '../popupAddingBlog/page.jsx';
 import styles from './page.module.css';
+import DeleteModal from '../DeleteModal/index.jsx';
 function BlogStaff() {
+  const selectPopup = useRef(null);
+
   const [popup, setPopup] = useState('');
   const [blogList, setBlogList] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
@@ -20,7 +22,6 @@ function BlogStaff() {
   const [modalOpent, setModalOpen] = useState(null);
   const [idDelete, setIdDelete] = useState(null);
   const [isopenCreate, setisopenCreate] = useState(null);
-
   const [loading, setLoading] = useState(true);
 
   const handlePopup = idx => {
@@ -39,8 +40,8 @@ function BlogStaff() {
     await getAllBlog(val)
       .then(res => {
         const data = res.data.result;
-        setTotalPage(data.totalPage);
-        setBlogList(data.list);
+        setTotalPage(() => data.totalPage);
+        setBlogList(() => data.list);
       })
       .catch(err => console.log(err))
       .finally(() => {
@@ -54,19 +55,14 @@ function BlogStaff() {
     setIdDelete(id);
   };
 
-  // close the model and cancel delete
-  const handleCloseModal = () => {
-    setModalOpen(null);
-    setIdDelete(null);
-  };
-
   // accept delete when click confirm on model
   const triggerDelete = async () => {
     await deleteBlog(idDelete)
       .then(() => {
-        fetchDataBlog();
+        fetchDataBlog(1);
         setModalOpen(null);
         setIdDelete(null);
+        setPopup(null);
         toast.success('Xoá thành công', {
           position: 'top-right',
           autoClose: 5000,
@@ -98,6 +94,25 @@ function BlogStaff() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // close edit button popup
+  const closePopup = () => {
+    setPopup(null);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (!selectPopup.current?.contains(event.target)) {
+        closePopup();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       {isopenCreate ? (
@@ -113,9 +128,7 @@ function BlogStaff() {
         />
       ) : (
         <div className={styles.container}>
-          <h2 className={`tf-title pb-20 ${styles.main_title}`}>
-            Blog Của Tôi
-          </h2>
+          <h2 className={`tf-title pb-20 ${styles.main_title}`}>Bài viết</h2>
           <div className={styles.blog_navigation}>
             <div className={styles.blog_list}>
               {loading ? (
@@ -128,7 +141,7 @@ function BlogStaff() {
                 ))
               ) : blogList?.length ? (
                 blogList.map((vl, idx) => (
-                  <div key={vl} className={styles.card}>
+                  <div key={vl.id} className={styles.card}>
                     <div className={styles.image}>
                       <img src={vl.image} alt={vl.title} />
                     </div>
@@ -141,7 +154,9 @@ function BlogStaff() {
                               : vl.title}
                           </h3>
                           <MoreHorizIcon
-                            onClick={() => handlePopup(idx)}
+                            onClick={() => {
+                              handlePopup(idx);
+                            }}
                             sx={{
                               color: '#9835FB',
                               fontSize: '3rem',
@@ -149,12 +164,12 @@ function BlogStaff() {
                             }}
                           />
                           {popup === idx && (
-                            <div className={styles.poup}>
+                            <div className={styles.poup} ref={selectPopup}>
                               <span onClick={() => setOpenEdit(vl.id)}>
-                                <h6>Edit</h6>
+                                <h6>Sửa</h6>
                               </span>
                               <span onClick={() => triggerModal(vl.id)}>
-                                <h6>Delete</h6>
+                                <h6>Xoá</h6>
                               </span>
                             </div>
                           )}
@@ -216,20 +231,12 @@ function BlogStaff() {
       )}
 
       {/* confirm delete button */}
-      <Modal show={modalOpent} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Xoá bài viết</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Bạn có chắc là sẽ xoá bài viết này không ?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={triggerDelete}>
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DeleteModal
+        show={modalOpent}
+        setShow={setModalOpen}
+        title={'bài viết'}
+        callBack={triggerDelete}
+      />
 
       {openEdit === null && !isopenCreate && (
         <div className={styles.btn_add} onClick={() => setisopenCreate(true)}>

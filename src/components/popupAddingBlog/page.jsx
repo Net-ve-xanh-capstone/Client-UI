@@ -324,10 +324,10 @@ function AddNewBlog({ triggerClose, refetchData }) {
 
           <div className={styles.btn_click}>
             <span className={styles.btn_find} onClick={() => closePopup()}>
-              <h5>Cancel</h5>
+              <h5>Huỷ</h5>
             </span>
             <span className={styles.btn_find} onClick={() => postImage()}>
-              <h5>Post</h5>
+              <h5>Tạo</h5>
             </span>
           </div>
         </div>

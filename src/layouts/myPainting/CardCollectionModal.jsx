@@ -92,7 +92,7 @@ const CardCollectionModal = props => {
   const addCollectionMutation = useCustomMutation(
     (data) => masterApi.create(ADD_COLLECTION, data),
     'Thêm vào bộ sưu tập thành công',
-    'Thêm vào bộ sưu tập thất bại'
+    'Đã có tranh trong bộ sưu tập'
   );
   
 
@@ -168,9 +168,6 @@ const CardCollectionModal = props => {
     }
   }, [data, refresh]);
   
-  if (isLoading) {
-    return <div>Loading</div>;
-  }
   return (
     <Modal animation scrollable show={props.show} onHide={onHide}>
       <Modal.Header closeButton></Modal.Header>

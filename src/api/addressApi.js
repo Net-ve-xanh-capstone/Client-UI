@@ -1,6 +1,7 @@
 import axiosApi from './axiosApi.js';
 
-const endpoint = 'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json'
+const addressEndpoint = 'address';
 export const addressApi = {
-  get: async () => await axiosApi.get(endpoint)
+  getDistrict: async () => await axiosApi.get(addressEndpoint),
+  getWard: async (districtId) => await axiosApi.get(`${addressEndpoint}/${districtId}`),
 };

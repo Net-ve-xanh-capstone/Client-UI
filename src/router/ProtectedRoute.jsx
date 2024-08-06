@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 const ProtectedRoute = ({ children, role }) => {
   const { userInfo } = useSelector(state => state.auth);
   if (!userInfo) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/Client-UI/login" replace />;
   }
   if (role && userInfo.role !== role) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/Client-UI/" replace />;
   }
 
   return children;

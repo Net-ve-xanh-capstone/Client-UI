@@ -61,10 +61,10 @@ const Login = () => {
     if (success || jwtToken) {
       if (userInfo.role === 'Staff') {
         reset();
-        navigate('/staff-management/contest');
+        navigate('/Client-UI/staff-management/contest');
       } else {
         reset();
-        navigate('/');
+        navigate('/Client-UI/');
       }
     }
     if (error) {
@@ -86,7 +86,7 @@ const Login = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/">Trang chủ</Link>
+                    <Link to="/Client-UI/">Trang chủ</Link>
                   </li>
                   <li>Đăng nhập</li>
                 </ul>
@@ -165,7 +165,7 @@ const Login = () => {
                     </button>
                     <div className="mt-5 text-right h5">
                       Bạn chưa có tài khoản? {''}
-                      <Link to={'/sign-up'} className="font-weight-bold">
+                      <Link to={'/Client-UI/sign-up'} className="font-weight-bold">
                         đăng ký
                       </Link>
                     </div>

@@ -12,7 +12,7 @@ const Home = () => {
             <HeaderVersion2 />
             <SliderStyle2 data={heroSliderData} />
             <Contest />
-            <TopSeller />
+            {/*<TopSeller />*/}
             <PopularCollection />
             <Create />
             <Footer />

@@ -3532,3 +3532,10 @@ input.number::-webkit-inner-spin-button {
     object-fit: cover;
 }
 
+.font-size-14 {
+    font-size: 14px !important;
+}
+
+.text-black {
+    color: #0d0d0d !important;
+}

@@ -37,7 +37,7 @@ const PaintingOfCollectionPage = () => {
                             </div>
                             <div className="breadcrumbs style2">
                                 <ul>
-                                    <li><Link to="/">Trang</Link></li>
+                                    <li><Link to="/Client-UI/">Trang chủ</Link></li>
                                     <li>Bộ sưu tập {collectionName}</li>
                                 </ul>
                             </div>

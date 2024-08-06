@@ -107,7 +107,7 @@ function ContestDetail({ contest, handleBack }) {
           </IconButton>
         </div>
         <div>
-          <h2 className={styles.titleHeader}>Nét vẽ xanh 2023-2024</h2>
+          <h2 className={styles.titleHeader}>Nét vẽ xanh</h2>
         </div>
       </div>
 

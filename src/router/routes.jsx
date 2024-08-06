@@ -33,10 +33,10 @@ const HistoryPage = lazy(() => import('../pages/history/HistoryPage.jsx'));
 
 const routes = [
   { path: '/Client-UI/', component: <Home /> },
-  { path: '/login', component: <Login /> },
-  { path: '/sign-up', component: <SignUp /> },
+  { path: '/Client-UI/login', component: <Login /> },
+  { path: '/Client-UI/sign-up', component: <SignUp /> },
   {
-    path: '/staff-management',
+    path: '/Client-UI/staff-management',
     component: (
       <ProtectedRoute role={Role.STAFF}>
         <StaffManage />
@@ -44,41 +44,41 @@ const routes = [
     ),
     children: [
       {
-        path: 'contest',
+        path: 'Client-UI/contest',
         component: <ContestManagement />,
       },
       {
-        path: 'blog',
+        path: 'Client-UI/blog',
         component: <BlogStaff />,
       },
       {
-        path: 'category',
+        path: 'Client-UI/category',
         component: <CategoryBlog />,
       },
       {
-        path: 'topic',
+        path: 'Client-UI/topic',
         component: <TopicManagement />,
       },
       {
-        path: 'examiner',
+        path: 'Client-UI/examiner',
         component: <ExaminerManagement />,
       },
       {
-        path: 'sponsor',
+        path: 'Client-UI/sponsor',
         component: <SponsorManage />,
       },
       {
-        path: 'painting',
+        path: 'Client-UI/painting',
         component: <PaintingPage />,
       },
       {
-        path: 'competitor',
+        path: 'Client-UI/competitor',
         component: <CompetitorManage />,
       },
     ],
   },
   {
-    path: '/submit/:contestId',
+    path: 'Client-UI/submit/:contestId',
     component: (
       <ProtectedRoute role={Role.COMPETITOR}>
         <SubmitPage />
@@ -86,7 +86,7 @@ const routes = [
     ),
   },
   {
-    path: '/edit-profile',
+    path: 'Client-UI/edit-profile',
     component: (
       <ProtectedRoute>
         <ProfilePage />
@@ -94,7 +94,7 @@ const routes = [
     ),
   },
   {
-    path: '/my-painting',
+    path: 'Client-UI/my-painting',
     component: (
       <ProtectedRoute>
         <MyPaintingPage />
@@ -102,19 +102,19 @@ const routes = [
     ),
   },
   {
-    path: '/blog',
+    path: 'Client-UI/blog',
     component: <BlogPage />,
   },
-  { path: '/contest-detail/:contestId', component: <ContestDetail /> },
-  { path: '/faq', component: <FAQPage /> },
-  { path: '/contact', component: <ContactPage /> },
-  { path: '/collection', component: <CollectionPage /> },
+  { path: 'Client-UI/contest-detail/:contestId', component: <ContestDetail /> },
+  { path: 'Client-UI/faq', component: <FAQPage /> },
+  { path: 'Client-UI/contact', component: <ContactPage /> },
+  { path: 'Client-UI/collection', component: <CollectionPage /> },
   {
-    path: '/collection-painting/:collectionId',
+    path: 'Client-UI/collection-painting/:collectionId',
     component: <PaintingOfCollectionPage />,
   },
   {
-    path: '/collection/:accountId',
+    path: 'Client-UI/collection/:accountId',
     component: (
       <ProtectedRoute>
         <CollectionPage />
@@ -122,7 +122,7 @@ const routes = [
     ),
   },
   {
-    path: '/history/:paintingId',
+    path: 'Client-UI/history/:paintingId',
     component: (
       <ProtectedRoute>
         <HistoryPage />

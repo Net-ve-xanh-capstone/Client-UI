@@ -84,7 +84,7 @@ const Footer = () => {
             <div className="col-lg-3 col-md-12 col-12">
               <div className="widget widget-logo">
                 <div className="logo-footer" id="logo-footer">
-                  <Link to="/Client-UI">
+                  <Link to="/Client-UI/">
                     <img
                       className="logo-dark"
                       id="logo_footer"

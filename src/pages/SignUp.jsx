@@ -109,7 +109,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (jwtToken) {
-      navigate('/Client-UI');
+      navigate('/Client-UI/');
     }
     if (success !== null) {
       setOpen(true);
@@ -200,7 +200,7 @@ const SignUp = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/Client-UI">Trang chủ</Link>
+                    <Link to="/Client-UI/">Trang chủ</Link>
                   </li>
                   <li>Đăng ký</li>
                 </ul>

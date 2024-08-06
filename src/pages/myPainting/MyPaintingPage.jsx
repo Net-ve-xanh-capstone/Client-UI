@@ -18,7 +18,7 @@ const MyPaintingPage = () => {
                             </div>
                             <div className="breadcrumbs style2">
                                 <ul>
-                                    <li><Link to="/Client-UI">Trang chủ</Link></li>
+                                    <li><Link to="/Client-UI/">Trang chủ</Link></li>
                                     <li>Tranh của tôi</li>
                                 </ul>
                             </div>

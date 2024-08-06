@@ -19,7 +19,7 @@ const Explore = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/Client-UI">Home</Link>
+                    <Link to="/Client-UI/">Home</Link>
                   </li>
                   <li>
                     <Link to="#">Explore</Link>

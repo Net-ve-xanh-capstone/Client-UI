@@ -166,25 +166,25 @@ const SubmitPage = () => {
     setError(name, '');
   };
 
-  const handleCityChange = (e) => {
-    const cityId = e.target.value;
-    setAddress(prevState => ({
-      ...prevState,
-      selectedCity: cityId,
-      selectedDistrict: '',
-      districts: cityId ? prevState.cities.find(c => c.Id === cityId)?.Districts || [] : [],
-      wards: []
-    }));
-  };
-
-  const handleDistrictChange = (e) => {
-    const districtId = e.target.value;
-    setAddress(prevState => ({
-      ...prevState,
-      selectedDistrict: districtId,
-      wards: districtId ? prevState.districts.find(d => d.Id === districtId)?.Wards || [] : []
-    }));
-  };
+  // const handleCityChange = (e) => {
+  //   const cityId = e.target.value;
+  //   setAddress(prevState => ({
+  //     ...prevState,
+  //     selectedCity: cityId,
+  //     selectedDistrict: '',
+  //     districts: cityId ? prevState.cities.find(c => c.Id === cityId)?.Districts || [] : [],
+  //     wards: []
+  //   }));
+  // };
+  //
+  // const handleDistrictChange = (e) => {
+  //   const districtId = e.target.value;
+  //   setAddress(prevState => ({
+  //     ...prevState,
+  //     selectedDistrict: districtId,
+  //     wards: districtId ? prevState.districts.find(d => d.Id === districtId)?.Wards || [] : []
+  //   }));
+  // };
 
   useEffect(() => {
     //clean-up

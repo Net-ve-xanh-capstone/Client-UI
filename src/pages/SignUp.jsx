@@ -122,7 +122,7 @@ const SignUp = () => {
       setTimeout(() => {
         setOpen(false);
         dispatch(setDefault());
-        navigate('/login');
+        navigate('/Client-UI/login');
       }, 3000);
     }
     // clear timeout
@@ -468,7 +468,7 @@ const SignUp = () => {
                     <div className="mt-5 text-right h5">
                       Bạn đã có tài khoản? {''}
                       <Link
-                        to={'/login'}
+                        to={'/Client-UI/login'}
                         className="font-weight-bold">
                         đăng nhập
                       </Link>

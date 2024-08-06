@@ -168,7 +168,7 @@ const ContestDetail = () => {
                                         <Link to="#">
                                           <img
                                             src={levelIcon}
-                                            alt="Axies"
+                                            alt="Icon"
                                             className="avatar"
                                           />
                                         </Link>
@@ -177,15 +177,15 @@ const ContestDetail = () => {
                                       <div className="author-infor">
                                         <div className="name">
                                           <h6>
-                                            <Link to="/author-02">
-                                              {item.level}{' '}
-                                            </Link>
-                                          </h6>{' '}
+                                            <div className='text-black'>
+                                              {item.level}
+                                            </div>
+                                          </h6>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
-                                  <div className="price">
+                                  <div className='text-black'>
                                     <h5>{item.description}</h5>
                                   </div>
                                 </div>
@@ -215,9 +215,9 @@ const ContestDetail = () => {
                                       <div className="author-infor">
                                         <div className="name">
                                           <h6>
-                                            <Link to="/author-02">
+                                            <div className='text-black'>
                                               {item.sponsor?.name}
-                                            </Link>
+                                            </div>
                                           </h6>
                                         </div>
                                       </div>
@@ -234,17 +234,17 @@ const ContestDetail = () => {
 
                       <TabPanel>
                         <div className="provenance">
-                          <p className="mb-5">Nội dung cuộc thi: {contest?.content}</p>
+                          <p className="mb-5 text-black">Nội dung cuộc thi: {contest?.content}</p>
                           <p>{contest?.educationalLevel.map(item => {
                             return (
                               <div className="mb-5 flex justify-content-between">
-                                <p>{item?.description}</p>
-                                <p style={{ width: '120px' }}>Các giải thưởng:</p>
-                                <p style={{ width: '220px' }}>{item?.award.map((award, key) => {
+                                <p className='text-black'>{item?.description}</p>
+                                <p className='text-black' style={{ width: '120px' }}>Các giải thưởng:</p>
+                                <p className='text-black' style={{ width: '220px' }}>{item?.award.map((award, key) => {
                                   return (
                                     <div key={key} className="flex justify-content-center">
-                                      <p style={{ flex: '1', textAlign: 'left' }}>{award?.rank}: </p>
-                                      <p>{award?.quantity}</p>
+                                      <p className='text-black' style={{ flex: '1', textAlign: 'left' }}>{award?.rank}: </p>
+                                      <p className='text-black'>{award?.quantity}</p>
                                     </div>
                                   );
                                 })}</p>
@@ -271,7 +271,7 @@ const registerButton = ({ status, check, contestId, userInfo }) => {
     if (check) {
       return (
         <Link
-          to={`/submit/${contestId}`}
+          to={`/Client-UI/submit/${contestId}`}
           className="sc-button loadmore style fl-button pri-3">
           <span>Đăng ký dự thi</span>
         </Link>
@@ -289,7 +289,7 @@ const registerButton = ({ status, check, contestId, userInfo }) => {
   if (!userInfo) {
     return (
       <Link
-        to={`/submit/${contestId}`}
+        to={`/Client-UI/submit/${contestId}`}
         className="sc-button loadmore style fl-button pri-3">
         <span>Đăng ký dự thi</span>
       </Link>

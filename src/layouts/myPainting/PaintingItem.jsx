@@ -27,7 +27,7 @@ const PaintingItem = props => {
   
   const handleEditPainting = (status, contestId) => {
     if (paintingStatusEnable.includes(status)) {
-      navigate(`/submit/${contestId}`);
+      navigate(`/Client-UI/submit/${contestId}`);
     } else {
       setModalReject(true);
     }
@@ -50,7 +50,7 @@ const PaintingItem = props => {
                       <div>
                         <img className='img-painting object-fit-contain' style={{
                           height: '320px',
-                        }} src={item?.image} alt="tranh" />
+                        }} src={item?.image} alt="painting" />
                       </div>
                       <div className="button-place-bid">
                         <button
@@ -143,7 +143,7 @@ const PaintingItem = props => {
                         </div>
                       </div>
                     </div>
-                    <Link to={`/history/${item.id}`} className="view-history reload">Xem lịch sử</Link>
+                    <Link to={`/Client-UI/history/${item.id}`} className="view-history reload">Xem lịch sử</Link>
                   </div>
                 ))
               ) : (

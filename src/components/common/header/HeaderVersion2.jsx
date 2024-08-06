@@ -143,7 +143,7 @@ const HeaderVersion2 = () => {
                         <TooltipMenu />
                       ) : (
                         <Link
-                          to="/login"
+                          to="/Client-UI/login"
                           className="sc-button header-slider style style-1 fl-button pri-1">
                           <span>Đăng nhập</span>
                         </Link>

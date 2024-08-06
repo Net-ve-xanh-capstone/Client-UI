@@ -165,7 +165,7 @@ const Login = () => {
                     </button>
                     <div className="mt-5 text-right h5">
                       Bạn chưa có tài khoản? {''}
-                      <Link to={'/sign-up'} className="font-weight-bold">
+                      <Link to={'/Client-UI/sign-up'} className="font-weight-bold">
                         đăng ký
                       </Link>
                     </div>

@@ -61,7 +61,7 @@ const Login = () => {
     if (success || jwtToken) {
       if (userInfo.role === 'Staff') {
         reset();
-        navigate('/staff-management/contest');
+        navigate('/Client-UI/staff-management/contest');
       } else {
         reset();
         navigate('/Client-UI/');

@@ -91,7 +91,7 @@ const SideBarStaff = ({
 
   const handleItemClick = val => {
     if (val) {
-      navigate(`/staff-management${val}`);
+      navigate(`/Client-UI/staff-management${val}`);
     }
   };
 

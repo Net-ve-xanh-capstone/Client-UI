@@ -109,7 +109,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (jwtToken) {
-      navigate('/');
+      navigate('/Client-UI');
     }
     if (success !== null) {
       setOpen(true);

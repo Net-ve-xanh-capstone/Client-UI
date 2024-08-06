@@ -64,7 +64,7 @@ const Login = () => {
         navigate('/staff-management/contest');
       } else {
         reset();
-        navigate('/');
+        navigate('/Client-UI');
       }
     }
     if (error) {

@@ -32,7 +32,7 @@ const ContactPage = lazy(() => import('../pages/contact/ContactPage.jsx'));
 const HistoryPage = lazy(() => import('../pages/history/HistoryPage.jsx'));
 
 const routes = [
-  { path: '/', component: <Home /> },
+  { path: '/Client-UI', component: <Home /> },
   { path: '/login', component: <Login /> },
   { path: '/sign-up', component: <SignUp /> },
   {

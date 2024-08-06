@@ -85,7 +85,7 @@ const CollectionPage = () => {
               </div>
               <div className="breadcrumbs style2">
                 <ul>
-                  <li><Link to="/">Trang chủ</Link></li>
+                  <li><Link to="/Client-UI">Trang chủ</Link></li>
                   <li>Bộ sưu tập</li>
                 </ul>
               </div>

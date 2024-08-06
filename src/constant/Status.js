@@ -4,9 +4,9 @@ export const contestStatus =  {
 }
 
 export const paintingStatus = {
-  SUBMITTED: 'Đã nộp',
-  DRAFT : 'Bản nháp',
-  ACCEPTED: 'Đã chấp nhận',
+  SUBMITTED: 'Submitted',
+  DRAFT : 'Draft',
+  ACCEPTED: 'Accepted',
 }
 
 export const paintingStatusDisable = [

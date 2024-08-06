@@ -32,7 +32,10 @@ const ContactPage = lazy(() => import('../pages/contact/ContactPage.jsx'));
 const HistoryPage = lazy(() => import('../pages/history/HistoryPage.jsx'));
 
 const routes = [
-  { path: '/Client-UI/', component: <Home /> },
+  {
+    path: '/Client-UI/', component:
+        <Home />
+  },
   { path: '/Client-UI/login', component: <Login /> },
   { path: '/Client-UI/sign-up', component: <SignUp /> },
   {
@@ -44,35 +47,35 @@ const routes = [
     ),
     children: [
       {
-        path: 'Client-UI/contest',
+        path: 'contest',
         component: <ContestManagement />,
       },
       {
-        path: 'Client-UI/blog',
+        path: 'blog',
         component: <BlogStaff />,
       },
       {
-        path: 'Client-UI/category',
+        path: 'category',
         component: <CategoryBlog />,
       },
       {
-        path: 'Client-UI/topic',
+        path: 'topic',
         component: <TopicManagement />,
       },
       {
-        path: 'Client-UI/examiner',
+        path: 'examiner',
         component: <ExaminerManagement />,
       },
       {
-        path: 'Client-UI/sponsor',
+        path: 'sponsor',
         component: <SponsorManage />,
       },
       {
-        path: 'Client-UI/painting',
+        path: 'painting',
         component: <PaintingPage />,
       },
       {
-        path: 'Client-UI/competitor',
+        path: 'competitor',
         component: <CompetitorManage />,
       },
     ],

@@ -1,0 +1,1 @@
+const n={NOT_STARTED:"Đã hoàn thành",IN_PROCESS:"Đang tiến hành"},t={SUBMITTED:"Đã nộp",DRAFT:"Bản nháp",ACCEPTED:"Đã chấp nhận"},a=["Đã nộp","Đã chấp nhận"],s=["Bản nháp","New"];export{t as a,s as b,n as c,a as p};

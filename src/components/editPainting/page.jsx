@@ -1,15 +1,14 @@
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import React, { useEffect, useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import { useSelector } from 'react-redux';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { paintingApi } from '../../api/paintingApi.js';
 import { roundTopicById } from '../../api/roundStaffApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
-import { parseDateEdit } from '../../utils/formatDate.js';
-import styles from './page.module.css';
-import { useSelector } from 'react-redux';
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
+import styles from './page.module.css';
 
 function ModalEditPainting({
   modalShow,
@@ -37,7 +36,7 @@ function ModalEditPainting({
     name: { value: '', error: '' },
     description: { value: '', error: '' },
     roundTopicId: { value: '', error: '' },
-    currentUserId: { value: '3fa85f64-5717-4562-b3fc-2c963f66afa6' },
+    currentUserId: { value: userInfo.Id },
   });
 
   const [updateField, setUpdateField] = useState({
@@ -426,6 +425,7 @@ function ModalEditPainting({
           address: payload.address,
           phone: payload.phone,
           birthday: payload.birthday,
+          currentUserId: userInfo.Id,
         };
         updatePainting(payload);
       } else {
@@ -450,6 +450,7 @@ function ModalEditPainting({
           address: payload.address,
           phone: payload.phone,
           birthday: payload.birthday,
+          currentUserId: userInfo.Id,
         };
         updatePainting(payload);
       }
@@ -485,7 +486,7 @@ function ModalEditPainting({
       address: { ...prv.address, value: state.address },
       birthday: {
         ...prv.birthday,
-        value: parseDateEdit(state.birthday),
+        value: state.birthday,
       },
       phone: { ...prv.phone, value: state.phone },
     }));

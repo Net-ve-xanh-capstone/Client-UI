@@ -9,7 +9,7 @@ const menus = [
       {
         id: 1,
         sub: 'Trang chủ',
-        links: '/',
+        links: '/Client-UI',
         public: true,
       },
     ],

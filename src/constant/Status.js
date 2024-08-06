@@ -14,7 +14,7 @@ export const paintingStatusDisable = [
 ]
 
 export const paintingStatusEnable = [
-  'Bản nháp', 'Trạng thái không xác định'
+  'Bản nháp', 'New'
 ]
 export const paintingStatusArray = [
   'Bản nháp', 

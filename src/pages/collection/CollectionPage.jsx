@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from '../../components/common/header/HeaderVersion2';
 import Footer from '../../components/common/footer/Footer';
 import useFetchData from '../../hooks/useQueryData.js';
-import { defaultAvatar, defaultImage, whiteScreen } from '../../constant/imageDefault.js';
+import { whiteScreen } from '../../constant/imageDefault.js';
 import { formatDate } from '../../utils/formatDate.js';
 import { useForm } from 'react-hook-form';
 import TextFieldCommon from '../../components/input/TextfieldCommon.jsx';
@@ -127,7 +127,7 @@ const CollectionPage = () => {
                             </div>
                           </div>
                           <div className="infor text-right">
-                            <h4><Link to={`/collection-painting/${item.id}`}>{item.name}</Link></h4>
+                            <h4><Link to={`/Client-UI/collection-painting/${item.id}`}>{item.name}</Link></h4>
                             <div className="status">{item.description}</div>
                             <div className="time">{formatDate(item.createdTime)}</div>
                           </div>

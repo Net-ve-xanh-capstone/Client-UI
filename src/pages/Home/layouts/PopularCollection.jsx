@@ -40,7 +40,7 @@ const PopularCollection = () => {
               <h2 className="tf-title pb-22 text-left">
                 Các bộ sưu tập nổi trội
               </h2>
-              <Link to="/explore-03" className="exp style2">
+              <Link to="/Client-UI/collection" className="exp style2">
                 TÌM HIỂU THÊM
               </Link>
             </div>
@@ -125,7 +125,7 @@ const PopularCollectionItem = props => (
             </div>
             <div className="content">
               <h4 className="heading">
-                <Link to="/collection">{props.item?.name}</Link>
+                <Link to={`/Client-UI/collection-painting/${props.item.id}`}>{props.item?.name}</Link>
               </h4>
               <div className="description">
                 <span>Mô tả: </span>

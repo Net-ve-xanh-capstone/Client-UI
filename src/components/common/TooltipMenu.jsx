@@ -29,7 +29,7 @@ const TitleComponent = props => {
                 </Link>
             </li>
             <li>
-                <a href="/#" id="logout" onClick={handleLogout}>
+                <a className='cursor-pointer' id="logout" onClick={handleLogout}>
                     <i className="fal fa-sign-out"></i>
                     <span>Đăng xuất</span>
                 </a>

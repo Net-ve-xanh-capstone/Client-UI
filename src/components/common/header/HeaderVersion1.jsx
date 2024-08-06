@@ -73,9 +73,9 @@ const HeaderVersion1 = () => {
                 <div id="site-logo" className="clearfix">
                   <div id="site-logo-inner">
                     <Link
-                      to="/Client-UI/"
+                      to="/Client-UI"
                       rel="home"
-                      className="main-logo">
+                      className="main-logo select-none">
                       <img
                         className="logo-light"
                         id="logo_header"

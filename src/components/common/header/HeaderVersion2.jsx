@@ -67,10 +67,11 @@ const HeaderVersion2 = () => {
                 <div id="site-logo" className="clearfix">
                   <div id="site-logo-inner">
                     <Link
-                      to="/Client-UI/"
+                      to="/Client-UI"
                       rel="home"
-                      className="main-logo">
+                      className="main-logo select-none">
                       <img
+                        className='select-none'
                         id="logo_header"
                         src={logodark}
                         alt="nft-gaming"

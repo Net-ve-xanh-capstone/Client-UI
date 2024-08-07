@@ -267,6 +267,8 @@ const ContestDetail = () => {
 };
 
 const registerButton = ({ status, check, contestId, userInfo }) => {
+  console.log('status', status)
+  console.log('check', check)
   if (paintingStatusEnable.includes(status)) {
     if (check) {
       return (

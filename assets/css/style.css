@@ -3539,3 +3539,7 @@ input.number::-webkit-inner-spin-button {
 .text-black {
     color: #0d0d0d !important;
 }
+
+.padding-bottom-zero {
+    padding-bottom: 0px !important;
+}

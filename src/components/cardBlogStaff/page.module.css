@@ -148,14 +148,9 @@
  .tag span {
      display: block;
      border-radius: 50%;
-     height: 3rem;
-     width: 3rem;
+     height: 1rem;
+     width: 1rem;
      transition: all 0.2s ease;
- }
-
- .tag:hover>span {
-     width: 4.5rem;
-     border-radius: 2rem;
  }
 
  .btn_add {
@@ -431,13 +426,10 @@
      .tag span {
          display: block;
          border-radius: 50%;
-         height: 3rem;
-         width: 3rem;
+         height: 1rem;
+         width: 1rem;
          transition: all 0.2s ease;
      }
 
-     .tag:hover>span {
-         width: 4.5rem;
-         border-radius: 2rem;
-     }
+
  }

@@ -161,7 +161,10 @@ function ContestManagement() {
                 aria-label="delete"
                 size="small"
                 color="error"
-                onClick={() => handleOpenDelete(value)}
+                onClick={e => {
+                  e.stopPropagation();
+                  handleOpenDelete(value);
+                }}
                 disabled={handleActiveDelete(tableData)}>
                 <DeleteIcon />
               </IconButton>
@@ -195,7 +198,7 @@ function ContestManagement() {
         filterTable: 'Lọc bảng',
       },
     },
-    onRowClick: (rowData, rowMeta) => {
+    onRowClick: rowData => {
       const obj = rowData[5]?.props?.children?.find(
         item => item.type === 'span',
       );
@@ -234,7 +237,7 @@ function ContestManagement() {
 
   const handleBack = () => {
     setIsOpenDetail(false);
-    getContest();
+    getContest(); 
   };
 
   const handlePostDone = () => {

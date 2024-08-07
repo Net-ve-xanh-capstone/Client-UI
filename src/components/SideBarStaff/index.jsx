@@ -1,7 +1,10 @@
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import BookIcon from '@mui/icons-material/Book';
 import CategoryIcon from '@mui/icons-material/Category';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
 import LogoutIcon from '@mui/icons-material/Logout';
 import TopicIcon from '@mui/icons-material/Topic';
+import { IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import {
   FaAngleDoubleLeft,
@@ -18,12 +21,9 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from 'react-pro-sidebar';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '../../store/auth/authSlice.js';
-import { IconButton } from '@mui/material';
 
 const SideBarStaff = ({
   collapsed,
@@ -139,13 +139,13 @@ const SideBarStaff = ({
       {/* Content */}
       <SidebarContent>
         <Menu iconShape="circle">
-          {listContent.map((vl, _) => (
+          {listContent.map(vl => (
             <MenuItem
               key={vl}
               icon={vl.icon}
               onClick={() => handleItemClick(vl.path)}
               suffix={vl.new && <span className="badge red">NEW</span>}
-              active={activeItem === vl.path}>
+              active={activeItem.includes(vl.path)}>
               {vl.name}
             </MenuItem>
           ))}

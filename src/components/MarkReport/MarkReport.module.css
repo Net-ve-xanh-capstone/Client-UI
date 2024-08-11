@@ -1,0 +1,87 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+
+.square {
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.squareContent {
+  text-align: center;
+}
+
+.checkbox {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 2px solid #000;
+  cursor: pointer;
+}
+
+.checkbox:checked {
+  background-color: blue;
+}
+
+.imageContainer {
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+}
+
+.examCode {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.buttons {
+  grid-column: span 4;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.editPage .squareContent {
+  background-color: #f8f9fa;
+}
+
+.selected {
+  border-color: blue;
+}
+
+.unselected {
+  border-color: black;
+}

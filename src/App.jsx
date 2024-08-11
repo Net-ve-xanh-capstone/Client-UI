@@ -1,34 +1,35 @@
 import './App.css';
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import routes from './router/routes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import DotLoaderCustom from './components/dotLoader/DotLoader.jsx';
-const queryClient = new QueryClient();
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { baselightTheme } from './pages/admin/theme/DefaultColors.js';
+
 function App() {
-    return (
-        <QueryClientProvider client={queryClient}>
-            <Suspense fallback={<DotLoaderCustom />}>
-                <Routes>
-                    {routes.map((data, index) => (
-                        <Route
-                            path={data.path}
-                            element={data.component}
-                            key={index}>
-                            {data.children &&
-                                data.children.map((val, _) => (
-                                    <Route
-                                        path={val.path}
-                                        element={val.component}
-                                        key={val.path}
-                                    />
-                                ))}
-                        </Route>
-                    ))}
-                </Routes>
-            </Suspense>
-        </QueryClientProvider>
-    );
+  const queryClient = new QueryClient();
+  const theme = baselightTheme;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Routes>
+          {routes.map((data, index) => (
+            <Route path={data.path} element={data.component} key={index}>
+              {data.children &&
+                data.children.map((val, _) => (
+                  <Route
+                    path={val.path}
+                    element={val.component}
+                    key={val.path}
+                  />
+                ))}
+            </Route>
+          ))}
+        </Routes>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
 }
 
 export default App;

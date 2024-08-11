@@ -16,7 +16,7 @@ import { color } from '../../../constant/Color.js';
 import { userAvatar } from '../../../constant/imageDefault.js';
 import PropTypes from 'prop-types';
 
-const Contest = () => {
+const ContestComing = () => {
   const { isLoading, isError, data, error } = useFetchData(
     'contests/getallcontest',
   );
@@ -32,12 +32,12 @@ const Contest = () => {
   }
   return (
     <Fragment>
-      <section className="tf-section live-auctions padding-bottom-zero">
+      <section className="tf-section live-auctions">
         <div className="themesflat-container">
           <div className="row">
             <div className="col-md-12">
               <div className="heading-live-auctions">
-                <h2 className="tf-title">Cuộc Thi Đang Diễn Ra</h2>
+                <h2 className="tf-title pb-20">Cuộc Thi Sắp Diễn Ra</h2>
               </div>
             </div>
             <div className="col-md-12">
@@ -189,7 +189,7 @@ const ContestLoading = () => {
                 </div>
               </div>
               <div className="meta-info">
-                <div className="author">
+              <div className="author">
                   <div className="avatar">
                     <LoadingSkeleton
                       width="100%"
@@ -230,11 +230,11 @@ const ContestLoading = () => {
   );
 };
 
-Contest.propTypes = {
+ContestComing.propTypes = {
   show: PropTypes.bool,
   onHide: PropTypes.func,
 };
 
-export default withErrorBoundary(Contest, {
+export default withErrorBoundary(ContestComing, {
   FallbackComponent: Fallback,
 });

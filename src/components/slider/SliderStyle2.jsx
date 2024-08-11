@@ -51,7 +51,14 @@ const SliderStyle2 = () => {
                   <span>Đăng ký ngay</span>
                 </a>
               </div>
-            ) : (<></>)}
+            ) : (<div className="flat-bt-slider style2 flex">
+              <a
+                href="/Client-UI/login"
+                className="sc-button header-slider style style-1 note fl-button pri-1"
+              >
+                <span>Nộp bài dự thi</span>
+              </a>
+            </div>)}
           </div>
 
           <Swiper

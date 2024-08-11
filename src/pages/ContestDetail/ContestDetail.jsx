@@ -87,7 +87,7 @@ const ContestDetail = () => {
             <div className="col-xl-6 col-md-12">
               <div className="content-left">
                 <div className="media">
-                  <img src={contest?.logo} alt="Contest" />
+                  <img src={contest?.logo} alt="ContestComing" />
                 </div>
               </div>
             </div>

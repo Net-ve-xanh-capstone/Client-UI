@@ -2,8 +2,8 @@ import heroSliderData from '../../assets/fake-data/data-slider-2';
 import Footer from '../../components/common/footer/Footer';
 import HeaderVersion2 from '../../components/common/header/HeaderVersion2';
 import SliderStyle2 from '../../components/slider/SliderStyle2';
-import Contest from './layouts/Contest';
-import TopSeller from './layouts/TopCompetitorNearly.jsx';
+import ContestComing from './layouts/ContestComing.jsx';
+import Contest from './layouts/Contest.jsx';
 import PopularCollection from './layouts/PopularCollection';
 import Create from './layouts/Create';
 const Home = () => {
@@ -12,7 +12,7 @@ const Home = () => {
             <HeaderVersion2 />
             <SliderStyle2 data={heroSliderData} />
             <Contest />
-            {/*<TopSeller />*/}
+            <ContestComing />
             <PopularCollection />
             <Create />
             <Footer />

@@ -1103,7 +1103,7 @@
   background-color: #ffbd0c;
 }
 .sc-card-product .card-media .coming-soon {
-  display: none;
+  /*display: none;*/
 }
 .sc-card-product.comingsoon .card-media .coming-soon {
   display: block;

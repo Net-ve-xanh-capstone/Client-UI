@@ -12,6 +12,7 @@ import CompetitorManage from '../pages/competitorManage/page.jsx';
 import PaintingPage from '../pages/paintingPage/page.jsx';
 import CollectionPage from '../pages/collection/CollectionPage.jsx';
 import PaintingOfCollectionPage from '../pages/collection/painting/PaintingOfCollectionPage.jsx';
+import MarkReport from '../components/MarkReport/index.jsx';
 
 const Home = lazy(() => import('../pages/Home/Home'));
 const BlogPage = lazy(() => import('../pages/blogPage/BlogPage'));
@@ -103,15 +104,16 @@ const routes = [
   },
   {
     path: '/blog',
-    component: (
-      <BlogPage />
-    ),
+    component: <BlogPage />,
   },
   { path: '/contest-detail/:contestId', component: <ContestDetail /> },
   { path: '/faq', component: <FAQPage /> },
   { path: '/contact', component: <ContactPage /> },
   { path: '/collection', component: <CollectionPage /> },
-  { path: '/collection-painting/:collectionId', component: <PaintingOfCollectionPage /> },
+  {
+    path: '/collection-painting/:collectionId',
+    component: <PaintingOfCollectionPage />,
+  },
   {
     path: '/collection/:accountId',
     component: (
@@ -129,6 +131,14 @@ const routes = [
     ),
   },
   { path: '/*', component: <NoResult /> },
+  {
+    path: '/mark-report',
+    component: (
+      <ProtectedRoute role={Role.EXAMINER}>
+        <MarkReport />
+      </ProtectedRoute>
+    ),
+  },
 ];
 
 export default routes;

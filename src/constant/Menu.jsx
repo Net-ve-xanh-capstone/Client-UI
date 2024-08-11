@@ -72,6 +72,13 @@ const menus = [
       },
       {
         id: 3,
+        sub: 'Chấm thi',
+        links: '/mark-report',
+        public: false,
+        role: [Role.EXAMINER],
+      },
+      {
+        id: 4,
         sub: 'Không có kết quả',
         links: '/no-result',
         public: true,

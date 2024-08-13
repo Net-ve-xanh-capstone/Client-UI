@@ -228,7 +228,10 @@ function ContestManagement() {
                 aria-label="delete"
                 size="small"
                 color="error"
-                onClick={() => handleOpenDelete(value)}
+                onClick={e => {
+                  e.stopPropagation();
+                  handleOpenDelete(value);
+                }}
                 disabled={handleActiveDelete(tableData)}>
                 <DeleteIcon />
               </IconButton>
@@ -311,7 +314,7 @@ function ContestManagement() {
 
   const handleBack = () => {
     setIsOpenDetail(false);
-    getContest();
+    getContest(); 
   };
 
   const handlePostDone = () => {

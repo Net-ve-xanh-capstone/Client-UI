@@ -92,3 +92,45 @@
 .rankTitle {
     width: 100px;
 }
+
+.first_zone {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #000;
+    padding: 1rem;
+    border-radius: 0.625rem;
+    margin-bottom: 2rem;
+}
+
+.title_zone {
+    font-size: medium;
+    text-align: start;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.outside {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.data_time {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.data_time .div_data {
+    flex: 1;
+}
+
+.first_round {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 2rem;
+}

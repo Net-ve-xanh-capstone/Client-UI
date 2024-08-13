@@ -477,8 +477,9 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
     }
   };
 
+  // after click on the round selected then will setit to final
   const fetchRoundTopic = async (id, label) => {
-    finalCondition(label.split(' -')[0] === 'Vòng Chung Kết', id);
+    finalCondition(label.split(' -')[0] === 'Chung Kết', id);
     setLoadingRound(true);
     try {
       const res = await roundTopicById(id);

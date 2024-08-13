@@ -188,7 +188,7 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/examiner-round/:examinerId',
+    path: 'Client-UI/examiner-round',
     component: (
       <ProtectedRoute role={Role.EXAMINER}>
         <ExaminerRound />

@@ -2,7 +2,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getScheduleExaminer } from '../../api/scheduleExaminer.js';
 import Footer from '../../components/common/footer/Footer';
 import Header from '../../components/common/header/HeaderVersion2';
@@ -10,11 +10,10 @@ import { parseDataVietnam } from '../../utils/formatDate.js';
 import '../StaffManage/style.scss';
 import styles from './page.module.css';
 import { checkNavigateBtn } from '../../utils/checkEditButton.js';
-import { useNavigate } from 'react-router-dom';
 
 const ExaminerMark = () => {
   const { userInfo } = useSelector(state => state.auth);
-  const navigate = useNavigate();
+  const goTo = useNavigate();
   const [roundData, setRoundData] = useState([]);
 
   const fetchData = async () => {
@@ -29,7 +28,10 @@ const ExaminerMark = () => {
 
   const roundNavigate = id => {
     console.log(id);
-    navigate('Client-UI/examiner-round/', { state: { key: id } });
+    goTo({
+      pathname: '/Client-UI/examiner-round',
+      search: `?id=${id}`,
+    });
   };
 
   useEffect(() => {
@@ -46,7 +48,7 @@ const ExaminerMark = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="page-title-heading mg-bt-12">
-                <h1 className="heading text-center">Vòng chấm thi</h1>
+                <h1 className="heading text-center">Lịch chấm</h1>
               </div>
               <div className="breadcrumbs style2">
                 <ul>

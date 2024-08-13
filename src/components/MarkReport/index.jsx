@@ -1,41 +1,30 @@
-import { faker } from '@faker-js/faker';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { getById } from '../../api/awardApi.js';
 import Header from '../../components/common/header/HeaderVersion2';
 import { defaultImage } from '../../constant/imageDefault.js';
 import Footer from '../common/footer/Footer.jsx';
 import styles from './MarkReport.module.css';
 
-const contestF = () => {
-  return {
-    name: faker.person.fullName(),
-    code: faker.number.int({ min: 1000, max: 9999 }),
-  };
-};
-
-const createContests = (num = 5) => {
-  return Array.from({ length: num }, contestF);
-};
-
 const MarkReport = ({ pageType }) => {
-  // const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const [contests, setContests] = useState([]);
-  const fetchData = async () => {
-    // const { data } = await getScheduleById(
-    //   id || '64a4b9b5-17f1-495e-9fe4-34b727cd0aa4',
-    // );
-
-    // setContests(data.result);
-    setContests(createContests(10));
-  };
-  useEffect(() => {
-    fetchData();
-    console.log(contests);
-  }, []);
-
+  const [quantity, setQuantity] = useState(0);
   const [selectedContests, setSelectedContests] = useState(
     contests.map(() => false),
   );
+
+  // get all data from api
+  const fetchData = async id => {
+    const { data } = await getById(id);
+    setContests(data.result.paintingViewModelsList);
+    setQuantity(data.result.quantity);
+  };
+  useEffect(() => {
+    fetchData(searchParams.get('id'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   const handleSelect = index => {
     const updatedSelections = [...selectedContests];

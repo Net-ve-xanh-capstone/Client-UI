@@ -1,33 +1,38 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getScheduleExaminer } from '../../api/scheduleExaminer.js';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { getScheduleById } from '../../api/awardApi.js';
 import Footer from '../../components/common/footer/Footer';
 import Header from '../../components/common/header/HeaderVersion2';
-import { parseDataVietnam } from '../../utils/formatDate.js';
-import '../StaffManage/style.scss';
 import styles from './page.module.css';
-import { checkNavigateBtn } from '../../utils/checkEditButton.js';
+import '../StaffManage/style.scss';
 
 const ExaminerRound = () => {
-  const { userInfo } = useSelector(state => state.auth);
+  const [searchParams] = useSearchParams();
+  const goto = useNavigate();
   const [roundData, setRoundData] = useState([]);
 
-  const fetchData = async () => {
+  // navigating to next page for render list of painting
+  const navigateToMark = id => {
+    goto({
+      pathname: '/Client-UI/mark-report',
+      search: `?id=${id}`,
+    });
+  };
+
+  // get round by roundid
+  const fetchData = async id => {
     try {
-      const res = await getScheduleExaminer(userInfo.Id);
+      const res = await getScheduleById(id);
       const data = res.data.result;
       setRoundData(data);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
   };
 
+  // get the id in query param and pass it into the fetch api
   useEffect(() => {
-    fetchData();
+    fetchData(searchParams.get('id'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -57,7 +62,21 @@ const ExaminerRound = () => {
           </div>
         </div>
       </section>
-      <div className="tf-section tf-item-details">hello</div>
+      <div className={styles.container}>
+        {roundData?.length &&
+          roundData.map(val => (
+            <div key={val} className={styles.card}>
+              <div className={styles.content}>
+                <h3 style={{ color: '#1f1f2c' }}>{val.rank}</h3>
+              </div>
+              <button
+                className={styles.btn_mark}
+                onClick={() => navigateToMark(val.id)}>
+                Chấm bài
+              </button>
+            </div>
+          ))}
+      </div>
       <Footer />
     </div>
   );

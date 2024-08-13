@@ -9,6 +9,9 @@ import { roundTopicById } from '../../api/roundStaffApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 import styles from './page.module.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import './datepicker.css';
 
 function ModalEditPainting({
   modalShow,
@@ -75,6 +78,12 @@ function ModalEditPainting({
     return currentObject;
   };
 
+  // change the value of birthday
+  const parseDate = dateString => {
+    const [day, month, year] = dateString.split('/');
+    return new Date(year, month - 1, day);
+  };
+
   // styling the topic label
   const customStyles = {
     control: (base, state) => ({
@@ -130,7 +139,7 @@ function ModalEditPainting({
       onchange: e => {
         setStaffUpdate(prv => ({
           ...prv,
-          birthday: { ...prv.birthday, value: e.target.value },
+          birthday: { ...prv.birthday, value: e },
         }));
       },
       label: 'birthday',
@@ -486,7 +495,7 @@ function ModalEditPainting({
       address: { ...prv.address, value: state.address },
       birthday: {
         ...prv.birthday,
-        value: state.birthday,
+        value: parseDate(state.birthday),
       },
       phone: { ...prv.phone, value: state.phone },
     }));
@@ -559,12 +568,23 @@ function ModalEditPainting({
                       <p style={{ fontWeight: 'normal', fontSize: '14px' }}>
                         {vl.title}
                       </p>
-                      <input
-                        type={vl.type}
-                        value={vl.value}
-                        onChange={vl.onchange}
-                        readOnly={dataPainting?.ownerRole === 'Competitor'}
-                      />
+                      {vl.type === 'date' ? (
+                        <div className={styles.newinput}>
+                          <DatePicker
+                            selected={vl.value}
+                            onChange={vl.onchange} //only when value has changed
+                            readOnly={dataPainting?.ownerRole === 'Competitor'}
+                            dateFormat="dd/MM/yyyy"
+                          />
+                        </div>
+                      ) : (
+                        <input
+                          type={vl.type}
+                          value={vl.value}
+                          onChange={vl.onchange}
+                          readOnly={dataPainting?.ownerRole === 'Competitor'}
+                        />
+                      )}
                     </div>
                     {(staffUpdate[vl.label].error !== '' ||
                       staffUpdate[vl.label].error !== null) && (

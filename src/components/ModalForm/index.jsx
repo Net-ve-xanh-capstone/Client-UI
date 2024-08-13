@@ -22,6 +22,7 @@ function ModalForm({ modalShow, onHide }) {
   useEffect(() => {
     if (userInfo === null) navigate('/login');
     setFormData(intialState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalShow]);
 
   const intialState = {
@@ -163,213 +164,232 @@ function ModalForm({ modalShow, onHide }) {
         </Modal.Header>
         <Modal.Body style={{ height: '80vh', overflow: 'hidden' }}>
           <form onSubmit={handleSubmit} className={styles.modalForm}>
-            <h4 className={styles.title}>Tên cuộc thi</h4>
-            <input
-              className={styles.inputModal}
-              required
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
-            <div className="row">
-              <div className="col-md-6">
-                <h5 className={styles.title}>Thời gian bắt đầu</h5>
-                <input
-                  required
-                  type="date"
-                  name="startTime"
-                  id="startTime"
-                  className={styles.formControl}
-                  value={formData.startTime}
-                  onChange={handleInputChange}
-                  min={currentDate}
-                />
+            <div className={styles.first_zone}>
+              <h3 className={styles.title_zone}>Thông tin cuộc thi</h3>
+              <h4 className={styles.title}>Tên cuộc thi</h4>
+              <input
+                className={styles.inputModal}
+                required
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+              />
+              <div className={styles.outside}>
+                <div className={`row ${styles.data_time}`}>
+                  <div className={styles.div_data}>
+                    <h5 className={styles.title}>Thời gian bắt đầu</h5>
+                    <input
+                      required
+                      type="date"
+                      name="startTime"
+                      id="startTime"
+                      className={styles.formControl}
+                      value={formData.startTime}
+                      onChange={handleInputChange}
+                      min={currentDate}
+                    />
+                  </div>
+                  <div className={styles.div_data}>
+                    <h4 className={styles.title}>Thời gian kết thúc</h4>
+                    <input
+                      required
+                      type="date"
+                      name="endTime"
+                      id="endTime"
+                      className={styles.formControl}
+                      value={formData.endTime}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="col-md-6">
-                <h4 className={styles.title}>Thời gian kết thúc</h4>
-                <input
-                  required
-                  type="date"
-                  name="endTime"
-                  id="endTime"
-                  className={styles.formControl}
-                  value={formData.endTime}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-            {errors.startTime && (
-              <p className={styles.error}>{errors.startTime}</p>
-            )}
+              {errors.startTime && (
+                <p className={styles.error}>{errors.startTime}</p>
+              )}
 
-            <h4 className={styles.title}>Nội dung cuộc thi</h4>
-            <textarea
-              required
-              name="content"
-              value={formData.content}
-              onChange={handleInputChange}></textarea>
-            <h4 className={styles.title}>Đối tượng tham gia</h4>
-            <div className={styles.levelBlock}>
-              <p>Bảng A</p>
-              <p>Mầm non</p>
+              <h4 className={styles.title}>Nội dung cuộc thi</h4>
+              <textarea
+                required
+                name="content"
+                value={formData.content}
+                onChange={handleInputChange}></textarea>
             </div>
-            <div className={styles.levelBlock}>
-              <p>Bảng B</p>
-              <p>Tiểu học</p>
+            <div className={styles.first_zone}>
+              <h4 className={styles.title_zone}>Đối tượng tham gia</h4>
+              <div className={styles.levelBlock}>
+                <p>Bảng A</p>
+                <p>Mầm non</p>
+              </div>
+              <div className={styles.levelBlock}>
+                <p>Bảng B</p>
+                <p>Tiểu học</p>
+              </div>
             </div>
-            <h4 className={styles.title}>Vòng thi</h4>
-            <div style={{ marginLeft: '20px' }}>
-              <div className={styles.roundBlock}>
-                <h5>Vòng sơ khảo</h5>
+            <div className={styles.first_zone}>
+              <h4 className={styles.title_zone}>Vòng thi</h4>
+              <div style={{ marginLeft: '20px' }}>
+                <div className={styles.roundBlock}>
+                  <h5>Vòng sơ khảo</h5>
+                </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <h5 className={styles.title}>Thời gian bắt đầu</h5>
+                    <input
+                      required
+                      type="date"
+                      name="round1StartTime"
+                      id="round1StartTime"
+                      className={styles.formControl}
+                      value={formData.round1StartTime}
+                      onChange={handleInputChange}
+                      min={formData.startTime}
+                      max={formData.endTime}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <h4 className={styles.title}>Thời gian kết thúc</h4>
+                    <input
+                      required
+                      type="date"
+                      name="round1EndTime"
+                      id="round1EndTime"
+                      className={styles.formControl}
+                      value={formData.round1EndTime}
+                      onChange={handleInputChange}
+                      min={formData.round1StartTime}
+                      max={formData.endTime}
+                    />
+                  </div>
+                </div>
+                {errors.round1 && (
+                  <p className={styles.error}>{errors.round1}</p>
+                )}
+                <div className={styles.roundBlock}>
+                  <h5>Vòng chung kết</h5>
+                </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <h5 className={styles.title}>Thời gian bắt đầu</h5>
+                    <input
+                      required
+                      type="date"
+                      name="round2StartTime"
+                      id="round2StartTime"
+                      className={styles.formControl}
+                      value={formData.round2StartTime}
+                      onChange={handleInputChange}
+                      min={formData.round1EndTime}
+                      max={formData.endTime}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <h4 className={styles.title}>Thời gian kết thúc</h4>
+                    <input
+                      required
+                      type="date"
+                      name="round2EndTime"
+                      id="round2EndTime"
+                      className={styles.formControl}
+                      value={formData.round2EndTime}
+                      onChange={handleInputChange}
+                      min={formData.round2StartTime}
+                      max={formData.endTime}
+                    />
+                  </div>
+                </div>
+                {errors.round2 && (
+                  <p className={styles.error}>{errors.round2}</p>
+                )}
+              </div>
+            </div>
+            <div className={styles.first_zone}>
+              <h3 className={styles.title_zone}>Cơ cấu giải thưởng</h3>
+              <div className={styles.first_round}>
+                <h4 className={styles.title} style={{ margin: '0' }}>
+                  Số lượng bài thi đậu sơ khảo:{' '}
+                </h4>
+                <input
+                  className={styles.inputAward}
+                  required
+                  type="number"
+                  name="passRound1"
+                  min="1"
+                  max="99"
+                  value={formData.passRound1}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <h4 className={styles.title}>Số lượng giải</h4>
+              <div className="row mb-4 box-award">
+                <div
+                  className="col-md-6 d-flex justify-content-center align-items-center"
+                  style={{ gap: '20px' }}>
+                  <p className={styles.rankTitle}>Giải nhất</p>
+                  <input
+                    className={styles.inputAward}
+                    required
+                    type="number"
+                    min="1"
+                    max="99"
+                    name="rank1"
+                    value={formData.rank1}
+                    onChange={handleInputChange}
+                  />
+                  <p>giải</p>
+                </div>
+                <div
+                  className="col-md-6 d-flex justify-content-center align-items-center"
+                  style={{ gap: '20px' }}>
+                  <p className={styles.rankTitle}>Giải ba</p>
+                  <input
+                    className={styles.inputAward}
+                    required
+                    type="number"
+                    min="1"
+                    max="99"
+                    name="rank3"
+                    value={formData.rank3}
+                    onChange={handleInputChange}
+                  />
+                  <p>giải</p>
+                </div>
               </div>
               <div className="row">
-                <div className="col-md-6">
-                  <h5 className={styles.title}>Thời gian bắt đầu</h5>
+                <div
+                  className="col-md-6 d-flex justify-content-center align-items-center"
+                  style={{ gap: '20px' }}>
+                  <p className={styles.rankTitle}>Giải nhì</p>
                   <input
+                    className={styles.inputAward}
                     required
-                    type="date"
-                    name="round1StartTime"
-                    id="round1StartTime"
-                    className={styles.formControl}
-                    value={formData.round1StartTime}
+                    type="number"
+                    min="1"
+                    max="99"
+                    name="rank2"
+                    value={formData.rank2}
                     onChange={handleInputChange}
-                    min={formData.startTime}
-                    max={formData.endTime}
                   />
+                  <p>giải</p>
                 </div>
-                <div className="col-md-6">
-                  <h4 className={styles.title}>Thời gian kết thúc</h4>
+                <div
+                  className="col-md-6 d-flex justify-content-center align-items-center"
+                  style={{ gap: '20px' }}>
+                  <p className={styles.rankTitle}>Giải khuyến khích</p>
                   <input
+                    className={styles.inputAward}
                     required
-                    type="date"
-                    name="round1EndTime"
-                    id="round1EndTime"
-                    className={styles.formControl}
-                    value={formData.round1EndTime}
+                    type="number"
+                    min="1"
+                    max="99"
+                    name="rank4"
+                    value={formData.rank4}
                     onChange={handleInputChange}
-                    min={formData.round1StartTime}
-                    max={formData.endTime}
                   />
+                  <p>giải</p>
                 </div>
-              </div>
-              {errors.round1 && <p className={styles.error}>{errors.round1}</p>}
-              <div className={styles.roundBlock}>
-                <h5>Vòng chung kết</h5>
-              </div>
-              <div className="row">
-                <div className="col-md-6">
-                  <h5 className={styles.title}>Thời gian bắt đầu</h5>
-                  <input
-                    required
-                    type="date"
-                    name="round2StartTime"
-                    id="round2StartTime"
-                    className={styles.formControl}
-                    value={formData.round2StartTime}
-                    onChange={handleInputChange}
-                    min={formData.round1EndTime}
-                    max={formData.endTime}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <h4 className={styles.title}>Thời gian kết thúc</h4>
-                  <input
-                    required
-                    type="date"
-                    name="round2EndTime"
-                    id="round2EndTime"
-                    className={styles.formControl}
-                    value={formData.round2EndTime}
-                    onChange={handleInputChange}
-                    min={formData.round2StartTime}
-                    max={formData.endTime}
-                  />
-                </div>
-              </div>
-              {errors.round2 && <p className={styles.error}>{errors.round2}</p>}
-            </div>
-
-            <h4 className={styles.title}>Cơ cấu giải thưởng</h4>
-            <div className="row mb-4 box-award">
-              <div
-                className="col-md-6 d-flex justify-content-center align-items-center"
-                style={{ gap: '20px' }}>
-                <p className={styles.rankTitle}>Giải nhất</p>
-                <input
-                  className={styles.inputAward}
-                  required
-                  type="number"
-                  min="1"
-                  max="99"
-                  name="rank1"
-                  value={formData.rank1}
-                  onChange={handleInputChange}
-                />
-                <p>giải</p>
-              </div>
-              <div
-                className="col-md-6 d-flex justify-content-center align-items-center"
-                style={{ gap: '20px' }}>
-                <p className={styles.rankTitle}>Giải ba</p>
-                <input
-                  className={styles.inputAward}
-                  required
-                  type="number"
-                  min="1"
-                  max="99"
-                  name="rank3"
-                  value={formData.rank3}
-                  onChange={handleInputChange}
-                />
-                <p>giải</p>
               </div>
             </div>
-            <div className="row">
-              <div
-                className="col-md-6 d-flex justify-content-center align-items-center"
-                style={{ gap: '20px' }}>
-                <p className={styles.rankTitle}>Giải nhì</p>
-                <input
-                  className={styles.inputAward}
-                  required
-                  type="number"
-                  min="1"
-                  max="99"
-                  name="rank2"
-                  value={formData.rank2}
-                  onChange={handleInputChange}
-                />
-                <p>giải</p>
-              </div>
-              <div
-                className="col-md-6 d-flex justify-content-center align-items-center"
-                style={{ gap: '20px' }}>
-                <p className={styles.rankTitle}>Giải khuyến khích</p>
-                <input
-                  className={styles.inputAward}
-                  required
-                  type="number"
-                  min="1"
-                  max="99"
-                  name="rank4"
-                  value={formData.rank4}
-                  onChange={handleInputChange}
-                />
-                <p>giải</p>
-              </div>
-            </div>
-            <h4 className={styles.title}>Số người qua vòng 1: </h4>
-            <input
-              className={styles.inputAward}
-              required
-              type="number"
-              name="passRound1"
-              min="1"
-              max="99"
-              value={formData.passRound1}
-              onChange={handleInputChange}
-            />
             <div style={{ textAlign: 'end' }}>
               <LoadingButton
                 type="submit"

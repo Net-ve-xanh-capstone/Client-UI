@@ -92,3 +92,28 @@
 .rankTitle {
     width: 100px;
 }
+
+.card_screen {
+    padding: 1rem;
+    border-radius: 0.625rem;
+    border: 1px solid #000;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+.title_zone {
+    font-size: medium;
+    text-align: start;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.age {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 20rem;
+}

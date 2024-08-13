@@ -13,7 +13,6 @@ function LevelFragment({ levelFrag, getContestDetail }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [idLevelDelete, setIdLevelDelete] = useState();
-  const isEditing = checkEditButton(levelFrag.startTime);
   const resetDetail = () => {
     setModalShow(false);
     getContestDetail();
@@ -62,6 +61,8 @@ function LevelFragment({ levelFrag, getContestDetail }) {
           <li className={styles.roundHeader}>
             <div className={styles.col}>Nội dung</div>
             <div className={styles.col}>Mô tả</div>
+            <div className={styles.col}>Từ tuổi</div>
+            <div className={styles.col}>Đến tuổi</div>
           </li>
 
           {levelFrag.educationalLevel.map(data => (
@@ -74,7 +75,6 @@ function LevelFragment({ levelFrag, getContestDetail }) {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
                 }}
                 data-label="Mô tả">
                 <div>{data.description || 'Chưa có'}</div>
@@ -89,19 +89,24 @@ function LevelFragment({ levelFrag, getContestDetail }) {
                   </IconButton>
                 </div> */}
               </div>
+              <div className={styles.col} data-label="Từ tuổi">
+                10
+              </div>
+              <div className={styles.col} data-label="Đến tuổi">
+                12
+              </div>
             </li>
           ))}
         </ul>
       </div>
 
-      {/* <div className="flex justify-content-end mt-20">
+      <div className="flex justify-content-end mt-20">
         <button
           className="btn btn-outline-primary btn-lg"
-          onClick={() => setModalShow(true)}
-          disabled={isEditing}>
+          onClick={() => setModalShow(true)}>
           Thêm
         </button>
-      </div> */}
+      </div>
     </>
   );
 }

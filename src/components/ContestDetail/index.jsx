@@ -29,6 +29,8 @@ function ContestDetail({ contest, handleBack }) {
   const getContestDetail = async () => {
     try {
       const { data } = await getById(contest.id);
+      console.log(data);
+
       setContestDes(data?.result);
     } catch (e) {
       console.log('err', e);

@@ -96,27 +96,53 @@ function CreateLevel({ modalShow, onHide, contestId }) {
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            Tạo đối tượng dự thi
+            Thêm đối tượng
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ height: '50vh', overflow: 'hidden' }}>
+        <Modal.Body style={{ height: '70vh', overflow: 'hidden' }}>
           <form onSubmit={handleSubmit} className={styles.modalForm}>
-            <h4 className={styles.title}>Tên đối tượng</h4>
-            <input
-              className={styles.inputModal}
-              required
-              type="text"
-              name="level"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
-
-            <h4 className={styles.title}>Mô tả ngắn</h4>
-            <textarea
-              required
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}></textarea>
+            <div className={styles.card_screen}>
+              <h3 className={styles.title_zone}>Thông tin cuộc thi</h3>
+              <h4 className={styles.title}>Tên đối tượng</h4>
+              <input
+                className={styles.inputModal}
+                required
+                type="text"
+                name="level"
+                value={formData.name}
+                onChange={handleInputChange}
+              />
+              <h4 className={styles.title}>Mô tả ngắn</h4>
+              <textarea
+                required
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}></textarea>
+              <div className={styles.age}>
+                <div>
+                  <h4 className={styles.title}>Từ tuổi</h4>
+                  <input
+                    className={styles.inputModal}
+                    required
+                    type="text"
+                    name="level"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div>
+                  <h4 className={styles.title}>Đến tuổi</h4>
+                  <input
+                    className={styles.inputModal}
+                    required
+                    type="text"
+                    name="level"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+            </div>
             <div style={{ textAlign: 'end' }}>
               <button className={styles.btnCreate} type="submit">
                 Tạo

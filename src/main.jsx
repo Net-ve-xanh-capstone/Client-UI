@@ -11,17 +11,21 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Suspense } from 'react';
+import DotLoaderCustom from './components/dotLoader/DotLoader.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
-    <PersistGate loading={<div>Waiting</div>} persistor={persistor}>
-      <BrowserRouter>
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="vi">
-          <ScrollToTop />
-          <App></App>
-          <ToastContainer />
-        </LocalizationProvider>
-      </BrowserRouter>
-    </PersistGate>
-  </Provider>
+  <Suspense fallback={<DotLoaderCustom />}>
+    <Provider store={store}>
+      <PersistGate loading={<div>Waiting</div>} persistor={persistor}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="vi">
+            <ScrollToTop />
+            <App></App>
+            <ToastContainer />
+          </LocalizationProvider>
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
+  </Suspense>,
 );

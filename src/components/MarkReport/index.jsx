@@ -5,14 +5,33 @@ import Header from '../../components/common/header/HeaderVersion2';
 import { defaultImage } from '../../constant/imageDefault.js';
 import Footer from '../common/footer/Footer.jsx';
 import styles from './MarkReport.module.css';
+import { useDispatch } from 'react-redux';
+import { store } from '../../store/examiner/markingSlice.js';
 
 const MarkReport = ({ pageType }) => {
   const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
   const [contests, setContests] = useState([]);
+  const [lazyData, setLazyData] = useState([]);
+
   const [quantity, setQuantity] = useState(0);
   const [selectedContests, setSelectedContests] = useState(
     contests.map(() => false),
   );
+  const itemsPerPage = 8;
+
+  // define data loading
+  const lazyLoading = () => {
+    const startIndex = lazyData.length;
+    const dataLoad = contests.splice(startIndex, startIndex + itemsPerPage);
+    setLazyData(prevData => [...prevData, ...dataLoad]);
+  };
+
+  // adding new painting to redux
+  const postIntoRedux = item => {
+    const payload = contests.filter((_, idx) => item[idx] === true);
+    dispatch(store(payload));
+  };
 
   // get all data from api
   const fetchData = async id => {
@@ -25,12 +44,23 @@ const MarkReport = ({ pageType }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
-  const handleSelect = index => {
+  const handleSelect = (_, index) => {
     const updatedSelections = [...selectedContests];
     updatedSelections[index] = !updatedSelections[index];
     setSelectedContests(updatedSelections);
   };
+
+  // check if image is update to the variable
+  useEffect(() => {
+    postIntoRedux(selectedContests);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedContests]);
+
+  useEffect(() => {
+    lazyLoading();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="item-details">
       <Header />
@@ -64,7 +94,7 @@ const MarkReport = ({ pageType }) => {
               <input
                 type="checkbox"
                 checked={selectedContests[index]}
-                onChange={() => handleSelect(index)}
+                onChange={e => handleSelect(e, index)}
                 className={`${styles.checkbox} ${
                   selectedContests[index] ? styles.selected : styles.unselected
                 }`}

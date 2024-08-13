@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import authSlice from './auth/authSlice.js';
+import markingSlice from './examiner/markingSlice.js';
 import storage from 'redux-persist/lib/storage';
 import {
   FLUSH,
@@ -31,6 +32,7 @@ const authPersistedConfig = {
 const reducer = combineReducers({
   // key: value
   auth: persistReducer(authPersistedConfig, authSlice),
+  marking: markingSlice,
 });
 
 const persistedReducer = persistReducer(persistedConfig, reducer);

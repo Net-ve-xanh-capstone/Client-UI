@@ -44,11 +44,11 @@ const PaintingItem = props => {
               {data.length > 0 ? (
                 data.slice(0, visible).map((item, index) => (
                   <div
-                    className={`sc-card-product mr-4 explode style2 mg-bt ${item.feature ? 'comingsoon' : ''} `}
+                    className={'sc-card-product mr-4 explode style2 mg-bt'}
                     key={index}>
-                    <div className="card-media">
+                    <div className="card-media select-none">
                       <div>
-                        <img className='img-painting object-fit-contain' style={{
+                        <img className="img-painting object-fit-contain" style={{
                           height: '320px',
                         }} src={item?.image} alt="painting" />
                       </div>
@@ -56,18 +56,19 @@ const PaintingItem = props => {
                         <button
                           onClick={() => handleShowModal(item.id)}
                           className="sc-button style-place-bid style fl-button pri-3"
-                          style={{ width: '220px'}}
+                          style={{ width: '220px' }}
                         >
                           <span>Thêm vào bộ sưu tập</span>
                         </button>
                         <button
                           onClick={() => handleEditPainting(item?.status, item?.contestId)}
                           className="sc-button style-place-bid style fl-button pri-3 mt-5"
-                          style={{ width: '220px'}}
+                          style={{ width: '220px' }}
                         >
                           <span>Chỉnh sửa bài nộp</span>
                         </button>
                       </div>
+                      <div className="coming-soon">{item?.award}</div>
                     </div>
                     <div onClick={() => handleEditPainting(item?.status, item?.contestId)} className="card-title">
                       <h5>

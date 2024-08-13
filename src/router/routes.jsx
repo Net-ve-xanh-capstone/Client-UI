@@ -12,6 +12,9 @@ import CompetitorManage from '../pages/competitorManage/page.jsx';
 import PaintingPage from '../pages/paintingPage/page.jsx';
 import CollectionPage from '../pages/collection/CollectionPage.jsx';
 import PaintingOfCollectionPage from '../pages/collection/painting/PaintingOfCollectionPage.jsx';
+import HomeCollectionPage from '../pages/myCollection/HomeCollectionPage.jsx';
+import Loadable from '../pages/admin/layouts/full/shared/loadable/Loadable';
+import { Navigate } from 'react-router-dom';
 import MarkReport from '../components/MarkReport/index.jsx';
 import ExaminerMark from '../pages/ExaminerMark/page.jsx';
 import ExaminerRound from '../pages/examinerRound/page.jsx';
@@ -33,6 +36,19 @@ const MyPaintingPage = lazy(() =>
 const FAQPage = lazy(() => import('../pages/FAQ/FAQPage.jsx'));
 const ContactPage = lazy(() => import('../pages/contact/ContactPage.jsx'));
 const HistoryPage = lazy(() => import('../pages/history/HistoryPage.jsx'));
+const FullLayout = lazy(() => import('../pages/admin/layouts/full/FullLayout'));
+const Dashboard = lazy(() =>
+  import('../pages/admin/views/dashboard/Dashboard'),
+);
+const SamplePage = lazy(() =>
+  import('../pages/admin/views/sample-page/SamplePage'),
+);
+const TypographyPage = Loadable(
+  lazy(() => import('../pages/admin/views/utilities/TypographyPage')),
+);
+const Shadow = Loadable(
+  lazy(() => import('../pages/admin/views/utilities/Shadow')),
+);
 
 const routes = [
   {
@@ -134,6 +150,25 @@ const routes = [
         <HistoryPage />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: 'Client-UI/my-collection',
+    component: (
+      <ProtectedRoute>
+        <HomeCollectionPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/Client-UI/admin-management',
+    component: <FullLayout />,
+    children: [
+      { path: '', component: <Navigate to="dashboard" /> },
+      { path: 'dashboard', exact: true, component: <Dashboard /> },
+      { path: 'sample-page', exact: true, component: <SamplePage /> },
+      { path: 'ui/typography', exact: true, component: <TypographyPage /> },
+      { path: 'ui/shadow', exact: true, component: <Shadow /> },
+    ],
   },
   { path: '/*', component: <NoResult /> },
   {

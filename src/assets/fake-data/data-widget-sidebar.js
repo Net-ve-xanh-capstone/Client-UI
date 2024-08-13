@@ -1,25 +1,13 @@
 const widgetSidebarData = [
   {
     id: 1,
-    title: 'Collections',
+    title: 'Bộ sưu tập',
     content: [
       {
-        field: 'Abstraction',
+        field: 'Mùa xuân',
       },
       {
-        field: 'Patternlicious',
-      },
-      {
-        field: 'Skecthify',
-      },
-      {
-        field: 'Cartoonism',
-      },
-      {
-        field: 'Virtuland',
-      },
-      {
-        field: 'Papercut',
+        field: 'Mùa thu',
       },
     ],
   },

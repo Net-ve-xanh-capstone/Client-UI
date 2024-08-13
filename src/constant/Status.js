@@ -10,20 +10,20 @@ export const paintingStatus = {
 }
 
 export const paintingStatusDisable = [
-  'Submitted', 'Accepted',
+  'Đã nộp', 'Đã chấp nhận',
 ]
 
 export const paintingStatusEnable = [
-  'Draft', 'New'
+  'Bản nháp', 'New'
 ]
 export const paintingStatusArray = [
-  'Draft', 
-  'Submitted',
-  'Delete', 
-  'Accepted', 
-  'Rejected', 
-  'Pass', 
-  'NotPass',
-  'FinalRound',
-  'HasPrizes',
+  'Bản nháp', 
+  'Đã nộp',
+  'Đã xóa', 
+  'Đã chấp nhận', 
+  'Đã từ chối', 
+  'Qua Vòng 1', 
+  'Không qua vòng 1',
+  'Vòng chung kết',
+  'Có giải thưởng',
 ]

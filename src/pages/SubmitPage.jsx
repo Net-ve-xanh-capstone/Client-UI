@@ -33,13 +33,6 @@ const SubmitPage = () => {
   const { progress, url, error } = useUploadImage(file);
   const userInfo = useSelector(state => state.auth.userInfo);
   const today = new Date().toISOString().slice(0, 10);
-  const [address, setAddress] = useState({
-    cities: [],
-    districts: [],
-    wards: [],
-    selectedCity: '',
-    selectedDistrict: '',
-  });
   
   useEffect(() => {
     const fetchData = async () => {
@@ -48,10 +41,7 @@ const SubmitPage = () => {
         userInfo.Id,
         contestId,
       );
-      const address = await addressApi.get();
-      
       setRoundTopicsData(response.data.result);
-      setAddress(prevState => ({ ...prevState, cities: address.data }));
     };
     fetchData();
   }, []);
@@ -120,7 +110,6 @@ const SubmitPage = () => {
       method,
       data, 
       'Lưu bài thành công', 
-      'Lưu bài thất bại', 
       'Bạn đã hủy lưu bài',
       setRefreshTrigger
     );
@@ -161,7 +150,6 @@ const SubmitPage = () => {
       method,
       data,
       'Nộp bài thành công',
-      'Nộp bài thất bại',
       'Bạn đã hủy nộp bài',
       setRefreshTrigger
     );
@@ -178,25 +166,25 @@ const SubmitPage = () => {
     setError(name, '');
   };
 
-  const handleCityChange = (e) => {
-    const cityId = e.target.value;
-    setAddress(prevState => ({
-      ...prevState,
-      selectedCity: cityId,
-      selectedDistrict: '',
-      districts: cityId ? prevState.cities.find(c => c.Id === cityId)?.Districts || [] : [],
-      wards: []
-    }));
-  };
-
-  const handleDistrictChange = (e) => {
-    const districtId = e.target.value;
-    setAddress(prevState => ({
-      ...prevState,
-      selectedDistrict: districtId,
-      wards: districtId ? prevState.districts.find(d => d.Id === districtId)?.Wards || [] : []
-    }));
-  };
+  // const handleCityChange = (e) => {
+  //   const cityId = e.target.value;
+  //   setAddress(prevState => ({
+  //     ...prevState,
+  //     selectedCity: cityId,
+  //     selectedDistrict: '',
+  //     districts: cityId ? prevState.cities.find(c => c.Id === cityId)?.Districts || [] : [],
+  //     wards: []
+  //   }));
+  // };
+  //
+  // const handleDistrictChange = (e) => {
+  //   const districtId = e.target.value;
+  //   setAddress(prevState => ({
+  //     ...prevState,
+  //     selectedDistrict: districtId,
+  //     wards: districtId ? prevState.districts.find(d => d.Id === districtId)?.Wards || [] : []
+  //   }));
+  // };
 
   useEffect(() => {
     //clean-up
@@ -243,7 +231,7 @@ const SubmitPage = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/">Trang chủ</Link>
+                    <Link to="/Client-UI/">Trang chủ</Link>
                   </li>
                   <li>
                     <Link to="#">Trang</Link>
@@ -404,7 +392,7 @@ const SubmitPage = () => {
   );
 };
 
-const SwalComponent = (title, endpoint, method, data, successMsg, errorMsg, cancelMsg, setRefreshTrigger) => {
+const SwalComponent = (title, endpoint, method, data, successMsg, cancelMsg, setRefreshTrigger) => {
   Swal.fire({
     title: title,
     showCancelButton: true,
@@ -422,7 +410,7 @@ const SwalComponent = (title, endpoint, method, data, successMsg, errorMsg, canc
             );
           })
           .catch(error => {
-            Swal.fire(errorMsg, 'Hãy thử lại sau bạn nhé', 'error');
+            Swal.fire(error?.response?.data?.message, 'Hãy thử lại sau bạn nhé', 'error');
           });
       } else if(method === 'PUT') {
         paintingApi
@@ -435,7 +423,7 @@ const SwalComponent = (title, endpoint, method, data, successMsg, errorMsg, canc
             );
           })
           .catch(error => {
-            Swal.fire(errorMsg, 'Hãy thử lại sau bạn nhé', 'error');
+            Swal.fire(error?.response?.data?.message, 'Hãy thử lại sau bạn nhé', 'error');
           });
       }
       

@@ -11,6 +11,7 @@ import { LoadingButton } from '@mui/lab';
 
 // eslint-disable-next-line react-refresh/only-export-components
 function ModalForm({ modalShow, onHide }) {
+  let currentDate = new Date().toJSON().slice(0, 10);
   const [isLoading, setIsLoading] = useState(false);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
@@ -182,6 +183,7 @@ function ModalForm({ modalShow, onHide }) {
                   className={styles.formControl}
                   value={formData.startTime}
                   onChange={handleInputChange}
+                  min={currentDate}
                 />
               </div>
               <div className="col-md-6">

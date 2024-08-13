@@ -1,20 +1,18 @@
 import React, { useEffect } from 'react';
-import Header from '../../components/common/header/HeaderVersion2';
-import Footer from '../../components/common/footer/Footer';
-import { Link, useParams } from 'react-router-dom';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-import liveAuctionData from '../../assets/fake-data/data-live-auction';
-import LiveAuction from '../../layouts/auctions/LiveAuction.jsx';
-import levelIcon from '../../assets/images/icon/level.png';
-import useFetchData from '../../hooks/useQueryData.js';
-import { defaultImage, defaultAvatar, userAvatar } from '../../constant/imageDefault.js';
-import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
-import CountdownComponent from '../../components/CountdownComponent.jsx';
-import { contestStatus, paintingStatusEnable } from './../../constant/Status.js';
-import { topicApi } from '../../api/topicApi.js';
 import { useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import { paintingApi } from '../../api/paintingApi.js';
+import { topicApi } from '../../api/topicApi.js';
+import levelIcon from '../../assets/images/icon/level.png';
+import Footer from '../../components/common/footer/Footer';
+import Header from '../../components/common/header/HeaderVersion2';
+import CountdownComponent from '../../components/CountdownComponent.jsx';
+import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
+import { defaultAvatar, userAvatar } from '../../constant/imageDefault.js';
+import useFetchData from '../../hooks/useQueryData.js';
+import { contestStatus, paintingStatusEnable } from './../../constant/Status.js';
 
 const getAllPaintingByCompetitorIdEndpoint =
   'paintings/getpaintingbyaccountcontest';
@@ -72,7 +70,7 @@ const ContestDetail = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/">Trang chủ</Link>
+                    <Link to="/Client-UI/">Trang chủ</Link>
                   </li>
                   <li>Chi tiết cuộc thi</li>
                 </ul>
@@ -87,7 +85,7 @@ const ContestDetail = () => {
             <div className="col-xl-6 col-md-12">
               <div className="content-left">
                 <div className="media">
-                  <img src={contest?.logo} alt="Contest" />
+                  <img src={contest?.logo} alt="ContestComing" />
                 </div>
               </div>
             </div>
@@ -168,7 +166,7 @@ const ContestDetail = () => {
                                         <Link to="#">
                                           <img
                                             src={levelIcon}
-                                            alt="Axies"
+                                            alt="Icon"
                                             className="avatar"
                                           />
                                         </Link>
@@ -177,15 +175,15 @@ const ContestDetail = () => {
                                       <div className="author-infor">
                                         <div className="name">
                                           <h6>
-                                            <Link to="/author-02">
-                                              {item.level}{' '}
-                                            </Link>
-                                          </h6>{' '}
+                                            <div className='text-black'>
+                                              {item.level}
+                                            </div>
+                                          </h6>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
-                                  <div className="price">
+                                  <div className='text-black'>
                                     <h5>{item.description}</h5>
                                   </div>
                                 </div>
@@ -215,9 +213,9 @@ const ContestDetail = () => {
                                       <div className="author-infor">
                                         <div className="name">
                                           <h6>
-                                            <Link to="/author-02">
+                                            <div className='text-black'>
                                               {item.sponsor?.name}
-                                            </Link>
+                                            </div>
                                           </h6>
                                         </div>
                                       </div>
@@ -234,17 +232,17 @@ const ContestDetail = () => {
 
                       <TabPanel>
                         <div className="provenance">
-                          <p className="mb-5">Nội dung cuộc thi: {contest?.content}</p>
+                          <p className="mb-5 text-black">Nội dung cuộc thi: {contest?.content}</p>
                           <p>{contest?.educationalLevel.map(item => {
                             return (
                               <div className="mb-5 flex justify-content-between">
-                                <p>{item?.description}</p>
-                                <p style={{ width: '120px' }}>Các giải thưởng:</p>
-                                <p style={{ width: '220px' }}>{item?.award.map((award, key) => {
+                                <p className='text-black'>{item?.description}</p>
+                                <p className='text-black' style={{ width: '120px' }}>Các giải thưởng:</p>
+                                <p className='text-black' style={{ width: '220px' }}>{item?.award.map((award, key) => {
                                   return (
                                     <div key={key} className="flex justify-content-center">
-                                      <p style={{ flex: '1', textAlign: 'left' }}>{award?.rank}: </p>
-                                      <p>{award?.quantity}</p>
+                                      <p className='text-black' style={{ flex: '1', textAlign: 'left' }}>{award?.rank}: </p>
+                                      <p className='text-black'>{award?.quantity}</p>
                                     </div>
                                   );
                                 })}</p>
@@ -267,11 +265,13 @@ const ContestDetail = () => {
 };
 
 const registerButton = ({ status, check, contestId, userInfo }) => {
+  console.log('status', status)
+  console.log('check', check)
   if (paintingStatusEnable.includes(status)) {
     if (check) {
       return (
         <Link
-          to={`/submit/${contestId}`}
+          to={`/Client-UI/submit/${contestId}`}
           className="sc-button loadmore style fl-button pri-3">
           <span>Đăng ký dự thi</span>
         </Link>
@@ -289,7 +289,7 @@ const registerButton = ({ status, check, contestId, userInfo }) => {
   if (!userInfo) {
     return (
       <Link
-        to={`/submit/${contestId}`}
+        to={`/Client-UI/submit/${contestId}`}
         className="sc-button loadmore style fl-button pri-3">
         <span>Đăng ký dự thi</span>
       </Link>

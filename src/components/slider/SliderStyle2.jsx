@@ -6,6 +6,7 @@ import { Autoplay } from 'swiper/modules';
 import useFetchData from '../../hooks/useQueryData.js';
 import DotLoaderCustom from '../dotLoader/DotLoader.jsx';
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const GET_16_PAINTINGS = 'paintings/list16winingpainting';
 const SliderStyle2 = () => {
@@ -13,6 +14,7 @@ const SliderStyle2 = () => {
   const title = 'Nét Vẽ Xanh';
   const city = 'thành phố Hồ Chí Minh';
   const description = 'Khơi dậy sự sáng tạo, Vươn xa cùng đam mê';
+  const userInfo = useSelector(state => state.auth.userInfo);
   const { isLoading, isError, data, error } = useFetchData(
     GET_16_PAINTINGS
   );
@@ -40,14 +42,23 @@ const SliderStyle2 = () => {
             <h1 className="heading font-slider">{title}</h1>
             <h1 className="heading font-slider">{city}</h1>
             <p className="sub-heading mg-t-7 mg-bt-39">{description}</p>
-            <div className="flat-bt-slider style2 flex">
+            {userInfo === null ? (
+              <div className="flat-bt-slider style2 flex">
+                <a
+                  href="/Client-UI/login"
+                  className="sc-button header-slider style style-1 note fl-button pri-1"
+                >
+                  <span>Đăng ký ngay</span>
+                </a>
+              </div>
+            ) : (<div className="flat-bt-slider style2 flex">
               <a
-                href="/login"
+                href="/Client-UI/login"
                 className="sc-button header-slider style style-1 note fl-button pri-1"
               >
-                <span>Đăng ký ngay</span>
+                <span>Nộp bài dự thi</span>
               </a>
-            </div>
+            </div>)}
           </div>
 
           <Swiper

@@ -91,13 +91,13 @@ const SideBarStaff = ({
 
   const handleItemClick = val => {
     if (val) {
-      navigate(`/staff-management${val}`);
+      navigate(`/Client-UI/staff-management${val}`);
     }
   };
 
   const triggerLogout = () => {
     dispatch(logout());
-    navigate('/login');
+    navigate('/Client-UI/login');
   };
 
   useEffect(() => {

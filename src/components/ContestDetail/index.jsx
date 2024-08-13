@@ -3,22 +3,21 @@ import {
   ArrowBack,
   CalendarMonth,
   ColorLens,
+  Paid,
   School,
   Topic,
-  Paid,
-  Schedule,
 } from '@mui/icons-material';
-import React, { useEffect, useState } from 'react';
-import styles from './style.module.css';
-import LoadingSkeleton from '../../components/loading/LoadingSkeleton';
 import { IconButton } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { getById } from '../../api/contestStaffApi';
+import LoadingSkeleton from '../../components/loading/LoadingSkeleton';
 import ContestFragment from '../ContestFragment';
 import LevelFragment from '../LevelFragment';
-import RoundFragment from '../RoundFragment';
-import TopicFragment from '../TopicFragment';
 import ResourceFragment from '../ResourceFragment';
+import RoundFragment from '../RoundFragment';
 import ScheduleFragment from '../ScheduleFragment';
+import TopicFragment from '../TopicFragment';
+import styles from './style.module.css';
 
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
@@ -107,7 +106,7 @@ function ContestDetail({ contest, handleBack }) {
           </IconButton>
         </div>
         <div>
-          <h2 className={styles.titleHeader}>Nét vẽ xanh 2023-2024</h2>
+          <h2 className={styles.titleHeader}>Nét vẽ xanh</h2>
         </div>
       </div>
 

@@ -1,6 +1,10 @@
 export const formatDate = dateString => {
-  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-  return new Date(dateString).toLocaleDateString(undefined, options);
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based in JavaScript
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
 };
 
 export const cutString = (string, numberSlice) => {
@@ -14,5 +18,15 @@ export const parseDateEdit = string => {
   const month = String(dateObject.getMonth() + 1).padStart(2, '0');
   const day = String(dateObject.getDate()).padStart(2, '0');
   const formattedDate = `${year}-${month}-${day}`;
+  return formattedDate;
+};
+
+export const parseDataVietnam = string => {
+  const initialDate = string;
+  const dateObject = new Date(initialDate);
+  const year = dateObject.getFullYear();
+  const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObject.getDate()).padStart(2, '0');
+  const formattedDate = `${day}-${month}-${year}`;
   return formattedDate;
 };

@@ -117,3 +117,30 @@
 .btnCreate:hover::before {
     transform: translate3d(100%, 0, 0);
 }
+
+.btnAdd {
+    color: rgba(0, 0, 0, 0.26);
+    font-size: 36px;
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+}
+
+.row {
+    background: rgb(96% 97% 97%);
+    color: rgba(0, 0, 0, 0.87);
+    -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    border-radius: 4px;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    width: 100%;
+}
+
+.row:hover {
+    background: rgb(0% 0% 0% / 0.04);
+}
+
+.row:hover .btnAdd {
+    color: var(--primary-color3);
+}

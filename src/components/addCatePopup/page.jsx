@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import styles from './page.module.css';
-import { addnewCategory, updateCate } from '../../api/categoryApi.js';
-import { toast } from 'react-toastify';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { addnewCategory, updateCate } from '../../api/categoryApi.js';
+import styles from './page.module.css';
 
 function AddCatePopup({
   handleClose,
@@ -109,7 +109,7 @@ function AddCatePopup({
   return (
     <div className={styles.box}>
       <h2 className={`tf-title pb-20 ${styles.title}`}>
-        {isEdit ? `Chỉnh sửa thể loại` : 'Thêm mới thể loại'}
+        {isEdit ? 'Chỉnh sửa thể loại' : 'Thêm mới thể loại'}
       </h2>
       <div className={styles.input_box}>
         <input

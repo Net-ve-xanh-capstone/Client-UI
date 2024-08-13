@@ -22,31 +22,37 @@
 }
 
 .roundTableResponse .col:nth-child(1) {
-    flex-basis: 12%;
+    flex-basis: 11%;
 }
 
 .roundTableResponse .col:nth-child(2) {
-    flex-basis: 15%;
+    flex-basis: 12%;
 }
 
 .roundTableResponse .col:nth-child(3) {
-    flex-basis: 13%;
+    flex-basis: 12%;
 }
 
 .roundTableResponse .col:nth-child(4) {
-    flex-basis: 15%;
+    flex-basis: 12%;
 }
 
 .roundTableResponse .col:nth-child(5) {
-    flex-basis: 15%;
+    flex-basis: 14%;
 }
 
 .roundTableResponse .col:nth-child(6) {
-    flex-basis: 15%;
+    flex-basis: 14%;
 }
 
 .roundTableResponse .col:nth-child(7) {
-    flex-basis: 15%;
+    flex-basis: 11%;
+    text-align: center;
+}
+
+.roundTableResponse .col:nth-child(8) {
+    flex-basis: 10%;
+    text-align: center;
 }
 
 .roundTableResponse .col button:hover {

@@ -12,6 +12,7 @@ const Painting = props => {
     `${userInfo.Id}`,
   );
   const painting = data?.data?.result?.list;
+  
   if (isError) {
     return <span>Error: {error.message}</span>;
   }

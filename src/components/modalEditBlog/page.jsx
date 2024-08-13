@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styles from './page.module.css';
 import CloseIcon from '@mui/icons-material/Close';
-import { getBlogId, updateBlog } from '../../api/blogApi.js';
-import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
-import ModalAddingImg from '../ModalAddingImage/page.jsx';
-import { toast } from 'react-toastify';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { getBlogId, updateBlog } from '../../api/blogApi.js';
+import ModalAddingImg from '../ModalAddingImage/page.jsx';
+import styles from './page.module.css';
+import Select from 'react-select';
+import { allCategory } from '../../api/categoryApi.js';
 
 function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
   const { userInfo } = useSelector(state => state.auth);
@@ -14,14 +15,18 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
   const [txtTitles, setTxtTitles] = useState('');
   const [txtDes, setTxtDes] = useState('');
   const [imageUrl, setImageUrl] = useState([]);
-  const [supDesValue, setSupDes] = useState('');
   const [url, setUrl] = useState('');
+
+  const [loadingCate, setLoadingCategory] = useState(false);
+  const [listCate, setListCategory] = useState([{ value: '', label: '' }]);
+  const [currentCate, setCurrentCate] = useState({ value: '', label: '' });
+
+  const [idCate, setIdCate] = useState('');
 
   const [openEditImage, setOpenEditImage] = useState(false);
 
   const txtTitle = useRef(null);
   const txtDesRef = useRef(null);
-  const txtSupDes = useRef(null);
 
   const inputArea = [
     {
@@ -34,15 +39,6 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
       },
     },
     {
-      ref: txtSupDes,
-      placeHoder: 'Mô tả bài viết',
-      value: supDesValue,
-      onchange: e => {
-        setSupDes(e.target.value);
-        resizeSupDes(e.target.value);
-      },
-    },
-    {
       ref: txtDesRef,
       placeHoder: 'Nội dung bài viết',
       value: txtDes,
@@ -52,6 +48,41 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
       },
     },
   ];
+
+  // styling the dropdown select
+  const customStyles = {
+    control: (base, state) => ({
+      ...base,
+      background: 'transparent',
+      border: '1px solid #8a8aa0',
+      // match with the menu
+      borderRadius: state.isFocused ? '0.625rem' : '0.625rem',
+      color: '#070F2B',
+      // Overwrittes the different states of border
+      borderColor: 'none !important',
+      // Removes weird border around container
+
+      height: '5rem',
+      width: '100%',
+      fontSize: '1.5rem !important',
+      '&:hover': {
+        // Overwrittes the different states of border
+        borderColor: 'none',
+      },
+    }),
+    menu: base => ({
+      ...base,
+      // override border radius to match the box
+      borderRadius: 0,
+      // kill the gap
+      marginTop: 0,
+    }),
+    menuList: base => ({
+      ...base,
+      // kill the white space on first and last option
+      padding: 0,
+    }),
+  };
 
   // close popup
   const handleClosePopup = () => {
@@ -78,16 +109,6 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
     }
   };
 
-  const resizeSupDes = value => {
-    if (!txtSupDes.current) {
-      return;
-    }
-    if (value === '') {
-      txtSupDes.current.style.height = 'auto';
-    }
-    txtSupDes.current.style.height = `${txtSupDes.current.scrollHeight}px`;
-  };
-
   // resize with text whilt typing
   const resizeTextDes = value => {
     if (!txtDesRef.current) {
@@ -108,6 +129,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
         setTxtDes(data.description);
         setImageUrl(data.images);
         setUrl(data.url);
+        setCurrentCate({ value: data.categoryId, label: data.categoryName });
       })
       .catch(err => console.log(err));
   };
@@ -116,7 +138,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
   const triggerUpdate = async payload => {
     try {
       await updateBlog(payload);
-      recallBlogData();
+      recallBlogData(1);
       toast.success('Bài viết đã được cập nhật thành công !!!', {
         position: 'top-right',
         autoClose: 5000,
@@ -154,6 +176,8 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
         description: txtDes,
         currentUserId: userInfo.Id,
         newImages: [...imageUrl],
+        categoryId:
+          idCate !== '' && idCate !== null ? idCate : currentCate.value,
       };
       if (validation(payload)) {
         triggerUpdate(payload);
@@ -170,28 +194,53 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
         });
       }
     } else {
-      payload = {
-        id: blogId,
-        url: imageUrl,
-        title: txtTitles,
-        description: txtDes,
-        currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c',
-      };
-      if (validation(payload)) {
-        triggerUpdate(payload);
-      } else {
-        toast.error('Không được để trống bất cứ trường dữ liệu nào !!!', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-      }
+      toast.warning('Hãy thêm ảnh!!!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
+    // else {
+    //   payload = {
+    //     id: blogId,
+    //     url: [...imageUrl],
+    //     title: txtTitles,
+    //     description: txtDes,
+    //     categoryId:'',
+    //     currentUserId: 'c4c9fb26-344a-44cb-ad18-6fc2d2604c4c',
+    //   };
+    //   if (validation(payload)) {
+    //     triggerUpdate(payload);
+    //   } else {
+    //     toast.error('Không được để trống bất cứ trường dữ liệu nào !!!', {
+    //       position: 'top-right',
+    //       autoClose: 5000,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //       theme: 'light',
+    //     });
+    //   }
+    // }
+  };
+
+  //calling api to getting all of category not use
+  const getCategory = async () => {
+    setLoadingCategory(true);
+    await allCategory()
+      .then(res => {
+        const data = res.data.result;
+        setListCategory(data.map(vl => ({ value: vl.id, label: vl.name })));
+      })
+      .catch(err => console.log(err))
+      .finally(() => setLoadingCategory(false));
   };
 
   // rerender and calling the event for resize the box input
@@ -206,7 +255,9 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
 
   // calling blog by id in first time
   useEffect(() => {
+    getCategory();
     fetchData(blogId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -222,7 +273,7 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
           <div className={styles.scroll_place}>
             <div className={styles.title_line}>
               <h2 className={`tf-title pb-20 ${styles.title_page}`}>
-                Chỉnh sữa bài viết
+                Chỉnh sửa bài viết
               </h2>
               <CloseIcon
                 onClick={() => setOpenEdit(null)}
@@ -273,14 +324,37 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
                 </>
               )}
             </div>
-            {inputArea.map((val, _) => (
-              <div key={val} className={styles.input_title}>
-                <textarea
-                  ref={val.ref}
-                  className={styles.title_textarea}
-                  placeholder={val.placeHoder}
-                  value={val.value}
-                  onChange={val.onchange}></textarea>
+            {/* category */}
+            <div className={styles.category_box}>
+              <div className={styles.category}>
+                <div className={styles.select_topic}>
+                  <Select
+                    isClearable={true}
+                    placeholder={<div>Thể loại</div>}
+                    styles={customStyles}
+                    options={listCate}
+                    isLoading={loadingCate}
+                    value={currentCate}
+                    onChange={val => {
+                      setIdCate(val?.value);
+                      setCurrentCate({ value: val?.value, label: val?.label });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            {/* ending category */}
+            {inputArea.map(val => (
+              <div key={val} className={styles.box_field}>
+                <p style={{ fontSize: '2.2rem' }}>{val.placeHoder}</p>
+                <div className={styles.input_title}>
+                  <textarea
+                    ref={val.ref}
+                    className={styles.title_textarea}
+                    placeholder="...."
+                    value={val.value}
+                    onChange={val.onchange}></textarea>
+                </div>
               </div>
             ))}
 
@@ -288,10 +362,10 @@ function PopupBlog({ setOpenEdit, blogId, recallBlogData }) {
               <span
                 className={styles.btn_find}
                 onClick={() => setOpenEdit(null)}>
-                <h5>Cancel</h5>
+                <h5>Huỷ</h5>
               </span>
               <span className={styles.btn_find} onClick={() => updateImage()}>
-                <h5>Save</h5>
+                <h5>Lưu</h5>
               </span>
             </div>
           </div>

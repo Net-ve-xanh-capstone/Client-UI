@@ -1,12 +1,13 @@
 import React from 'react';
 import { useDropdown } from './dropdown-context.jsx';
 
-const List = ({ children }) => {
+const List = ({ children, className }) => {
   const { show } = useDropdown();
   return (
     <>
       {show && (
         <div
+          className={className}
           style={{
             border: '1px solid rgba(138, 138, 160, 0.3)',
             outline: 0,

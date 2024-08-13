@@ -51,7 +51,7 @@ const HistoryPage = () => {
               </div>
               <div className="breadcrumbs style2">
                 <ul>
-                  <li><Link to="/">Trang chủ</Link></li>
+                  <li><Link to="/Client-UI/">Trang chủ</Link></li>
                   <li>Lịch sử</li>
                 </ul>
               </div>
@@ -73,7 +73,7 @@ const HistoryPage = () => {
                     <h3>
                       <div>Tên tranh: {history?.name}</div>
                     </h3>
-                    <div className="status">{created?.message} vào ngày</div>
+                    <div className="status text-black">{created?.message} vào ngày</div>
                     <div className="author">{formatDate(created?.time)}</div>
                   </div>
                 </div>
@@ -94,7 +94,7 @@ const HistoryPage = () => {
                     <h3>
                       <div>Tên tranh: {history?.name}</div>
                     </h3>
-                    <div className="status">{reviewed?.message} vào ngày</div>
+                    <div className="status text-black">{reviewed?.message} vào ngày</div>
                     <div className="author">{formatDate(reviewed?.time)}</div>
                   </div>
                 </div>
@@ -115,7 +115,7 @@ const HistoryPage = () => {
                       <h3>
                         <div>Tên tranh: {history?.name}</div>
                       </h3>
-                      <div className="status">{submitted?.message} vào ngày</div>
+                      <div className="status text-black">{submitted?.message} vào ngày</div>
                       <div className="author">{formatDate(submitted?.time)}</div>
                     </div>
                   </div>
@@ -136,7 +136,7 @@ const HistoryPage = () => {
                       <h3>
                         <div>Tên tranh: {history?.name}</div>
                       </h3>
-                      <div className="status">{updated?.message} vào ngày</div>
+                      <div className="status text-black">{updated?.message} vào ngày</div>
                       <div className="author">{formatDate(updated?.time)}</div>
                     </div>
                   </div>
@@ -157,7 +157,7 @@ const HistoryPage = () => {
                       <h3>
                         <div>Tên tranh: {history?.name}</div>
                       </h3>
-                      <div className="status">{finalDecision?.message} vào ngày</div>
+                      <div className="status text-black">{finalDecision?.message} vào ngày</div>
                       <div className="author">{formatDate(finalDecision?.time)}</div>
                     </div>
                   </div>

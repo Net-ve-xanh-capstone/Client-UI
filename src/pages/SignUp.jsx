@@ -27,6 +27,7 @@ import { setDefault } from '../store/auth/authSlice';
 import { color } from '../constant/Color.js';
 import { regexEmail, regexFullNameVN, regexPhone } from '../constant/Regex.js';
 import { Dropdown } from '../components/dropdown';
+import { addressApi } from '../api/addressApi.js';
 
 const SignUp = () => {
   dayjs.extend(utc);
@@ -37,9 +38,16 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [address, setAddress] = useState({
+    districts: [],
+    wards: [],
+    selectedDistrict: '',
+  });
+  
   const handleClose = () => {
     setOpen(false);
   };
+  
   const {
     register: { success, message, loading },
     jwtToken,
@@ -70,6 +78,18 @@ const SignUp = () => {
       .string()
       .required('Vui lòng chọn ngày sinh')
       .typeError('Vui lòng chọn ngày sinh'),
+    // address: yup
+    //   .string()
+    //   .required('Vui lòng nhập địa chỉ của bạn')
+    //   .typeError('Vui lòng nhập địa chỉ của bạn'),
+    // district: yup
+    //   .string()
+    //   .required('Vui lòng chọn quận')
+    //   .typeError('Vui lòng chọn quận'),
+    // ward: yup
+    //   .string()
+    //   .required('Vui lòng chọn phường')
+    //   .typeError('Vui lòng chọn phường'),
   });
 
   const {
@@ -89,7 +109,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (jwtToken) {
-      navigate('/');
+      navigate('/Client-UI/');
     }
     if (success !== null) {
       setOpen(true);
@@ -102,7 +122,7 @@ const SignUp = () => {
       setTimeout(() => {
         setOpen(false);
         dispatch(setDefault());
-        navigate('/login');
+        navigate('/Client-UI/login');
       }, 3000);
     }
     // clear timeout
@@ -111,6 +131,18 @@ const SignUp = () => {
     };
   }, [success]);
 
+  useEffect(() => {
+      async function fetchData() {
+        const data = await addressApi.getDistrict();
+        setAddress({
+          ...address,
+          districts: data?.data?.result,
+        });
+      }
+
+      fetchData();
+    },
+    []);
   const handleRegister = async data => {
     const isValid = await trigger();
     if (!isValid) return;
@@ -132,11 +164,23 @@ const SignUp = () => {
     return value;
   };
 
-  const handleSelectDropdownOption = (name, value) => {
-    setValue(name, value.name);
+  const handleSelectDistrictOption = async (name, value) => {
+    setValue(name, value?.name);
     setError(name, '');
+    const districtId = value?.id;
+    const ward = await addressApi.getWard(districtId);
+    setAddress({
+      ...address,
+      wards: ward?.data?.result?.wards,
+      selectedDistrict: districtId,
+    });
   };
 
+  const handleSelectWardOption = async (name, value) => {
+    setValue(name, value?.name);
+    setError(name, '');
+  };
+  
   const valueArray = [
     { value: '0', label: 'Nam' },
     { value: '1', label: 'Nữ' },
@@ -156,7 +200,7 @@ const SignUp = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/">Trang chủ</Link>
+                    <Link to="/Client-UI/">Trang chủ</Link>
                   </li>
                   <li>Đăng ký</li>
                 </ul>
@@ -303,86 +347,90 @@ const SignUp = () => {
                       </Grid>
                     </Grid>
 
-                    <Grid container>
-                      <Grid item md={12}>
-                        {/* địa chỉ */}
-                        <div className="flex align-items-start mb-15">
-                          {/* Quận */}
-                          <div className="inner-row-form style-2 w-50 mr-5">
-                            <div id="item-create" className="dropdown">
-                              {errors.district && (
-                                <span className="text-danger h5">
-                              {errors.district.message}
-                            </span>
-                              )}
-                              <Dropdown
-                                errors={errors.district?.message}>
-                                <Dropdown.Select
-                                  placeholder={getDropdownOptions(
-                                    'district',
-                                    'Chọn quận',
-                                  )}></Dropdown.Select>
-                                <Dropdown.List>
-                                  {valueArray.map(topic => (
-                                    <Dropdown.Option
-                                      key={topic?.name}
-                                      onClick={() =>
-                                        handleSelectDropdownOption('topic', topic)
-                                      }>
-                                      {topic?.name}
-                                    </Dropdown.Option>
-                                  ))}
-                                </Dropdown.List>
-                              </Dropdown>
-                            </div>
-                          </div>
-
-                          {/* Phường */}
-                          <div className="inner-row-form style-2 w-50">
-                            <div id="item-create" className="dropdown">
-                              {errors.ward && (
-                                <span className="text-danger h5">
-                              {errors.ward.message}
-                            </span>
-                              )}
-                              <Dropdown
-                                errors={errors.ward?.message}>
-                                <Dropdown.Select
-                                  placeholder={getDropdownOptions(
-                                    'ward',
-                                    'Chọn phường',
-                                  )}></Dropdown.Select>
-                                <Dropdown.List>
-                                  {valueArray.map(topic => (
-                                    <Dropdown.Option
-                                      key={topic?.name}
-                                      onClick={() =>
-                                        handleSelectDropdownOption('topic', topic)
-                                      }>
-                                      {topic?.name}
-                                    </Dropdown.Option>
-                                  ))}
-                                </Dropdown.List>
-                              </Dropdown>
-                            </div>
-                          </div>
-                        </div>
-                      </Grid>
-                    </Grid>
-                    <Grid container>
-                      <Grid item md={12}>
-                        {/* địa chỉ cụ thể */}
-                        <TextFieldCommon
-                          control={control}
-                          error={errors.adress?.message}
-                          id="adress"
-                          name="adress"
-                          placeholder="Nhập địa chỉ cụ thể như số nhà, tên đường, trường, lớp, ...."
-                          className="mb-15 mt-3"
-                          autoFocus
-                        />
-                      </Grid>
-                    </Grid>
+                    {/*<Grid container>*/}
+                    {/*  <Grid item md={12}>*/}
+                    {/*    /!* địa chỉ *!/*/}
+                    {/*    <div className="flex align-items-start mb-15">*/}
+                    {/*      /!* Quận *!/*/}
+                    {/*      <div className="inner-row-form style-2 w-50 mr-5">*/}
+                    {/*        <div id="item-create" className="dropdown">*/}
+                    {/*          {errors.district && (*/}
+                    {/*            <span className="text-danger h5">*/}
+                    {/*          {errors.district.message}*/}
+                    {/*        </span>*/}
+                    {/*          )}*/}
+                    {/*          <Dropdown*/}
+                    {/*            errors={errors.district?.message}>*/}
+                    {/*            <Dropdown.Select className='font-size-14'*/}
+                    {/*              placeholder={getDropdownOptions(*/}
+                    {/*                'district',*/}
+                    {/*                'Chọn quận',*/}
+                    {/*              )}></Dropdown.Select>*/}
+                    {/*            <Dropdown.List className='font-size-14'>*/}
+                    {/*              {address.districts && address.districts.map(district => (*/}
+                    {/*                <Dropdown.Option*/}
+                    {/*                  key={district?.name}*/}
+                    {/*                  onClick={() =>*/}
+                    {/*                    handleSelectDistrictOption('district', district)*/}
+                    {/*                  }>*/}
+                    {/*                  {district?.name}*/}
+                    {/*                </Dropdown.Option>*/}
+                    {/*              ))}*/}
+                    {/*            </Dropdown.List>*/}
+                    {/*          </Dropdown>*/}
+                    {/*        </div>*/}
+                    {/*      </div>*/}
+                    
+                    {/*      /!* Phường *!/*/}
+                    {/*      <div className="inner-row-form style-2 w-50">*/}
+                    {/*        <div id="item-create" className="dropdown">*/}
+                    {/*          {errors.ward && (*/}
+                    {/*            <span className="text-danger h5">*/}
+                    {/*          {errors.ward.message}*/}
+                    {/*        </span>*/}
+                    {/*          )}*/}
+                    {/*          <Dropdown*/}
+                    {/*            classname='text-success'*/}
+                    {/*            errors={errors.ward?.message}>*/}
+                    {/*            <Dropdown.Select*/}
+                    {/*              className='font-size-14'*/}
+                    {/*              placeholder={getDropdownOptions(*/}
+                    {/*                'ward',*/}
+                    {/*                'Chọn phường',*/}
+                    {/*              )}></Dropdown.Select>*/}
+                    {/*            <Dropdown.List*/}
+                    {/*              className='font-size-14'*/}
+                    {/*            >*/}
+                    {/*              {address.wards && address.wards.map(ward => (*/}
+                    {/*                <Dropdown.Option*/}
+                    {/*                  key={ward?.name}*/}
+                    {/*                  onClick={() =>*/}
+                    {/*                    handleSelectWardOption('ward', ward)*/}
+                    {/*                  }>*/}
+                    {/*                  {ward?.name}*/}
+                    {/*                </Dropdown.Option>*/}
+                    {/*              ))}*/}
+                    {/*            </Dropdown.List>*/}
+                    {/*          </Dropdown>*/}
+                    {/*        </div>*/}
+                    {/*      </div>*/}
+                    {/*    </div>*/}
+                    {/*  </Grid>*/}
+                    {/*</Grid>*/}
+                    {/*<Grid container>*/}
+                    {/*  <Grid item md={12}>*/}
+                    {/*    /!* địa chỉ cụ thể *!/*/}
+                    {/*    <TextFieldCommon*/}
+                    {/*      control={control}*/}
+                    {/*      error={errors.address?.message}*/}
+                    {/*      id="address"*/}
+                    {/*      name="address"*/}
+                    {/*      placeholder="Nhập địa chỉ cụ thể như số nhà, tên đường, trường, lớp, ...."*/}
+                    {/*      className="mb-15 mt-3"*/}
+                    {/*      autoFocus*/}
+                    {/*    />*/}
+                    {/*  </Grid>*/}
+                    {/*</Grid>*/}
                     <BootstrapDialog
                       onClose={handleClose}
                       aria-labelledby="customized-dialog-title"
@@ -420,7 +468,7 @@ const SignUp = () => {
                     <div className="mt-5 text-right h5">
                       Bạn đã có tài khoản? {''}
                       <Link
-                        to={'/login'}
+                        to={'/Client-UI/login'}
                         className="font-weight-bold">
                         đăng nhập
                       </Link>

@@ -15,24 +15,24 @@ const TitleComponent = props => {
                 width: '160px',
             }}
             id="menu-primary-menu"
-            className="menu h5">
+            className="menu h5 select-none">
             <li className="mb-15">
-                <Link to='/my-painting'>
-                    <i className="fab fa-accusoft"></i>{' '}
+                <Link to='/Client-UI/my-painting'>
+                    <i className="fab fa-accusoft mr-2"></i>
                     <span>Tranh của tôi</span>
                 </Link>
             </li>
             <li className="mb-15">
-              <Link to='/edit-profile'>
-                    <i className="fas fa-pencil-alt"></i>{' '}
+              <Link to='/Client-UI/edit-profile'>
+                    <i className="fas fa-pencil-alt mr-2"></i>
                     <span> Thông tin cá nhân</span>
                 </Link>
             </li>
             <li>
-                <a href="/#" id="logout" onClick={handleLogout}>
-                    <i className="fal fa-sign-out"></i>
+                <Link className='cursor-pointer' id="logout" onClick={handleLogout}>
+                    <i className="fal fa-sign-out mr-3"></i>
                     <span>Đăng xuất</span>
-                </a>
+                </Link>
             </li>
         </ul>
     );
@@ -42,7 +42,7 @@ const InsideComponent = forwardRef(function MyComponent(props, ref) {
   return (
         <div {...props} ref={ref}>
           <div className="sc-button header-slider style style-1 fl-button pri-1 flex  align-items-center">
-            <div className="info">
+            <div className="info select-none">
               <span>Thông tin</span>
             </div>
           </div>

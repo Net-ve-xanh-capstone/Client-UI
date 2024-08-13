@@ -1,8 +1,8 @@
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import React, { useEffect, useRef, useState } from 'react';
-import Form from 'react-bootstrap/Form';
 import { useSelector } from 'react-redux';
+import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { addnewBlog } from '../../api/blogApi.js';
 import { allCategory } from '../../api/categoryApi.js';
@@ -12,12 +12,11 @@ import styles from './page.module.css';
 function AddNewBlog({ triggerClose, refetchData }) {
   const { userInfo } = useSelector(state => state.auth);
   const [listCategory, setListCategory] = useState([]);
-  const [txtCategory, setTxtCategory] = useState('');
 
   const [txtTitles, setTxtTitles] = useState('');
   const [txtDes, setTxtDes] = useState('');
-  const [supDesValue, setSupDes] = useState('');
   const [idCategory, setIdCategory] = useState('');
+  const [loadingCategory, setLoadingCategoryr] = useState(false);
 
   // state handle popup
   const [openAddingImage, setOpenAddingImage] = useState(false);
@@ -25,7 +24,6 @@ function AddNewBlog({ triggerClose, refetchData }) {
 
   const txtTitle = useRef(null);
   const txtDesRef = useRef(null);
-  const txtSupDes = useRef(null);
 
   const inputArea = [
     {
@@ -38,15 +36,6 @@ function AddNewBlog({ triggerClose, refetchData }) {
       },
     },
     {
-      ref: txtSupDes,
-      placeHoder: 'Mô tả bài viết',
-      value: supDesValue,
-      onchange: e => {
-        setSupDes(e.target.value);
-        resizeSupDes(e.target.value);
-      },
-    },
-    {
       ref: txtDesRef,
       placeHoder: 'Nội dung bài viết',
       value: txtDes,
@@ -56,6 +45,41 @@ function AddNewBlog({ triggerClose, refetchData }) {
       },
     },
   ];
+
+  // styling the dropdown select
+  const customStyles = {
+    control: (base, state) => ({
+      ...base,
+      background: 'transparent',
+      border: '1px solid #8a8aa0',
+      // match with the menu
+      borderRadius: state.isFocused ? '0.625rem' : '0.625rem',
+      color: '#070F2B',
+      // Overwrittes the different states of border
+      borderColor: 'none !important',
+      // Removes weird border around container
+
+      height: '5rem',
+      width: '100%',
+      fontSize: '1.5rem !important',
+      '&:hover': {
+        // Overwrittes the different states of border
+        borderColor: 'none',
+      },
+    }),
+    menu: base => ({
+      ...base,
+      // override border radius to match the box
+      borderRadius: 0,
+      // kill the gap
+      marginTop: 0,
+    }),
+    menuList: base => ({
+      ...base,
+      // kill the white space on first and last option
+      padding: 0,
+    }),
+  };
 
   // close popup
   const handleClosePopup = () => {
@@ -90,17 +114,6 @@ function AddNewBlog({ triggerClose, refetchData }) {
   };
 
   //auto resize fix with the content
-  const resizeSupDes = value => {
-    if (!txtSupDes.current) {
-      return;
-    }
-    if (value === '') {
-      txtSupDes.current.style.height = 'auto';
-    }
-    txtSupDes.current.style.height = `${txtSupDes.current.scrollHeight}px`;
-  };
-
-  //auto resize fix with the content
   const resizeTextDes = value => {
     if (!txtDesRef.current) {
       return;
@@ -113,12 +126,14 @@ function AddNewBlog({ triggerClose, refetchData }) {
 
   //calling api to getting all of category not use
   const getCategory = async () => {
+    setLoadingCategoryr(true);
     await allCategory()
       .then(res => {
         const data = res.data.result;
-        setListCategory(data);
+        setListCategory(data.map(vl => ({ value: vl.id, label: vl.name })));
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => setLoadingCategoryr(false));
   };
 
   // post the blog with calling api
@@ -136,7 +151,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
           theme: 'light',
         });
         triggerClose(null);
-        refetchData();
+        refetchData(1);
       })
       .catch(err => {
         toast.error(err, {
@@ -275,50 +290,44 @@ function AddNewBlog({ triggerClose, refetchData }) {
 
           {/* category */}
           <div className={styles.category_box}>
-            <Form.Group controlId="custom-select" className={styles.box_select}>
-              <Form.Control
-                value={txtCategory}
-                onChange={e => {
-                  const selectedOption = e.target.selectedOptions[0];
-                  const selectedId = selectedOption ? selectedOption.id : '';
-                  setIdCategory(selectedId);
-                  setTxtCategory(e.target.value);
-                }}
-                as="select"
-                className={`rounded-0 shadow ${styles.form_selected}`}>
-                <option className="d-none" value="">
-                  Chọn thể loại bài viết
-                </option>
-                {listCategory?.length &&
-                  listCategory.map(vl => (
-                    <option id={vl.id} key={vl.id}>
-                      {vl.name}
-                    </option>
-                  ))}
-              </Form.Control>
-            </Form.Group>
+            <div className={styles.category}>
+              <div className={styles.select_topic}>
+                <Select
+                  isClearable={true}
+                  placeholder={<div>Thể loại</div>}
+                  styles={customStyles}
+                  options={listCategory}
+                  isLoading={loadingCategory}
+                  defaultValue={{ value: '', label: 'Thể loại' }}
+                  onChange={val => setIdCategory(val?.value)}
+                />
+              </div>
+            </div>
           </div>
           {/* ending category */}
 
           {/* text editor */}
           {inputArea.map(vl => (
-            <div key={vl} className={styles.title_box}>
-              <textarea
-                ref={vl.ref}
-                className={styles.title_input}
-                placeholder={vl.placeHoder}
-                value={vl.value}
-                onChange={vl.onchange}></textarea>
+            <div key={vl} className={styles.box_field}>
+              <p style={{ fontSize: '2.2rem' }}>{vl.placeHoder}</p>
+              <div className={styles.title_box}>
+                <textarea
+                  ref={vl.ref}
+                  className={styles.title_input}
+                  placeholder="...."
+                  value={vl.value}
+                  onChange={vl.onchange}></textarea>
+              </div>
             </div>
           ))}
           {/*ending text editor */}
 
           <div className={styles.btn_click}>
             <span className={styles.btn_find} onClick={() => closePopup()}>
-              <h5>Cancel</h5>
+              <h5>Huỷ</h5>
             </span>
             <span className={styles.btn_find} onClick={() => postImage()}>
-              <h5>Post</h5>
+              <h5>Tạo</h5>
             </span>
           </div>
         </div>

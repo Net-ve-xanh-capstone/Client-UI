@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Fallback } from '../../../constant/Fallback';
@@ -6,18 +6,24 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { userAvatar } from '../../../constant/imageDefault.js';
 import PropTypes from 'prop-types';
 import 'react-tabs/style/react-tabs.css';
+import useFetchData from '../../../hooks/useQueryData.js';
+import DotLoaderCustom from '../../../components/dotLoader/DotLoader.jsx';
+
+const GET_3_YEARS = 'accounts/getlistwinnerin3nearestcontest';
+
 const TopCompetitorNearly = () => {
-  const [dataTopSellerTab] = useState([
-    {
-      title: '1 năm'
-    },
+  const [dataTopCompetitorTab] = useState([
+    // {
+    //   title: '1 năm'
+    // },
     {
       title: '3 năm'
     },
-    {
-      title: '5 năm'
-    }
+    // {
+    //   title: '5 năm'
+    // }
   ]);
+  
   const [dataTopSellerPanel] = useState([
     {
       id: 1,
@@ -125,6 +131,29 @@ const TopCompetitorNearly = () => {
       ]
     }
   ]);
+  
+  const [top3Years, setTop3Years] = useState([{}]);
+  
+  const { isLoading, isError, data, error }
+    = useFetchData(GET_3_YEARS);
+
+  const top3YearsData = data?.data?.result;
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log(data);
+  //     setTop3Years([{
+  //       id: 1,
+  //       dataTop3: data?.data?.result
+  //     }]);
+  //   }
+  // }, [data]);
+  if (isLoading) {
+    return <DotLoaderCustom />;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
   return (
     <div>
       <section className="tf-section top-seller home5 s2 mobie-style bg-style2">
@@ -135,21 +164,21 @@ const TopCompetitorNearly = () => {
               <div className="flat-tabs seller-tab tablet-30">
                 <Tabs>
                   <TabList>
-                    {dataTopSellerTab.map((item, index) => (
+                    {dataTopCompetitorTab.map((item, index) => (
                       <Tab key={index}>{item.title}</Tab>
                     ))}
                   </TabList>
 
                   <div className="content-tab">
-                    {dataTopSellerPanel.map((item) => (
+                    {top3YearsData.map((item) => (
                       <TabPanel key={item.id}>
-                        {item.dataTopSellerContent.map((item, index) => (
+                        {item?.top3Years.map((item, index) => (
                           <div className="box-item" key={index}>
                             <div className="sc-author-box style-3">
                               <div className="author-avatar">
-                                <Link to="/authors-02">
+                                <div>
                                   <img src={item.img} alt="Axies" className="avatar" />
-                                </Link>
+                                </div>
                                 <div className="badge">
                                   <i className="ripple"></i>
                                 </div>

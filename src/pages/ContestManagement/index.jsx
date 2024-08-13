@@ -16,15 +16,53 @@ import ContestDetail from '../../components/ContestDetail';
 import DeleteModal from '../../components/DeleteModal';
 import ModalForm from '../../components/ModalForm';
 import { formatDate } from '../../utils/formatDate';
+import AddIcon from '@mui/icons-material/Add';
 import styles from './style.module.css';
+import { TablePagination } from '@mui/material';
+
+const CustomFooter = ({
+  addEmptyRow,
+  count,
+  page,
+  rowsPerPage,
+  handlePageChange,
+  handleRowsPerPageChange,
+}) => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}>
+      <div className={`flex justify-content-center ${styles.row}`}>
+        <AddIcon className={styles.btnAdd} onClick={() => addEmptyRow()} />
+      </div>
+      <TablePagination
+        sx={{ width: '100%' }}
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[4, 10, 20, 30]}
+        count={count}
+        page={page}
+        component="div"
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+      />
+    </div>
+  );
+};
 
 function ContestManagement() {
   const [isOpenDetail, setIsOpenDetail] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [contest, setContest] = useState([]);
+  const [contestPaging, setContestPaging] = useState([]);
   const [idContestDelete, setIdContestDelete] = useState();
   const [selectedContest, setSelectedContest] = useState(null); // State để lưu trữ contest được chọn
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(4);
   const { userInfo } = useSelector(state => state.auth);
 
   useEffect(() => {
@@ -34,10 +72,30 @@ function ContestManagement() {
   const getContest = async () => {
     try {
       const { data } = await getAll();
-      setContest(data?.result);
+      const fetchedContest = data?.result || [];
+      setContest(fetchedContest);
     } catch (e) {
       console.log('error', e);
     }
+  };
+
+  const getPaginatedData = () => {
+    const start = page * rowsPerPage;
+    const end = Math.min(start + rowsPerPage, contest.length);
+    return contest.slice(start, end);
+  };
+
+  useEffect(() => {
+    setContestPaging(getPaginatedData());
+  }, [page, rowsPerPage, contest]);
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleRowsPerPageChange = event => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const handleOpenDetail = id => {
@@ -73,6 +131,7 @@ function ContestManagement() {
   };
 
   const handleActiveDate = data => {
+    if (data.rowData.every(item => item === undefined)) return false;
     let currentDate = new Date().toJSON().slice(0, 10);
     const startDate = data.rowData[1].split('T')[0];
     const endDate = data.rowData[2].split('T')[0];
@@ -83,12 +142,25 @@ function ContestManagement() {
   };
 
   const handleActiveDelete = data => {
+    if (data.rowData.every(item => item === undefined)) return false;
     let currentDate = new Date().toJSON().slice(0, 10);
     const startDate = data.rowData[1].split('T')[0];
 
     if (currentDate < startDate) return false;
 
     return true;
+  };
+
+  const addEmptyRow = () => {
+    const emptyRow = {
+      id: '',
+      name: '',
+      startTime: '',
+      endTime: '',
+      accountFullName: '',
+      status: '',
+    };
+    setContest([emptyRow, ...contest]);
   };
 
   const columns = [
@@ -98,7 +170,9 @@ function ContestManagement() {
       options: {
         customBodyRender: value => (
           <span>
-            {value.length > 50 ? value.substring(0, 50) + '...' : value}
+            {value && value.length > 50
+              ? value.substring(0, 50) + '...'
+              : value}
           </span>
         ),
       },
@@ -125,7 +199,7 @@ function ContestManagement() {
       name: 'TRẠNG THÁI',
       options: {
         customBodyRender: (value, tableData) => {
-          const isActive = handleActiveDate(tableData);
+          const isActive = tableData && handleActiveDate(tableData);
 
           return (
             <>
@@ -175,8 +249,7 @@ function ContestManagement() {
   const options = {
     selectableRows: 'none',
     elevation: 5,
-    rowsPerPage: 4,
-    rowsPerPageOptions: [4, 10, 20, 30],
+    rowsPerPage: rowsPerPage,
     responsive: 'standard',
     print: false,
     download: false,
@@ -195,6 +268,16 @@ function ContestManagement() {
         filterTable: 'Lọc bảng',
       },
     },
+    customFooter: () => (
+      <CustomFooter
+        page={page}
+        rowsPerPage={rowsPerPage}
+        handlePageChange={handlePageChange}
+        addEmptyRow={addEmptyRow}
+        handleRowsPerPageChange={handleRowsPerPageChange}
+        count={contest.length}
+      />
+    ),
     onRowClick: (rowData, rowMeta) => {
       const obj = rowData[5]?.props?.children?.find(
         item => item.type === 'span',
@@ -278,7 +361,7 @@ function ContestManagement() {
                 <div className="table-contest table-contest-detail">
                   <MUIDataTable
                     //title={'Quản lí cuộc thi'}
-                    data={contest}
+                    data={contestPaging}
                     columns={columns}
                     options={options}
                   />

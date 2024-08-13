@@ -121,7 +121,7 @@ const ProfilePage = () => {
     };
   }, [image, userInfo?.Id]);
   
-  const { isLoading, isError, data, error } = useFetchData(
+  const { isLoading, isError, data, error, refetch } = useFetchData(
     'accounts/getaccountbyid', `${userInfo.Id}`
   );
   const info = data?.data?.result;
@@ -133,7 +133,8 @@ const ProfilePage = () => {
         setImageUrl(userAvatar);
       }
     }
-  }, [data]);
+    refetch();
+  }, [data, refetch, userInfo.Id]);
 
   if (isLoading) {
     return <DotLoaderCustom />;
@@ -158,7 +159,7 @@ const ProfilePage = () => {
                             <div className="breadcrumbs style2">
                                 <ul>
                                     <li>
-                                        <Link to="/">Trang chủ</Link>
+                                        <Link to="/Client-UI/">Trang chủ</Link>
                                     </li>
                                     
                                     <li>Thông tin cá nhân</li>

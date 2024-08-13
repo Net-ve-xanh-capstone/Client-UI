@@ -9,7 +9,7 @@ const menus = [
       {
         id: 1,
         sub: 'Trang chủ',
-        links: '/',
+        links: '/Client-UI/',
         public: true,
       },
     ],
@@ -22,7 +22,7 @@ const menus = [
       {
         id: 1,
         sub: 'Câu hỏi thường gặp',
-        links: '/faq',
+        links: '/Client-UI/faq',
         public: true,
       },
     ],
@@ -35,15 +35,15 @@ const menus = [
       {
         id: 1,
         sub: 'Bài đọc',
-        links: '/blog',
+        links: '/Client-UI/blog',
         public: true,
       },
-      {
-        id: 2,
-        sub: 'Chi tiết bài đọc',
-        links: '/blog-details',
-        public: true,
-      },
+      // {
+      //   id: 2,
+      //   sub: 'Chi tiết bài đọc',
+      //   links: '/Client-UI/blog-details',
+      //   public: true,
+      // },
     ],
   },
   {
@@ -54,7 +54,7 @@ const menus = [
       {
         id: 1,
         sub: 'Chỉnh sửa thông tin',
-        links: '/edit-profile',
+        links: '/Client-UI/edit-profile',
         public: false,
         role: [
           Role.COMPETITOR,
@@ -73,7 +73,7 @@ const menus = [
       {
         id: 3,
         sub: 'Chấm thi',
-        links: '/mark-report',
+        links: '/Client-UI/mark-examiner',
         public: false,
         role: [Role.EXAMINER],
       },
@@ -88,12 +88,12 @@ const menus = [
   {
     id: 5,
     name: 'Liên hệ',
-    links: '/contact',
+    links: '/Client-UI/contact',
     namesub: [
       {
         id: 1,
         sub: 'Liên hệ',
-        links: '/contact',
+        links: '/Client-UI/contact',
         public: true,
       },
     ],

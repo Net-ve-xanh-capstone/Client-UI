@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDropdown } from './dropdown-context';
 import classNames from 'classnames';
 
@@ -17,7 +17,7 @@ const Select = ({ placeholder = '', className = '' }) => {
         lineHeight: '28px',
         borderRadius: '4px',
         background: 'transparent',
-        color: '#8A8A8A',
+        color: '#8a8aa0',
         width: '100%',
         padding: '10px 0'
       }}

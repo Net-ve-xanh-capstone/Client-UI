@@ -10,7 +10,6 @@ import { getAllRoundStaff, roundTopicById } from '../../api/roundStaffApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 import styles from './page.module.css';
-import { parseDateEdit } from '../../utils/formatDate.js';
 
 function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
   const { userInfo } = useSelector(state => state.auth);
@@ -300,6 +299,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
 
   // addnew painting
   const postPainting = async payload => {
+    console.log(payload);
     try {
       await paintingApi.addNewPainting(
         'paintings/submitepainting1stroundforCompetitor',
@@ -438,7 +438,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
           ...prv[index],
           value:
             index === 'birthday'
-              ? parseDateEdit(competitorById[0][index])
+              ? competitorById[0][index]
               : competitorById[0][index],
         },
       }));
@@ -499,7 +499,13 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
       let payload;
       if (progress) {
         payload = updateObject(fieldInput);
-        payload = { ...payload, image: url, status: val };
+        payload = {
+          ...payload,
+          image: url,
+          status: val,
+          currentUserId: userInfo.Id,
+          birthday: payload.birthday,
+        };
         postPainting(payload);
       } else {
         toast.warning('Bạn vui lòng bổ sung thêm ảnh nhé !!', {
@@ -606,6 +612,8 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                         value={vl.value}
                         onChange={vl.onchange}
                         readOnly={isFinalRound}
+                        min="1899-01-01"
+                        max={new Date().toJSON().slice(0, 10)}
                       />
                     </div>
                     {(fieldInput[vl.label].error !== '' ||

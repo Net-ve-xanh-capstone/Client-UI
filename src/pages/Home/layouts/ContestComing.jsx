@@ -15,12 +15,15 @@ import { formatDate } from '../../../utils/formatDate.js';
 import { color } from '../../../constant/Color.js';
 import { userAvatar } from '../../../constant/imageDefault.js';
 import PropTypes from 'prop-types';
+import { paintingStatusActive } from '../../../constant/Status.js';
 
 const ContestComing = () => {
   const { isLoading, isError, data, error } = useFetchData(
     'contests/getallcontest',
   );
-  const contests = data?.data?.result;
+  const contests = data?.data?.result.filter(
+    item => item.status !== paintingStatusActive,
+  );
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -69,8 +72,13 @@ const ContestComing = () => {
                               <div className="slider-item">
                                 <div className="sc-card-contest">
                                   <div className="card-media">
-                                    <Link to={`/Client-UI/contest-detail/${contest?.id}`}>
-                                      <img className='object-fit-contain' src={contest?.logo} alt="Logo cuộc thi" />
+                                    <Link
+                                      to={`/Client-UI/contest-detail/${contest?.id}`}>
+                                      <img
+                                        className="object-fit-contain"
+                                        src={contest?.logo}
+                                        alt="Logo cuộc thi"
+                                      />
                                     </Link>
                                     <div className="button-place-bid">
                                       <button
@@ -98,24 +106,26 @@ const ContestComing = () => {
                                         <img src={userAvatar} alt="avatar" />
                                       </div>
                                       <div className="info">
-                                        <span className='font-weight-bold'>Người tạo</span>
+                                        <span className="font-weight-bold">
+                                          Người tạo
+                                        </span>
                                         <h6>
-                                          <div style={{
-                                            color: color.black,
-                                          }}>
+                                          <div
+                                            style={{
+                                              color: color.black,
+                                            }}>
                                             {contest?.accountFullName}
                                           </div>
                                         </h6>
                                       </div>
                                     </div>
-                                    <div
-                                      className="price">
+                                    <div className="price">
                                       <div className="flex flex-column align-items-start justify-content-center">
-                                        <span className="text-start">Trạng thái</span>
+                                        <span className="text-start">
+                                          Trạng thái
+                                        </span>
                                         <h6>
-                                          <div>
-                                            {contest?.status}
-                                          </div>
+                                          <div>{contest?.status}</div>
                                         </h6>
                                       </div>
                                     </div>
@@ -126,7 +136,7 @@ const ContestComing = () => {
                                         <div className="">
                                           <span>Thời gian bắt đầu</span>
                                           <h6>
-                                            <div className='text-left'>
+                                            <div className="text-left">
                                               {formatDate(contest?.startTime)}
                                             </div>
                                           </h6>
@@ -135,7 +145,7 @@ const ContestComing = () => {
                                         <div className="">
                                           <span>Thời gian kết thúc</span>
                                           <h6>
-                                            <div className='text-left'>
+                                            <div className="text-left">
                                               {formatDate(contest?.endTime)}
                                             </div>
                                           </h6>
@@ -166,7 +176,9 @@ const ContestLoading = () => {
       <div className="swiper-wrapper">
         <div className="swiper-slide">
           <div className="slider-item">
-            <div className="sc-card-product" style={{ maxHeight: '500px !important'}}>
+            <div
+              className="sc-card-product"
+              style={{ maxHeight: '500px !important' }}>
               <div className="card-media">
                 <LoadingSkeleton
                   width="100%"
@@ -189,7 +201,7 @@ const ContestLoading = () => {
                 </div>
               </div>
               <div className="meta-info">
-              <div className="author">
+                <div className="author">
                   <div className="avatar">
                     <LoadingSkeleton
                       width="100%"

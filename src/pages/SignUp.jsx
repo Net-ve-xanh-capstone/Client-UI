@@ -5,14 +5,7 @@ import TextFieldCommon from '../components/input/TextfieldCommon';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {
-  FormControlLabel,
-  Grid,
-  styled,
-  Dialog,
-  DialogContent,
-  IconButton,
-} from '@mui/material';
+import { Grid, styled, Dialog, DialogContent, IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import DatepickerCommon from '../components/datepicker/DatePickerCommon';
@@ -43,21 +36,23 @@ const SignUp = () => {
     wards: [],
     selectedDistrict: '',
   });
-  
+
   const handleClose = () => {
     setOpen(false);
   };
-  
+
   const {
     register: { success, message, loading },
     jwtToken,
   } = useSelector(state => state.auth);
 
   const schema = yup.object().shape({
-    lastname: yup.string()
+    lastname: yup
+      .string()
       .required('Vui lòng nhập Họ của bạn')
       .matches(regexFullNameVN, 'Họ không hợp lệ'),
-    firstname: yup.string()
+    firstname: yup
+      .string()
       .required('Vui lòng nhập Tên của bạn')
       .matches(regexFullNameVN, 'Tên không hợp lệ'),
     email: yup
@@ -78,18 +73,10 @@ const SignUp = () => {
       .string()
       .required('Vui lòng chọn ngày sinh')
       .typeError('Vui lòng chọn ngày sinh'),
-    // address: yup
-    //   .string()
-    //   .required('Vui lòng nhập địa chỉ của bạn')
-    //   .typeError('Vui lòng nhập địa chỉ của bạn'),
-    // district: yup
-    //   .string()
-    //   .required('Vui lòng chọn quận')
-    //   .typeError('Vui lòng chọn quận'),
-    // ward: yup
-    //   .string()
-    //   .required('Vui lòng chọn phường')
-    //   .typeError('Vui lòng chọn phường'),
+    address: yup
+      .string()
+      .required('Vui lòng nhập địa chỉ của bạn')
+      .typeError('Vui lòng nhập địa chỉ của bạn'),
   });
 
   const {
@@ -132,17 +119,16 @@ const SignUp = () => {
   }, [success]);
 
   useEffect(() => {
-      async function fetchData() {
-        const data = await addressApi.getDistrict();
-        setAddress({
-          ...address,
-          districts: data?.data?.result,
-        });
-      }
+    async function fetchData() {
+      const data = await addressApi.getDistrict();
+      setAddress({
+        ...address,
+        districts: data?.data?.result,
+      });
+    }
 
-      fetchData();
-    },
-    []);
+    fetchData();
+  }, []);
   const handleRegister = async data => {
     const isValid = await trigger();
     if (!isValid) return;
@@ -180,7 +166,7 @@ const SignUp = () => {
     setValue(name, value?.name);
     setError(name, '');
   };
-  
+
   const valueArray = [
     { value: '0', label: 'Nam' },
     { value: '1', label: 'Nữ' },
@@ -224,9 +210,7 @@ const SignUp = () => {
                       <Grid item md={6}>
                         <TextFieldCommon
                           control={control}
-                          error={
-                            errors.lastname?.message
-                          }
+                          error={errors.lastname?.message}
                           id="lastname"
                           name="lastname"
                           aria-required="true"
@@ -237,10 +221,7 @@ const SignUp = () => {
                       <Grid item md={6}>
                         <TextFieldCommon
                           control={control}
-                          error={
-                            errors.firstname
-                              ?.message
-                          }
+                          error={errors.firstname?.message}
                           id="firstname"
                           name="firstname"
                           aria-required="true"
@@ -257,27 +238,19 @@ const SignUp = () => {
                       container
                       spacing={2}>
                       <Grid item md={6}>
-                        <p className="font-weight-bold h5">
-                          Ngày sinh
-                        </p>
+                        <p className="font-weight-bold h5">Ngày sinh</p>
                         <DatepickerCommon
                           defaultValue={currentDate}
                           control={control}
-                          error={
-                            errors.birthday?.message
-                          }
+                          error={errors.birthday?.message}
                           name="birthday"
                         />
                       </Grid>
                       <Grid item md={6}>
-                        <p className="font-weight-bold h5">
-                          Giới tính
-                        </p>
+                        <p className="font-weight-bold h5">Giới tính</p>
                         <RadioCommon
                           control={control}
-                          error={
-                            errors?.gender?.message
-                          }
+                          error={errors?.gender?.message}
                           name="gender"
                           valueArray={valueArray}
                         />
@@ -287,9 +260,7 @@ const SignUp = () => {
                       <Grid item md={6}>
                         <TextFieldCommon
                           control={control}
-                          error={
-                            errors.email?.message
-                          }
+                          error={errors.email?.message}
                           id="email"
                           name="email"
                           aria-required="true"
@@ -300,9 +271,7 @@ const SignUp = () => {
                       <Grid item md={6}>
                         <TextFieldCommon
                           control={control}
-                          error={
-                            errors.phone?.message
-                          }
+                          error={errors.phone?.message}
                           id="phone"
                           name="phone"
                           aria-required="true"
@@ -314,15 +283,11 @@ const SignUp = () => {
                       </Grid>
                       <Grid item md={3}></Grid>
                     </Grid>
-                    <Grid
-                      sx={{ marginBottom: '12px' }}
-                      container>
+                    <Grid sx={{ marginBottom: '12px' }} container>
                       <Grid item md={12}>
                         <TextFieldCommon
                           control={control}
-                          error={
-                            errors.userName?.message
-                          }
+                          error={errors.userName?.message}
                           id="userName"
                           name="userName"
                           aria-required="true"
@@ -336,9 +301,7 @@ const SignUp = () => {
                         <TextFieldCommon
                           control={control}
                           id="password"
-                          error={
-                            errors.password?.message
-                          }
+                          error={errors.password?.message}
                           name="password"
                           aria-required="true"
                           type="password"
@@ -347,90 +310,20 @@ const SignUp = () => {
                       </Grid>
                     </Grid>
 
-                    {/*<Grid container>*/}
-                    {/*  <Grid item md={12}>*/}
-                    {/*    /!* địa chỉ *!/*/}
-                    {/*    <div className="flex align-items-start mb-15">*/}
-                    {/*      /!* Quận *!/*/}
-                    {/*      <div className="inner-row-form style-2 w-50 mr-5">*/}
-                    {/*        <div id="item-create" className="dropdown">*/}
-                    {/*          {errors.district && (*/}
-                    {/*            <span className="text-danger h5">*/}
-                    {/*          {errors.district.message}*/}
-                    {/*        </span>*/}
-                    {/*          )}*/}
-                    {/*          <Dropdown*/}
-                    {/*            errors={errors.district?.message}>*/}
-                    {/*            <Dropdown.Select className='font-size-14'*/}
-                    {/*              placeholder={getDropdownOptions(*/}
-                    {/*                'district',*/}
-                    {/*                'Chọn quận',*/}
-                    {/*              )}></Dropdown.Select>*/}
-                    {/*            <Dropdown.List className='font-size-14'>*/}
-                    {/*              {address.districts && address.districts.map(district => (*/}
-                    {/*                <Dropdown.Option*/}
-                    {/*                  key={district?.name}*/}
-                    {/*                  onClick={() =>*/}
-                    {/*                    handleSelectDistrictOption('district', district)*/}
-                    {/*                  }>*/}
-                    {/*                  {district?.name}*/}
-                    {/*                </Dropdown.Option>*/}
-                    {/*              ))}*/}
-                    {/*            </Dropdown.List>*/}
-                    {/*          </Dropdown>*/}
-                    {/*        </div>*/}
-                    {/*      </div>*/}
-                    
-                    {/*      /!* Phường *!/*/}
-                    {/*      <div className="inner-row-form style-2 w-50">*/}
-                    {/*        <div id="item-create" className="dropdown">*/}
-                    {/*          {errors.ward && (*/}
-                    {/*            <span className="text-danger h5">*/}
-                    {/*          {errors.ward.message}*/}
-                    {/*        </span>*/}
-                    {/*          )}*/}
-                    {/*          <Dropdown*/}
-                    {/*            classname='text-success'*/}
-                    {/*            errors={errors.ward?.message}>*/}
-                    {/*            <Dropdown.Select*/}
-                    {/*              className='font-size-14'*/}
-                    {/*              placeholder={getDropdownOptions(*/}
-                    {/*                'ward',*/}
-                    {/*                'Chọn phường',*/}
-                    {/*              )}></Dropdown.Select>*/}
-                    {/*            <Dropdown.List*/}
-                    {/*              className='font-size-14'*/}
-                    {/*            >*/}
-                    {/*              {address.wards && address.wards.map(ward => (*/}
-                    {/*                <Dropdown.Option*/}
-                    {/*                  key={ward?.name}*/}
-                    {/*                  onClick={() =>*/}
-                    {/*                    handleSelectWardOption('ward', ward)*/}
-                    {/*                  }>*/}
-                    {/*                  {ward?.name}*/}
-                    {/*                </Dropdown.Option>*/}
-                    {/*              ))}*/}
-                    {/*            </Dropdown.List>*/}
-                    {/*          </Dropdown>*/}
-                    {/*        </div>*/}
-                    {/*      </div>*/}
-                    {/*    </div>*/}
-                    {/*  </Grid>*/}
-                    {/*</Grid>*/}
-                    {/*<Grid container>*/}
-                    {/*  <Grid item md={12}>*/}
-                    {/*    /!* địa chỉ cụ thể *!/*/}
-                    {/*    <TextFieldCommon*/}
-                    {/*      control={control}*/}
-                    {/*      error={errors.address?.message}*/}
-                    {/*      id="address"*/}
-                    {/*      name="address"*/}
-                    {/*      placeholder="Nhập địa chỉ cụ thể như số nhà, tên đường, trường, lớp, ...."*/}
-                    {/*      className="mb-15 mt-3"*/}
-                    {/*      autoFocus*/}
-                    {/*    />*/}
-                    {/*  </Grid>*/}
-                    {/*</Grid>*/}
+                    <Grid container>
+                      <Grid item md={12}>
+                        {/* địa chỉ cụ thể */}
+                        <TextFieldCommon
+                          control={control}
+                          error={errors.address?.message}
+                          id="address"
+                          name="address"
+                          placeholder="Nhập địa chỉ cụ thể như số nhà, tên đường, trường, lớp, ...."
+                          className="mb-15 mt-3"
+                          autoFocus
+                        />
+                      </Grid>
+                    </Grid>
                     <BootstrapDialog
                       onClose={handleClose}
                       aria-labelledby="customized-dialog-title"
@@ -442,14 +335,15 @@ const SignUp = () => {
                           position: 'absolute',
                           right: 8,
                           top: 6,
-                          color: theme =>
-                            theme.palette.grey[500],
+                          color: theme => theme.palette.grey[500],
                         }}>
                         <CloseIcon />
                       </IconButton>
                       <DialogContent>
                         <div className="space-y-20 pd-40">
-                          <h4 className="text-center font-weight-bold">{message ? message : ''}</h4>
+                          <h4 className="text-center font-weight-bold">
+                            {message ? message : ''}
+                          </h4>
                         </div>
                       </DialogContent>
                     </BootstrapDialog>
@@ -485,26 +379,10 @@ const SignUp = () => {
   );
 };
 
-const FormControlLabelStyled = styled(FormControlLabel)({
-  '& .MuiSvgIcon-root': {
-    fontSize: 24,
-  },
-  //Font size
-  '& .MuiTypography-root': {
-    fontSize: 16,
-    fontFamily: 'REM',
-  },
-});
-
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(5),
   },
 }));
 
-const TypographyStyled = styled('div')(({ theme }) => ({
-  color: theme.palette.text.primary,
-  fontSize: 14,
-  fontWeight: theme.typography.fontWeightMedium,
-}));
 export default SignUp;

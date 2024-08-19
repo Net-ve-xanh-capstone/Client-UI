@@ -20,3 +20,13 @@ export const parseDateEdit = string => {
   const formattedDate = `${year}-${month}-${day}`;
   return formattedDate;
 };
+
+export const parseDateScnd = string => {
+  const initialDate = string;
+  const dateObject = new Date(initialDate);
+  const year = dateObject.getFullYear();
+  const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObject.getDate()).padStart(2, '0');
+  const formattedDate = `${day}-${month}-${year}`;
+  return formattedDate;
+};

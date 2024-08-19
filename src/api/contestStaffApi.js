@@ -1,21 +1,21 @@
-import axiosApi from "./axiosApi"
+import axiosApi from './axiosApi';
 
-export const getById = (id) => {
-    return axiosApi.get(`contests/${id}`)
-}
+export const getById = id => {
+  return axiosApi.get(`contests/${id}`);
+};
 
-export const createContest = (payload) => {
-    return axiosApi.post('contests', payload)
-}
+export const createContest = payload => {
+  return axiosApi.post('contests', payload);
+};
 
 export const getAll = () => {
-    return axiosApi.get('contests/getallcontest')
-}
+  return axiosApi.get('contests/getallcontest');
+};
 
-export const editContest = (payload) => {
-    return axiosApi.put('contests', payload)
-}
+export const editContest = payload => {
+  return axiosApi.put('contests', payload);
+};
 
-export const deleteContest = (id) => {
-    return axiosApi.patch(`contests?id=${id}`)
-}
+export const deleteContest = id => {
+  return axiosApi.patch(`contests?id=${id}`);
+};

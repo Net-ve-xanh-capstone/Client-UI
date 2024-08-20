@@ -1,45 +1,120 @@
+import LoadingButton from '@mui/lab/LoadingButton';
 import Multiselect from 'multiselect-react-dropdown';
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import {
-  createPreliminary,
-  createFinal,
-  editShedule,
-} from '../../api/scheduleStaffApi';
+import { getAwardId } from '../../api/awrdApi.js';
 import { getAll } from '../../api/examinerStaffApi';
-import CreateModal from '../CreateModal';
-import EditModal from '../EditModal';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { createPreliminary, editShedule } from '../../api/scheduleStaffApi';
 import styles from './style.module.css';
 
-function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
+function ScheduleForm({
+  modalShow,
+  onHide,
+  roundData,
+  scheduleData,
+  type,
+  roundId,
+}) {
   let currentDate = new Date().toJSON().slice(0, 10);
   const [isLoading, setIsLoading] = useState(false);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
-  const [examiner, setExaminer] = useState();
+  const [examiner, setExaminer] = useState([]);
   const { userInfo } = useSelector(state => state.auth);
   const navigate = useNavigate();
-  const [modal, setModal] = useState(false);
+  const [award, setAward] = useState({ awardId: null, name: null });
 
-  useEffect(() => {
-    if (userInfo === null) navigate('/login');
-    setFormData(intialState);
-  }, [modalShow]);
+  //get all award of this round to GET the ID and  NAME
+  const fetchAwardId = async id => {
+    try {
+      const { data } = await getAwardId(id);
+      setAward(prv =>
+        data.result.map(val => {
+          return { ...prv, awardId: val.id, name: val.rank };
+        }),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  useEffect(() => {
-    getExaminer();
-  }, []);
-
+  // get all examiner in system
   const getExaminer = async () => {
     try {
       const { data } = await getAll();
-      setExaminer(data?.result);
+      setExaminer(data.result);
     } catch (e) {
       console.log('err', e);
+    }
+  };
+
+  // put schedule to server
+  const putSchedule = async payload => {
+    setIsLoading(true);
+    try {
+      await editShedule(payload);
+      toast.success('Chỉnh sửa lịch chấm thành công', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      onHide();
+    } catch (e) {
+      toast.error('Có lỗi xảy ra vui lòng thử lại', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      console.log('Err', e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // post information while complete
+  const postSchedule = async payload => {
+    setIsLoading(true);
+    try {
+      await createPreliminary(payload); // calling api here
+      toast.success('Thêm lịch chấm thi thành công', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      onHide();
+    } catch (error) {
+      toast.error('Thêm lịch chấm thi không thành công', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,6 +124,8 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
     endDate: type?.endDate?.split('T')[0] || '',
     listExaminer: [],
     currentUserId: userInfo?.Id,
+    judgedCount: '',
+    awardCount: '',
   };
 
   const [formData, setFormData] = useState(intialState);
@@ -56,15 +133,23 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
   const handleInputChange = event => {
     try {
       const { name, value } = event.target;
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
+      if (name === 'award') {
+        setAward(prv => [
+          ...prv,
+          { ...prv.awardId, ...prv.name, awardCount: value },
+        ]);
+      } else {
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+      }
     } catch (e) {
       console.log(e);
     }
   };
 
+  // adding new examiner after user selected
   const handleSelect = seletedList => {
     const selectIds = seletedList.map(item => item.id);
     setFormData({
@@ -73,10 +158,32 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
     });
   };
 
+  //filter all examiner is still not asign to mark the painting
+  const filteredExaminers = examiner?.filter(
+    valExaminer =>
+      !scheduleData?.some(
+        scheduleVal => scheduleVal.examinerId === valExaminer.id,
+      ),
+  );
+
+  // adding value while edit
+  const editValue = val => {
+    setFormData(prv => ({
+      ...prv,
+      roundId: roundData?.id,
+      endDate: val?.endDate?.split('T')[0],
+      description: val?.description,
+      judgedCount: val.judgeCount,
+      awardCount: val.awards[0].quantity,
+    }));
+  };
+
+  // validation and then submit the form to server
   const handleSubmit = async event => {
     event.preventDefault();
     event.stopPropagation();
 
+    // adding validation here
     if (formData.listExaminer.length === 0 && type === 'create') {
       toast.error('Chưa chọn giám khảo nào', {
         position: 'top-right',
@@ -93,8 +200,30 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
     let formErrors = {};
 
     if (Object.keys(formErrors).length === 0) {
+      // pass this payload to post api for saving new schedule
+      const payload = {
+        description: formData.description,
+        roundId: formData.roundId,
+        endDate: formData.endDate,
+        ListExaminer: formData.listExaminer,
+        judgedCount: formData.judgedCount,
+        currentUserId: formData.currentUserId,
+        awards: [
+          {
+            awardId: award[0]?.awardId,
+            awardCount: formData.awardCount,
+          },
+        ],
+      };
+
+      const payloadEdit = {
+        id: roundId,
+        description: formData.description,
+        endDate: formData.endDate,
+        currentUserId: formData.currentUserId,
+      };
+      type === 'create' ? postSchedule(payload) : putSchedule(payloadEdit);
       setValidated(true);
-      setModal(true);
       setErrors({});
     } else {
       setValidated(false);
@@ -102,102 +231,34 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
     }
   };
 
-  const postResource = async () => {
-    try {
-      setIsLoading(true);
+  useEffect(() => {
+    getExaminer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-      const { data } =
-        roundData?.name === 'Vòng Sơ Khảo'
-          ? await createPreliminary(formData)
-          : await createFinal(formData);
-      if (data?.result) {
-        toast.success('Thêm lịch chấm thành công', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-        setIsLoading(false);
-        onHide();
+  useEffect(() => {
+    if (userInfo === null) navigate('/login');
+    if (modalShow) {
+      setFormData(intialState);
+      if (roundId !== null) {
+        fetchAwardId(roundId);
       }
-    } catch (e) {
-      toast.error(e.response?.data?.message, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      setIsLoading(false);
-      console.log('err', e);
-      onHide();
     }
-  };
 
-  const handleEditResource = async () => {
-    formData.id = type?.id;
-    try {
-      setIsLoading(true);
-      if (type !== 'create') formData.id = type?.id;
-      const { data } = await editShedule(formData);
-      if (data?.result) {
-        toast.success('Chỉnh sửa lịch chấm thành công', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-        setIsLoading(false);
-        onHide();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalShow]);
+
+  useEffect(() => {
+    if (modalShow) {
+      if (type !== 'create' && type !== undefined) {
+        editValue(type);
       }
-    } catch (e) {
-      toast.error('Có lỗi xảy ra vui lòng thử lại', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      setIsLoading(false);
-      console.log('Err', e);
     }
-  };
-
-  const filteredExaminers = examiner?.filter(
-    e => !scheduleData?.some(sd => sd.examinerId === e.id),
-  );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalShow]);
 
   return (
     <>
-      {type === 'create' ? (
-        <CreateModal
-          show={modal}
-          setShow={setModal}
-          title={'lịch chấm'}
-          callBack={postResource}
-        />
-      ) : (
-        <EditModal
-          show={modal}
-          setShow={setModal}
-          title={'lịch chấm'}
-          callBack={handleEditResource}
-        />
-      )}
       <Modal
         show={modalShow}
         onHide={onHide}
@@ -213,18 +274,6 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
         </Modal.Header>
         <Modal.Body style={{ height: '60vh', overflow: 'hidden' }}>
           <form onSubmit={handleSubmit} className={styles.modalForm}>
-            <h4 className={styles.title}>Ngày chấm</h4>
-            <input
-              required
-              type="date"
-              name="endDate"
-              id="endDate"
-              className={styles.formControl}
-              value={formData.endDate}
-              onChange={handleInputChange}
-              min={currentDate}
-              max={roundData?.endTime.split('T')[0]}
-            />
             <h4 className={styles.title}>Giám khảo</h4>
             <Multiselect
               displayValue="fullName"
@@ -249,12 +298,53 @@ function ScheduleForm({ modalShow, onHide, roundData, scheduleData, type }) {
               }}
               showArrow
             />
+            <h4 className={styles.title}>Ngày chấm</h4>
+            {/* <input
+              required
+              type="date"
+              name="endDate"
+              id="endDate"
+              className={styles.formControl}
+              value={formData.endDate}
+              onChange={handleInputChange}
+              min={currentDate}
+            /> */}
+            <div>
+              <DatePicker
+                dateFormat="dd/MM/yyyy"
+                selected={formData.endDate}
+                className={styles.formControl}
+                onChange={date =>
+                  setFormData(prv => ({ ...prv, endDate: date }))
+                }
+                minDate={currentDate}
+              />
+            </div>
             <h4 className={styles.title}>Mô tả</h4>
             <input
+              required
               className={styles.inputModal}
               type="text"
               name="description"
               value={formData.description}
+              onChange={handleInputChange}
+            />
+            <h4 className={styles.title}>Số lượng bài chấm</h4>
+            <input
+              required
+              className={styles.inputModal}
+              type="number"
+              name="judgedCount"
+              value={formData.judgedCount}
+              onChange={handleInputChange}
+            />
+            <h4 className={styles.title}>Số lượng đạt giải</h4>
+            <input
+              className={styles.inputModal}
+              required
+              type="number"
+              name="awardCount"
+              value={formData.awardCount}
               onChange={handleInputChange}
             />
             <div style={{ textAlign: 'end' }}>

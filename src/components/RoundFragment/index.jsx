@@ -16,7 +16,7 @@ function RoundFragment({ roundFrag, getContestDetail }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [idRoundDelete, setIdRoundDelete] = useState();
-  const isEditing = checkEditButton(roundFrag.startTime);
+  // const isEditing = checkEditButton(roundFrag.startTime);
   const [round, setRound] = useState();
   const [editRoundData, setEditRoundData] = useState();
 
@@ -175,14 +175,15 @@ function RoundFragment({ roundFrag, getContestDetail }) {
               )),
             )}
           </ul>
-          {/* <div className="flex justify-content-end mt-20">
+          <div className="flex justify-content-end mt-20">
             <button
               className="btn btn-outline-primary btn-lg"
               onClick={() => handleOpenCreate()}
-              disabled={isEditing}>
+              // disabled={isEditing}
+            >
               Thêm
             </button>
-          </div> */}
+          </div>
         </div>
       </>
     )

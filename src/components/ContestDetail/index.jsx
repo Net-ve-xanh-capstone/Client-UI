@@ -19,13 +19,16 @@ import RoundFragment from '../RoundFragment';
 import TopicFragment from '../TopicFragment';
 import ResourceFragment from '../ResourceFragment';
 import ScheduleFragment from '../ScheduleFragment';
+import AwardsFragment from '../awardsFragment/page..jsx';
 
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
 
   useEffect(() => {
     getContestDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const getContestDetail = async () => {
     try {
       const { data } = await getById(contest.id);
@@ -76,6 +79,7 @@ function ContestDetail({ contest, handleBack }) {
         />
       ),
     },
+
     {
       title: 'Tài trợ',
       icon: <Paid />,
@@ -87,10 +91,20 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
-      title: 'Lịch chấm thi',
+      title: 'Lịch chấm',
       icon: <CalendarMonth />,
       component: (
         <ScheduleFragment
+          scheduleFrag={contestDes}
+          getContestDetail={getContestDetail}
+        />
+      ),
+    },
+    {
+      title: 'Giải thưởng',
+      icon: <CalendarMonth />,
+      component: (
+        <AwardsFragment
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
         />
@@ -137,9 +151,12 @@ function ContestDetail({ contest, handleBack }) {
           ))}
         </ul>
 
+        {/* bottom slider animation */}
         <div className={styles.slider}>
           <div className={styles.indicator}></div>
         </div>
+        {/*ending bottom slider animation */}
+
         <div className={styles.content}>
           {tabs.map((tab, index) => (
             <section key={index} className={styles.contentSection}>

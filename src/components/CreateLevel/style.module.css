@@ -70,12 +70,13 @@
 .roundBlock h5 {
     color: black;
     font-weight: 500;
-    font-size: 14px;
-    border: 1px solid black;
+    font-size: 16px;
+    
+    /* border: 1px solid black;
     padding: 10px 5px;
     border-radius: 10px;
     width: 150px;
-    text-align: center;
+    text-align: center; */
 }
 
 .inputAward {
@@ -105,7 +106,7 @@
 }
 
 .title_zone {
-    font-size: medium;
+    font-size: 18px;
     text-align: start;
     display: flex;
     justify-content: flex-start;
@@ -115,7 +116,7 @@
 .age {
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 4rem;
 }
 

@@ -162,6 +162,8 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
   // this is will render all of schedule follow with the data responding
   const renderRound = data => {
     const roundChedule = schedule?.find(item => item.roundId === data.id);
+    console.log(roundChedule);
+
     const isActive = checkActiveScheduleButton(data.startTime, data.endTime); // unknow this variable makign for --- checking this?
     return (
       <div key={data.id} style={{ padding: '10px' }}>

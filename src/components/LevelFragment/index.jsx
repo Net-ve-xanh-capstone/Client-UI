@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CreateLevel from '../CreateLevel';
 import { checkEditButton } from '../../utils/checkEditButton';
 import DeleteModal from '../DeleteModal';
@@ -13,17 +13,24 @@ function LevelFragment({ levelFrag, getContestDetail }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [idLevelDelete, setIdLevelDelete] = useState();
-  const isEditing = checkEditButton(levelFrag.startTime);
+
+  const [type, setType] = useState('');
+  const [dataRound, setDataRound] = useState(null);
+
   const resetDetail = () => {
     setModalShow(false);
     getContestDetail();
+    setType('');
+    setDataRound(null);
   };
 
+  // open modal confirm delete
   const hanldeOpenDelete = id => {
     setIdLevelDelete(id);
     setDeleteModalShow(true);
   };
 
+  // trigger to delete and post to server
   const handleDelete = async () => {
     try {
       const { data } = await deleteLevel(idLevelDelete);
@@ -41,15 +48,41 @@ function LevelFragment({ levelFrag, getContestDetail }) {
         getContestDetail();
       }
     } catch (e) {
-      console.log('err', e);
+      toast.error('Xoá không thành công', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
   };
+
+  // open popup create
+  const openCreate = () => {
+    setModalShow(true);
+    setType('create');
+  };
+  // open popup delete
+  const openEdit = data => {
+    setModalShow(true);
+    setType('edit');
+    setDataRound(data);
+  };
+
   return (
     <>
       <CreateLevel
         modalShow={modalShow}
         onHide={resetDetail}
         contestId={levelFrag.id}
+        startTime={levelFrag.startTime}
+        endTime={levelFrag.endTime}
+        roundData={dataRound}
+        type={type}
       />
       <DeleteModal
         show={deleteModalShow}
@@ -62,6 +95,9 @@ function LevelFragment({ levelFrag, getContestDetail }) {
           <li className={styles.roundHeader}>
             <div className={styles.col}>Nội dung</div>
             <div className={styles.col}>Mô tả</div>
+            <div className={styles.col}>Từ tuổi</div>
+            <div className={styles.col}>Đến tuổi</div>
+            <div className={styles.col}>Tương tác</div>
           </li>
 
           {levelFrag.educationalLevel.map(data => (
@@ -74,34 +110,51 @@ function LevelFragment({ levelFrag, getContestDetail }) {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
                 }}
                 data-label="Mô tả">
                 <div>{data.description || 'Chưa có'}</div>
-                {/* <div style={{ display: 'flex' }}>
+              </div>
+              <div className={styles.col} data-label="Từ tuổi">
+                {data.minAge}
+              </div>
+              <div className={styles.col} data-label="Đến tuổi">
+                {data.maxAge}
+              </div>
+              <div className={styles.col} data-label="Tương tác">
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <IconButton
+                    aria-label="edit"
+                    size="large"
+                    color="primary"
+                    onClick={() => openEdit(data)}>
+                    <EditIcon />
+                  </IconButton>
                   <IconButton
                     aria-label="delete"
                     size="large"
                     color="error"
-                    onClick={() => hanldeOpenDelete(data.id)}
-                    disabled={isEditing}>
+                    onClick={() => hanldeOpenDelete(data.id)}>
                     <DeleteIcon />
                   </IconButton>
-                </div> */}
+                </div>
               </div>
             </li>
           ))}
         </ul>
       </div>
 
-      {/* <div className="flex justify-content-end mt-20">
+      <div className="flex justify-content-end mt-20">
         <button
           className="btn btn-outline-primary btn-lg"
-          onClick={() => setModalShow(true)}
-          disabled={isEditing}>
+          onClick={() => openCreate()}>
           Thêm
         </button>
-      </div> */}
+      </div>
     </>
   );
 }

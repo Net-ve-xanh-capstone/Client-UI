@@ -27,9 +27,8 @@ const ExaminerMark = () => {
   };
 
   const roundNavigate = id => {
-    console.log(id);
     goTo({
-      pathname: '/Client-UI/examiner-round',
+      pathname: '/Client-UI/mark-report',
       search: `?id=${id}`,
     });
   };
@@ -40,104 +39,110 @@ const ExaminerMark = () => {
   }, []);
 
   return (
-    <div className="item-details">
-      <Header />
-      <section className="flat-title-page inner">
-        <div className="overlay"></div>
-        <div className="themesflat-container">
-          <div className="row">
-            <div className="col-md-12">
-              <div className="page-title-heading mg-bt-12">
-                <h1 className="heading text-center">Lịch chấm</h1>
-              </div>
-              <div className="breadcrumbs style2">
-                <ul>
-                  <li>
-                    <Link to="/Client-UI/">Trang chủ</Link>
-                  </li>
-                  <li>Lịch chấm</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <div className="tf-section tf-item-details">
-        <div className="themesflat-container">
-          <div className="row">
-            <div className="col-xl-6 col-md-12">
-              <div className="content-left">
-                <div className="media">
-                  <img
-                    src="https://th.bing.com/th/id/R.04d9fafe76804758e42695367bfc6e68?rik=2gP8R1TVn1ddkA&riu=http%3a%2f%2ftrandainghia.edu.vn%2fwp-content%2fuploads%2f2020%2f12%2flogonet-ve-xanh.jpg&ehk=qIg%2bj98Zo8lSrattuMS2lPrCcsrVOALSy6GSwgjNv5o%3d&risl=&pid=ImgRaw&r=0"
-                    alt="ContestComing"
-                  />
+    <>
+      <div className="item-details">
+        <Header />
+        <section className="flat-title-page inner">
+          <div className="overlay"></div>
+          <div className="themesflat-container">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="page-title-heading mg-bt-12">
+                  <h1 className="heading text-center">Lịch chấm</h1>
                 </div>
-              </div>
-            </div>
-            <div className="col-xl-6 col-md-12">
-              <div className="content-right">
-                <div className={styles.right_container}>
-                  <h1 className={styles.heading_right}>
-                    Cuộc thi năm 2023-2024
-                  </h1>
-                  {roundData?.length > 0 &&
-                    roundData.map(val => (
-                      <Accordion key={val.id}>
-                        <AccordionSummary
-                          style={{ fontSize: '16px' }}
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls="panel1-content"
-                          id="panel1-header">
-                          {val.level}
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <div className={styles.roundContainer}>
-                            <ul className={styles.roundTableResponse}>
-                              {val.scheduleViewModels?.length > 0 &&
-                                val.scheduleViewModels.map(val => (
-                                  <li key={val.id} className={styles.tableRow}>
-                                    <div
-                                      className={styles.col}
-                                      data-label="Tên chủ đề">
-                                      {val.round}
-                                    </div>
-                                    <div
-                                      className={styles.col}
-                                      data-label="Mô tả">
-                                      <div>{parseDataVietnam(val.endDate)}</div>
-                                    </div>
-                                    <div
-                                      className={styles.col}
-                                      data-label="Tương tác">
-                                      <button
-                                        className={styles.button_marking}
-                                        style={{
-                                          fontSize: '16px !important',
-                                          padding: '2rem 1rem !important',
-                                          lineHeight: '0',
-                                          width: '15rem',
-                                        }}
-                                        // disabled={checkNavigateBtn(val.endDate)}
-                                        onClick={() => roundNavigate(val.id)}>
-                                        Chấm bài
-                                      </button>
-                                    </div>
-                                  </li>
-                                ))}
-                            </ul>
-                          </div>
-                        </AccordionDetails>
-                      </Accordion>
-                    ))}
+                <div className="breadcrumbs style2">
+                  <ul>
+                    <li>
+                      <Link to="/Client-UI/">Trang chủ</Link>
+                    </li>
+                    <li>Lịch chấm</li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
+        </section>
+        <div className="tf-section tf-item-details">
+          <div className="themesflat-container">
+            <div className="row">
+              <div className="col-xl-6 col-md-12">
+                <div className="content-left">
+                  <div className="media">
+                    <img
+                      src="https://th.bing.com/th/id/R.04d9fafe76804758e42695367bfc6e68?rik=2gP8R1TVn1ddkA&riu=http%3a%2f%2ftrandainghia.edu.vn%2fwp-content%2fuploads%2f2020%2f12%2flogonet-ve-xanh.jpg&ehk=qIg%2bj98Zo8lSrattuMS2lPrCcsrVOALSy6GSwgjNv5o%3d&risl=&pid=ImgRaw&r=0"
+                      alt="ContestComing"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-6 col-md-12">
+                <div className="content-right">
+                  <div className={styles.right_container}>
+                    <h1 className={styles.heading_right}>
+                      Cuộc thi năm 2023-2024
+                    </h1>
+                    {roundData?.length > 0 &&
+                      roundData.map(val => (
+                        <Accordion key={val.id}>
+                          <AccordionSummary
+                            style={{ fontSize: '16px' }}
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1-content"
+                            id="panel1-header">
+                            {val.level}
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            <div className={styles.roundContainer}>
+                              <ul className={styles.roundTableResponse}>
+                                {val.scheduleViewModels?.length > 0 &&
+                                  val.scheduleViewModels.map(val => (
+                                    <li
+                                      key={val.id}
+                                      className={styles.tableRow}>
+                                      <div
+                                        className={styles.col}
+                                        data-label="Tên chủ đề">
+                                        {val.round}
+                                      </div>
+                                      <div
+                                        className={styles.col}
+                                        data-label="Mô tả">
+                                        <div>
+                                          {parseDataVietnam(val.endDate)}
+                                        </div>
+                                      </div>
+                                      <div
+                                        className={styles.col}
+                                        data-label="Tương tác">
+                                        <button
+                                          className={styles.button_marking}
+                                          style={{
+                                            fontSize: '16px !important',
+                                            padding: '2rem 1rem !important',
+                                            lineHeight: '0',
+                                            width: '15rem',
+                                          }}
+                                          // disabled={checkNavigateBtn(val.endDate)}
+                                          onClick={() => roundNavigate(val.id)}>
+                                          Chấm bài
+                                        </button>
+                                      </div>
+                                    </li>
+                                  ))}
+                              </ul>
+                            </div>
+                          </AccordionDetails>
+                        </Accordion>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 };
 

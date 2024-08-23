@@ -11,3 +11,7 @@ export const getScheduleById = id => {
 export const getContestsByExaminer = id => {
   return axiosApi.get(`schedules/examiner/${id}`);
 };
+
+export const getAllPainting = id => {
+  return axiosApi.get(`paintings/Schedule/${id}`);
+};

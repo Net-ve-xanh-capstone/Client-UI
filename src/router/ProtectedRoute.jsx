@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 const ProtectedRoute = ({ children, role }) => {
   const { userInfo } = useSelector(state => state.auth);
-  console.log('id day ne', userInfo);
   if (!userInfo) {
     return <Navigate to="/Client-UI/login" replace />;
   }

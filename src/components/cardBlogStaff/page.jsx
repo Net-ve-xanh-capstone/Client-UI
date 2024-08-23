@@ -153,16 +153,21 @@ function BlogStaff() {
                               ? cutString(vl.title, 20) + '...'
                               : vl.title}
                           </h3>
-                          <MoreHorizIcon
+                          <div
+                            style={{
+                              backgroundColor: 'transparent',
+                            }}
                             onClick={() => {
                               handlePopup(idx);
-                            }}
-                            sx={{
-                              color: '#9835FB',
-                              fontSize: '3rem',
-                              cursor: 'pointer',
-                            }}
-                          />
+                            }}>
+                            <MoreHorizIcon
+                              sx={{
+                                color: '#9835FB',
+                                fontSize: '3rem',
+                                cursor: 'pointer',
+                              }}
+                            />
+                          </div>
                           {popup === idx && (
                             <div className={styles.poup} ref={selectPopup}>
                               <span onClick={() => setOpenEdit(vl.id)}>

@@ -6,13 +6,16 @@ import 'react-tabs/style/react-tabs.css';
 import { paintingApi } from '../../api/paintingApi.js';
 import { topicApi } from '../../api/topicApi.js';
 import levelIcon from '../../assets/images/icon/level.png';
-import Footer from '../../components/common/footer/Footer';
-import Header from '../../components/common/header/HeaderVersion2';
 import CountdownComponent from '../../components/CountdownComponent.jsx';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
 import { defaultAvatar, userAvatar } from '../../constant/imageDefault.js';
 import useFetchData from '../../hooks/useQueryData.js';
-import { contestStatus, paintingStatusEnable } from './../../constant/Status.js';
+import {
+  contestStatus,
+  paintingStatusEnable,
+} from './../../constant/Status.js';
+import Footer from '../../components/common/footer/Footer.jsx';
+import HeaderVersion2 from '../../components/common/header/HeaderVersion2.jsx';
 
 const getAllPaintingByCompetitorIdEndpoint =
   'paintings/getpaintingbyaccountcontest';
@@ -31,9 +34,12 @@ const ContestDetail = () => {
         userInfo.Id,
         contestId,
       );
-      const paintingResponse = await paintingApi.getAllPaintingByContestAccountId(
-        getAllPaintingByCompetitorIdEndpoint, contestId, userInfo?.Id,
-      )
+      const paintingResponse =
+        await paintingApi.getAllPaintingByContestAccountId(
+          getAllPaintingByCompetitorIdEndpoint,
+          contestId,
+          userInfo?.Id,
+        );
       if (response.data.result.length > 0) {
         setCheck(true);
       }
@@ -46,7 +52,7 @@ const ContestDetail = () => {
     };
     fetchData();
   }, []);
-  
+
   const contest = data?.data?.result;
 
   if (isLoading) {
@@ -58,7 +64,7 @@ const ContestDetail = () => {
   }
   return (
     <div className="item-details">
-      <Header />
+      <HeaderVersion2 />
       <section className="flat-title-page inner">
         <div className="overlay"></div>
         <div className="themesflat-container">
@@ -117,7 +123,7 @@ const ContestDetail = () => {
                           <span>Tạo bởi</span>
                           <h6>
                             <Link className="cursor-none">
-                              {contest?.account.fullName}
+                              {contest?.account?.fullName}
                             </Link>
                           </h6>
                         </div>
@@ -139,12 +145,14 @@ const ContestDetail = () => {
                     </div>
                   </div>
                   {contest?.status !== contestStatus.IN_PROCESS ? (
-                      <Link
-                        to="#"
-                        className="disable-button loadmore style fl-button pri-3 cursor-none">
-                        <span>{contest?.status}</span>
-                      </Link>
-                    ): registerButton({ status, check, contestId, userInfo })}
+                    <Link
+                      to="#"
+                      className="disable-button loadmore style fl-button pri-3 cursor-none">
+                      <span>{contest?.status}</span>
+                    </Link>
+                  ) : (
+                    registerButton({ status, check, contestId, userInfo })
+                  )}
 
                   <div className="flat-tabs themesflat-tabs">
                     <Tabs>
@@ -175,7 +183,7 @@ const ContestDetail = () => {
                                       <div className="author-infor">
                                         <div className="name">
                                           <h6>
-                                            <div className='text-black'>
+                                            <div className="text-black">
                                               {item.level}
                                             </div>
                                           </h6>
@@ -183,7 +191,7 @@ const ContestDetail = () => {
                                       </div>
                                     </div>
                                   </div>
-                                  <div className='text-black'>
+                                  <div className="text-black">
                                     <h5>{item.description}</h5>
                                   </div>
                                 </div>
@@ -194,7 +202,7 @@ const ContestDetail = () => {
 
                       <TabPanel>
                         <ul className="bid-history-list">
-                          {contest?.resource.length > 0 &&
+                          {contest?.resource.length > 0 ? (
                             contest.resource.map((item, index) => (
                               <li key={index}>
                                 <div className="content">
@@ -213,7 +221,7 @@ const ContestDetail = () => {
                                       <div className="author-infor">
                                         <div className="name">
                                           <h6>
-                                            <div className='text-black'>
+                                            <div className="text-black">
                                               {item.sponsor?.name}
                                             </div>
                                           </h6>
@@ -226,29 +234,67 @@ const ContestDetail = () => {
                                   </div>
                                 </div>
                               </li>
-                            ))}
+                            ))
+                          ) : (
+                            <div className="text-black">
+                              <h5>Không có nhà tài trợ</h5>
+                            </div>
+                          )}
                         </ul>
                       </TabPanel>
 
                       <TabPanel>
                         <div className="provenance">
-                          <p className="mb-5 text-black">Nội dung cuộc thi: {contest?.content}</p>
-                          <p>{contest?.educationalLevel.map(item => {
-                            return (
-                              <div className="mb-5 flex justify-content-between">
-                                <p className='text-black'>{item?.description}</p>
-                                <p className='text-black' style={{ width: '120px' }}>Các giải thưởng:</p>
-                                <p className='text-black' style={{ width: '220px' }}>{item?.award.map((award, key) => {
-                                  return (
-                                    <div key={key} className="flex justify-content-center">
-                                      <p className='text-black' style={{ flex: '1', textAlign: 'left' }}>{award?.rank}: </p>
-                                      <p className='text-black'>{award?.quantity}</p>
-                                    </div>
-                                  );
-                                })}</p>
-                              </div>
-                            );
-                          })}</p>
+                          <p className="mb-5 text-black">
+                            Nội dung cuộc thi: {contest?.content}
+                          </p>
+                          <div>
+                            {contest?.educationalLevel.map((item, key) => {
+                              return (
+                                <div
+                                  key={key}
+                                  className="mb-5 flex justify-content-between">
+                                  <p className="text-black">
+                                    {item?.description}
+                                  </p>
+                                  <p
+                                    className="text-black"
+                                    style={{ width: '120px' }}>
+                                    Các giải thưởng:
+                                  </p>
+                                  <div
+                                    className="text-black"
+                                    style={{ width: '220px' }}>
+                                    {item?.round?.map((round, key) => {
+                                      return (
+                                        <div key={key}>
+                                          {round?.award?.map((award, key) => {
+                                            return (
+                                              <div
+                                                key={key}
+                                                className="flex justify-content-center">
+                                                <p
+                                                  className="text-black"
+                                                  style={{
+                                                    flex: '1',
+                                                    textAlign: 'left',
+                                                  }}>
+                                                  {award?.rank}:{' '}
+                                                </p>
+                                                <p className="text-black">
+                                                  {award?.quantity}
+                                                </p>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
                       </TabPanel>
                     </Tabs>
@@ -265,8 +311,6 @@ const ContestDetail = () => {
 };
 
 const registerButton = ({ status, check, contestId, userInfo }) => {
-  console.log('status', status)
-  console.log('check', check)
   if (paintingStatusEnable.includes(status)) {
     if (check) {
       return (
@@ -283,7 +327,7 @@ const registerButton = ({ status, check, contestId, userInfo }) => {
           className="disable-button loadmore style fl-button pri-3 cursor-none">
           <span>Bạn chưa đủ tuổi</span>
         </Link>
-      )
+      );
     }
   }
   if (!userInfo) {

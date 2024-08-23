@@ -1,0 +1,9 @@
+/* Tùy chỉnh kích thước thành phần đầu vào của lịch */
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+    display: inline-block;
+    width: 100%;
+    /* Chiều rộng mong muốn */
+    height: 100%;
+    /* Chiều cao mong muốn */
+}

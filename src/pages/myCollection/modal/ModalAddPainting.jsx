@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import styles from '../page.module.css';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { CardHeader, Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
+import {
+  Button,
+  CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Typography,
+} from '@mui/material';
 
 // Giả định dữ liệu ảnh
 const initialImages = [
@@ -19,19 +28,25 @@ function ModalAddPainting({ show, onHide }) {
   const [images, setImages] = useState(initialImages);
   const [collection, setCollection] = useState([]);
   const handleHide = () => {
-    onHide()
-  }
-  const onDragEnd = (result) => {
+    onHide();
+  };
+  const onDragEnd = result => {
     const { source, destination } = result;
 
     if (!destination) return; // Nếu không có điểm đến thì không làm gì
 
-    if (source.droppableId === 'imageList' && destination.droppableId === 'collection') {
+    if (
+      source.droppableId === 'imageList' &&
+      destination.droppableId === 'collection'
+    ) {
       // Di chuyển từ imageList sang collection
       const movedImage = images[source.index];
       setImages(images.filter((_, index) => index !== source.index));
       setCollection([...collection, movedImage]);
-    } else if (source.droppableId === 'collection' && destination.droppableId === 'imageList') {
+    } else if (
+      source.droppableId === 'collection' &&
+      destination.droppableId === 'imageList'
+    ) {
       // Di chuyển từ collection về imageList
       const movedImage = collection[source.index];
       setCollection(collection.filter((_, index) => index !== source.index));
@@ -50,44 +65,50 @@ function ModalAddPainting({ show, onHide }) {
   };
 
   return (
-    <Dialog 
-      fullWidth={true}
-      maxWidth={'xl'}
-      open={show}
-      onClose={handleHide}>
+    <Dialog fullWidth={true} maxWidth={'xl'} open={show} onClose={handleHide}>
       <DialogTitle>
-        <CardHeader title={
-          <Typography sx={
-            { textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: '3.5rem',
-              userSelect: 'none'
-            }
-          } variant="h5" component="div">
-            Thêm tranh vào bộ sưu tập
-          </Typography>
-        } />
+        <CardHeader
+          title={
+            <Typography
+              sx={{
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: '3.5rem',
+                userSelect: 'none',
+              }}
+              variant="h5"
+              component="div">
+              Thêm tranh vào bộ sưu tập
+            </Typography>
+          }
+        />
       </DialogTitle>
-      <DialogContent>
+      <DialogContent
+        sx={{
+          borderBottom: '1px solid #000000',
+        }}>
         <DragDropContext onDragEnd={onDragEnd}>
           <div className={styles.app}>
             <Droppable droppableId="imageList" direction="horizontal">
-              {(provided) => (
+              {provided => (
                 <div
                   className={styles.image_list}
                   ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
+                  {...provided.droppableProps}>
                   {images.map((image, index) => (
-                    <Draggable key={image.id} draggableId={image.id} index={index}>
-                      {(provided) => (
+                    <Draggable
+                      key={image.id}
+                      draggableId={image.id}
+                      index={index}>
+                      {(provided, snapshot) => (
                         <div
-                          className={styles.image_item}
+                          className={`${styles.image_item} ${
+                            snapshot.isDragging ? styles.dragging : ''
+                          }`}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          onClick={() => handleImageClick(image, 'imageList')}
-                        >
+                          onClick={() => handleImageClick(image, 'imageList')}>
                           <img src={image.url} alt="Thumbnail" />
                         </div>
                       )}
@@ -99,22 +120,23 @@ function ModalAddPainting({ show, onHide }) {
             </Droppable>
 
             <Droppable droppableId="collection">
-              {(provided) => (
+              {provided => (
                 <div
                   className={styles.collection}
                   ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
+                  {...provided.droppableProps}>
                   {collection.map((image, index) => (
-                    <Draggable key={image.id} draggableId={image.id} index={index}>
-                      {(provided) => (
+                    <Draggable
+                      key={image.id}
+                      draggableId={image.id}
+                      index={index}>
+                      {provided => (
                         <div
                           className={styles.collection_item}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          onClick={() => handleImageClick(image, 'collection')}
-                        >
+                          onClick={() => handleImageClick(image, 'collection')}>
                           <img src={image.url} alt="Thumbnail" />
                         </div>
                       )}
@@ -127,8 +149,37 @@ function ModalAddPainting({ show, onHide }) {
           </div>
         </DragDropContext>
       </DialogContent>
+      <DialogActions
+        sx={{
+          position: 'relative',
+          marginTop: 'auto',
+        }}>
+        <Grid
+          width={1}
+          display="flex"
+          justifyContent="center"
+          alignContent="center"
+          container
+          spacing={4}>
+          <Button
+            onClick={handleHide}
+            sx={{
+              fontSize: '16px',
+              width: '150px',
+            }}>
+            Đóng
+          </Button>
+          <Button
+            onClick={handleHide}
+            sx={{
+              fontSize: '16px',
+              width: '150px',
+            }}>
+            Thêm tranh
+          </Button>
+        </Grid>
+      </DialogActions>
     </Dialog>
-      
   );
 }
 

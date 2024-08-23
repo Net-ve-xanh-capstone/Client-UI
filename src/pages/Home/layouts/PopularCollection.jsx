@@ -11,19 +11,14 @@ import { userAvatar, whiteScreen } from '../../../constant/imageDefault.js';
 const GET_ALL_COLLECTION = 'collections/getallcollection';
 const PopularCollection = () => {
   const [collection, setCollection] = useState([]);
-  const {
-    isLoading,
-    isError,
-    data,
-    error,
-  } = useFetchData(GET_ALL_COLLECTION);
-  
+  const { isLoading, isError, data, error } = useFetchData(GET_ALL_COLLECTION);
+
   useEffect(() => {
     if (data) {
       setCollection(data?.data?.result?.list);
     }
   }, [data, collection]);
-  
+
   if (isLoading) {
     return <span>Loading...</span>;
   }
@@ -48,12 +43,7 @@ const PopularCollection = () => {
           <div className="col-md-12">
             <div className="">
               <Swiper
-                modules={[
-                  Navigation,
-                  Pagination,
-                  Scrollbar,
-                  A11y,
-                ]}
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
                 spaceBetween={30}
                 breakpoints={{
                   0: {
@@ -72,11 +62,12 @@ const PopularCollection = () => {
                 navigation={false}
                 pagination={{ clickable: true }}
                 scrollbar={{ draggable: true }}>
-                {collection.length > 0 && collection.slice(0, 16).map((item, index) => (
-                  <SwiperSlide key={index}>
-                    <PopularCollectionItem item={item} />
-                  </SwiperSlide>
-                ))}
+                {collection.length > 0 &&
+                  collection.slice(0, 16).map((item, index) => (
+                    <SwiperSlide key={index}>
+                      <PopularCollectionItem item={item} />
+                    </SwiperSlide>
+                  ))}
               </Swiper>
             </div>
           </div>
@@ -94,17 +85,23 @@ const PopularCollectionItem = props => (
           <div className="sc-card-collection style-2 home5">
             <div className="media-images-collection">
               <div className="box-left">
-                <img src={props.item.image[0] || whiteScreen} alt="painting" />
+                <img
+                  className="border-3"
+                  src={props.item.image[0] || whiteScreen}
+                  alt="painting"
+                />
               </div>
               <div className="box-right">
                 <div className="top-img">
                   <img
+                    className="border-3"
                     src={props.item.image[1] || whiteScreen}
                     alt="painting"
                   />
                 </div>
                 <div className="bottom-img">
                   <img
+                    className="border-3"
                     src={props.item.image[2] || whiteScreen}
                     alt="painting"
                   />
@@ -125,7 +122,9 @@ const PopularCollectionItem = props => (
             </div>
             <div className="content">
               <h4 className="heading">
-                <Link to={`/Client-UI/collection-painting/${props.item.id}`}>{props.item?.name}</Link>
+                <Link to={`/Client-UI/collection-painting/${props.item.id}`}>
+                  {props.item?.name}
+                </Link>
               </h4>
               <div className="description">
                 <span>Mô tả: </span>

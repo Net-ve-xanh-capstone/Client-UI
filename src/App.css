@@ -97,3 +97,11 @@
 .border_element {
   border: solid 2px #EEEEEE
 }
+
+.css-1dimb5e-singleValue {
+  overflow: unset !important;
+}
+
+.Toastify__toast-container {
+  z-index: 200000 !important;
+}

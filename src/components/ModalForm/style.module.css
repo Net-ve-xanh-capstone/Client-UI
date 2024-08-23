@@ -29,8 +29,8 @@
     position: absolute;
 }
 
-.modalForm>.inputModal {
-    padding: 5px 5px;
+.modalForm .inputModal {
+    padding: 5px 5px !important;
 }
 
 .modalForm .btnCreate {
@@ -52,20 +52,62 @@
 }
 
 .levelBlock {
-    margin: 20px;
+    width: 100%;
     display: flex;
-    gap: 20px;
-    width: max-content;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-.levelBlock p {
-    color: black;
-    border: 1px solid black;
-    padding: 0px 5px;
-    border-radius: 10px;
-    width: 100px;
-    text-align: center;
+.levelblock_input {
+    width: 100%;
+    padding: 0 3rem;
 }
+
+.input_place {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input_place>span {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.input_place>span p {
+    flex-shrink: 0;
+}
+
+.input_place>span .level_textarea {
+    flex: 1;
+    padding: 5px 5px !important;
+}
+
+.age_box {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+.age_box span {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.age_box span p {
+    flex-shrink: 0;
+}
+
+.age_box span .level_textarea {
+    flex: 0 0 10rem;
+    padding: 5px 5px !important;
+
+}
+
 
 .roundBlock h5 {
     color: black;
@@ -91,4 +133,46 @@
 
 .rankTitle {
     width: 100px;
+}
+
+.first_zone {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #000;
+    padding: 1rem;
+    border-radius: 0.625rem;
+    margin-bottom: 2rem;
+}
+
+.title_zone {
+    font-size: medium;
+    text-align: start;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.outside {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.data_time {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.data_time .div_data {
+    flex: 1;
+}
+
+.first_round {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 2rem;
 }

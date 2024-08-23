@@ -98,13 +98,16 @@ function AddNewBlog({ triggerClose, refetchData }) {
 
   //auto resize fix with the content
   const resizeTextArea = value => {
+    console.log(value);
+
     if (!txtTitle.current) {
       return;
     }
     if (value === '') {
       txtTitle.current.style.height = 'auto';
-      return;
     }
+    console.log(txtTitle.current.scrollHeight);
+
     txtTitle.current.style.height = `${txtTitle.current.scrollHeight}px`;
   };
 
@@ -216,8 +219,8 @@ function AddNewBlog({ triggerClose, refetchData }) {
     window.addEventListener('resize', resizeTextArea);
     window.addEventListener('resize', resizeTextDes);
     return () => {
-      window.removeEventListener('resize', () => resizeTextArea(txtTitles));
-      window.removeEventListener('resize', () => resizeTextDes(txtDes));
+      window.removeEventListener('resize', resizeTextArea(txtTitles));
+      window.removeEventListener('resize', resizeTextDes(txtDes));
     };
   }, [txtTitles, txtDes]);
 
@@ -308,7 +311,7 @@ function AddNewBlog({ triggerClose, refetchData }) {
 
           {/* text editor */}
           {inputArea.map(vl => (
-            <div key={vl} className={styles.box_field}>
+            <div key={vl.ref} className={styles.box_field}>
               <p style={{ fontSize: '2.2rem' }}>{vl.placeHoder}</p>
               <div className={styles.title_box}>
                 <textarea

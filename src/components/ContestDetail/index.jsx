@@ -81,6 +81,7 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
 
+
     {
       title: 'Tài trợ',
       icon: <Paid />,
@@ -92,6 +93,7 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
+      title: 'Lịch chấm',
       title: 'Lịch chấm',
       icon: <CalendarMonth />,
       component: (
@@ -153,9 +155,12 @@ function ContestDetail({ contest, handleBack }) {
         </ul>
 
         {/* bottom slider animation */}
+        {/* bottom slider animation */}
         <div className={styles.slider}>
           <div className={styles.indicator}></div>
         </div>
+        {/*ending bottom slider animation */}
+
         {/*ending bottom slider animation */}
 
         <div className={styles.content}>

@@ -5,7 +5,7 @@ import { IconButton } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { getById } from '../../api/contestStaffApi.js';
 import {
@@ -22,8 +22,10 @@ import ScheduleForm from '../ScheduleForm/index.jsx';
 import styles from './page.module.css';
 import FinalScheduleForm from '../finalScheduleForm/page.jsx';
 import ListAward from './tableList/page.jsx';
-
-function AwardsFragment({ scheduleFrag, getContestDetail }) {
+const AwardsFragment = memo(function AwardsFragment({
+  scheduleFrag,
+  getContestDetail,
+}) {
   const [type, setType] = useState();
   const [schedule, setSchedule] = useState();
   const [listExam, setListExam] = useState();
@@ -77,56 +79,14 @@ function AwardsFragment({ scheduleFrag, getContestDetail }) {
     getSchedule();
   };
 
-  // open the modal confirm delete
-  const hanldeOpenDelete = scheduleId => {
-    setScheduleIdDelete(scheduleId);
-    setDeleteModalShow(true);
-  };
-
-  // handle when user click adding more schedule
-  const handleOpenCreate = (data, roundSchedule) => {
-    if (roundSchedule.roundName === 'Vòng Sơ Khảo') {
-      setRoundId(roundSchedule.roundId);
-      setEditRoundData(data);
-      setListExam(roundSchedule?.schedules);
-      setType('create');
-      setModalShow(true);
-    } else {
-      setRoundId(roundSchedule.roundId);
-      setEditRoundData(data);
-      setListExam(roundSchedule?.schedules);
-      setType('create');
-      setFinalModalShow(true);
-    }
-  };
-
-  // handle while user click edit schedule
-  const handleOpenEdit = (data, scheduleData) => {
-    if (data.name === 'Vòng Sơ Khảo') {
-      setType(scheduleData);
-      setRoundId(scheduleData?.id);
-      setEditRoundData(data);
-      setModalShow(true);
-    } else {
-      setType(scheduleData);
-      setRoundId(scheduleData?.id);
-      setEditRoundData(data);
-      setFinalModalShow(true);
-    }
-  };
-
   useEffect(() => {
     getSchedule();
-    console.log('frag', scheduleFrag);
     setPreliminaryList(scheduleFrag.educationalLevel);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scheduleFrag]);
 
   // this is will render all of schedule follow with the data responding
   const renderRound = data => {
-    console.log(data);
-
     return (
       <div key={data.id} style={{ padding: '10px' }}>
         {/* tạo 1 nested map ở đây để handle việc này nhé */}
@@ -141,7 +101,11 @@ function AwardsFragment({ scheduleFrag, getContestDetail }) {
           <AccordionDetails>
             {/* nested table here */}
             {data?.round.map(val => (
-              <ListAward key={val.id} items={val} />
+              <ListAward
+                key={val.id}
+                items={val}
+                recallData={getContestDetail}
+              />
             ))}
           </AccordionDetails>
         </Accordion>
@@ -174,10 +138,10 @@ function AwardsFragment({ scheduleFrag, getContestDetail }) {
         callBack={handleDelete}
       />
       {/* this return will map the data follow with the level of the schedule
-        in contest */}
+          in contest */}
       {preliminaryList.map(renderRound)}
     </>
   );
-}
+});
 
 export default AwardsFragment;

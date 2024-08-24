@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import styles from './page.module.css';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion,
@@ -7,16 +7,89 @@ import {
   AccordionSummary,
   IconButton,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { deleteAward } from '../../../api/awrdApi.js';
+import DeleteModal from '../../DeleteModal/index.jsx';
+import styles from './page.module.css';
+import AddingModal from '../addingModal/page.jsx';
 
-const ListRoundAward = ({ items }) => {
-  useEffect(() => {
-    console.log('award each round', items);
-  }, [items]);
+const ListRoundAward = ({ items, recallData }) => {
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const [awardsId, setAwardId] = useState('');
+
+  const [editModalShow, setEditModal] = useState(false);
+  const [infomation, setInfomation] = useState({
+    rank: '',
+    quantity: '',
+    cash: '',
+    artifact: '',
+  });
+
+  // patch delete while click
+  const handleDelete = async () => {
+    try {
+      await deleteAward(awardsId);
+      toast.success('Xoá thành công!!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      recallData();
+    } catch (error) {
+      toast.error(error.response.data.message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
+  };
+
+  // handle open edit modal
+  const editModal = items => {
+    for (let index in items) {
+      setInfomation(prev => ({
+        ...prev,
+        [index]: items[index],
+      }));
+    }
+    setEditModal(true);
+  };
+
+  // handle hiding modal and clear all field after done
+  const triggerHide = () => {
+    setEditModal(false);
+    for (let index in infomation) {
+      infomation[index] = '';
+    }
+  };
 
   return (
     <>
+      <AddingModal
+        modalShow={editModalShow}
+        onHide={triggerHide}
+        roundId={items?.id}
+        recallData={recallData}
+        isEdit
+        dataEdit={infomation}
+      />
+      <DeleteModal
+        show={deleteModalShow}
+        setShow={setDeleteModalShow}
+        title={'giải thưởng'}
+        callBack={handleDelete}
+      />
       <div style={{ padding: '10px' }}>
         <Accordion>
           <AccordionSummary
@@ -68,24 +141,24 @@ const ListRoundAward = ({ items }) => {
                       <IconButton
                         aria-label="edit"
                         size="large"
-                        color="primary">
+                        color="primary"
+                        onClick={() => editModal(items)}>
                         <EditIcon />
                       </IconButton>
                       <IconButton
                         aria-label="delete"
                         size="large"
-                        color="error">
+                        color="error"
+                        onClick={() => {
+                          setDeleteModalShow(true);
+                          setAwardId(items.id);
+                        }}>
                         <DeleteIcon />
                       </IconButton>
                     </div>
                   </div>
                 </li>
               </ul>
-            </div>
-            <div className="flex justify-content-end mt-20">
-              <button className="btn btn-outline-primary btn-lg">
-                Thêm lịch chấm
-              </button>
             </div>
           </AccordionDetails>
         </Accordion>

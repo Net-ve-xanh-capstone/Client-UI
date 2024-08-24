@@ -55,6 +55,7 @@ const ContestDetail = () => {
       console.log(paintingResponse);
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const contest = data?.data?.result;

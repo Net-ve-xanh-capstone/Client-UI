@@ -20,6 +20,7 @@ import TopicFragment from '../TopicFragment';
 import ResourceFragment from '../ResourceFragment';
 import ScheduleFragment from '../ScheduleFragment';
 import AwardsFragment from '../awardsFragment/page..jsx';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
@@ -102,7 +103,7 @@ function ContestDetail({ contest, handleBack }) {
     },
     {
       title: 'Giải thưởng',
-      icon: <CalendarMonth />,
+      icon: <CardGiftcardIcon />,
       component: (
         <AwardsFragment
           scheduleFrag={contestDes}

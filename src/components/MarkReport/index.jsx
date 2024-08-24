@@ -5,6 +5,11 @@ import Header from '../../components/common/header/HeaderVersion2';
 import Footer from '../common/footer/Footer.jsx';
 import ModalPaintingContest from '../showPaintingContest/page.jsx';
 import styles from './MarkReport.module.css';
+import 'react-tabs/style/react-tabs.css';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { LoadingButton } from '@mui/lab';
+import { confirmRating } from '../../api/rating.js';
+import { toast } from 'react-toastify';
 
 const MarkReport = ({ pageType }) => {
   const [searchParams] = useSearchParams();
@@ -14,10 +19,14 @@ const MarkReport = ({ pageType }) => {
   const [contestMarking, setContestMarking] = useState([]);
 
   const [showModal, setShowMoadal] = useState(false);
+  const [type, setType] = useState('');
   const [dataObject, setDataObject] = useState(null);
 
   const [awardObject, setAwardObject] = useState(null);
   const [awardLoading, setAwardLoading] = useState(null);
+  const [postAllLoading, setPostAllLoading] = useState(false);
+
+  const [typeOfTab, setTypeOfTabs] = useState(0);
 
   const [scheduleId, setScheduleId] = useState('');
 
@@ -33,6 +42,28 @@ const MarkReport = ({ pageType }) => {
     setLazyData(prevData => [...prevData, ...dataLoad]);
   };
 
+  //post all field and confirm marking by examiner
+  const fetchConfirm = async () => {
+    setPostAllLoading(true);
+    try {
+      await confirmRating(searchParams.get('id'));
+    } catch (error) {
+      toast.warning('Hãy chấm hết tất cả các bài thi nhé!', {
+        position: 'top-right',
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      console.log(error);
+    } finally {
+      setPostAllLoading(false);
+    }
+  };
+
   // adding new painting to redux
   // const postIntoRedux = item => {
   //   const payload = contests.filter((_, idx) => item[idx] === true);
@@ -44,7 +75,7 @@ const MarkReport = ({ pageType }) => {
     const { data } = await getAllPainting(id);
     const rspNotMarking = data.result.filter(val => val?.isJudged === false);
     const rspMarking = data.result.filter(val => val?.isJudged === true);
-    
+
     setContests(rspNotMarking);
     setContestMarking(rspMarking);
   };
@@ -71,6 +102,11 @@ const MarkReport = ({ pageType }) => {
   const handleOpen = data => {
     setShowMoadal(true);
     setDataObject(data);
+    if (data.isJudged) {
+      setType('edit');
+    } else {
+      setType('create');
+    }
   };
 
   // trigger close modal
@@ -114,6 +150,7 @@ const MarkReport = ({ pageType }) => {
         awardData={awardObject}
         awardLoading={awardLoading}
         scheduleId={scheduleId}
+        type={type}
       />
 
       <div className="item-details">
@@ -138,28 +175,79 @@ const MarkReport = ({ pageType }) => {
             </div>
           </div>
         </section>
-        <div
-          className={`${styles.gridContainer} ${
-            pageType === 'edit' ? styles.editPage : ''
-          }`}>
-          {contests?.map((contest, index) => (
-            <div
-              key={index}
-              className={styles.square}
-              onClick={() => handleOpen(contest)}>
-              <div className={styles.squareContent}>
-                <div className={styles.imageContainer}>
-                  <img
-                    src={contest?.image}
-                    alt="thumbnail"
-                    className={styles.image}
-                  />
-                </div>
-                <p className={styles.examCode}>{contest?.name}</p>
+        <div className={`${styles.tablist} flat-tabs themesflat-tabs`}>
+          <Tabs
+            defaultIndex={typeOfTab}
+            onSelect={index => setTypeOfTabs(index)}>
+            <TabList>
+              <Tab>Chưa chấm</Tab>
+              <Tab>Đã chấm</Tab>
+            </TabList>
+            <TabPanel>
+              <div
+                className={`${styles.gridContainer} ${
+                  pageType === 'edit' ? styles.editPage : ''
+                }`}>
+                {contests?.map((contest, index) => (
+                  <div
+                    key={index}
+                    className={styles.square}
+                    onClick={() => handleOpen(contest)}>
+                    <div className={styles.squareContent}>
+                      <div className={styles.imageContainer}>
+                        <img
+                          src={contest?.image}
+                          alt="thumbnail"
+                          className={styles.image}
+                        />
+                      </div>
+                      <p className={styles.examCode}>{contest?.name}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
+            </TabPanel>
+            <TabPanel>
+              <div
+                className={`${styles.gridContainer} ${
+                  pageType === 'edit' ? styles.editPage : ''
+                }`}>
+                {contestMarking?.map((contest, index) => (
+                  <div
+                    key={index}
+                    className={styles.square}
+                    onClick={() => handleOpen(contest)}>
+                    <div className={styles.squareContent}>
+                      <div className={styles.imageContainer}>
+                        <img
+                          src={contest?.image}
+                          alt="thumbnail"
+                          className={styles.image}
+                        />
+                      </div>
+                      <p className={styles.examCode}>{contest?.name}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabPanel>
+          </Tabs>
         </div>
+        {typeOfTab === 1 && (
+          <div className={styles.add_all}>
+            <LoadingButton
+              className={styles.btnCreate}
+              size="large"
+              onClick={() => fetchConfirm()}
+              loading={postAllLoading}
+              loadingPosition="center"
+              variant="contained">
+              <span style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                <h5>Xác nhận</h5>
+              </span>
+            </LoadingButton>
+          </div>
+        )}
         <Footer />
       </div>
     </>

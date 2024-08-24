@@ -4,6 +4,7 @@ import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { ratingPainting } from '../../api/rating.js';
 import styles from './page.module.css';
+import { LoadingButton } from '@mui/lab';
 
 const ModalPaintingContest = ({
   modalShow,
@@ -12,6 +13,7 @@ const ModalPaintingContest = ({
   awardData,
   awardLoading,
   scheduleId,
+  type,
 }) => {
   const commentRef = useRef(null);
   const descriptionRef = useRef(null);
@@ -22,10 +24,13 @@ const ModalPaintingContest = ({
     label: '',
   });
   const [awardOption, setAwardOptions] = useState([
-    { value: 'null', label: 'Không đạt giải' },
+    { value: '', label: 'Không đạt giải' },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
 
+  // post the marking after click
   const fetchRatingPainting = async payload => {
+    setIsLoading(true);
     try {
       await ratingPainting(payload);
       onHide();
@@ -56,6 +61,7 @@ const ModalPaintingContest = ({
       for (let index in awardId) {
         awardId[index] = '';
       }
+      setIsLoading(false);
     }
   };
 
@@ -128,8 +134,19 @@ const ModalPaintingContest = ({
     return true;
   };
 
+  // adding current data to state if component is editting
+  const editingField = val => {
+    setCommentTxt(val?.reason);
+    setAwardId({
+      value: val?.awardId || '',
+      label: val?.award || 'Không đạt giải' ,
+    });
+  };
+
   // handle confirm painting
-  const validateConfirm = () => {
+  const validateConfirm = e => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!isValidField() || commentTxt === '') {
       toast.warning(
         'Bạn vui lòng để lại đánh giá và chọn giải cho bài thi này nhé !!',
@@ -147,18 +164,21 @@ const ModalPaintingContest = ({
       return;
     }
     if (awardId?.label === 'Không đạt giải') {
+      console.log('cap nhat 1');
       const payload = {
         scheduleId: scheduleId,
         paintings: [
           {
             paintingId: items?.id,
-            awardId: 'null',
+            awardId: '',
             reason: commentTxt,
           },
         ],
       };
       fetchRatingPainting(payload);
     } else {
+      console.log('cap nhat 2');
+
       const payload = {
         scheduleId: scheduleId,
         paintings: [
@@ -193,6 +213,13 @@ const ModalPaintingContest = ({
     }
   }, [awardData]);
 
+  // checking if component is editting
+  useEffect(() => {
+    if (type === 'edit') {
+      editingField(items);
+    } else return;
+  }, [items, type]);
+
   return (
     <>
       <Modal
@@ -214,7 +241,7 @@ const ModalPaintingContest = ({
             overflow: 'scroll',
             scrollbarWidth: 'none',
           }}>
-          <form className={styles.modalForm}>
+          <form onSubmit={validateConfirm} className={styles.modalForm}>
             <div className={styles.image_box}>
               <img className={styles.image} src={items?.image} alt="" />
             </div>
@@ -271,7 +298,7 @@ const ModalPaintingContest = ({
                     onChange={val => {
                       setAwardId(prev => ({
                         ...prev,
-                        value: val?.value,
+                        value: val?.value || '',
                         label: val?.label,
                       }));
                     }}
@@ -297,11 +324,17 @@ const ModalPaintingContest = ({
             </div>
 
             <div className={styles.btn_place}>
-              <span
-                className={styles.btn_find}
-                onClick={() => validateConfirm()}>
-                <h5>Gửi</h5>
-              </span>
+              <LoadingButton
+                type="submit"
+                className={styles.btnCreate}
+                size="large"
+                loading={isLoading}
+                loadingPosition="center"
+                variant="contained">
+                <span style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                  {type === 'edit' ? <h5>Cập nhật</h5> : <h5>Gửi</h5>}
+                </span>
+              </LoadingButton>
             </div>
           </form>
         </Modal.Body>

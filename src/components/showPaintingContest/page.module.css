@@ -67,7 +67,7 @@
 }
 
 .inputModal {
-    padding: 5px 5px !important;
+    padding: 5px !important;
     font-size: 2rem;
 }
 
@@ -90,7 +90,6 @@
     min-height: 10rem;
     height: auto;
     border-radius: 3rem;
-    padding: 2px;
     border: 1px solid rgba(138, 138, 160, 0.3);
     border-radius: 4px;
 }
@@ -104,6 +103,7 @@
     overflow: hidden;
     border: none !important;
     outline: none !important;
+    padding: 5px !important;
 }
 
 .btn_place {
@@ -114,14 +114,17 @@
     margin-top: auto;
 }
 
-.btn_find {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: calc(2rem - 0.5rem);
-    background-color: #5142fc;
+
+.modalForm .btnCreate {
+    margin-top: auto;
+    padding: 0.5rem 1rem;
+}
+
+.modalForm .btnCreate:hover {
     color: white;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    padding: 1.2rem 1rem;
+    border: none !important;
+}
+
+.modalForm .btnCreate:focus {
+    color: white;
 }

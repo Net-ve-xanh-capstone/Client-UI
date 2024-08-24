@@ -11,6 +11,8 @@ const MarkReport = ({ pageType }) => {
   const [contests, setContests] = useState([]);
   const [lazyData, setLazyData] = useState([]);
 
+  const [contestMarking, setContestMarking] = useState([]);
+
   const [showModal, setShowMoadal] = useState(false);
   const [dataObject, setDataObject] = useState(null);
 
@@ -37,10 +39,14 @@ const MarkReport = ({ pageType }) => {
   //   dispatch(store(payload));
   // };
 
-  // get all data from api
+  // get all painting still not marking
   const fetchData = async id => {
     const { data } = await getAllPainting(id);
-    setContests(data.result);
+    const rspNotMarking = data.result.filter(val => val?.isJudged === false);
+    const rspMarking = data.result.filter(val => val?.isJudged === true);
+    
+    setContests(rspNotMarking);
+    setContestMarking(rspMarking);
   };
 
   // get all award of this round
@@ -71,6 +77,7 @@ const MarkReport = ({ pageType }) => {
   const handleClose = () => {
     setShowMoadal(false);
     setDataObject(null);
+    fetchData(searchParams.get('id'));
   };
 
   useEffect(() => {

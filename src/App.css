@@ -105,3 +105,9 @@
 .Toastify__toast-container {
   z-index: 200000 !important;
 }
+
+.Toastify__close-button:hover,
+.Toastify__close-button:focus {
+  outline: none !important;
+  border: none !important;
+}

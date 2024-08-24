@@ -1,18 +1,18 @@
-import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
-import '../public/assets/css/style.css';
-import 'dayjs/locale/vi';
-import { BrowserRouter } from 'react-router-dom';
-import { store, persistor } from './store/configureStore.js';
-import { Provider } from 'react-redux';
-import ScrollToTop from './utils/ScrollToTop.js';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { PersistGate } from 'redux-persist/lib/integration/react';
+import 'dayjs/locale/vi';
+import { Suspense } from 'react';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Suspense } from 'react';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+import '../public/assets/css/style.css';
+import App from './App.jsx';
 import DotLoaderCustom from './components/dotLoader/DotLoader.jsx';
+import { persistor, store } from './store/configureStore.js';
+import ScrollToTop from './utils/ScrollToTop.js';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Suspense fallback={<DotLoaderCustom />}>

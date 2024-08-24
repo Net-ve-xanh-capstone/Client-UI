@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import styles from './page.module.css';
 import Select from 'react-select';
-import { ratingPainting } from '../../api/rating.js';
 import { toast } from 'react-toastify';
+import { ratingPainting } from '../../api/rating.js';
+import styles from './page.module.css';
 
 const ModalPaintingContest = ({
   modalShow,
@@ -17,13 +17,45 @@ const ModalPaintingContest = ({
   const descriptionRef = useRef(null);
 
   const [commentTxt, setCommentTxt] = useState('');
-  const [awardId, setAwardId] = useState({ value: null, label: null });
+  const [awardId, setAwardId] = useState({
+    value: '',
+    label: '',
+  });
+  const [awardOption, setAwardOptions] = useState([
+    { value: 'null', label: 'Không đạt giải' },
+  ]);
 
   const fetchRatingPainting = async payload => {
     try {
       await ratingPainting(payload);
+      onHide();
+      setCommentTxt('');
+      toast.success('Chấm điểm thành công', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     } catch (error) {
       console.log(error);
+      toast.error('Chấm điểm không thành công!!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    } finally {
+      for (let index in awardId) {
+        awardId[index] = '';
+      }
     }
   };
 
@@ -96,9 +128,6 @@ const ModalPaintingContest = ({
     return true;
   };
 
-  // handle reject painting
-  const validateReject = val => {};
-
   // handle confirm painting
   const validateConfirm = () => {
     if (!isValidField() || commentTxt === '') {
@@ -106,7 +135,7 @@ const ModalPaintingContest = ({
         'Bạn vui lòng để lại đánh giá và chọn giải cho bài thi này nhé !!',
         {
           position: 'top-right',
-          autoClose: 5000,
+          autoClose: false,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -116,6 +145,19 @@ const ModalPaintingContest = ({
         },
       );
       return;
+    }
+    if (awardId?.label === 'Không đạt giải') {
+      const payload = {
+        scheduleId: scheduleId,
+        paintings: [
+          {
+            paintingId: items?.id,
+            awardId: 'null',
+            reason: commentTxt,
+          },
+        ],
+      };
+      fetchRatingPainting(payload);
     } else {
       const payload = {
         scheduleId: scheduleId,
@@ -140,6 +182,16 @@ const ModalPaintingContest = ({
       window.removeEventListener('resize', resizeDesRef(items?.description));
     };
   }, [commentTxt, items?.description]);
+
+  // set the new state to innitial state
+  useEffect(() => {
+    if (awardData !== null) {
+      setAwardOptions(prv => [
+        ...awardData.map(val => ({ value: val?.value, label: val?.label })),
+        ...prv,
+      ]);
+    }
+  }, [awardData]);
 
   return (
     <>
@@ -212,7 +264,7 @@ const ModalPaintingContest = ({
                     isClearable={true}
                     placeholder={<div>Chọn giải</div>}
                     styles={customStyles}
-                    options={awardData}
+                    options={awardOption}
                     isLoading={awardLoading}
                     defaultValue={{ value: '', label: 'Chọn giải' }}
                     value={awardId}
@@ -247,13 +299,8 @@ const ModalPaintingContest = ({
             <div className={styles.btn_place}>
               <span
                 className={styles.btn_find}
-                onClick={() => validateReject()}>
-                <h5>Không đạt</h5>
-              </span>
-              <span
-                className={styles.btn_find}
                 onClick={() => validateConfirm()}>
-                <h5>Đạt</h5>
+                <h5>Gửi</h5>
               </span>
             </div>
           </form>

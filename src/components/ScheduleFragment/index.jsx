@@ -21,15 +21,12 @@ import DeleteModal from '../DeleteModal';
 import ScheduleForm from '../ScheduleForm/index.jsx';
 import styles from './style.module.css';
 import FinalScheduleForm from '../finalScheduleForm/page.jsx';
-import FinalScheduleForm from '../finalScheduleForm/page.jsx';
 
 function ScheduleFragment({ scheduleFrag, getContestDetail }) {
   const [type, setType] = useState();
   const [schedule, setSchedule] = useState();
   const [listExam, setListExam] = useState();
   const [modalShow, setModalShow] = useState(false);
-  const [finalModalShow, setFinalModalShow] = useState(false);
-
   const [finalModalShow, setFinalModalShow] = useState(false);
 
   const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -39,13 +36,9 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
   const [editRoundData, setEditRoundData] = useState(null);
   const [roundId, setRoundId] = useState(null);
 
-  const [editRoundData, setEditRoundData] = useState(null);
-  const [roundId, setRoundId] = useState(null);
-
   const [preliminaryList, setPreliminaryList] = useState([]);
   const [finalList, setFinalList] = useState([]);
 
-  // unknow this api make for --- checking this?
   // unknow this api make for --- checking this?
   const getLevelRound = async () => {
     try {
@@ -57,7 +50,6 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
   };
 
   // get all schedule by contestid
-  // get all schedule by contestid
   const getSchedule = async () => {
     try {
       const { data } = await getScheduleByContestId(scheduleFrag.id);
@@ -67,7 +59,6 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
     }
   };
 
-  // delete one schedule in every schedule
   // delete one schedule in every schedule
   const handleDelete = async () => {
     try {
@@ -105,21 +96,6 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
   };
 
   // handle when user click adding more schedule
-  // reset all field when user close popup
-  const resetDetail = () => {
-    setModalShow(false);
-    setFinalModalShow(false);
-    getLevelRound();
-    getSchedule();
-  };
-
-  // open the modal confirm delete
-  const hanldeOpenDelete = scheduleId => {
-    setScheduleIdDelete(scheduleId);
-    setDeleteModalShow(true);
-  };
-
-  // handle when user click adding more schedule
   const handleOpenCreate = (data, roundSchedule) => {
     if (roundSchedule.roundName === 'Vòng Sơ Khảo') {
       setRoundId(roundSchedule.roundId);
@@ -137,37 +113,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
   };
 
   // handle while user click edit schedule
-    if (roundSchedule.roundName === 'Vòng Sơ Khảo') {
-      setRoundId(roundSchedule.roundId);
-      setEditRoundData(data);
-      setListExam(roundSchedule?.schedules);
-      setType('create');
-      setModalShow(true);
-    } else {
-      setRoundId(roundSchedule.roundId);
-      setEditRoundData(data);
-      setListExam(roundSchedule?.schedules);
-      setType('create');
-      setFinalModalShow(true);
-    }
-  };
-
-  // handle while user click edit schedule
   const handleOpenEdit = (data, scheduleData) => {
-    if (data.name === 'Vòng Sơ Khảo') {
-      setType(scheduleData);
-      setRoundId(scheduleData?.id);
-      setEditRoundData(data);
-      setModalShow(true);
-    } else {
-      setType(scheduleData);
-      setRoundId(scheduleData?.id);
-      setEditRoundData(data);
-      setFinalModalShow(true);
-    }
-  };
-
-  //  sorting the level of list schedule to map follow with the level
     if (data.name === 'Vòng Sơ Khảo') {
       setType(scheduleData);
       setRoundId(scheduleData?.id);
@@ -214,17 +160,8 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
   }, [scheduleFrag]);
 
   // this is will render all of schedule follow with the data responding
-  useEffect(() => {
-    getLevelRound();
-    getSchedule();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scheduleFrag]);
-
-  // this is will render all of schedule follow with the data responding
   const renderRound = data => {
     const roundChedule = schedule?.find(item => item.roundId === data.id);
-    console.log(roundChedule);
-
     const isActive = checkActiveScheduleButton(data.startTime, data.endTime); // unknow this variable makign for --- checking this?
     return (
       <div key={data.id} style={{ padding: '10px' }}>
@@ -249,32 +186,8 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                         ? 'repeat(6, 1fr)'
                         : 'repeat(9, 1fr)',
                   }}>
-                <li
-                  className={styles.roundHeader}
-                  style={{
-                    gridTemplateColumns:
-                      roundChedule?.roundName === 'Vòng Sơ Khảo'
-                        ? 'repeat(6, 1fr)'
-                        : 'repeat(9, 1fr)',
-                  }}>
                   <div className={styles.col}>Giám khảo</div>
                   <div className={styles.col}>Ngày chấm</div>
-                  {roundChedule?.roundName === 'Vòng Chung Kết' && (
-                    <>
-                      <div className={styles.col}>Tổng bài chấm</div>
-                      <div className={styles.col}>Giải Nhất</div>
-                      <div className={styles.col}>Giải Nhì</div>
-                      <div className={styles.col}>Giải Ba</div>
-                      <div className={styles.col}>Giải Khuyến Khích</div>
-                    </>
-                  )}
-
-                  {roundChedule?.roundName === 'Vòng Sơ Khảo' && (
-                    <>
-                      <div className={styles.col}>Tổng bài chấm</div>
-                      <div className={styles.col}>Đạt giải</div>
-                    </>
-                  )}
                   {roundChedule?.roundName === 'Vòng Chung Kết' && (
                     <>
                       <div className={styles.col}>Tổng bài chấm</div>
@@ -309,56 +222,12 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                             ? 'repeat(6, 1fr)'
                             : 'repeat(9, 1fr)',
                       }}>
-                    <li
-                      key={scheduleData.id}
-                      className={styles.tableRow}
-                      style={{
-                        gridTemplateColumns:
-                          roundChedule.roundName === 'Vòng Sơ Khảo'
-                            ? 'repeat(6, 1fr)'
-                            : 'repeat(9, 1fr)',
-                      }}>
                       <div className={styles.col} data-label="Tên giám khảo">
                         {scheduleData?.examinerName}
                       </div>
                       <div className={styles.col} data-label="Ngày chấm">
                         <div>{formatDate(scheduleData?.endDate)}</div>
                       </div>
-
-                      {roundChedule?.roundName === 'Vòng Sơ Khảo' && (
-                        <>
-                          <div
-                            className={styles.col}
-                            data-label="Tổng bài chấm">
-                            <div>{scheduleData?.judgeCount}</div>
-                          </div>
-                          {scheduleData?.awards?.map(val => (
-                            <div
-                              key={val.id}
-                              className={styles.col}
-                              data-label="Đạt giải">
-                              <span>{val.quantity}</span>
-                            </div>
-                          ))}
-                        </>
-                      )}
-                      {roundChedule?.roundName === 'Vòng Chung Kết' && (
-                        <>
-                          <div
-                            className={styles.col}
-                            data-label="Tổng bài chấm">
-                            <div>{scheduleData?.judgeCount}</div>
-                          </div>
-                          {scheduleData?.awards?.map(val => (
-                            <div
-                              key={val.id}
-                              className={styles.col}
-                              data-label={val.rank}>
-                              <div>{val.quantity}</div>
-                            </div>
-                          ))}
-                        </>
-                      )}
 
                       {roundChedule?.roundName === 'Vòng Sơ Khảo' && (
                         <>
@@ -462,15 +331,6 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
           scheduleData={listExam}
           type={type}
           roundId={roundId}
-          roundId={roundId}
-        />
-        <FinalScheduleForm
-          modalShow={finalModalShow}
-          onHide={resetDetail}
-          roundData={editRoundData}
-          scheduleData={listExam}
-          type={type}
-          roundId={roundId}
         />
         <DeleteModal
           show={deleteModalShow}
@@ -478,8 +338,6 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
           title={'lịch chấm'}
           callBack={handleDelete}
         />
-        {/* this return will map the data follow with the level of the schedule
-        in contest */}
         {/* this return will map the data follow with the level of the schedule
         in contest */}
         {preliminaryList.map(renderRound)}

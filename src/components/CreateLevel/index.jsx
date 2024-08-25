@@ -348,13 +348,14 @@ function CreateLevel({
                 </div>
               </div>
             </div>
+            {/* Round */} 
             <div className={styles.card_screen}>
               <h3 className={styles.title_zone}>Vòng thi</h3>
               <div style={{ marginLeft: '20px' }}>
-                <div className={styles.roundBlock}>
-                  <h5>Vòng sơ khảo</h5>
-                </div>
-                <div className="row">
+                <div className={styles.roundBlock}> 
+                  <h5>Vòng sơ khảo:</h5>
+                </div> 
+                <div style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
                     {/* <input
@@ -410,10 +411,10 @@ function CreateLevel({
                 {errors.round1 && (
                   <p className={styles.error}>{errors.round1}</p>
                 )}
-                <div className={styles.roundBlock}>
-                  <h5>Vòng chung kết</h5>
+                <div style={{ marginTop: '20px' }} className={styles.roundBlock}>
+                  <h5>Vòng chung kết:</h5>
                 </div>
-                <div className="row">
+                <div style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
                     {/* <input
@@ -470,6 +471,7 @@ function CreateLevel({
                 )}
               </div>
             </div>
+            {/* Award */} 
             <div className={styles.card_screen}>
               <h3 className={styles.title_zone}>Cơ cấu giải thưởng</h3>
               <div className={styles.first_round}>
@@ -493,7 +495,7 @@ function CreateLevel({
                 <div
                   className="col-md-6 d-flex justify-content-center align-items-center"
                   style={{ gap: '20px' }}>
-                  <p className={styles.rankTitle}>Giải nhất</p>
+                  <p className={styles.rankTitle}>Giải nhất:</p>
                   <input
                     className={styles.inputAward}
                     required
@@ -510,7 +512,7 @@ function CreateLevel({
                 <div
                   className="col-md-6 d-flex justify-content-center align-items-center"
                   style={{ gap: '20px' }}>
-                  <p className={styles.rankTitle}>Giải ba</p>
+                  <p className={styles.rankTitle}>Giải ba:</p>
                   <input
                     className={styles.inputAward}
                     required
@@ -529,7 +531,7 @@ function CreateLevel({
                 <div
                   className="col-md-6 d-flex justify-content-center align-items-center"
                   style={{ gap: '20px' }}>
-                  <p className={styles.rankTitle}>Giải nhì</p>
+                  <p className={styles.rankTitle}>Giải nhì:</p>
                   <input
                     className={styles.inputAward}
                     required
@@ -546,7 +548,7 @@ function CreateLevel({
                 <div
                   className="col-md-6 d-flex justify-content-center align-items-center"
                   style={{ gap: '20px' }}>
-                  <p className={styles.rankTitle}>Giải khuyến khích</p>
+                  <p className={styles.rankTitle}>Giải khuyến khích:</p>
                   <input
                     className={styles.inputAward}
                     required

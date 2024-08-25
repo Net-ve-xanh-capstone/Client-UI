@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://netvexanh.azurewebsites.net/api/';
+const baseUrl = 'http://localhost:5001/api/';
 
 const axiosApi = axios.create({
     baseURL: baseUrl,

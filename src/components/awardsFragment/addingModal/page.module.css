@@ -1,0 +1,151 @@
+.title {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 0;
+}
+
+.titleHeader {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@media (max-width: 800px) {
+    .modalForm {
+        right: -5px !important;
+    }
+
+
+}
+
+.modalForm {
+    padding: 20px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: -17px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+}
+
+.btn {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+}
+
+.modalForm .inputModal {
+    padding: 5px 5px !important;
+}
+
+.modalForm .btnCreate {
+    padding: 7px 30px;
+}
+
+.modalForm .btnCreate:hover {
+    color: white;
+    background-color: #5142fc70;
+}
+
+.modalForm .btnCreate:focus {
+    color: white;
+}
+
+.formControl {
+    padding: 5px 5px !important;
+    border: 1px solid #000;
+}
+
+.levelBlock {
+    margin: 20px;
+    display: flex;
+    gap: 20px;
+    width: max-content;
+}
+
+.levelBlock p {
+    color: black;
+    border: 1px solid black;
+    padding: 0px 5px;
+    border-radius: 10px;
+    width: 100px;
+    text-align: center;
+}
+
+.roundBlock h5 {
+    color: black;
+    font-weight: 500;
+    font-size: 14px;
+    border: 1px solid black;
+    padding: 10px 5px;
+    border-radius: 10px;
+    width: 150px;
+    text-align: center;
+}
+
+.inputAward {
+    width: 100px !important;
+    height: 40px;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+}
+
+.rankTitle {
+    width: 100px;
+}
+
+.card_screen {
+    padding: 1rem;
+    border-radius: 0.625rem;
+    border: 1px solid #000;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    gap: 0.5rem;
+}
+
+.title_zone {
+    font-size: medium;
+    text-align: start;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 2rem;
+}
+
+.age {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 4rem;
+}
+
+.age .small_age {
+    display: flex;
+    gap: 1rem;
+}
+
+.age .small_age h4 {
+    flex-shrink: 0;
+}
+
+.age .small_age .inputModal {
+    width: 5rem;
+}
+
+.small_place {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.small_place .inputModal {
+    width: 100%;
+}

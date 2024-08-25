@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { styled, Container, Box } from '@mui/material';
+import { styled, Container, Box, ThemeProvider } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 import Header from './header/Header';
 import Sidebar from './sidebar/Sidebar';
+import { baselightTheme } from '../../theme/DefaultColors.js';
 
 const MainWrapper = styled('div')(() => ({
   display: 'flex',
@@ -24,48 +25,52 @@ const FullLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+  const theme = baselightTheme;
 
   return (
-    <MainWrapper className="mainwrapper">
-      {/* ------------------------------------------- */}
-      {/* Sidebar */}
-      {/* ------------------------------------------- */}
-      <Sidebar
-        isSidebarOpen={isSidebarOpen}
-        isMobileSidebarOpen={isMobileSidebarOpen}
-        onSidebarClose={() => setMobileSidebarOpen(false)}
-      />
-      {/* ------------------------------------------- */}
-      {/* Main Wrapper */}
-      {/* ------------------------------------------- */}
-      <PageWrapper className="page-wrapper">
+    <ThemeProvider theme={theme}>
+
+      <MainWrapper className="mainwrapper">
         {/* ------------------------------------------- */}
-        {/* Header */}
+        {/* Sidebar */}
         {/* ------------------------------------------- */}
-        <Header
-          toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
-          toggleMobileSidebar={() => setMobileSidebarOpen(true)}
+        <Sidebar
+          isSidebarOpen={isSidebarOpen}
+          isMobileSidebarOpen={isMobileSidebarOpen}
+          onSidebarClose={() => setMobileSidebarOpen(false)}
         />
         {/* ------------------------------------------- */}
-        {/* PageContent */}
+        {/* Main Wrapper */}
         {/* ------------------------------------------- */}
-        <Container
-          sx={{
-            paddingTop: '20px',
-            maxWidth: '1200px',
-          }}>
+        <PageWrapper className="page-wrapper">
           {/* ------------------------------------------- */}
-          {/* Page Route */}
+          {/* Header */}
           {/* ------------------------------------------- */}
-          <Box sx={{ minHeight: 'calc(100vh - 170px)' }}>
-            <Outlet />
-          </Box>
+          <Header
+            toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
+            toggleMobileSidebar={() => setMobileSidebarOpen(true)}
+          />
           {/* ------------------------------------------- */}
-          {/* End Page */}
+          {/* PageContent */}
           {/* ------------------------------------------- */}
-        </Container>
-      </PageWrapper>
-    </MainWrapper>
+          <Container
+            sx={{
+              paddingTop: '20px',
+              maxWidth: '1200px',
+            }}>
+            {/* ------------------------------------------- */}
+            {/* Page Route */}
+            {/* ------------------------------------------- */}
+            <Box sx={{ minHeight: 'calc(100vh - 170px)' }}>
+              <Outlet />
+            </Box>
+            {/* ------------------------------------------- */}
+            {/* End Page */}
+            {/* ------------------------------------------- */}
+          </Container>
+        </PageWrapper>
+      </MainWrapper>
+    </ThemeProvider>
   );
 };
 

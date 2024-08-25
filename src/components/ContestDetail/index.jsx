@@ -20,6 +20,7 @@ import TopicFragment from '../TopicFragment';
 import ResourceFragment from '../ResourceFragment';
 import ScheduleFragment from '../ScheduleFragment';
 import AwardsFragment from '../awardsFragment/page..jsx';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
@@ -80,6 +81,7 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
 
+
     {
       title: 'Tài trợ',
       icon: <Paid />,
@@ -92,6 +94,7 @@ function ContestDetail({ contest, handleBack }) {
     },
     {
       title: 'Lịch chấm',
+      title: 'Lịch chấm',
       icon: <CalendarMonth />,
       component: (
         <ScheduleFragment
@@ -102,7 +105,7 @@ function ContestDetail({ contest, handleBack }) {
     },
     {
       title: 'Giải thưởng',
-      icon: <CalendarMonth />,
+      icon: <CardGiftcardIcon />,
       component: (
         <AwardsFragment
           scheduleFrag={contestDes}
@@ -152,9 +155,12 @@ function ContestDetail({ contest, handleBack }) {
         </ul>
 
         {/* bottom slider animation */}
+        {/* bottom slider animation */}
         <div className={styles.slider}>
           <div className={styles.indicator}></div>
         </div>
+        {/*ending bottom slider animation */}
+
         {/*ending bottom slider animation */}
 
         <div className={styles.content}>

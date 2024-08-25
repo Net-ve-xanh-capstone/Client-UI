@@ -1,1 +1,0 @@
-import{P as a,j as s}from"./index-_RrZMV6M.js";import{a as e}from"./DashboardCard-0D_bKLQb.js";const p=({children:r,className:o})=>s.jsx(e,{sx:{p:0,position:"relative"},className:o,elevation:9,variant:void 0,children:r});p.propTypes={children:a.node};export{p as B};

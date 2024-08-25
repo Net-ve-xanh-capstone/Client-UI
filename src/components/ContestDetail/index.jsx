@@ -21,7 +21,7 @@ import ResourceFragment from '../ResourceFragment';
 import ScheduleFragment from '../ScheduleFragment';
 import AwardsFragment from '../awardsFragment/page..jsx';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-
+import PaintingPage from '../../pages/paintingPage/page.jsx';
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
 
@@ -81,7 +81,6 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
 
-
     {
       title: 'Tài trợ',
       icon: <Paid />,
@@ -93,7 +92,16 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
-      title: 'Lịch chấm',
+      title: 'Giải thưởng',
+      icon: <CardGiftcardIcon />,
+      component: (
+        <AwardsFragment
+          scheduleFrag={contestDes}
+          getContestDetail={getContestDetail}
+        />
+      ),
+    },
+    {
       title: 'Lịch chấm',
       icon: <CalendarMonth />,
       component: (
@@ -104,12 +112,13 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
-      title: 'Giải thưởng',
-      icon: <CardGiftcardIcon />,
+      title: 'Bài thi',
+      icon: <CalendarMonth />,
       component: (
-        <AwardsFragment
+        <PaintingPage
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
+          contestId={contest.id}
         />
       ),
     },
@@ -155,12 +164,9 @@ function ContestDetail({ contest, handleBack }) {
         </ul>
 
         {/* bottom slider animation */}
-        {/* bottom slider animation */}
         <div className={styles.slider}>
           <div className={styles.indicator}></div>
         </div>
-        {/*ending bottom slider animation */}
-
         {/*ending bottom slider animation */}
 
         <div className={styles.content}>

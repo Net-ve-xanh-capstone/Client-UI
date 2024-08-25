@@ -12,7 +12,7 @@ import ModalEditPainting from '../../components/editPainting/page.jsx';
 import CardPainting from '../../components/paintingCard/page.jsx';
 import styles from './page.module.css';
 
-function PaintingPage() {
+function PaintingPage({ scheduleFrag, getContestDetail, contestId }) {
   const [totalPage, setTotalPage] = useState(2);
   const [pageNumber, setPageNumber] = useState(1);
   const [loadingPage, setLoadingPage] = useState(false);
@@ -64,6 +64,7 @@ function PaintingPage() {
     label: 'Chọn cuộc thi',
   });
 
+  // clear all of field in current page
   const clearInput = () => {
     setClearTopic(prev => ({ ...prev, label: 'Chọn chủ đề' }));
     let payload = {};
@@ -84,6 +85,7 @@ function PaintingPage() {
     setOpenCreate(false);
   };
 
+  // user if allready searching for now
   const isSeaching = () => {
     for (let index in searching) {
       if (searching[index] !== '') {
@@ -97,7 +99,6 @@ function PaintingPage() {
     if (isSeaching()) {
       fetchDataBySearching(searching, 1);
     } else {
-      console.log('chạy vào đây');
       fetchData(1);
     }
   };
@@ -218,6 +219,7 @@ function PaintingPage() {
     }
   };
 
+  // fetch data by searching
   const fetchDataBySearching = async (payload, pageNumer) => {
     setLoadingPage(true);
     try {

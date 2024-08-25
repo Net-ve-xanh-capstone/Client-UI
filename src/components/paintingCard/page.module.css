@@ -86,14 +86,16 @@
 .field {
     width: 100%;
     display: flex;
+    gap: 1rem;
 }
 
 .field>.title_field {
-    flex: 2.5;
+    flex-shrink: 0;
+
 }
 
 .field>.des_field {
-    flex: 6;
+    flex: 1;
 }
 
 .field>.title_field p {
@@ -126,8 +128,7 @@
     color: white;
     transition: all 0.2s ease;
     cursor: pointer;
-    padding: 1.2rem 1rem;
-    width: 45%;
+    padding: 0.5rem 1rem;
 
     display: flex;
     justify-content: center;
@@ -153,7 +154,7 @@
 }
 
 .btn_find h5 {
-    font-size: 1.6rem !important;
+    font-size: 1.4rem !important;
 }
 
 .btn_find:hover {

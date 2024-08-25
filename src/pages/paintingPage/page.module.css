@@ -52,16 +52,20 @@
 .heros {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
+
     justify-content: flex-start;
     gap: 2rem;
-    height: 5rem;
+    height: auto;
 }
 
 /* line filter by name */
 .searchbox {
-    height: 100%;
-    width: 80rem;
+    height: 5rem;
     border-radius: 2rem;
+
+    flex-shrink: 0;
+    min-width: 80%;
 
     background: transparent;
     backdrop-filter: blur(15px);
@@ -76,6 +80,7 @@
     outline: none !important;
     color: #070F2B !important;
     font-size: 1.5rem !important;
+
 }
 
 .search_field:focus {
@@ -237,6 +242,26 @@
         color: #7a798a !important;
         font-size: 20px;
     }
+
+    .heros {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+
+        justify-content: center;
+        gap: 2rem;
+        height: auto;
+    }
+
+    .filter_body {
+        width: 100%;
+        height: max-content;
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
+    }
 }
 
 /* Small devices (phones, 576px and up) */
@@ -246,7 +271,7 @@
         height: auto;
 
         display: grid;
-        grid-template-columns: repeat(1, 50rem);
+        grid-template-columns: repeat(1, 43rem);
         justify-content: center;
 
         column-gap: 2rem;
@@ -298,29 +323,29 @@
     /* CSS cho thiết bị có kích thước từ 1200px trở lên */
 }
 
-/* Extra extra large devices (very large desktops, 1400px and up) */
-@media (min-width: 1400px) {
-    /* CSS cho thiết bị có kích thước từ 1400px trở lên */
-}
-
 /* responsive */
 
 .btn_searching {
     width: max-content;
     display: flex;
+    height: 5rem;
     gap: 2rem;
+    flex: 1
 }
 
 .btn_find {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    flex: 1;
+    min-width: fit-content;
+    padding: 0 0.5rem;
     border-radius: calc(2rem - 0.5rem);
     background-color: #5142fc;
     color: white;
     transition: all 0.2s ease;
     cursor: pointer;
-    padding: 1.2rem 1rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .btn_find h5 {

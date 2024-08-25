@@ -167,7 +167,7 @@
 }
 
 .title_input {
-    font-size: 12px;
+    font-size: 18px;
     color: #1f1f2c;
     width: 100%;
     word-break: break-word;
@@ -175,7 +175,6 @@
     overflow: hidden;
     border: none;
     outline: none !important;
-    padding: 5px !important;
 }
 
 .title_input:focus {

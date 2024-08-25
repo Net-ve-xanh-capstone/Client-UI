@@ -6,7 +6,6 @@ import {
   School,
   Topic,
   Paid,
-  Schedule,
 } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import styles from './style.module.css';
@@ -81,7 +80,6 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
 
-
     {
       title: 'Tài trợ',
       icon: <Paid />,
@@ -93,7 +91,6 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
-      title: 'Lịch chấm',
       title: 'Lịch chấm',
       icon: <CalendarMonth />,
       component: (
@@ -145,6 +142,10 @@ function ContestDetail({ contest, handleBack }) {
               <label
                 htmlFor={`tab${index + 1}`}
                 role="button"
+                style={{
+                  cursor: 'pointer',
+                  height: '100%',
+                }}
                 className={styles.tabLabel}>
                 {tab.icon}
                 <br />

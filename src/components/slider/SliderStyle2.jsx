@@ -45,7 +45,7 @@ const SliderStyle2 = () => {
             {userInfo === null ? (
               <div className="flat-bt-slider style2 flex">
                 <a
-                  href="/Client-UI/login"
+                  href="/Client-UI/sign-up"
                   className="sc-button header-slider style style-1 note fl-button pri-1"
                 >
                   <span>Đăng ký ngay</span>

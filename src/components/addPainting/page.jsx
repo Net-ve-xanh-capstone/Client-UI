@@ -307,7 +307,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
       );
       resetFieldInputValues();
       setPageNumber(1);
-      fetchData(1);
+      fetchData();
       onHide();
       toast.success('Bài thi đã được thêm vào danh sách', {
         position: 'top-right',
@@ -341,7 +341,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
       );
       resetFieldInputValues();
       setPageNumber(1);
-      fetchData(1);
+      fetchData();
       onHide();
       toast.success('Thêm thành công!', {
         position: 'top-right',

@@ -54,6 +54,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
     try {
       const { data } = await getScheduleByContestId(scheduleFrag.id);
       setSchedule(data?.result);
+      console.log('các vòng hiện tại', data);
     } catch (e) {
       console.log('err', e);
     }
@@ -162,6 +163,8 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
   // this is will render all of schedule follow with the data responding
   const renderRound = data => {
     const roundChedule = schedule?.find(item => item.roundId === data.id);
+    console.log('du lieu hien tai', roundChedule);
+
     const isActive = checkActiveScheduleButton(data.startTime, data.endTime); // unknow this variable makign for --- checking this?
     return (
       <div key={data.id} style={{ padding: '10px' }}>
@@ -278,20 +281,20 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                             alignItems: 'center',
                           }}>
                           <IconButton
-                            aria-label="edit"
-                            size="large"
-                            color="primary"
-                            disabled={scheduleData?.status === 'Done'}
-                            onClick={() => handleOpenEdit(data, scheduleData)}>
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
                             aria-label="delete"
                             size="large"
                             color="error"
                             disabled={scheduleData?.status === 'Done'}
                             onClick={() => hanldeOpenDelete(scheduleData?.id)}>
                             <DeleteIcon />
+                          </IconButton>
+                          <IconButton
+                            aria-label="edit"
+                            size="large"
+                            color="primary"
+                            disabled={scheduleData?.status === 'Done'}
+                            onClick={() => handleOpenEdit(data, scheduleData)}>
+                            <EditIcon />
                           </IconButton>
                         </div>
                       </div>

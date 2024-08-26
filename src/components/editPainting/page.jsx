@@ -19,6 +19,8 @@ function ModalEditPainting({
   fetchData,
   dataPainting,
   setPageNumber,
+  currentSeach,
+  currentPage,
 }) {
   const { userInfo } = useSelector(state => state.auth);
 
@@ -376,8 +378,8 @@ function ModalEditPainting({
         progress: undefined,
         theme: 'light',
       });
-      setPageNumber(1);
-      fetchData(1);
+      setPageNumber(currentPage);
+      fetchData(currentSeach);
       onHide();
     } catch (error) {
       toast.warning(error, {

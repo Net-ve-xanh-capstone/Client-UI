@@ -4,7 +4,6 @@ import { Pagination, Skeleton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
-import { contestApi } from '../../api/contestApi.js';
 import { paintingApi } from '../../api/paintingApi.js';
 import { topicApi } from '../../api/topicApi.js';
 import ModalAddPainting from '../../components/addPainting/page.jsx';
@@ -12,7 +11,7 @@ import ModalEditPainting from '../../components/editPainting/page.jsx';
 import CardPainting from '../../components/paintingCard/page.jsx';
 import styles from './page.module.css';
 
-function PaintingPage() {
+function PaintingPage({ scheduleFrag, getContestDetail, contestId }) {
   const [totalPage, setTotalPage] = useState(2);
   const [pageNumber, setPageNumber] = useState(1);
   const [loadingPage, setLoadingPage] = useState(false);
@@ -33,7 +32,7 @@ function PaintingPage() {
     level: '',
     roundName: '',
     status: '',
-    contestId: '',
+    contestId: contestId,
   });
 
   // data round and roundtopic
@@ -56,24 +55,20 @@ function PaintingPage() {
     { value: 'Vòng Sơ Khảo', label: 'Vòng Sơ Khảo' },
   ]);
 
-  // data contest
-  const [loadingContest, setLoadingContest] = useState(true);
-  const [contest, setContestList] = useState([{ val: null, label: null }]);
-  const [clearContest, setClearContest] = useState({
-    value: '',
-    label: 'Chọn cuộc thi',
-  });
-
+  // clear all of field in current page
   const clearInput = () => {
     setClearTopic(prev => ({ ...prev, label: 'Chọn chủ đề' }));
     let payload = {};
     for (let index in searching) {
-      if (index !== 'code') {
-        searching[index] = '';
+      if (index !== 'contestId') {
+        if (index !== 'code') {
+          searching[index] = '';
+        }
       }
     }
+    setNewFilter('');
     payload = { ...searching };
-    payload.code === '' ? fetchData(1) : fetchDataBySearching(payload, 1);
+    fetchDataBySearching(payload, 1);
   };
 
   const handleEditDone = () => {
@@ -84,10 +79,13 @@ function PaintingPage() {
     setOpenCreate(false);
   };
 
+  //check if user i already searching
   const isSeaching = () => {
     for (let index in searching) {
-      if (searching[index] !== '') {
-        return true;
+      if (index !== 'contestId') {
+        if (searching[index] !== '') {
+          return true;
+        }
       }
     }
     return false;
@@ -97,7 +95,6 @@ function PaintingPage() {
     if (isSeaching()) {
       fetchDataBySearching(searching, 1);
     } else {
-      console.log('chạy vào đây');
       fetchData(1);
     }
   };
@@ -107,8 +104,15 @@ function PaintingPage() {
     if (isSeaching()) {
       fetchDataBySearching(searching, value);
     } else {
-      console.log('running this code');
-      fetchData(value);
+      let payload = {
+        code: '',
+        topicName: '',
+        level: '',
+        roundName: '',
+        status: '',
+        contestId: contestId,
+      };
+      fetchDataBySearching(payload, value);
     }
   };
 
@@ -160,16 +164,19 @@ function PaintingPage() {
     }),
   };
 
-  // get all painting by current page
-  const fetchData = async currPage => {
+  // fetch data by searching
+  const fetchDataBySearching = async (payload, pageNumer) => {
     setLoadingPage(true);
     try {
-      const res = await paintingApi.getAllPaintingByPage(
-        `paintings/list?PageSize=8&PageNumber=${currPage}`,
+      const res = await paintingApi.filterPainting(
+        `paintings/filterpainting?PageSize=8&PageNumber=${pageNumer}`,
+        payload,
       );
-      const data = await res.data.result;
-      setListPainting(data.list);
-      setTotalPage(data.totalPage);
+      const data = res.data.result.list;
+      const totalPage = res.data.result.totalPage;
+
+      setTotalPage(totalPage);
+      setListPainting(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -202,51 +209,41 @@ function PaintingPage() {
     }
   };
 
-  // fetch all contest
-  const fetchContest = async () => {
-    setLoadingContest(true);
-    try {
-      const res = await contestApi.getAll(
-        'contests/getcontestforfilterpainting',
-      );
-      const data = res.data.result;
-      setContestList(data.map(val => ({ value: val.id, label: val.name })));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingContest(false);
-    }
-  };
-
-  const fetchDataBySearching = async (payload, pageNumer) => {
-    setLoadingPage(true);
-    try {
-      const res = await paintingApi.filterPainting(
-        `paintings/filterpainting?PageSize=8&PageNumber=${pageNumer}`,
-        payload,
-      );
-      const data = res.data.result.list;
-      const totalPage = res.data.result.totalPage;
-
-      setTotalPage(totalPage);
-      setListPainting(data);
-
-      console.log(res.data.result);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingPage(false);
-    }
+  // recalling data, if not pass anything in parameter we will calling default value like below
+  const recallData = (
+    payload = {
+      code: '',
+      topicName: '',
+      level: '',
+      roundName: '',
+      status: '',
+      contestId: contestId,
+    },
+  ) => {
+    fetchDataBySearching(payload, 1);
   };
 
   useEffect(() => {
     if (isSeaching()) {
       return;
     } else {
-      console.log('calling');
-      fetchData(pageNumber);
       fetchAllTopic();
-      fetchContest();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // calling first data by contestId
+  useEffect(() => {
+    if (contestId !== null) {
+      let payload = {
+        code: '',
+        topicName: '',
+        level: '',
+        roundName: '',
+        status: '',
+        contestId: contestId,
+      };
+      recallData(payload);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -256,22 +253,19 @@ function PaintingPage() {
       <ModalAddPainting
         modalShow={openCreate}
         onHide={handlePostDone}
-        fetchData={fetchData}
+        fetchData={recallData}
         setPageNumber={setPageNumber}
       />
       <ModalEditPainting
         modalShow={openEdit}
         onHide={handleEditDone}
         dataPainting={paintingByid}
-        fetchData={fetchData}
+        fetchData={recallData}
         setPageNumber={setPageNumber}
+        currentSeach={searching}
+        currentPage={pageNumber}
       />
       <div className={styles.container}>
-        <div className={styles.title_box}>
-          <h2 className={`tf-title pb-20 ${styles.main_title}`}>
-            Quản lý bài thi
-          </h2>
-        </div>
         <div className={styles.section}>
           <div className={styles.filter_box}>
             <div className={styles.heros}>
@@ -298,19 +292,6 @@ function PaintingPage() {
               </div>
             </div>
             <div className={styles.filter_body}>
-              <Select
-                isClearable={true}
-                placeholder={<div>Chọn cuộc thi</div>}
-                // defaultInputValue={{ value: '', label: 'Chọn chủ đề' }}
-                styles={customStyles}
-                options={contest}
-                isLoading={loadingContest}
-                value={clearContest}
-                onChange={val => {
-                  setClearContest(val);
-                  setSearching(prev => ({ ...prev, contestId: val?.value }));
-                }}
-              />
               <Select
                 isClearable={true}
                 placeholder={<div>Chọn chủ đề</div>}

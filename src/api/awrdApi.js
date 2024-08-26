@@ -19,3 +19,5 @@ export const createAward = payload => {
 export const deleteAward = id => {
   return axiosApi.patch(`awards?id=${id}`);
 };
+
+

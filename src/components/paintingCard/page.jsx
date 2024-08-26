@@ -34,15 +34,15 @@ function CardPainting({ items, getPaintingByID }) {
             </span>
           </div>
         </span>
-        <div className={`${styles.field} ${styles.title_field}`}>
+        {/* <div className={`${styles.field} ${styles.title_field}`}>
           <div className={styles.title_field}>
             <p>Mã thí sinh: </p>
           </div>
           <div className={styles.des_field}>
             <p>{items.competitorCode}</p>
           </div>
-        </div>
-        <div className={`${styles.field} ${styles.title_field}`}>
+        </div> */}
+        <div className={`${styles.field}`}>
           <div className={styles.title_field}>
             <p>Tác giả: </p>
           </div>
@@ -50,7 +50,7 @@ function CardPainting({ items, getPaintingByID }) {
             <p>{items.ownerName}</p>
           </div>
         </div>
-        <div className={`${styles.field} ${styles.title_field}`}>
+        <div className={`${styles.field}`}>
           <div className={styles.title_field}>
             <p>Cấp độ: </p>
           </div>
@@ -58,7 +58,7 @@ function CardPainting({ items, getPaintingByID }) {
             <p>{items.level}</p>
           </div>
         </div>
-        <div className={`${styles.field} ${styles.title_field}`}>
+        <div className={`${styles.field}`}>
           <div className={styles.title_field}>
             <p>Chủ đề: </p>
           </div>
@@ -66,7 +66,7 @@ function CardPainting({ items, getPaintingByID }) {
             <p>{items.topicName}</p>
           </div>
         </div>
-        <div className={`${styles.field} ${styles.title_field}`}>
+        <div className={`${styles.field}`}>
           <div className={styles.title_field}>
             <p>Vòng thi: </p>
           </div>
@@ -74,7 +74,7 @@ function CardPainting({ items, getPaintingByID }) {
             <p>{items.roundName}</p>
           </div>
         </div>
-        <div className={`${styles.field} ${styles.title_field}`}>
+        <div className={`${styles.field}`}>
           <div className={styles.title_field}>
             <p>Người tạo: </p>
           </div>

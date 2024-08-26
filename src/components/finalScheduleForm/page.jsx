@@ -7,13 +7,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getAwardId } from '../../api/awrdApi.js';
+import { getAwardForScheduleByRoundId } from '../../api/awrdApi.js';
 import { getAll } from '../../api/examinerStaffApi';
-import {
-  createFinal,
-  createPreliminary,
-  editShedule,
-} from '../../api/scheduleStaffApi';
+import { createFinal, editShedule } from '../../api/scheduleStaffApi';
 import styles from './page.module.css';
 import { CircularProgress } from '@mui/material';
 
@@ -38,14 +34,13 @@ function FinalScheduleForm({
 
   //get all award of this round to GET the ID and  NAME
   const fetchAwardId = async id => {
-    console.log('chay api du thua');
-
     setAwardLoading(true);
     try {
-      const { data } = await getAwardId(id);
+      const { data } = await getAwardForScheduleByRoundId(id);
       const result = data.result.map(val => {
-        return { awardId: val.id, name: val.rank, quantity: '' };
+        return { awardId: val.id, name: val.rank, quantity: val.quantity };
       });
+
       setAward(result);
     } catch (error) {
       console.log(error);
@@ -170,13 +165,18 @@ function FinalScheduleForm({
 
   // adding new award value to the state
   const awardOnchange = (e, id) => {
+    let newValue = e.target.value;
     const { value } = e.target;
     for (let index in award) {
       if (award[index].awardId === id) {
+        if (isNaN(newValue) || newValue < 0) {
+          // Có thể đặt giá trị về 0 hoặc thực hiện hành động khác tùy ý
+          newValue = 0;
+        }
         setAward(prv =>
           prv.map(val => {
             if (val.awardId === id) {
-              return { ...val, quantity: value };
+              return { ...val, quantity: newValue };
             }
             return val;
           }),
@@ -404,8 +404,12 @@ function FinalScheduleForm({
                       className={styles.grid_input}
                       type="number"
                       value={val.quantity}
+                      min="0"
                       onChange={e => awardOnchange(e, val.awardId)}
                     />
+                    <div className={styles.grid_input_label}>
+                      Số lượng giải còn lại: {val.quantity}
+                    </div>
                   </div>
                 ))
               )}

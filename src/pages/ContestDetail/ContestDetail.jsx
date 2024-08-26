@@ -7,7 +7,6 @@ import 'react-tabs/style/react-tabs.css';
 import levelIcon from '../../assets/images/icon/level.png';
 import useFetchData from '../../hooks/useQueryData.js';
 import {
-  defaultImage,
   defaultAvatar,
   userAvatar,
 } from '../../constant/imageDefault.js';

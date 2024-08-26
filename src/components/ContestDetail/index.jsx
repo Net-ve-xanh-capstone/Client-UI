@@ -6,7 +6,6 @@ import {
   School,
   Topic,
   Paid,
-  Schedule,
 } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import styles from './style.module.css';
@@ -154,6 +153,10 @@ function ContestDetail({ contest, handleBack }) {
               <label
                 htmlFor={`tab${index + 1}`}
                 role="button"
+                style={{
+                  cursor: 'pointer',
+                  height: '100%',
+                }}
                 className={styles.tabLabel}>
                 {tab.icon}
                 <br />
@@ -164,9 +167,12 @@ function ContestDetail({ contest, handleBack }) {
         </ul>
 
         {/* bottom slider animation */}
+        {/* bottom slider animation */}
         <div className={styles.slider}>
           <div className={styles.indicator}></div>
         </div>
+        {/*ending bottom slider animation */}
+
         {/*ending bottom slider animation */}
 
         <div className={styles.content}>

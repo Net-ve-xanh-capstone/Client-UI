@@ -74,6 +74,7 @@ function ContestManagement() {
       const { data } = await getAll();
       const fetchedContest = data?.result || [];
       setContest(fetchedContest);
+      console.log(data);
     } catch (e) {
       console.log('error', e);
     }
@@ -196,22 +197,10 @@ function ContestManagement() {
       label: 'TÊN STAFF',
     },
     {
-      name: 'TRẠNG THÁI',
+      name: 'status',
+      label: 'TRẠNG THÁI',
       options: {
-        customBodyRender: (value, tableData) => {
-          const isActive = tableData && handleActiveDate(tableData);
-
-          return (
-            <>
-              <Switch
-                checked={isActive}
-                size="small"
-                color="success"
-                disabled
-              />
-            </>
-          );
-        },
+        customBodyRender: value => <span>{value}</span>,
       },
     },
     {
@@ -223,13 +212,6 @@ function ContestManagement() {
             <span style={{ display: 'none' }} name="id">
               {value}
             </span>
-            <IconButton
-              aria-label="delete"
-              size="small"
-              color="info"
-              onClick={() => handleOpenDetail(value)}>
-              <RemoveRedEyeIcon />
-            </IconButton>
             {userInfo.role === 'Staff' && (
               <IconButton
                 aria-label="delete"
@@ -243,6 +225,13 @@ function ContestManagement() {
                 <DeleteIcon />
               </IconButton>
             )}
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="info"
+              onClick={() => handleOpenDetail(value)}>
+              <RemoveRedEyeIcon />
+            </IconButton>
           </span>
         ),
       },

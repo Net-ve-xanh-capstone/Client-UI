@@ -126,18 +126,18 @@ function ResourceFragment({ resourceFrag, getContestDetail }) {
                     <IconButton
                       aria-label="delete"
                       size="large"
-                      color="info"
-                      onClick={() => handleOpenEdit(data)}
-                      disabled={isEditing}>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      size="large"
                       color="error"
                       onClick={() => hanldeOpenDelete(data.id)}
                       disabled={isEditing}>
                       <DeleteIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      size="large"
+                      color="info"
+                      onClick={() => handleOpenEdit(data)}
+                      disabled={isEditing}>
+                      <EditIcon />
                     </IconButton>
                   </div>
                 </div>

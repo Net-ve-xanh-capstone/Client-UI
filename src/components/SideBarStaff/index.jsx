@@ -45,12 +45,6 @@ const SideBarStaff = ({
       new: false,
     },
     {
-      icon: <ColorLensIcon />,
-      path: '/painting',
-      name: 'Bài dự thi',
-      new: false,
-    },
-    {
       icon: <BookIcon />,
       path: '/blog',
       name: 'Bài viết',

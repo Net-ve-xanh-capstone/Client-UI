@@ -114,7 +114,8 @@ input[name="tab-control"] {
 
 .tabs .tabList .tabItem label svg {
     height: 1.2em;
-    vertical-align: bottom;
+    display: inline-block;
+    vertical-align: middle;
     margin-right: 0.2em;
 
 }
@@ -239,17 +240,44 @@ input[name="tab-control"]:nth-of-type(8):checked~.content>section:nth-child(8) {
 }
 
 @media (max-width: 992px) {
-    .tabs .tabList .tabItem label {
-        white-space: initial;
+
+    .tabs {
+        padding: 20px
     }
 
-    .tabs .tabList .tabItem label br {
-        display: initial;
+    .tabs .tabList .tabItem label {
+        padding: 5px;
+        border-radius: 5px;
     }
 
     .tabs .tabList .tabItem label svg {
-        height: 1.5em;
+        font-size: 16px;
     }
+
+    .tabs .tabList .tabItem label span {
+        display: none;
+    }
+
+    .tabs .slider {
+        display: none;
+    }
+
+    .tabs .content {
+        margin-top: 20px;
+    }
+
+    .tabs .content section h2 {
+        display: block;
+        color: var(--pink);
+        margin-bottom: 1rem;
+    }
+
+    section p {
+        font-size: 12px;
+        line-height: 20px;
+        margin-bottom: 2rem;
+    }
+
 }
 
 @media (max-width: 768px) {

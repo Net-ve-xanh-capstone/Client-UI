@@ -128,6 +128,7 @@ function ContestDetail({ contest, handleBack }) {
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
           contestId={contest.id}
+          statusOfRound={statusOfRound}
         />
       ),
     },

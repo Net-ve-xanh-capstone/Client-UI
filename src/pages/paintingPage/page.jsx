@@ -11,7 +11,13 @@ import ModalEditPainting from '../../components/editPainting/page.jsx';
 import CardPainting from '../../components/paintingCard/page.jsx';
 import styles from './page.module.css';
 
-function PaintingPage({ scheduleFrag, getContestDetail, contestId }) {
+
+function PaintingPage({
+  scheduleFrag,
+  getContestDetail,
+  contestId,
+  statusOfRound,
+}) {
   const [totalPage, setTotalPage] = useState(2);
   const [pageNumber, setPageNumber] = useState(1);
   const [loadingPage, setLoadingPage] = useState(false);
@@ -42,6 +48,12 @@ function PaintingPage({ scheduleFrag, getContestDetail, contestId }) {
     label: 'Chọn chủ đề',
   });
   const [roundTopic, setRoundTopic] = useState([{ val: null, label: null }]);
+
+  // handlePopreason
+
+  const isDisabel = !statusOfRound
+    .toLowerCase()
+    .includes('đang tiến hành'.toLowerCase());
 
   // data educationlevel
   const [levelList] = useState([
@@ -95,7 +107,7 @@ function PaintingPage({ scheduleFrag, getContestDetail, contestId }) {
     if (isSeaching()) {
       fetchDataBySearching(searching, 1);
     } else {
-      fetchData(1);
+      return;
     }
   };
 
@@ -250,11 +262,13 @@ function PaintingPage({ scheduleFrag, getContestDetail, contestId }) {
 
   return (
     <>
+
       <ModalAddPainting
         modalShow={openCreate}
         onHide={handlePostDone}
         fetchData={recallData}
         setPageNumber={setPageNumber}
+        isDisabel={isDisabel}
       />
       <ModalEditPainting
         modalShow={openEdit}
@@ -264,6 +278,7 @@ function PaintingPage({ scheduleFrag, getContestDetail, contestId }) {
         setPageNumber={setPageNumber}
         currentSeach={searching}
         currentPage={pageNumber}
+        isDisabel={isDisabel}
       />
       <div className={styles.container}>
         <div className={styles.section}>
@@ -405,7 +420,10 @@ function PaintingPage({ scheduleFrag, getContestDetail, contestId }) {
             />
           </div>
         </div>
-        <div className={styles.btn_add} onClick={() => setOpenCreate(true)}>
+        <div
+          style={{ display: isDisabel ? 'none' : 'flex' }}
+          className={styles.btn_add}
+          onClick={() => setOpenCreate(true)}>
           <AddIcon
             sx={{
               fontSize: '4rem',

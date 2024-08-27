@@ -89,7 +89,14 @@ function TopicManagement() {
       name: 'description',
       label: 'MÔ TẢ',
       options: {
-        customBodyRender: value => <span>{value}</span>,
+        customBodyRender: value => (
+          <span className={styles.extendMore}>
+            {value?.length > 100 ? value.slice(0, 90) : value}
+            {value?.length > 100 && (
+              <span className={styles.tooltip}>{value}</span>
+            )}
+          </span>
+        ),
       },
     },
     {

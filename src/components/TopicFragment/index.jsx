@@ -135,9 +135,15 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                             </div>
 
                             <div className={styles.col} data-label="Mô tả">
-                              <div>
-                                <>{topicData.topic.description}</>
-                              </div>
+                              {topicData.topic.description?.length > 40
+                                ? topicData.topic.description.slice(0, 30) +
+                                  '...'
+                                : topicData.topic.description}
+                              {topicData.topic.description?.length > 40 && (
+                                <div className={styles.tooltip}>
+                                  {topicData.topic.description}
+                                </div>
+                              )}
                             </div>
                             <div className={styles.col} data-label="Tương tác">
                               <IconButton

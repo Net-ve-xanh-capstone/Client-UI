@@ -64,6 +64,7 @@ function ContestDetail({ contest, handleBack }) {
       icon: <AccessTimeFilled />,
       component: (
         <RoundFragment
+          scheduleFrag={contestDes}
           roundFrag={contestDes}
           getContestDetail={getContestDetail}
         />
@@ -132,7 +133,7 @@ function ContestDetail({ contest, handleBack }) {
           </IconButton>
         </div>
         <div>
-          <h2 className={styles.titleHeader}>Nét vẽ xanh</h2>
+          <h2 className={styles.titleHeader}>{contestDes?.name}</h2>
         </div>
       </div>
 

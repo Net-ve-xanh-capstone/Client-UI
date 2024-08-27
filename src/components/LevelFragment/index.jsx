@@ -133,13 +133,13 @@ function LevelFragment({ levelFrag, getContestDetail }) {
                     color="error"
                     onClick={() => hanldeOpenDelete(data.id)}>
                     <DeleteIcon />
-                    <IconButton
-                      aria-label="edit"
-                      size="large"
-                      color="primary"
-                      onClick={() => openEdit(data)}>
-                      <EditIcon />
-                    </IconButton>
+                  </IconButton>
+                  <IconButton
+                    aria-label="edit"
+                    size="large"
+                    color="primary"
+                    onClick={() => openEdit(data)}>
+                    <EditIcon />
                   </IconButton>
                 </div>
               </div>

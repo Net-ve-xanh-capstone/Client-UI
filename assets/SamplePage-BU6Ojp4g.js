@@ -1,0 +1,1 @@
+import{j as a,ag as e}from"./index-DK9C9aCW.js";import{P as s,D as r}from"./DashboardCard-_GtGK-g8.js";import"./Box-Bh5DRXh3.js";const o=()=>a.jsx(s,{title:"Sample Page",description:"this is Sample page",children:a.jsx(r,{title:"Sample Page",children:a.jsx(e,{children:"This is a sample page"})})});export{o as default};

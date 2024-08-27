@@ -5,9 +5,9 @@ import TextFieldCommon from '../components/input/TextfieldCommon';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Grid, styled, Dialog, DialogContent, IconButton } from '@mui/material';
+import { Dialog, DialogContent, Grid, IconButton, styled } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DatepickerCommon from '../components/datepicker/DatePickerCommon';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -19,7 +19,6 @@ import { FadeLoader } from 'react-spinners';
 import { setDefault } from '../store/auth/authSlice';
 import { color } from '../constant/Color.js';
 import { regexEmail, regexFullNameVN, regexPhone } from '../constant/Regex.js';
-import { Dropdown } from '../components/dropdown';
 import { addressApi } from '../api/addressApi.js';
 
 const SignUp = () => {
@@ -45,7 +44,6 @@ const SignUp = () => {
     register: { success, message, loading },
     jwtToken,
   } = useSelector(state => state.auth);
-
   const schema = yup.object().shape({
     lastname: yup
       .string()
@@ -64,7 +62,10 @@ const SignUp = () => {
       .matches(regexPhone, 'Số điện thoại không hợp lệ')
       .required('Vui lòng nhập số điện thoại của bạn'),
     userName: yup.string().required('Vui lòng nhập tên tài khoản của bạn'),
-    password: yup.string().required('Vui lòng nhập mật khẩu của bạn'),
+    password: yup.string().required('Vui lòng nhập mật khẩu của bạn').matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+      'Mật khẩu của bạn phải chứa 8 ký tự, bao gồm một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt.',
+    ),
     gender: yup
       .boolean()
       .required('Vui lòng chọn giới tính')

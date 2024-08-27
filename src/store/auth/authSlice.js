@@ -74,7 +74,7 @@ const authSlice = createSlice({
     builder.addCase(competitorRegister.rejected, (state, { payload }) => {
       state.register.loading = false;
       state.register.success = payload.success;
-      state.register.message = payload.message;
+      state.register.message = payload;
     });
   },
 });

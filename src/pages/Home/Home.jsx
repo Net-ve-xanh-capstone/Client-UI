@@ -6,18 +6,19 @@ import ContestComing from './layouts/ContestComing.jsx';
 import Contest from './layouts/Contest.jsx';
 import PopularCollection from './layouts/PopularCollection';
 import Create from './layouts/Create';
+
 const Home = () => {
-    return (
-        <div className="home-5">
-            <HeaderVersion2 />
-            <SliderStyle2 data={heroSliderData} />
-            <Contest />
-            <ContestComing />
-            <PopularCollection />
-            <Create />
-            <Footer />
-        </div>
-    );
+  return (
+    <div className="home-5">
+      <HeaderVersion2 />
+      <SliderStyle2 data={heroSliderData} />
+      <Contest />
+      <ContestComing />
+      {/*<PopularCollection />*/}
+      <Create />
+      <Footer />
+    </div>
+  );
 };
 
 export default Home;

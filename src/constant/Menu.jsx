@@ -67,7 +67,7 @@ const menus = [
       {
         id: 2,
         sub: 'Bộ sưu tập',
-        links: '/collection',
+        links: '/Client-UI/collection',
         public: true,
       },
       {

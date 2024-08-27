@@ -12,7 +12,7 @@ import { createTopic, editTopic } from '../../api/topicStaffApi';
 
 function TopicForm({ modalShow, onHide, topicData }) {
   const [validated, setValidated] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState('');
   const { userInfo } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
@@ -20,6 +20,7 @@ function TopicForm({ modalShow, onHide, topicData }) {
   useEffect(() => {
     if (userInfo === null) navigate('/login');
     setFormData(intialState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalShow]);
 
   const intialState = {
@@ -81,6 +82,8 @@ function TopicForm({ modalShow, onHide, topicData }) {
     } catch (e) {
       console.log('err', e);
       onHide();
+    } finally {
+      setErrors(null);
     }
   };
 
@@ -103,6 +106,8 @@ function TopicForm({ modalShow, onHide, topicData }) {
       }
     } catch (e) {
       console.log('Err', e);
+    } finally {
+      setErrors(null);
     }
   };
 
@@ -127,7 +132,7 @@ function TopicForm({ modalShow, onHide, topicData }) {
         show={modalShow}
         onHide={() => {
           onHide();
-          setErrors({});
+          setErrors(null);
         }}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
@@ -149,7 +154,7 @@ function TopicForm({ modalShow, onHide, topicData }) {
               name="name"
               value={formData.name}
               onChange={handleInputChange}></input>
-            <p style={{ color: '#eb0014', fontSize: '1rem' }}>{errors.name}</p>
+            <p style={{ color: '#eb0014', fontSize: '1rem' }}>{errors?.name}</p>
             <h4 className={styles.title}>Mô tả</h4>
             <textarea
               name="description"

@@ -16,6 +16,7 @@ const AddingModal = ({
   const { userInfo } = useSelector(state => state.auth);
 
   const [fieldUpdate, setFieldUpdate] = useState({
+    id: '',
     rank: '',
     quantity: '',
     cash: '',
@@ -152,7 +153,7 @@ const AddingModal = ({
         createdBy: userInfo.Id,
       };
       const editPayload = {
-        id: roundId,
+        id: fieldUpdate?.id,
         rank: fieldUpdate.rank,
         quantity: fieldUpdate.quantity,
         cash: fieldUpdate.cash,

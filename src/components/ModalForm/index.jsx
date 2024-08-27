@@ -366,6 +366,17 @@ function ModalForm({ modalShow, onHide }) {
                       className={styles.formControl}
                       value={formData.endTime}
                       onChange={handleInputChange}
+                      min={
+                        formData.startTime
+                          ? new Date(
+                              new Date(formData.startTime).setDate(
+                                new Date(formData.startTime).getDate() + 1,
+                              ),
+                            )
+                              .toISOString()
+                              .split('T')[0]
+                          : ''
+                      }
                     />
                   </div>
                 </div>
@@ -538,7 +549,7 @@ function ModalForm({ modalShow, onHide }) {
                 <div className={styles.roundBlock}>
                   <h5>Vòng Sơ Khảo:</h5>
                 </div>
-                <div  style={{ marginLeft: '20px' }} className="row">
+                <div style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
                     <input
@@ -574,7 +585,7 @@ function ModalForm({ modalShow, onHide }) {
                 <div className={styles.roundBlock}>
                   <h5>Vòng Chung Kết:</h5>
                 </div>
-                <div  style={{ marginLeft: '20px' }} className="row">
+                <div style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
                     <input

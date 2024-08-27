@@ -10,6 +10,7 @@ import { getAllRoundStaff, roundTopicById } from '../../api/roundStaffApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 import styles from './page.module.css';
+import ModalReason from '../../pages/paintingPage/modalReason.jsx';
 
 function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
   const { userInfo } = useSelector(state => state.auth);
@@ -46,6 +47,9 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
   const [listUser, setListUser] = useState([]);
   const [idCompetitor, setIdCompetitor] = useState('');
 
+  // handle open popReason
+  const [openPopReason, setOpenPopReason] = useState(false);
+  const [payloadReason, setPayloadReason] = useState(null);
   // geting new object without the error field
   const updateObject = val => {
     let currentObject = {};
@@ -498,18 +502,39 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
 
   // while click post check it  was validate or not
   const postImage = val => {
+    console.log(val);
     if (validateAllFields()) {
       let payload;
+      let rejecPayload;
       if (progress) {
-        payload = updateObject(fieldInput);
-        payload = {
-          ...payload,
-          image: url,
-          status: val,
-          currentUserId: userInfo.Id,
-          birthday: payload.birthday,
-        };
-        postPainting(payload);
+        if (val === 'Rejected') {
+          rejecPayload = updateObject(fieldInput);
+          rejecPayload = {
+            ...rejecPayload,
+            image: url,
+            status: val,
+            currentUserId: userInfo.Id,
+            birthday: rejecPayload.birthday,
+            reason: '',
+          };
+          console.log('chay vao day');
+
+          console.log(rejecPayload);
+          setPayloadReason(rejecPayload);
+          setOpenPopReason(true);
+        } else {
+          payload = updateObject(fieldInput);
+          payload = {
+            ...payload,
+            image: url,
+            status: val,
+            currentUserId: userInfo.Id,
+            birthday: payload.birthday,
+          };
+          console.log(payload);
+
+          // postPainting(payload);
+        }
       } else {
         toast.warning('Bạn vui lòng bổ sung thêm ảnh nhé !!', {
           position: 'top-right',
@@ -543,6 +568,13 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
 
   return (
     <>
+      <ModalReason
+        show={openPopReason}
+        setShow={setOpenPopReason}
+        title={'vòng thi'}
+        callBack={postPainting}
+        payload={payloadReason}
+      />
       <Modal
         show={modalShow}
         onHide={() => {

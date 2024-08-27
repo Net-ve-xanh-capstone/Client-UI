@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "vite",
     "lint": "eslint --fix --ext js,jsx src/",
-    "build": "npm run generate-html && vite build",
+    "build": "npm run generate-html && vite build --base=/Client-UI",
     "generate-html": "mkdir -p dist && cp index.html dist/",
     "preview": "vite preview"
   },

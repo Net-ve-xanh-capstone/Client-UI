@@ -276,7 +276,6 @@ function ContestManagement() {
       );
       handleOpenDetail(obj?.props?.children);
     },
-    
   };
 
   const getMuiTheme = () =>

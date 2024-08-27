@@ -30,6 +30,7 @@ function RoundFragment({ roundFrag, getContestDetail }) {
     try {
       const { data } = await getById(roundFrag.id);
       setRound(sortRoundsByStartTime(data?.result.educationalLevel));
+      console.log(data?.result.educationalLevel);
     } catch (e) {
       console.log('err', e);
     }
@@ -130,7 +131,9 @@ function RoundFragment({ roundFrag, getContestDetail }) {
                     {dataRound.level}
                   </div>
                   <div className={styles.col} data-label="Tên vòng thi">
-                    {data.name}
+                    {data.name?.length > 100
+                      ? data.name.slice(0, 99) + '...'
+                      : data.name}
                   </div>
                   <div className={styles.col} data-label="Ngày bắt đầu">
                     {formatDate(data.startTime)}
@@ -139,10 +142,22 @@ function RoundFragment({ roundFrag, getContestDetail }) {
                     {formatDate(data.endTime)}
                   </div>
                   <div className={styles.col} data-label="Địa điểm">
-                    {data.location}
+                    {data.location?.length > 100
+                      ? data.location.slice(0, 99) + '...'
+                      : data.location}
+
+                    {data.location?.length > 100 && (
+                      <div className={styles.tooltip}>{data.location}</div>
+                    )}
                   </div>
                   <div className={styles.col} data-label="Mô tả">
-                    {data.description}
+                    {data.description?.length > 100
+                      ? data.description.slice(0, 99) + '...'
+                      : data.description}
+
+                    {data.description?.length > 100 && (
+                      <div className={styles.tooltip}>{data.description}</div>
+                    )}
                   </div>
                   <div className={styles.col} data-label="Trạng thái">
                     <>

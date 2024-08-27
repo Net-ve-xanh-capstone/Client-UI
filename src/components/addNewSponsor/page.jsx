@@ -7,9 +7,12 @@ import { addSponsor, getSponsorId, putSponsor } from '../../api/sponsorApi.js';
 import { isPhoneNumber } from '../../utils/validation.js';
 import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
+import './number.css';
 
 function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
   const { userInfo } = useSelector(state => state.auth);
+
+  const [errorOb, setErrorOb] = useState(null);
 
   const [imgLoad, setImgLoad] = useState(null);
   const [imgPost, setImagePost] = useState(null);
@@ -95,15 +98,15 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
   };
 
   const validateName = val => {
-    if (val.length < 3 || val.length > 200) {
-      return 'độ dài phải từ 3 đến 200 chữ';
+    if (val.length < 3 || val.length > 99) {
+      return 'độ dài phải từ 3-100 chữ';
     }
     return '';
   };
 
   const validateDelegate = val => {
-    if (val.length < 3 || val.length > 200) {
-      return 'độ dài phải từ 3 đến 200 chữ';
+    if (val.length < 3 || val.length > 49) {
+      return 'độ dài phải từ 3-50 chữ';
     }
     return '';
   };
@@ -116,8 +119,8 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
   };
 
   const validateAddress = address => {
-    if (address.length < 5 || address.length > 200) {
-      return 'độ dài phải từ 3 đến 200 chữ';
+    if (address.length < 5 || address.length > 199) {
+      return 'độ dài phải từ 3-200 chữ';
     }
     return '';
   };
@@ -319,6 +322,22 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
     }
   };
 
+  // catch if user trying to enter e character
+  const handleKeyDown = event => {
+    if (
+      event.key === 'e' ||
+      event.key === 'E' ||
+      event.key === '.' ||
+      event.key === ','
+    ) {
+      event.preventDefault();
+    }
+  };
+  const handleInput = event => {
+    event.target.value = event.target.value.replace(/e/gi, '');
+  };
+  // catch if user trying to enter e character
+
   useEffect(() => {
     console.log('calling new', idSponsor);
 
@@ -356,15 +375,29 @@ function AddNewSponsor({ idSponsor, reCallData, modalShow, onHide }) {
               <div key={idx} className={styles.input_box}>
                 <div className={styles.container_error}>
                   <p className={styles.field_title}>{val.name}</p>
-                  <div className={styles.textArea}>
-                    <input
-                      className={styles.input_place}
-                      type="text"
-                      placeholder={val.placeHolder}
-                      value={val.value}
-                      onChange={val.onchange}
-                    />
-                  </div>
+                  {val.name === 'Số điện thoại' ? (
+                    <div className={styles.textArea}>
+                      <input
+                        className={styles.input_place}
+                        type="number"
+                        placeholder={val.placeHolder}
+                        value={val.value}
+                        onChange={val.onchange}
+                        onInput={handleInput}
+                        onKeyDown={handleKeyDown}
+                      />
+                    </div>
+                  ) : (
+                    <div className={styles.textArea}>
+                      <input
+                        className={styles.input_place}
+                        type="text"
+                        placeholder={val.placeHolder}
+                        value={val.value}
+                        onChange={val.onchange}
+                      />
+                    </div>
+                  )}
                 </div>
                 {(val.error !== '' || val.error !== null) && (
                   <div className={styles.error_text}>

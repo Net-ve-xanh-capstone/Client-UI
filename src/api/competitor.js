@@ -12,6 +12,6 @@ export const activeCompetitor = id => {
   return axiosApi.patch(`accounts/activeaccount?id=${id}`);
 };
 
-export const getCompetitorByid = id => {
+export const getCompetitorById = id => {
   return axiosApi.get(`accounts/getaccountbyid/${id}`);
 };

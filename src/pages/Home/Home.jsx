@@ -14,7 +14,7 @@ const Home = () => {
       <SliderStyle2 data={heroSliderData} />
       <Contest />
       <ContestComing />
-      {/*<PopularCollection />*/}
+      <PopularCollection />
       <Create />
       <Footer />
     </div>

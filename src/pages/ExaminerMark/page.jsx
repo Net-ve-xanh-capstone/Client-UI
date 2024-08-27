@@ -10,19 +10,24 @@ import { parseDataVietnam } from '../../utils/formatDate.js';
 import '../StaffManage/style.scss';
 import styles from './page.module.css';
 import { checkNavigateBtn } from '../../utils/checkEditButton.js';
+import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
 
 const ExaminerMark = () => {
   const { userInfo } = useSelector(state => state.auth);
   const goTo = useNavigate();
   const [roundData, setRoundData] = useState([]);
+  const [isLoading, setIsloading] = useState(false);
 
   const fetchData = async () => {
+    setIsloading(true);
     try {
       const res = await getScheduleExaminer(userInfo.Id);
       const data = res.data.result;
       setRoundData(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsloading(false);
     }
   };
 
@@ -81,7 +86,10 @@ const ExaminerMark = () => {
                     <h1 className={styles.heading_right}>
                       Cuộc thi năm 2023-2024
                     </h1>
-                    {roundData?.length > 0 &&
+
+                    {isLoading ? (
+                      <DotLoaderCustom />
+                    ) : roundData?.length > 0 ? (
                       roundData.map(val => (
                         <Accordion key={val.id}>
                           <AccordionSummary
@@ -133,7 +141,12 @@ const ExaminerMark = () => {
                             </div>
                           </AccordionDetails>
                         </Accordion>
-                      ))}
+                      ))
+                    ) : (
+                      <p style={{ fontSize: '3rem', fontWeight: '700' }}>
+                        Không có lịch chấm
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

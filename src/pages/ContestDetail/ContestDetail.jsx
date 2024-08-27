@@ -10,12 +10,7 @@ import CountdownComponent from '../../components/CountdownComponent.jsx';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
 import { defaultAvatar, userAvatar } from '../../constant/imageDefault.js';
 import useFetchData from '../../hooks/useQueryData.js';
-import {
-  defaultAvatar,
-  userAvatar,
-} from '../../constant/imageDefault.js';
-import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
-import CountdownComponent from '../../components/CountdownComponent.jsx';
+
 import {
   contestStatus,
   paintingStatusEnable,
@@ -57,7 +52,7 @@ const ContestDetail = () => {
       console.log(paintingResponse);
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const contest = data?.data?.result;

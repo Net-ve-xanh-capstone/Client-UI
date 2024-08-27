@@ -3,15 +3,27 @@ import DashboardCard from '../../components/shared/DashboardCard';
 import PageContainer from '../../components/container/PageContainer';
 import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
-import styles from '../../../ContestManagement/style.module.css';
 import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete.js';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye.js';
 import { useSelector } from 'react-redux';
 import Role from '../../../../constant/Role.js';
-import { getAllAccount } from '../../../../api/adminApi.js';
+import { activeAccount, getAllAccount, inactiveAccount } from '../../../../api/adminApi.js';
 import { formatDate } from '../../../../utils/formatDate.js';
-import { accountStatusMap } from '../../../../constant/Status.js';
+import { accountStatusMap, roleMap } from '../../../../constant/Status.js';
+import { Tooltip } from '@mui/material';
+import { toast } from 'react-toastify';
+import { Loop } from '@mui/icons-material';
+import ActiveModal from '../../../../components/ActiveModal/index.jsx';
+
+const renderWithTooltip = (value, maxLength = 20) => (
+  <Tooltip title={value}>
+    <span>
+      {value && value.length > maxLength
+        ? value.substring(0, maxLength) + '...'
+        : value}
+    </span>
+  </Tooltip>
+);
 
 const getMuiTheme = () =>
   createTheme({
@@ -45,6 +57,15 @@ const getMuiTheme = () =>
 const ExaminerManagementPage = () => {
   const { userInfo } = useSelector(state => state.auth);
   const [accountant, setAccountant] = useState([]);
+  const [idDelete, setIdDelete] = useState(null);
+  const [status, setStatus] = useState('');
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const handleOpenDelete = id => {
+    const status = accountant.find(val => val.id === id).status;
+    setStatus(status);
+    setIdDelete(id);
+    setDeleteModalShow(true);
+  };
 
   const options = {
     searchPlaceholder: 'Tìm kiếm theo họ và tên, email, số điện thoại',
@@ -79,57 +100,59 @@ const ExaminerManagementPage = () => {
       name: 'username',
       label: 'HỌ VÀ TÊN',
       options: {
-        customBodyRender: value => (
-          <span>
-            {value && value.length > 50
-              ? value.substring(0, 50) + '...'
-              : value}
-          </span>
-        ),
+        customBodyRender: value => renderWithTooltip(value, 30),
       },
     },
     {
       name: 'email',
       label: 'EMAIL',
       options: {
-        customBodyRender: value => (
-          <span>
-            {value && value.length > 20
-              ? value.substring(0, 20) + '...'
-              : value}
-          </span>
-        ),
+        customBodyRender: value => renderWithTooltip(value, 20),
       },
     },
     {
       name: 'phone',
       label: 'SỐ ĐIỆN THOẠI',
       textAlign: 'left',
-
+      options: {
+        customBodyRender: value => renderWithTooltip(value),
+      },
     },
     {
       name: 'birthday',
       label: 'NGÀY SINH',
       options: {
-        customBodyRender: value => formatDate(value),
+        customBodyRender: value => renderWithTooltip(formatDate(value)),
       },
     },
     {
       name: 'gender',
       label: 'GIỚI TÍNH',
       options: {
-        customBodyRender: value => <span>{value ? 'Nữ' : 'Nam'}</span>,
+        customBodyRender: value => {
+          const gender = value ? 'Nữ' : 'Nam';
+          return renderWithTooltip(gender);
+        },
       },
     },
     {
-      name: 'accountFullName',
+      name: 'role',
       label: 'VAI TRÒ',
+      options: {
+        customBodyRender: value => {
+          const status = roleMap[value] || value;
+          return renderWithTooltip(status);
+        },
+      },
     },
     {
       name: 'status',
       label: 'TRẠNG THÁI',
       options: {
-        customBodyRender: value => <span>{accountStatusMap[value] || value}</span>,
+        customBodyRender: value => {
+          const status = accountStatusMap[value] || value;
+          return renderWithTooltip(status);
+        },
       },
     },
     {
@@ -137,22 +160,21 @@ const ExaminerManagementPage = () => {
       label: 'TƯƠNG TÁC',
       options: {
         customBodyRender: (value, tableData) => (
-          <span className={styles.btnAction}>
+          <span>
             <span style={{ display: 'none' }} name="id">
               {value}
             </span>
-            {userInfo.role === Role.ADMIN && (
+            {userInfo && userInfo?.role === Role.ADMIN && (
               <IconButton
                 aria-label="delete"
                 size="small"
                 color="error"
                 onClick={e => {
                   e.stopPropagation();
-                  // handleOpenDelete(value);
+                  handleOpenDelete(value);
                 }}
-                // disabled={handleActiveDelete(tableData)}
               >
-                <DeleteIcon />
+                <Loop />
               </IconButton>
             )}
             <IconButton
@@ -169,31 +191,71 @@ const ExaminerManagementPage = () => {
     },
   ];
 
+  const fetchAccount = async () => {
+    try {
+      const { data } = await getAllAccount();
+      const result = data?.result.map(val => {
+        return {
+          id: val.id,
+          username: val.username,
+          birthday: val.birthday,
+          fullName: val.fullName,
+          email: val.email,
+          address: val.address,
+          phone: val.phone,
+          gender: val.gender,
+          role: val.role,
+          status: val.status,
+        };
+      });
+      setAccountant(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchAccount = async () => {
-      try {
-        const { data } = await getAllAccount();
-        const result = data?.result.map(val => {
-          return {
-            id: val.id,
-            username: val.username,
-            birthday: val.birthday,
-            fullName: val.fullName,
-            email: val.email,
-            address: val.address,
-            phone: val.phone,
-            gender: val.gender,
-            role: val.role,
-            status: val.status,
-          };
-        });
-        setAccountant(result);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchAccount();
   }, []);
+
+  const handleDelete = async () => {
+    try {
+      if (status === 'Active') {
+        const { data } = await inactiveAccount(idDelete);
+        if (data?.result) {
+          toast.success('Khóa tài khoản thành công', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+          fetchAccount();
+        }
+      } else {
+        const { data } = await activeAccount(idDelete);
+        if (data?.result) {
+          toast.success('Mở khóa tài khoản thành công', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+          fetchAccount();
+        }
+      }
+    } catch (e) {
+      console.log('err', e);
+    }
+  };
+
   return (
     <PageContainer title="Quản lý giám khảo" description="Quản lý giám khảo">
       <DashboardCard title="Quản lý giám khảo">
@@ -208,6 +270,13 @@ const ExaminerManagementPage = () => {
                 </span>
           </ThemeProvider>
         </StyledEngineProvider>
+        <ActiveModal
+          show={deleteModalShow}
+          setShow={setDeleteModalShow}
+          title={'tài khoản'}
+          callBack={handleDelete}
+          status={status}
+        />
       </DashboardCard>
     </PageContainer>
   );

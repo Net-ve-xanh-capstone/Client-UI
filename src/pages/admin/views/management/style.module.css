@@ -1,0 +1,13 @@
+.btnCreate {
+    margin-top: 10px;
+    padding: 7px 30px;
+}
+
+.btnCreate:hover {
+    color: white;
+    background-color: #5142fc70;
+}
+
+.btnCreate:focus {
+    color: white;
+}

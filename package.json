@@ -5,15 +5,13 @@
   "version": "0.0.0",
   "type": "module",
   "homepage": "https://net-ve-xanh-capstone.github.io/",
-  "generate-html": "cp index.html dist/",
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d build",
   "scripts": {
     "dev": "vite",
+    "build": "vite build",
     "lint": "eslint --fix --ext js,jsx src/",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "build": "npm run generate-html && vite build",
-    "generate-html": "mkdir -p dist && cp index.html dist/"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

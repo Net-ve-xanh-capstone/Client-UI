@@ -1,1 +1,0 @@
-import{C as t}from"./index-BgNlpUR8.js";const e=()=>t.get("contests/getquantitypaintingforyear"),n=()=>t.get("contests/getawardquantityforyear"),r=()=>t.get("accounts/getallaccount");export{n as a,r as b,e as g};

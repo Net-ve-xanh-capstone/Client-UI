@@ -57,6 +57,11 @@
     transform: translate(-1px, -1px);
 }
 
+
+.button_done:hover {
+    color: white;
+}
+
 .roundHeader .col {
     color: #ffffff;
     font-weight: bold;

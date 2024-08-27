@@ -30,6 +30,9 @@ const MarkReport = ({ pageType }) => {
 
   const [scheduleId, setScheduleId] = useState('');
 
+  // loading list
+  const [listMarkLoading, setListMarkLoading] = useState(false);
+
   // const [selectedContests, setSelectedContests] = useState(
   //   contests.map(() => false),
   // );
@@ -72,12 +75,19 @@ const MarkReport = ({ pageType }) => {
 
   // get all painting still not marking
   const fetchData = async id => {
-    const { data } = await getAllPainting(id);
-    const rspNotMarking = data.result.filter(val => val?.isJudged === false);
-    const rspMarking = data.result.filter(val => val?.isJudged === true);
+    setListMarkLoading(true);
+    try {
+      const { data } = await getAllPainting(id);
+      const rspNotMarking = data.result.filter(val => val?.isJudged === false);
+      const rspMarking = data.result.filter(val => val?.isJudged === true);
 
-    setContests(rspNotMarking);
-    setContestMarking(rspMarking);
+      setContests(rspNotMarking);
+      setContestMarking(rspMarking);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setListMarkLoading(false);
+    }
   };
 
   // get all award of this round

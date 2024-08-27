@@ -9,7 +9,6 @@ import TopicManagement from '../pages/TopicManagement/index.jsx';
 import ExaminerManagement from '../pages/ExaminerManagement/index.jsx';
 import SponsorManage from '../pages/sponsorPage/page.jsx';
 import CompetitorManage from '../pages/competitorManage/page.jsx';
-import PaintingPage from '../pages/paintingPage/page.jsx';
 import CollectionPage from '../pages/collection/CollectionPage.jsx';
 import PaintingOfCollectionPage from '../pages/collection/painting/PaintingOfCollectionPage.jsx';
 import HomeCollectionPage from '../pages/myCollection/HomeCollectionPage.jsx';
@@ -40,8 +39,8 @@ const FullLayout = lazy(() => import('../pages/admin/layouts/full/FullLayout'));
 const Dashboard = lazy(() =>
   import('../pages/admin/views/dashboard/Dashboard'),
 );
-const SamplePage = lazy(() =>
-  import('../pages/admin/views/sample-page/SamplePage'),
+const ExaminerManagementPage = lazy(() =>
+  import('../pages/admin/views/management/ExaminerManagementPage.jsx'),
 );
 const TypographyPage = Loadable(
   lazy(() => import('../pages/admin/views/utilities/TypographyPage')),
@@ -161,7 +160,7 @@ const routes = [
     children: [
       { path: '', component: <Navigate to="dashboard" /> },
       { path: 'dashboard', exact: true, component: <Dashboard /> },
-      { path: 'sample-page', exact: true, component: <SamplePage /> },
+      { path: 'sample-page', exact: true, component: <ExaminerManagementPage /> },
       { path: 'ui/typography', exact: true, component: <TypographyPage /> },
       { path: 'ui/shadow', exact: true, component: <Shadow /> },
     ],

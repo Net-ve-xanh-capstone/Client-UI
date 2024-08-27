@@ -161,7 +161,7 @@ function ModalForm({ modalShow, onHide }) {
                 ],
               },
               {
-                name: 'Vòng chung kết',
+                name: 'Vòng Chung Kết',
                 startTime: formData.round2StartTime,
                 endTime: formData.round2EndTime,
                 roundNumber: 2,
@@ -205,7 +205,7 @@ function ModalForm({ modalShow, onHide }) {
                 ],
               },
               {
-                name: 'Vòng chung kết',
+                name: 'Vòng Chung Kết',
                 startTime: formData.round2StartTime,
                 endTime: formData.round2EndTime,
                 roundNumber: 2,

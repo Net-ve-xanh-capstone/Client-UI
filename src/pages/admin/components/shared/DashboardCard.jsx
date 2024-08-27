@@ -31,7 +31,7 @@ const DashboardCard = ({
               alignItems={'center'}
               mb={3}>
               <Box>
-                {title ? <Typography variant="h5">{title}</Typography> : ''}
+                {title ? <Typography variant="h2">{title}</Typography> : ''}
 
                 {subtitle ? (
                   <Typography variant="subtitle2" color="textSecondary">

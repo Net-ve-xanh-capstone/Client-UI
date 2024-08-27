@@ -90,10 +90,6 @@ const routes = [
         component: <SponsorManage />,
       },
       {
-        path: 'painting',
-        component: <PaintingPage />,
-      },
-      {
         path: 'competitor',
         component: <CompetitorManage />,
       },

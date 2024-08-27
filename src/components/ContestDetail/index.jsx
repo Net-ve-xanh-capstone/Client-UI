@@ -17,7 +17,8 @@ import ResourceFragment from '../ResourceFragment';
 import RoundFragment from '../RoundFragment';
 import ScheduleFragment from '../ScheduleFragment';
 import AwardsFragment from '../awardsFragment/page..jsx';
-import TopicFragment from '../TopicFragment';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+import PaintingPage from '../../pages/paintingPage/page.jsx';import TopicFragment from '../TopicFragment';
 import styles from './style.module.css';
 
 function ContestDetail({ contest, handleBack }) {
@@ -90,6 +91,16 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
+      title: 'Giải thưởng',
+      icon: <CardGiftcardIcon />,
+      component: (
+        <AwardsFragment
+          scheduleFrag={contestDes}
+          getContestDetail={getContestDetail}
+        />
+      ),
+    },
+    {
       title: 'Lịch chấm',
       icon: <CalendarMonth />,
       component: (
@@ -100,12 +111,13 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
-      title: 'Giải thưởng',
+      title: 'Bài thi',
       icon: <CalendarMonth />,
       component: (
-        <AwardsFragment
+        <PaintingPage
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
+          contestId={contest.id}
         />
       ),
     },
@@ -141,6 +153,10 @@ function ContestDetail({ contest, handleBack }) {
               <label
                 htmlFor={`tab${index + 1}`}
                 role="button"
+                style={{
+                  cursor: 'pointer',
+                  height: '100%',
+                }}
                 className={styles.tabLabel}>
                 {tab.icon}
                 <br />
@@ -151,9 +167,12 @@ function ContestDetail({ contest, handleBack }) {
         </ul>
 
         {/* bottom slider animation */}
+        {/* bottom slider animation */}
         <div className={styles.slider}>
           <div className={styles.indicator}></div>
         </div>
+        {/*ending bottom slider animation */}
+
         {/*ending bottom slider animation */}
 
         <div className={styles.content}>

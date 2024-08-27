@@ -11,7 +11,6 @@ function App() {
   const theme = baselightTheme;
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
         <CssBaseline />
         <Routes>
           {routes.map((data, index) => (
@@ -27,7 +26,6 @@ function App() {
             </Route>
           ))}
         </Routes>
-      </ThemeProvider>
     </QueryClientProvider>
   );
 }

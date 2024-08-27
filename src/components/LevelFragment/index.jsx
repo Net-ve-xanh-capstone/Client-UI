@@ -128,18 +128,18 @@ function LevelFragment({ levelFrag, getContestDetail }) {
                     alignItems: 'center',
                   }}>
                   <IconButton
-                    aria-label="edit"
-                    size="large"
-                    color="primary"
-                    onClick={() => openEdit(data)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
                     aria-label="delete"
                     size="large"
                     color="error"
                     onClick={() => hanldeOpenDelete(data.id)}>
                     <DeleteIcon />
+                    <IconButton
+                      aria-label="edit"
+                      size="large"
+                      color="primary"
+                      onClick={() => openEdit(data)}>
+                      <EditIcon />
+                    </IconButton>
                   </IconButton>
                 </div>
               </div>

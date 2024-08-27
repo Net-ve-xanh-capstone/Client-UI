@@ -98,13 +98,6 @@ function TopicManagement() {
       options: {
         customBodyRender: (value, tableData) => (
           <div className={styles.btnAction}>
-            <IconButton
-              aria-label="delete"
-              size="small"
-              color="info"
-              onClick={() => handleOpenEdit(value)}>
-              <EditIcon />
-            </IconButton>
             {userInfo.role === 'Staff' && (
               <IconButton
                 aria-label="delete"
@@ -114,6 +107,13 @@ function TopicManagement() {
                 <DeleteIcon />
               </IconButton>
             )}
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="info"
+              onClick={() => handleOpenEdit(value)}>
+              <EditIcon />
+            </IconButton>
           </div>
         ),
       },

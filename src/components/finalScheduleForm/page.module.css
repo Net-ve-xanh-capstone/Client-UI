@@ -1,72 +1,75 @@
 .title {
-    font-size: 16px;
-    font-weight: 500;
-    padding: 10px 0;
-    margin-top: 0.5rem;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 0;
+  margin-top: 0.5rem;
 }
 
 .titleHeader {
-    font-size: 20px;
-    font-weight: bold;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 @media (max-width: 800px) {
-    .modalForm {
-        right: -5px !important;
-    }
-
-
+  .modalForm {
+    right: -5px !important;
+  }
 }
 
 .modalForm {
-    padding: 20px;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: -17px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    position: absolute;
+  padding: 20px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: -17px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: absolute;
 }
 
-.modalForm>.inputModal {
-    padding: 5px 5px;
+.modalForm > .inputModal {
+  padding: 5px 5px;
 }
 
 .modalForm .btnCreate {
-    margin-top: 10px;
-    padding: 7px 30px;
+  margin-top: 10px;
+  padding: 7px 30px;
 }
 
 .modalForm .btnCreate:hover {
-    color: white;
-    border: none !important;
+  color: white;
+  border: none !important;
 }
 
 .modalForm .btnCreate:focus {
-    color: white;
+  color: white;
 }
 
 .formControl {
-    padding: 5px 5px !important;
+  padding: 5px 5px !important;
 }
 
 .list_round {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 20rem);
-    grid-template-rows: repeat(2, auto);
-    justify-content: space-between;
-    margin-top: 1rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 20rem);
+  grid-template-rows: repeat(2, auto);
+  justify-content: space-between;
+  margin-top: 1rem;
 }
 
 .round {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .grid_input {
-    padding: 5px 5px !important;
+  padding: 5px 5px !important;
+}
 
+.grid_input_label {
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 0.2rem;
 }

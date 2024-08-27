@@ -502,7 +502,6 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
 
   // while click post check it  was validate or not
   const postImage = val => {
-    console.log(val);
     if (validateAllFields()) {
       let payload;
       let rejecPayload;
@@ -517,12 +516,12 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
             birthday: rejecPayload.birthday,
             reason: '',
           };
-          console.log('chay vao day');
 
-          console.log(rejecPayload);
           setPayloadReason(rejecPayload);
           setOpenPopReason(true);
         } else {
+          console.log(val);
+
           payload = updateObject(fieldInput);
           payload = {
             ...payload,
@@ -531,9 +530,8 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
             currentUserId: userInfo.Id,
             birthday: payload.birthday,
           };
-          console.log(payload);
 
-          // postPainting(payload);
+          postPainting(payload);
         }
       } else {
         toast.warning('Bạn vui lòng bổ sung thêm ảnh nhé !!', {

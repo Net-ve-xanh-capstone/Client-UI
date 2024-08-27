@@ -9,13 +9,17 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './style.module.css';
-function LevelFragment({ levelFrag, getContestDetail }) {
+function LevelFragment({ levelFrag, getContestDetail, statusOfRound }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [idLevelDelete, setIdLevelDelete] = useState();
 
   const [type, setType] = useState('');
   const [dataRound, setDataRound] = useState(null);
+
+  const isActive = !statusOfRound
+    .toLowerCase()
+    .includes('Chưa bắt đầu'.toLowerCase());
 
   const resetDetail = () => {
     setModalShow(false);
@@ -131,6 +135,7 @@ function LevelFragment({ levelFrag, getContestDetail }) {
                     aria-label="delete"
                     size="large"
                     color="error"
+                    disabled={isActive}
                     onClick={() => hanldeOpenDelete(data.id)}>
                     <DeleteIcon />
                   </IconButton>
@@ -138,6 +143,7 @@ function LevelFragment({ levelFrag, getContestDetail }) {
                     aria-label="edit"
                     size="large"
                     color="primary"
+                    disabled={isActive}
                     onClick={() => openEdit(data)}>
                     <EditIcon />
                   </IconButton>
@@ -151,7 +157,8 @@ function LevelFragment({ levelFrag, getContestDetail }) {
       <div className="flex justify-content-end mt-20">
         <button
           className="btn btn-outline-primary btn-lg"
-          onClick={() => openCreate()}>
+          onClick={() => openCreate()}
+          disabled={isActive}>
           Thêm
         </button>
       </div>

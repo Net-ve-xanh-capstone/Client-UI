@@ -1,9 +1,4 @@
-import {
-  createTheme,
-  StyledEngineProvider,
-  ThemeProvider,
-} from '@mui/material/styles';
-import Switch from '@mui/material/Switch';
+import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,13 +16,13 @@ import styles from './style.module.css';
 import { TablePagination } from '@mui/material';
 
 const CustomFooter = ({
-  addEmptyRow,
-  count,
-  page,
-  rowsPerPage,
-  handlePageChange,
-  handleRowsPerPageChange,
-}) => {
+                        addEmptyRow,
+                        count,
+                        page,
+                        rowsPerPage,
+                        handlePageChange,
+                        handleRowsPerPageChange,
+                      }) => {
   return (
     <div
       style={{
@@ -37,7 +32,7 @@ const CustomFooter = ({
         flexDirection: 'column',
       }}>
       <div className={`flex justify-content-center ${styles.row}`}>
-      <AddIcon className={styles.btnAdd} onClick={() => addEmptyRow()} />
+        <AddIcon className={styles.btnAdd} onClick={() => addEmptyRow()} />
       </div>
       <TablePagination
         sx={{ width: '100%' }}
@@ -74,7 +69,6 @@ function ContestManagement() {
       const { data } = await getAll();
       const fetchedContest = data?.result || [];
       setContest(fetchedContest);
-      console.log(data);
     } catch (e) {
       console.log('error', e);
     }
@@ -305,7 +299,7 @@ function ContestManagement() {
           },
         },
       },
-  });
+    });
 
   const handleBack = () => {
     setIsOpenDetail(false);

@@ -1,9 +1,4 @@
-import {
-  IconAperture,
-  IconCopy,
-  IconLayoutDashboard,
-  IconTypography,
-} from '@tabler/icons';
+import { IconLayoutDashboard, IconUsers } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
 
@@ -19,30 +14,30 @@ const Menuitems = [
     icon: IconLayoutDashboard,
     href: '/Client-UI/admin-management/dashboard',
   },
+  // {
+  //   navlabel: true,
+  //   subheader: 'Cài đặt hệ thống',
+  // },
+  // {
+  //   id: uniqueId(),
+  //   title: 'Typography',
+  //   icon: IconTypography,
+  //   href: '/Client-UI/admin-management/ui/typography',
+  // },
+  // {
+  //   id: uniqueId(),
+  //   title: 'Shadow',
+  //   icon: IconCopy,
+  //   href: '/Client-UI/admin-management/ui/shadow',
+  // },
   {
     navlabel: true,
-    subheader: 'Cài đặt hệ thống',
+    subheader: 'Quản lý',
   },
   {
     id: uniqueId(),
-    title: 'Typography',
-    icon: IconTypography,
-    href: '/Client-UI/admin-management/ui/typography',
-  },
-  {
-    id: uniqueId(),
-    title: 'Shadow',
-    icon: IconCopy,
-    href: '/Client-UI/admin-management/ui/shadow',
-  },
-  {
-    navlabel: true,
-    subheader: 'Mở rộng',
-  },
-  {
-    id: uniqueId(),
-    title: 'Tiêu chí',
-    icon: IconAperture,
+    title: 'Tài khoản',
+    icon: IconUsers,
     href: '/Client-UI/admin-management/sample-page',
   },
 ];

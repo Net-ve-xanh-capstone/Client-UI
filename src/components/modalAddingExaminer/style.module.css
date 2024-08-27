@@ -1,0 +1,105 @@
+.title {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 0;
+}
+
+.titleHeader {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@media (max-width: 800px) {
+    .modalForm {
+        right: -5px !important;
+    }
+
+    .avatar {
+        width: 100px !important;
+    }
+
+    .modalForm {
+        flex-direction: column;
+    }
+
+    .boxAvatar {
+        text-align: center;
+    }
+
+    .title,
+    .detailExam .inputModal {
+        font-size: 12px;
+    }
+
+    .detailExam .inputModal {
+        width: 65% !important;
+    }
+
+    .btnCreate {
+        margin-top: 10px;
+        padding: 5px 10px !important;
+        font-size: 14px;
+    }
+}
+
+
+.avatar {
+    width: 300px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 20px;
+    margin-top: 25px;
+}
+
+.modalForm {
+    padding: 20px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: -17px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: absolute;
+    display: flex;
+}
+
+.detailBox {
+    width: 100%;
+    padding: 0 30px
+}
+
+.detailExam {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.detailExam .inputModal {
+    padding: 5px 5px;
+    width: 70%;
+}
+
+.inputModal_select {
+    padding: 5px 5px;
+    width: 71%;
+}
+
+.btnCreate {
+    margin-top: 10px;
+    padding: 5px 15px;
+}
+
+.btnCreate:hover {
+    color: white;
+    background-color: #5142fc70;
+}
+
+.btnCreate:focus {
+    color: white;
+}
+
+.formControl {
+    padding: 5px 5px !important;
+}

@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { getAll } from '../../api/examinerStaffApi';
 import ViewExaminer from '../../components/ViewExaminer';
 import styles from './style.module.css';
+import AddExaminer from '../../components/modalAddingExaminer/page.jsx';
 
 function ExaminerManagement() {
   const [modalShow, setModalShow] = useState(false);
@@ -19,12 +20,15 @@ function ExaminerManagement() {
   const { userInfo } = useSelector(state => state.auth);
   const [isActive, setIsActive] = useState(true);
 
+  const [showAdd, setShowAdd] = useState(false);
+
   useEffect(() => {
     getExaminer();
   }, []);
 
   const resetData = () => {
     setModalShow(false);
+    setShowAdd(false);
     getExaminer();
   };
 
@@ -142,11 +146,12 @@ function ExaminerManagement() {
     });
 
   const handleOpenCreate = () => {
-    setModalShow(true);
+    setShowAdd(true);
   };
 
   return (
     <div>
+      <AddExaminer modalShow={showAdd} onHide={resetData} />
       <ViewExaminer
         modalShow={modalShow}
         onHide={resetData}

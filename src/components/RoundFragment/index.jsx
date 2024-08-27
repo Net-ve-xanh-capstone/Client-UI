@@ -237,7 +237,11 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
                       color="info"
                       onClick={() => dowloadFile(data.id)}
                       // disabled={checkEditButton(data.startTime)}
-                      disabled={isActive}>
+                      disabled={
+                        !data?.status
+                          .toLowerCase()
+                          .includes('hoàn thành'.toLowerCase())
+                      }>
                       <DownloadIcon />
                     </IconButton>
                     <IconButton
@@ -246,7 +250,11 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
                       color="info"
                       onClick={() => openModalConfirm(data.id)}
                       // disabled={checkEditButton(data.startTime)}
-                      disabled={isActive}>
+                      disabled={
+                        !data?.status
+                          .toLowerCase()
+                          .includes('hoàn thành'.toLowerCase())
+                      }>
                       <SendIcon />
                     </IconButton>
                     {/* <IconButton

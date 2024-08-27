@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import DashboardCard from '../../components/shared/DashboardCard';
 import PageContainer from '../../components/container/PageContainer';
-import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye.js';
 import { useSelector } from 'react-redux';
 import Role from '../../../../constant/Role.js';
-import { activeAccount, getAllAccount, inactiveAccount } from '../../../../api/adminApi.js';
+import {
+  activeAccount,
+  getAllAccount,
+  inactiveAccount,
+} from '../../../../api/adminApi.js';
 import { formatDate } from '../../../../utils/formatDate.js';
 import { accountStatusMap, roleMap } from '../../../../constant/Status.js';
 import { Tooltip } from '@mui/material';
@@ -91,8 +99,7 @@ const ExaminerManagementPage = () => {
         filterTable: 'Lọc bảng',
       },
     },
-    onRowClick: (rowData, rowMeta) => {
-    },
+    onRowClick: (rowData, rowMeta) => {},
   };
 
   const columns = [
@@ -172,8 +179,7 @@ const ExaminerManagementPage = () => {
                 onClick={e => {
                   e.stopPropagation();
                   handleOpenDelete(value);
-                }}
-              >
+                }}>
                 <Loop />
               </IconButton>
             )}
@@ -261,13 +267,13 @@ const ExaminerManagementPage = () => {
       <DashboardCard title="Quản lý giám khảo">
         <StyledEngineProvider injectFirst>
           <ThemeProvider theme={getMuiTheme()}>
-                <span className="table-contest table-contest-detail">
-                  <MUIDataTable
-                    data={accountant}
-                    columns={columns}
-                    options={options}
-                  />
-                </span>
+            <span className="table-contest table-contest-detail">
+              <MUIDataTable
+                data={accountant}
+                columns={columns}
+                options={options}
+              />
+            </span>
           </ThemeProvider>
         </StyledEngineProvider>
         <ActiveModal

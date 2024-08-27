@@ -11,7 +11,6 @@ import ModalEditPainting from '../../components/editPainting/page.jsx';
 import CardPainting from '../../components/paintingCard/page.jsx';
 import styles from './page.module.css';
 
-
 function PaintingPage({
   scheduleFrag,
   getContestDetail,
@@ -262,7 +261,6 @@ function PaintingPage({
 
   return (
     <>
-
       <ModalAddPainting
         modalShow={openCreate}
         onHide={handlePostDone}

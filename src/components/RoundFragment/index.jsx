@@ -12,13 +12,17 @@ import { formatDate } from '../../utils/formatDate.js';
 import DeleteModal from '../DeleteModal';
 import RoundForm from '../RoundForm/index.jsx';
 import styles from './style.module.css';
-function RoundFragment({ roundFrag, getContestDetail }) {
+function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [idRoundDelete, setIdRoundDelete] = useState();
   // const isEditing = checkEditButton(roundFrag.startTime);
   const [round, setRound] = useState();
   const [editRoundData, setEditRoundData] = useState();
+
+  const isActive = !statusOfRound
+    .toLowerCase()
+    .includes('Chưa bắt đầu'.toLowerCase());
 
   const resetDetail = () => {
     setModalShow(false);
@@ -93,6 +97,7 @@ function RoundFragment({ roundFrag, getContestDetail }) {
 
   useEffect(() => {
     getRound();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roundFrag]);
   return (
     round && (
@@ -174,7 +179,8 @@ function RoundFragment({ roundFrag, getContestDetail }) {
                       size="large"
                       color="info"
                       onClick={() => handleOpenEdit(data.id)}
-                      disabled={checkEditButton(data.startTime)}>
+                      // disabled={checkEditButton(data.startTime)}
+                      disabled={isActive}>
                       <EditIcon />
                     </IconButton>
                     {/* <IconButton
@@ -195,7 +201,7 @@ function RoundFragment({ roundFrag, getContestDetail }) {
               className="btn btn-outline-primary btn-lg"
               onClick={() => handleOpenCreate()}
               // disabled={isEditing}
-            >
+              disabled={isActive}>
               Thêm
             </button>
           </div>

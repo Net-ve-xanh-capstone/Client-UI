@@ -23,6 +23,7 @@ import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import PaintingPage from '../../pages/paintingPage/page.jsx';
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
+  const [statusOfRound, setStatusRound] = useState(null);
 
   useEffect(() => {
     getContestDetail();
@@ -32,6 +33,7 @@ function ContestDetail({ contest, handleBack }) {
   const getContestDetail = async () => {
     try {
       const { data } = await getById(contest.id);
+      setStatusRound(data?.result.status);
       setContestDes(data?.result);
     } catch (e) {
       console.log('err', e);
@@ -46,6 +48,7 @@ function ContestDetail({ contest, handleBack }) {
         <ContestFragment
           contestFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -56,6 +59,7 @@ function ContestDetail({ contest, handleBack }) {
         <LevelFragment
           levelFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -67,6 +71,7 @@ function ContestDetail({ contest, handleBack }) {
           scheduleFrag={contestDes}
           roundFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -77,6 +82,7 @@ function ContestDetail({ contest, handleBack }) {
         <TopicFragment
           topicFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -88,6 +94,7 @@ function ContestDetail({ contest, handleBack }) {
         <ResourceFragment
           resourceFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -98,6 +105,7 @@ function ContestDetail({ contest, handleBack }) {
         <AwardsFragment
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -108,6 +116,7 @@ function ContestDetail({ contest, handleBack }) {
         <ScheduleFragment
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },

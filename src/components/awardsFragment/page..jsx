@@ -25,6 +25,7 @@ import ListAward from './tableList/page.jsx';
 const AwardsFragment = memo(function AwardsFragment({
   scheduleFrag,
   getContestDetail,
+  statusOfRound,
 }) {
   const [type, setType] = useState();
   const [schedule, setSchedule] = useState();
@@ -105,6 +106,7 @@ const AwardsFragment = memo(function AwardsFragment({
                 key={val.id}
                 items={val}
                 recallData={getContestDetail}
+                statusOfRound={statusOfRound}
               />
             ))}
           </AccordionDetails>

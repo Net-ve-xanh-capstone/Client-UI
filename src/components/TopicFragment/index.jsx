@@ -15,7 +15,7 @@ import CreateTopicRound from '../CreateTopicRound/index.jsx';
 import { getById } from '../../api/contestStaffApi.js';
 import { deleteTopicRound } from '../../api/topicStaffApi.js';
 
-function TopicFragment({ topicFrag, getContestDetail }) {
+function TopicFragment({ topicFrag, getContestDetail, statusOfRound }) {
   const [topic, setTopic] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -23,6 +23,10 @@ function TopicFragment({ topicFrag, getContestDetail }) {
   const isEditing = checkEditButton(topicFrag.startTime);
   const [level, setLevel] = useState();
   const [editRoundData, setEditRoundData] = useState();
+
+  const isActive = !statusOfRound
+    .toLowerCase()
+    .includes('Chưa bắt đầu'.toLowerCase());
 
   const resetDetail = () => {
     setModalShow(false);
@@ -156,7 +160,8 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                                     topicData?.topic.id,
                                   )
                                 }
-                                disabled={checkEditButton(data.startTime)}>
+                                // disabled={checkEditButton(data.startTime)}
+                                disabled={isActive}>
                                 <DeleteIcon />
                               </IconButton>
                             </div>
@@ -169,7 +174,8 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                     <button
                       className="btn btn-outline-primary btn-lg"
                       onClick={() => handleOpenCreate(data)}
-                      disabled={checkEditButton(data.startTime)}>
+                      // disabled={checkEditButton(data.startTime)}
+                      disabled={isActive}>
                       Thêm
                     </button>
                   </div>

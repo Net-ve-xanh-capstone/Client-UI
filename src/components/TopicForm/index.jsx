@@ -125,7 +125,10 @@ function TopicForm({ modalShow, onHide, topicData }) {
       )}
       <Modal
         show={modalShow}
-        onHide={onHide}
+        onHide={() => {
+          onHide();
+          setErrors({});
+        }}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered>

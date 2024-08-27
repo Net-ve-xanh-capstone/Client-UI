@@ -30,3 +30,11 @@ export const accountStatusMap = {
   'Active': 'Hoạt Động',
   'Inactive': 'Không hoạt động',
 };
+
+
+export const roleMap = {
+  'Admin': 'Quản trị viên',
+  'Competitor': 'Thí sinh',
+  'Examiner': 'Giám khảo',
+  'Staff': 'Nhân viên',
+};

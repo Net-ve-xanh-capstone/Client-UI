@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import logodark from '../../../assets/images/logo/net-ve-xanh-logo.png';
 import logofooter from '../../../assets/images/logo/net-ve-xanh-logo.png';
 import { withErrorBoundary } from 'react-error-boundary';
 import { Fallback } from '../../../constant/Fallback';
+
 const Footer = () => {
   const accountList = [
     {
@@ -103,14 +104,14 @@ const Footer = () => {
             </div>
             <div className="col-lg-3 col-md-4 col-sm-5 col-5">
               <div className="widget widget-menu fl-st-3">
-                <h5 className="title-widget">Thông tin</h5>
-                <ul>
-                  {companyList.map((item, index) => (
-                    <li key={index}>
-                      <Link to={item.link}>{item.title}</Link>
-                    </li>
-                  ))}
-                </ul>
+                {/*<h5 className="title-widget">Thông tin</h5>*/}
+                {/*<ul>*/}
+                {/*  {companyList.map((item, index) => (*/}
+                {/*    <li key={index}>*/}
+                {/*      <Link to={item.link}>{item.title}</Link>*/}
+                {/*    </li>*/}
+                {/*  ))}*/}
+                {/*</ul>*/}
               </div>
             </div>
             <div className="col-lg-3 col-md-6 col-sm-7 col-12">

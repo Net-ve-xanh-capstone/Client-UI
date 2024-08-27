@@ -22,6 +22,7 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
 
   const [editModalShow, setEditModal] = useState(false);
   const [infomation, setInfomation] = useState({
+    id: '',
     rank: '',
     quantity: '',
     cash: '',
@@ -63,6 +64,8 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
 
   // handle open edit modal
   const editModal = items => {
+    console.log(items);
+
     for (let index in items) {
       setInfomation(prev => ({
         ...prev,

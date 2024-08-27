@@ -122,18 +122,40 @@ const ExaminerMark = () => {
                                       <div
                                         className={styles.col}
                                         data-label="Tương tác">
-                                        <button
-                                          className={styles.button_marking}
-                                          style={{
-                                            fontSize: '16px !important',
-                                            padding: '2rem 1rem !important',
-                                            lineHeight: '0',
-                                            width: '15rem',
-                                          }}
-                                          // disabled={checkNavigateBtn(val.endDate)}
-                                          onClick={() => roundNavigate(val.id)}>
-                                          Chấm bài
-                                        </button>
+                                        {val.status
+                                          .toLowerCase()
+                                          .includes('done'.toLowerCase()) ? (
+                                          <button
+                                            className={styles.button_done}
+                                            style={{
+                                              fontSize: '16px !important',
+                                              padding: '2rem 1rem !important',
+                                              lineHeight: '0',
+                                              width: '15rem',
+                                              backgroundColor:
+                                                'rgb(71, 164, 50)',
+                                              border: 'none',
+                                            }}
+                                            // disabled={checkNavigateBtn(val.endDate)}
+                                          >
+                                            Đã chấm
+                                          </button>
+                                        ) : (
+                                          <button
+                                            className={styles.button_marking}
+                                            style={{
+                                              fontSize: '16px !important',
+                                              padding: '2rem 1rem !important',
+                                              lineHeight: '0',
+                                              width: '15rem',
+                                            }}
+                                            // disabled={checkNavigateBtn(val.endDate)}
+                                            onClick={() =>
+                                              roundNavigate(val.id)
+                                            }>
+                                            Chấm bài
+                                          </button>
+                                        )}
                                       </div>
                                     </li>
                                   ))}

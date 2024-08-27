@@ -18,7 +18,8 @@ import RoundFragment from '../RoundFragment';
 import ScheduleFragment from '../ScheduleFragment';
 import AwardsFragment from '../awardsFragment/page..jsx';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import PaintingPage from '../../pages/paintingPage/page.jsx';import TopicFragment from '../TopicFragment';
+import PaintingPage from '../../pages/paintingPage/page.jsx';
+import TopicFragment from '../TopicFragment';
 import styles from './style.module.css';
 
 function ContestDetail({ contest, handleBack }) {

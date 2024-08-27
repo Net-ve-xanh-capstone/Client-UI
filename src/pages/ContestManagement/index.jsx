@@ -1,4 +1,8 @@
-import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,13 +20,13 @@ import styles from './style.module.css';
 import { TablePagination } from '@mui/material';
 
 const CustomFooter = ({
-                        addEmptyRow,
-                        count,
-                        page,
-                        rowsPerPage,
-                        handlePageChange,
-                        handleRowsPerPageChange,
-                      }) => {
+  addEmptyRow,
+  count,
+  page,
+  rowsPerPage,
+  handlePageChange,
+  handleRowsPerPageChange,
+}) => {
   return (
     <div
       style={{
@@ -137,13 +141,11 @@ function ContestManagement() {
   };
 
   const handleActiveDelete = data => {
-    if (data.rowData.every(item => item === undefined)) return false;
-    let currentDate = new Date().toJSON().slice(0, 10);
-    const startDate = data.rowData[1].split('T')[0];
-
-    if (currentDate < startDate) return false;
-
-    return true;
+    return (
+      data?.rowData[4].toLowerCase().includes('Hoàn thành'.toLowerCase()) ||
+      data?.rowData[4].toLowerCase().includes('Đang tiến hành'.toLowerCase()) ||
+      data?.rowData[4].toLowerCase().includes('Đã xóa'.toLowerCase())
+    );
   };
 
   const addEmptyRow = () => {

@@ -10,6 +10,7 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { LoadingButton } from '@mui/lab';
 import { confirmRating } from '../../api/rating.js';
 import { toast } from 'react-toastify';
+import { CircularProgress } from '@mui/material';
 
 const MarkReport = ({ pageType }) => {
   const [searchParams] = useSearchParams();
@@ -29,6 +30,9 @@ const MarkReport = ({ pageType }) => {
   const [typeOfTab, setTypeOfTabs] = useState(0);
 
   const [scheduleId, setScheduleId] = useState('');
+
+  // loading list
+  const [listMarkLoading, setListMarkLoading] = useState(false);
 
   // const [selectedContests, setSelectedContests] = useState(
   //   contests.map(() => false),
@@ -72,12 +76,19 @@ const MarkReport = ({ pageType }) => {
 
   // get all painting still not marking
   const fetchData = async id => {
-    const { data } = await getAllPainting(id);
-    const rspNotMarking = data.result.filter(val => val?.isJudged === false);
-    const rspMarking = data.result.filter(val => val?.isJudged === true);
+    setListMarkLoading(true);
+    try {
+      const { data } = await getAllPainting(id);
+      const rspNotMarking = data.result.filter(val => val?.isJudged === false);
+      const rspMarking = data.result.filter(val => val?.isJudged === true);
 
-    setContests(rspNotMarking);
-    setContestMarking(rspMarking);
+      setContests(rspNotMarking);
+      setContestMarking(rspMarking);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setListMarkLoading(false);
+    }
   };
 
   // get all award of this round
@@ -184,28 +195,60 @@ const MarkReport = ({ pageType }) => {
               <Tab>Đã chấm</Tab>
             </TabList>
             <TabPanel>
-              <div
-                className={`${styles.gridContainer} ${
-                  pageType === 'edit' ? styles.editPage : ''
-                }`}>
-                {contests?.map((contest, index) => (
-                  <div
-                    key={index}
-                    className={styles.square}
-                    onClick={() => handleOpen(contest)}>
-                    <div className={styles.squareContent}>
-                      <div className={styles.imageContainer}>
-                        <img
-                          src={contest?.image}
-                          alt="thumbnail"
-                          className={styles.image}
-                        />
+              {listMarkLoading ? (
+                <div className={styles.loading}>
+                  <CircularProgress
+                    sx={{ fontSize: '10rem' }}
+                    color="secondary"
+                  />
+                </div>
+              ) : (
+                <div
+                  className={`${styles.gridContainer} ${
+                    pageType === 'edit' ? styles.editPage : ''
+                  }`}>
+                  {contests?.length > 0 ? (
+                    contests?.map((contest, index) => (
+                      <div
+                        key={index}
+                        className={styles.square}
+                        onClick={() => handleOpen(contest)}>
+                        <div className={styles.squareContent}>
+                          <div className={styles.imageContainer}>
+                            <img
+                              src={contest?.image}
+                              alt="thumbnail"
+                              className={styles.image}
+                            />
+                          </div>
+                          <p className={styles.examCode}>{contest?.name}</p>
+                        </div>
                       </div>
-                      <p className={styles.examCode}>{contest?.name}</p>
+                    ))
+                  ) : (
+                    <p style={{ fontSize: '3rem', fontWeight: '700' }}>
+                      Không có bài thi hiển thị
+                    </p>
+                  )}
+                  {contests?.map((contest, index) => (
+                    <div
+                      key={index}
+                      className={styles.square}
+                      onClick={() => handleOpen(contest)}>
+                      <div className={styles.squareContent}>
+                        <div className={styles.imageContainer}>
+                          <img
+                            src={contest?.image}
+                            alt="thumbnail"
+                            className={styles.image}
+                          />
+                        </div>
+                        <p className={styles.examCode}>{contest?.name}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </TabPanel>
             <TabPanel>
               <div

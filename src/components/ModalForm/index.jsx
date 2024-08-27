@@ -83,6 +83,16 @@ function ModalForm({ modalShow, onHide }) {
     }
   };
 
+  // get value on the age of A and pass it to the state
+  const changeAgeOfA = e => {
+    try {
+      const { name, value } = e.target;
+      setFormDataA(prv => ({ ...prv, [name]: value }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // get value on round B and pass to state
   const handleChangeB = e => {
     try {
@@ -275,6 +285,27 @@ function ModalForm({ modalShow, onHide }) {
     }
   };
 
+  // catch if user trying to enter e character
+  const handleKeyDown = event => {
+    if (event.key === 'e' || event.key === 'E') {
+      event.preventDefault();
+    }
+  };
+  const handleInput = event => {
+    event.target.value = event.target.value.replace(/e/gi, '');
+  };
+  // catch if user trying to enter e character
+
+  // cancel if user try to input float number
+  const keydowFloat = event => {
+    if (event.key === '.' || event.key === ',') {
+      event.preventDefault();
+    }
+  };
+  const inputFloat = event => {
+    event.target.value = event.target.value.replace(/[^0-9]/g, '');
+  };
+
   return (
     <>
       {/* <CreateModal
@@ -393,7 +424,11 @@ function ModalForm({ modalShow, onHide }) {
                           type="number"
                           name="minAge"
                           value={formDataA.minAge}
+                          onKeyDown={handleKeyDown}
+                          onInput={handleInput}
                           onChange={e => handleChangeA(e)}
+                          min="3"
+                          max="99"
                         />
                       </span>
                       <span>
@@ -411,7 +446,11 @@ function ModalForm({ modalShow, onHide }) {
                           type="number"
                           name="maxAge"
                           value={formDataA.maxAge}
+                          onKeyDown={handleKeyDown}
+                          onInput={handleInput}
                           onChange={e => handleChangeA(e)}
+                          min="3"
+                          max="99"
                         />
                       </span>
                     </div>
@@ -456,7 +495,11 @@ function ModalForm({ modalShow, onHide }) {
                           type="number"
                           name="minAge"
                           value={formDataB.minAge}
+                          onKeyDown={handleKeyDown}
+                          onInput={handleInput}
                           onChange={e => handleChangeB(e)}
+                          min="3"
+                          max="99"
                         />
                       </span>
                       <span>
@@ -474,7 +517,11 @@ function ModalForm({ modalShow, onHide }) {
                           type="number"
                           name="maxAge"
                           value={formDataB.maxAge}
+                          onKeyDown={handleKeyDown}
+                          onInput={handleInput}
                           onChange={e => handleChangeB(e)}
+                          min="3"
+                          max="99"
                         />
                       </span>
                     </div>
@@ -489,9 +536,9 @@ function ModalForm({ modalShow, onHide }) {
               <h4 className={styles.title_zone}>Vòng thi</h4>
               <div style={{ marginLeft: '20px' }}>
                 <div className={styles.roundBlock}>
-                  <h5>Vòng sơ khảo</h5>
+                  <h5>Vòng Sơ Khảo:</h5>
                 </div>
-                <div className="row">
+                <div  style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
                     <input
@@ -525,9 +572,9 @@ function ModalForm({ modalShow, onHide }) {
                   <p className={styles.error}>{errors.round1}</p>
                 )}
                 <div className={styles.roundBlock}>
-                  <h5>Vòng chung kết</h5>
+                  <h5>Vòng Chung Kết:</h5>
                 </div>
-                <div className="row">
+                <div  style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
                     <input
@@ -579,6 +626,8 @@ function ModalForm({ modalShow, onHide }) {
                   max="99"
                   value={formData.passRound1}
                   onChange={handleInputChange}
+                  onInput={inputFloat}
+                  onKeyDown={keydowFloat}
                 />
               </div>
               <h4 className={styles.title}>Số lượng giải</h4>
@@ -596,6 +645,8 @@ function ModalForm({ modalShow, onHide }) {
                     name="rank1"
                     value={formData.rank1}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>
@@ -612,6 +663,8 @@ function ModalForm({ modalShow, onHide }) {
                     name="rank3"
                     value={formData.rank3}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>
@@ -630,6 +683,8 @@ function ModalForm({ modalShow, onHide }) {
                     name="rank2"
                     value={formData.rank2}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>
@@ -646,6 +701,8 @@ function ModalForm({ modalShow, onHide }) {
                     name="rank4"
                     value={formData.rank4}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>

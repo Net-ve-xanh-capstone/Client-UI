@@ -22,7 +22,7 @@ import ScheduleForm from '../ScheduleForm/index.jsx';
 import styles from './style.module.css';
 import FinalScheduleForm from '../finalScheduleForm/page.jsx';
 
-function ScheduleFragment({ scheduleFrag, getContestDetail }) {
+function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
   const [type, setType] = useState();
   const [schedule, setSchedule] = useState();
   const [listExam, setListExam] = useState();
@@ -38,11 +38,17 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
 
   const [preliminaryList, setPreliminaryList] = useState([]);
   const [finalList, setFinalList] = useState([]);
+  const [orderRound, setOrderRound] = useState([]);
+
+  const isActive = !statusOfRound
+    .toLowerCase()
+    .includes('Chưa bắt đầu'.toLowerCase());
 
   // unknow this api make for --- checking this?
   const getLevelRound = async () => {
     try {
       const { data } = await getById(scheduleFrag.id);
+
       setLevel(sortLevel(data?.result.educationalLevel));
     } catch (e) {
       console.log('error', e);
@@ -54,7 +60,6 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
     try {
       const { data } = await getScheduleByContestId(scheduleFrag.id);
       setSchedule(data?.result);
-      console.log('các vòng hiện tại', data);
     } catch (e) {
       console.log('err', e);
     }
@@ -98,49 +103,88 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
 
   // handle when user click adding more schedule
   const handleOpenCreate = (data, roundSchedule) => {
-    if (roundSchedule.roundName === 'Vòng Sơ Khảo') {
-      setRoundId(roundSchedule.roundId);
-      setEditRoundData(data);
-      setListExam(roundSchedule?.schedules);
-      setType('create');
-      setModalShow(true);
-    } else {
+    if (
+      roundSchedule.roundName.toLowerCase().includes('Chung Kết'.toLowerCase())
+    ) {
       setRoundId(roundSchedule.roundId);
       setEditRoundData(data);
       setListExam(roundSchedule?.schedules);
       setType('create');
       setFinalModalShow(true);
+    } else {
+      setRoundId(roundSchedule.roundId);
+      setEditRoundData(data);
+      setListExam(roundSchedule?.schedules);
+      setType('create');
+      setModalShow(true);
     }
+
+    // ==> old code for handle the logic checking which popup will open
+    // if (roundSchedule.roundName === 'Vòng Sơ Khảo') {
+    //   setRoundId(roundSchedule.roundId);
+    //   setEditRoundData(data);
+    //   setListExam(roundSchedule?.schedules);
+    //   setType('create');
+    //   setModalShow(true);
+    // } else {
+    //   setRoundId(roundSchedule.roundId);
+    //   setEditRoundData(data);
+    //   setListExam(roundSchedule?.schedules);
+    //   setType('create');
+    //   setFinalModalShow(true);
+    // }
+    // ==> old code for handle the logic checking which popup will open
   };
 
   // handle while user click edit schedule
   const handleOpenEdit = (data, scheduleData) => {
-    if (data.name === 'Vòng Sơ Khảo') {
-      setType(scheduleData);
-      setRoundId(scheduleData?.id);
-      setEditRoundData(data);
-      setModalShow(true);
-    } else {
+    if (data.name.toLowerCase().includes('Chung Kết'.toLowerCase())) {
       setType(scheduleData);
       setRoundId(scheduleData?.id);
       setEditRoundData(data);
       setFinalModalShow(true);
+    } else {
+      setType(scheduleData);
+      setRoundId(scheduleData?.id);
+      setEditRoundData(data);
+      setModalShow(true);
     }
+
+    // => old code for handle the edit popup will open in which type
+    // if (data.name === 'Vòng Sơ Khảo') {
+    //   setType(scheduleData);
+    //   setRoundId(scheduleData?.id);
+    //   setEditRoundData(data);
+    //   setModalShow(true);
+    // } else {
+    //   setType(scheduleData);
+    //   setRoundId(scheduleData?.id);
+    //   setEditRoundData(data);
+    //   setFinalModalShow(true);
+    // }
+    // => old code for handle the edit popup will open in which type
   };
 
   //  sorting the level of list schedule to map follow with the level
   const sortLevel = levels => {
-    const newPreliminaryList = [];
-    const newFinalList = [];
+    let newPreliminaryList = [];
+    let newFinalList = [];
+    let orderRound = [];
 
-    for (const level of levels) {
+    for (let level of levels) {
+      //checking the level of this round and map each level to each state
+      //we do that for sorting the level to appear the level with correct line
       if (level.round && level.round.length > 0) {
         const levelName = level.level;
-        for (const round of level.round) {
-          if (round?.name === 'Vòng Sơ Khảo') {
+        for (let round of level.round) {
+          if (round?.name.toLowerCase().includes('Sơ Khảo'.toLowerCase())) {
             newPreliminaryList.push({ ...round, levelName });
-          } else if (round?.name === 'Vòng Chung Kết') {
+          } else if (
+            round?.name.toLowerCase() === 'Vòng Chung Kết'.toLowerCase()
+          ) {
             newFinalList.push({ ...round, levelName });
+          } else {
+            orderRound.push({ ...round, levelName });
           }
         }
         level.round.sort(
@@ -151,6 +195,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
 
     setPreliminaryList(newPreliminaryList);
     setFinalList(newFinalList);
+    setOrderRound(orderRound);
     return levels;
   };
 
@@ -184,14 +229,17 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                 <li
                   className={styles.roundHeader}
                   style={{
-                    gridTemplateColumns:
-                      roundChedule?.roundName === 'Vòng Sơ Khảo'
-                        ? 'repeat(6, 1fr)'
-                        : 'repeat(9, 1fr)',
+                    gridTemplateColumns: roundChedule?.roundName
+                      .toLowerCase()
+                      .includes('Chung Kết'.toLowerCase())
+                      ? 'repeat(9, 1fr)'
+                      : 'repeat(6, 1fr)',
                   }}>
                   <div className={styles.col}>Giám khảo</div>
                   <div className={styles.col}>Ngày chấm</div>
-                  {roundChedule?.roundName === 'Vòng Chung Kết' && (
+                  {roundChedule?.roundName
+                    .toLowerCase()
+                    .includes('Chung Kết'.toLowerCase()) ? (
                     <>
                       <div className={styles.col}>Tổng bài chấm</div>
                       <div className={styles.col}>Giải Nhất</div>
@@ -199,9 +247,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                       <div className={styles.col}>Giải Ba</div>
                       <div className={styles.col}>Giải Khuyến Khích</div>
                     </>
-                  )}
-
-                  {roundChedule?.roundName === 'Vòng Sơ Khảo' && (
+                  ) : (
                     <>
                       <div className={styles.col}>Tổng bài chấm</div>
                       <div className={styles.col}>Đạt giải</div>
@@ -220,10 +266,11 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                       key={scheduleData.id}
                       className={styles.tableRow}
                       style={{
-                        gridTemplateColumns:
-                          roundChedule.roundName === 'Vòng Sơ Khảo'
-                            ? 'repeat(6, 1fr)'
-                            : 'repeat(9, 1fr)',
+                        gridTemplateColumns: roundChedule?.roundName
+                          .toLowerCase()
+                          .includes('Chung Kết'.toLowerCase())
+                          ? 'repeat(9, 1fr)'
+                          : 'repeat(6, 1fr)',
                       }}>
                       <div className={styles.col} data-label="Tên giám khảo">
                         {scheduleData?.examinerName}
@@ -231,8 +278,44 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                       <div className={styles.col} data-label="Ngày chấm">
                         <div>{formatDate(scheduleData?.endDate)}</div>
                       </div>
+                      {roundChedule?.roundName
+                        .toLowerCase()
+                        .includes('Chung Kết'.toLowerCase()) ? (
+                        <>
+                          <div
+                            className={styles.col}
+                            data-label="Tổng bài chấm">
+                            <div>{scheduleData?.judgeCount}</div>
+                          </div>
+                          {scheduleData?.awards?.map(val => (
+                            <div
+                              key={val.id}
+                              className={styles.col}
+                              data-label={val.rank}>
+                              <div>{val.quantity}</div>
+                            </div>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          <div
+                            className={styles.col}
+                            data-label="Tổng bài chấm">
+                            <div>{scheduleData?.judgeCount}</div>
+                          </div>
+                          {scheduleData?.awards?.map(val => (
+                            <div
+                              key={val.id}
+                              className={styles.col}
+                              data-label="Đạt giải">
+                              <span>{val.quantity}</span>
+                            </div>
+                          ))}
+                        </>
+                      )}
 
-                      {roundChedule?.roundName === 'Vòng Sơ Khảo' && (
+                      {/* this is old logic to handle the round so khao or chung ket for rendering the data match with that */}
+                      {/* {roundChedule?.roundName === 'Vòng Sơ Khảo' && (
                         <>
                           <div
                             className={styles.col}
@@ -265,7 +348,9 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                             </div>
                           ))}
                         </>
-                      )}
+                      )} */}
+                      {/* this is old logic to handle the round so khao or chung ket for rendering the data match with that */}
+
                       <div className={styles.col} data-label="Trạng thái">
                         <span>
                           {scheduleData?.status === 'Rating'
@@ -284,7 +369,8 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                             aria-label="delete"
                             size="large"
                             color="error"
-                            disabled={scheduleData?.status === 'Done'}
+                            // disabled={scheduleData?.status === 'Done'}
+                            disabled={isActive}
                             onClick={() => hanldeOpenDelete(scheduleData?.id)}>
                             <DeleteIcon />
                           </IconButton>
@@ -292,7 +378,8 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
                             aria-label="edit"
                             size="large"
                             color="primary"
-                            disabled={scheduleData?.status === 'Done'}
+                            // disabled={scheduleData?.status === 'Done'}
+                            disabled={isActive}
                             onClick={() => handleOpenEdit(data, scheduleData)}>
                             <EditIcon />
                           </IconButton>
@@ -306,6 +393,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
             <div className="flex justify-content-end mt-20">
               <button
                 className="btn btn-outline-primary btn-lg"
+                disabled={isActive}
                 onClick={() => handleOpenCreate(data, roundChedule)}>
                 Thêm lịch chấm
               </button>
@@ -344,6 +432,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail }) {
         {/* this return will map the data follow with the level of the schedule
         in contest */}
         {preliminaryList.map(renderRound)}
+        {orderRound.map(renderRound)}
         {finalList.map(renderRound)}
       </>
     )

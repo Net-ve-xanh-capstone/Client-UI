@@ -23,6 +23,7 @@ import styles from './style.module.css';
 
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
+  const [statusOfRound, setStatusRound] = useState(null);
 
   useEffect(() => {
     getContestDetail();
@@ -32,6 +33,7 @@ function ContestDetail({ contest, handleBack }) {
   const getContestDetail = async () => {
     try {
       const { data } = await getById(contest.id);
+      setStatusRound(data?.result.status);
       setContestDes(data?.result);
     } catch (e) {
       console.log('err', e);
@@ -46,6 +48,7 @@ function ContestDetail({ contest, handleBack }) {
         <ContestFragment
           contestFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -56,6 +59,7 @@ function ContestDetail({ contest, handleBack }) {
         <LevelFragment
           levelFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -64,8 +68,10 @@ function ContestDetail({ contest, handleBack }) {
       icon: <AccessTimeFilled />,
       component: (
         <RoundFragment
+          scheduleFrag={contestDes}
           roundFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -76,6 +82,7 @@ function ContestDetail({ contest, handleBack }) {
         <TopicFragment
           topicFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -87,6 +94,7 @@ function ContestDetail({ contest, handleBack }) {
         <ResourceFragment
           resourceFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -97,6 +105,7 @@ function ContestDetail({ contest, handleBack }) {
         <AwardsFragment
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -107,6 +116,7 @@ function ContestDetail({ contest, handleBack }) {
         <ScheduleFragment
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -118,6 +128,7 @@ function ContestDetail({ contest, handleBack }) {
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
           contestId={contest.id}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -132,7 +143,7 @@ function ContestDetail({ contest, handleBack }) {
           </IconButton>
         </div>
         <div>
-          <h2 className={styles.titleHeader}>Nét vẽ xanh</h2>
+          <h2 className={styles.titleHeader}>{contestDes?.name}</h2>
         </div>
       </div>
 

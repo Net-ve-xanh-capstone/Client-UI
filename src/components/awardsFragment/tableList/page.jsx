@@ -15,7 +15,7 @@ import DeleteModal from '../../DeleteModal/index.jsx';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-const ListAward = memo(({ items, recallData }) => {
+const ListAward = memo(({ items, recallData, statusOfRound }) => {
   const [openAdd, setOpenAdd] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [awardsId, setAwardId] = useState('');
@@ -27,6 +27,10 @@ const ListAward = memo(({ items, recallData }) => {
     cash: '',
     artifact: '',
   });
+
+  const isActive = !statusOfRound
+    .toLowerCase()
+    .includes('Chưa bắt đầu'.toLowerCase());
 
   // patch delete while click
   const handleDelete = async () => {
@@ -164,6 +168,7 @@ const ListAward = memo(({ items, recallData }) => {
                             aria-label="delete"
                             size="large"
                             color="error"
+                            disabled={isActive}
                             onClick={() => {
                               setDeleteModalShow(true);
                               setAwardId(val.id);
@@ -174,6 +179,7 @@ const ListAward = memo(({ items, recallData }) => {
                             aria-label="edit"
                             size="large"
                             color="primary"
+                            disabled={isActive}
                             onClick={() => editModal(val)}>
                             <EditIcon />
                           </IconButton>
@@ -186,6 +192,7 @@ const ListAward = memo(({ items, recallData }) => {
             <div className="flex justify-content-end mt-20">
               <button
                 className="btn btn-outline-primary btn-lg"
+                disabled={isActive}
                 onClick={() => triggerOpenPopup()}>
                 Thêm giải thưởng
               </button>

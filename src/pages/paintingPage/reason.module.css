@@ -1,0 +1,50 @@
+.container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.topic_error {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.field_painting {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    height: max-content;
+}
+
+.field_painting>textarea {
+    flex: 1;
+    font-size: 12px;
+    padding: 5px;
+    color: #1f1f2c !important;
+}
+
+/* error text */
+.error_text {
+    display: flex;
+    width: 100%;
+    height: max-content;
+}
+
+
+.error_text span {
+    flex: 1;
+}
+
+.error_text .txt_error {
+    flex: 5;
+    color: #eb0014 !important;
+    font-size: 11px;
+    font-weight: bold;
+    width: max-content;
+    height: max-content;
+    padding-left: 2rem;
+}

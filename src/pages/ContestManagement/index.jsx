@@ -37,7 +37,7 @@ const CustomFooter = ({
         flexDirection: 'column',
       }}>
       <div className={`flex justify-content-center ${styles.row}`}>
-        <AddIcon className={styles.btnAdd} onClick={() => addEmptyRow()} />
+      <AddIcon className={styles.btnAdd} onClick={() => addEmptyRow()} />
       </div>
       <TablePagination
         sx={{ width: '100%' }}
@@ -305,7 +305,7 @@ function ContestManagement() {
           },
         },
       },
-    });
+  });
 
   const handleBack = () => {
     setIsOpenDetail(false);

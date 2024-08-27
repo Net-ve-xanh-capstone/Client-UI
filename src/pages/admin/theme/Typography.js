@@ -1,22 +1,22 @@
 const typography = {
-  fontFamily: "'REM', sans-serif;",
+  fontFamily: '\'REM\', sans-serif;',
   h1: {
     fontWeight: 600,
     fontSize: '2.25rem',
     lineHeight: '2.75rem',
-    fontFamily: "'Plus Jakarta Sans', sans-serif;",
+    fontFamily: '\'REM\', sans-serif;',
   },
   h2: {
     fontWeight: 600,
     fontSize: '1.875rem',
     lineHeight: '2.25rem',
-    fontFamily: "'Plus Jakarta Sans', sans-serif;",
+    fontFamily: '\'REM\', sans-serif;',
   },
   h3: {
     fontWeight: 600,
     fontSize: '1.5rem',
     lineHeight: '1.75rem',
-    fontFamily: "'Plus Jakarta Sans', sans-serif;",
+    fontFamily: '\'REM\', sans-serif;',
   },
   h4: {
     fontWeight: 600,
@@ -53,7 +53,7 @@ const typography = {
     fontWeight: 400,
   },
   subtitle2: {
-    fontSize: '1.3rem',
+    fontSize: '1.4rem',
     fontWeight: 400,
   },
 };

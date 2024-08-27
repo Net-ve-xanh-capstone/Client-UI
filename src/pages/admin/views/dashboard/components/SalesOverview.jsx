@@ -1,47 +1,33 @@
 import React, { useEffect } from 'react';
-import { Select, MenuItem, Grid, Typography, Stack } from '@mui/material';
+import { Avatar, Grid, MenuItem, Select, Stack, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import DashboardCard from '../../../components/shared/DashboardCard';
 import Chart from 'react-apexcharts';
 import { getQuantityPaintingByYear } from '../../../../../api/adminApi';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Avatar } from '@mui/material';
-import {
-  IconArrowDownLeft,
-  IconArrowUpLeft,
-  IconArrowUpRight,
-} from '@tabler/icons';
+import { IconArrowDownLeft, IconArrowUpLeft } from '@tabler/icons';
 
 const SalesOverview = () => {
   // select
-  const { userInfo } = useSelector(state => state.auth);
-  const navigate = useNavigate();
   const [month, setMonth] = React.useState(0);
   const [quantity, setQuantity] = React.useState([]);
 
-  const fetchQuantityCompetitor = async id => {
+  const fetchQuantityCompetitor = async () => {
     try {
       const { data } = await getQuantityPaintingByYear();
-      const result = data.result.map(val => {
+      const result = data?.result.map(val => {
         return { year: val.year, quantity: val.quantity };
       });
-
       setQuantity(result);
-
-      // setQuantity(result);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (userInfo === null) navigate('/login');
     fetchQuantityCompetitor();
-  }, [navigate, userInfo]);
+  }, []);
 
   const handleChange = event => {
-    console.log(event.target.value);
     setMonth(event.target.value);
   };
 
@@ -57,13 +43,12 @@ const SalesOverview = () => {
   const theme = useTheme();
   const primary = theme.palette.primary.main;
   const primarylight = '#ecf2ff';
-  const successlight = theme.palette.success.light;
 
   // chart
   const optionscolumnchart = {
     chart: {
       type: 'donut',
-      fontFamily: "'REM', sans-serif;",
+      fontFamily: '\'REM\', sans-serif;',
       foreColor: '#adb0bb',
       toolbar: {
         show: false,
@@ -115,6 +100,9 @@ const SalesOverview = () => {
       title="Số lượng thí sinh tham gia từng năm"
       action={
         <Select
+          //turn off MuiBackdrop-root
+          MenuProps={{ disablePortal: true, disableScrollLock: true }}
+          autoWidth={true}
           labelId="month-dd"
           id="month-dd"
           value={month}

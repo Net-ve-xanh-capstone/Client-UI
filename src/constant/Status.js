@@ -25,3 +25,8 @@ export const paintingStatusArray = [
 ];
 
 export const paintingStatusActive = 'Đang tiến hành';
+
+export const accountStatusMap = {
+  'Active': 'Hoạt Động',
+  'Inactive': 'Không hoạt động',
+};

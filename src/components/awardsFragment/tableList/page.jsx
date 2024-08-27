@@ -189,14 +189,18 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
                   ))}
               </ul>
             </div>
-            <div className="flex justify-content-end mt-20">
-              <button
-                className="btn btn-outline-primary btn-lg"
-                disabled={isActive}
-                onClick={() => triggerOpenPopup()}>
-                Thêm giải thưởng
-              </button>
-            </div>
+            {items.name
+              .toLowerCase()
+              .includes('vòng chung kết'.toLowerCase()) ? (
+              <div className="flex justify-content-end mt-20">
+                <button
+                  className="btn btn-outline-primary btn-lg"
+                  disabled={isActive}
+                  onClick={() => triggerOpenPopup()}>
+                  Thêm giải thưởng
+                </button>
+              </div>
+            ) : null}
           </AccordionDetails>
         </Accordion>
       </div>

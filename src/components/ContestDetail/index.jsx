@@ -3,24 +3,24 @@ import {
   ArrowBack,
   CalendarMonth,
   ColorLens,
+  Paid,
   School,
   Topic,
-  Paid,
 } from '@mui/icons-material';
-import React, { useEffect, useState } from 'react';
-import styles from './style.module.css';
-import LoadingSkeleton from '../../components/loading/LoadingSkeleton';
 import { IconButton } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { getById } from '../../api/contestStaffApi';
+import LoadingSkeleton from '../../components/loading/LoadingSkeleton';
 import ContestFragment from '../ContestFragment';
 import LevelFragment from '../LevelFragment';
-import RoundFragment from '../RoundFragment';
-import TopicFragment from '../TopicFragment';
 import ResourceFragment from '../ResourceFragment';
+import RoundFragment from '../RoundFragment';
 import ScheduleFragment from '../ScheduleFragment';
 import AwardsFragment from '../awardsFragment/page..jsx';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import PaintingPage from '../../pages/paintingPage/page.jsx';
+import PaintingPage from '../../pages/paintingPage/page.jsx';import TopicFragment from '../TopicFragment';
+import styles from './style.module.css';
+
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
   const [statusOfRound, setStatusRound] = useState(null);

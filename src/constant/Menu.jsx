@@ -67,7 +67,20 @@ const menus = [
       {
         id: 2,
         sub: 'Bộ sưu tập',
-        links: '/Client-UI/collection',
+        links: '/collection',
+        public: true,
+      },
+      {
+        id: 3,
+        sub: 'Chấm thi',
+        links: '/Client-UI/mark-examiner',
+        public: false,
+        role: [Role.EXAMINER],
+      },
+      {
+        id: 4,
+        sub: 'Không có kết quả',
+        links: '/no-result',
         public: true,
       },
     ],

@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import styles from './style.module.css';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import CreateModal from '../CreateModal';
-import { createLevel } from '../../api/levelStaffApi';
-import { parseDateEdit, parseDateScnd } from '../../utils/formatDate.js';
-import DatePicker from 'react-datepicker';
-import './datePicker.css';
+import { toast } from 'react-toastify';
 import { putLevel } from '../../api/educationLevel.js';
-import 'react-datepicker/dist/react-datepicker.css';
+import { createLevel } from '../../api/levelStaffApi';
+import { parseDateEdit } from '../../utils/formatDate.js';
+import './datePicker.css';
+import styles from './style.module.css';
 function CreateLevel({
   modalShow,
   onHide,

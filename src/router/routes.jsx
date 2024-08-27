@@ -15,6 +15,9 @@ import PaintingOfCollectionPage from '../pages/collection/painting/PaintingOfCol
 import HomeCollectionPage from '../pages/myCollection/HomeCollectionPage.jsx';
 import Loadable from '../pages/admin/layouts/full/shared/loadable/Loadable';
 import { Navigate } from 'react-router-dom';
+import MarkReport from '../components/MarkReport/index.jsx';
+import ExaminerMark from '../pages/ExaminerMark/page.jsx';
+import ExaminerRound from '../pages/examinerRound/page.jsx';
 
 const Home = lazy(() => import('../pages/Home/Home'));
 const BlogPage = lazy(() => import('../pages/blogPage/BlogPage'));
@@ -164,6 +167,30 @@ const routes = [
     ],
   },
   { path: '/*', component: <NoResult /> },
+  {
+    path: 'Client-UI/mark-report',
+    component: (
+      <ProtectedRoute role={Role.EXAMINER}>
+        <MarkReport />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'Client-UI/mark-examiner',
+    component: (
+      <ProtectedRoute role={Role.EXAMINER}>
+        <ExaminerMark />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'Client-UI/examiner-round',
+    component: (
+      <ProtectedRoute role={Role.EXAMINER}>
+        <ExaminerRound />
+      </ProtectedRoute>
+    ),
+  },
 ];
 
 export default routes;

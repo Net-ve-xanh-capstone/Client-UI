@@ -1,0 +1,150 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.square {
+  box-shadow: 0px 3px 16px rgba(47, 83, 109, 0.12);
+  border-radius: 20px;
+  padding: 1rem;
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 2;
+}
+
+.squareContent {
+  text-align: center;
+}
+
+.imageContainer {
+  background-color: white;
+  margin-bottom: 10px;
+  height: 20rem;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: calc(20px - 1rem);
+}
+
+.examCode {
+  margin-top: 10px;
+  font-weight: bold;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+}
+
+.buttons {
+  grid-column: span 4;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.editPage .squareContent {
+  background-color: #f8f9fa;
+}
+
+.selected {
+  border-color: blue;
+}
+
+.unselected {
+  border-color: black;
+}
+
+/* css tablist */
+
+.tablist {
+  width: 100%;
+  padding: 5rem 8rem;
+}
+
+.add_all {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 8rem 5rem 0;
+
+}
+
+.btnCreate {
+  margin-top: auto;
+  padding: 0.5rem 1rem;
+}
+
+.btnCreate:hover {
+  color: white;
+  border: none !important;
+  outline: none !important;
+}
+
+.btnCreate:focus {
+  color: white;
+}
+
+/* responsive */
+
+/* Màn hình nhỏ (dưới 400px) */
+@media only screen and (min-width: 400px) {
+  .gridContainer {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .add_all {
+    justify-content: center;
+    padding: 5rem 0;
+  }
+
+}
+
+/* Màn hình nhỏ (dưới 600px) */
+@media only screen and (min-width: 600px) {
+  .gridContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+
+}
+
+/* Màn hình trung bình (từ 601px đến 768px) */
+@media only screen and (min-width: 768px) {
+  .gridContainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .add_all {
+    justify-content: flex-end;
+    padding: 0 8rem 5rem 0;
+  }
+}
+
+/* Màn hình lớn (từ 769px đến 1200px) */
+@media only screen and (min-width: 1200px) {
+  .gridContainer {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Màn hình rất lớn (trên 1200px) */
+@media only screen and (min-width: 1201px) {
+  .gridContainer {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

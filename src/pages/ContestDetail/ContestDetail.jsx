@@ -1,24 +1,22 @@
 import React, { useEffect } from 'react';
-import Header from '../../components/common/header/HeaderVersion2';
-import Footer from '../../components/common/footer/Footer';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { paintingApi } from '../../api/paintingApi.js';
+import { topicApi } from '../../api/topicApi.js';
 import levelIcon from '../../assets/images/icon/level.png';
-import useFetchData from '../../hooks/useQueryData.js';
-import {
-  defaultAvatar,
-  userAvatar,
-} from '../../constant/imageDefault.js';
-import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
 import CountdownComponent from '../../components/CountdownComponent.jsx';
+import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
+import { defaultAvatar, userAvatar } from '../../constant/imageDefault.js';
+import useFetchData from '../../hooks/useQueryData.js';
+
 import {
   contestStatus,
   paintingStatusEnable,
 } from './../../constant/Status.js';
-import { topicApi } from '../../api/topicApi.js';
-import { useSelector } from 'react-redux';
-import { paintingApi } from '../../api/paintingApi.js';
+import Footer from '../../components/common/footer/Footer.jsx';
+import HeaderVersion2 from '../../components/common/header/HeaderVersion2.jsx';
 
 const getAllPaintingByCompetitorIdEndpoint =
   'paintings/getpaintingbyaccountcontest';
@@ -54,7 +52,7 @@ const ContestDetail = () => {
       console.log(paintingResponse);
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const contest = data?.data?.result;
@@ -68,7 +66,7 @@ const ContestDetail = () => {
   }
   return (
     <div className="item-details">
-      <Header />
+      <HeaderVersion2 />
       <section className="flat-title-page inner">
         <div className="overlay"></div>
         <div className="themesflat-container">

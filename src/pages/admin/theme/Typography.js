@@ -53,7 +53,7 @@ const typography = {
     fontWeight: 400,
   },
   subtitle2: {
-    fontSize: '0.875rem',
+    fontSize: '1.3rem',
     fontWeight: 400,
   },
 };

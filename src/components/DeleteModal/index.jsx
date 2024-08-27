@@ -19,10 +19,10 @@ function DeleteModal({ show, setShow, title, callBack }) {
         </Modal.Header>
         <Modal.Body>Bạn có chắc chắn muốn xóa {title} này?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" size="lg" onClick={handleClose}>
+          <Button variant="danger" size="lg" onClick={handleClose}>
             Không
           </Button>
-          <Button variant="danger" size="lg" onClick={() => handleCallBack()}>
+          <Button variant="success" size="lg" onClick={() => handleCallBack()}>
             Có
           </Button>
         </Modal.Footer>

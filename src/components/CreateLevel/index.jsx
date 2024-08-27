@@ -289,7 +289,7 @@ function CreateLevel({
         round2EndTime: objRound.finalRound[0]?.endTime.split('T')[0],
 
         // award
-        passRound1: objRound.unFinalRound[0]?.award[0].quantity,
+        passRound1: objRound.unFinalRound[0]?.award[0]?.quantity,
         rank1: rankFinal['Giải Nhất'],
         rank2: rankFinal['Giải Nhì'],
         rank3: rankFinal['Giải Ba'],
@@ -375,13 +375,13 @@ function CreateLevel({
               </div>
             </div>
 
-            {/* Round */} 
+            {/* Round */}
             <div className={styles.card_screen}>
               <h3 className={styles.title_zone}>Vòng thi</h3>
               <div style={{ marginLeft: '20px' }}>
-                <div className={styles.roundBlock}> 
+                <div className={styles.roundBlock}>
                   <h5>Vòng sơ khảo:</h5>
-                </div> 
+                </div>
 
                 <div style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
@@ -440,8 +440,9 @@ function CreateLevel({
                   <p className={styles.error}>{errors.round1}</p>
                 )}
 
-                <div style={{ marginTop: '20px' }} className={styles.roundBlock}>
-
+                <div
+                  style={{ marginTop: '20px' }}
+                  className={styles.roundBlock}>
                   <h5>Vòng chung kết:</h5>
                 </div>
                 <div style={{ marginLeft: '20px' }} className="row">
@@ -502,7 +503,7 @@ function CreateLevel({
               </div>
             </div>
 
-            {/* Award */} 
+            {/* Award */}
 
             <div className={styles.card_screen}>
               <h3 className={styles.title_zone}>Cơ cấu giải thưởng</h3>

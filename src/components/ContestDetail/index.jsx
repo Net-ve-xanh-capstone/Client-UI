@@ -21,6 +21,7 @@ import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import PaintingPage from '../../pages/paintingPage/page.jsx';
 import TopicFragment from '../TopicFragment';
 import styles from './style.module.css';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
@@ -123,7 +124,7 @@ function ContestDetail({ contest, handleBack }) {
     },
     {
       title: 'Bài thi',
-      icon: <CalendarMonth />,
+      icon: <MenuBookIcon />,
       component: (
         <PaintingPage
           scheduleFrag={contestDes}

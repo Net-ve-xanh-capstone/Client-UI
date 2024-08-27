@@ -14,10 +14,9 @@ import RoundForm from '../RoundForm/index.jsx';
 import styles from './style.module.css';
 import DownloadIcon from '@mui/icons-material/Download';
 import { dowloadExcel } from '../../api/dowloadApi.js';
-import axios from 'axios';
-import { saveAs } from 'file-saver';
-import axiosApi from '../../api/axiosApi.js';
-import { store } from '../../store/configureStore.js';
+import SendIcon from '@mui/icons-material/Send';
+import EditModal from '../EditModal/index.jsx';
+import MailModal from './modalMail.jsx';
 
 function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   const [modalShow, setModalShow] = useState(false);
@@ -27,13 +26,29 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   const [round, setRound] = useState();
   const [editRoundData, setEditRoundData] = useState();
 
+  const [openModal, setOpenModal] = useState(false);
+  const [idLevel, setIdLevel] = useState(null);
+
   const isActive = !statusOfRound
     .toLowerCase()
     .includes('Chưa bắt đầu'.toLowerCase());
 
+  const openModalConfirm = id => {
+    setOpenModal(true);
+    setIdLevel(id);
+  };
+
+  // fetch sending email
+  const sendMail = async id => {
+    try {
+      await sendMail(id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // dowload file excel
   const dowloadFile = async id => {
-    // Tạo một URL tạm thời từ blob để tải file
     try {
       const response = await dowloadExcel(id);
       console.log(response);
@@ -128,6 +143,12 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   return (
     round && (
       <>
+        <MailModal
+          show={openModal}
+          setShow={setOpenModal}
+          callBack={sendMail}
+          idLevel={idLevel}
+        />
         <RoundForm
           modalShow={modalShow}
           onHide={resetDetail}
@@ -218,6 +239,15 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
                       // disabled={checkEditButton(data.startTime)}
                       disabled={isActive}>
                       <DownloadIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="edit"
+                      size="large"
+                      color="info"
+                      onClick={() => openModalConfirm(data.id)}
+                      // disabled={checkEditButton(data.startTime)}
+                      disabled={isActive}>
+                      <SendIcon />
                     </IconButton>
                     {/* <IconButton
                         aria-label="delete"

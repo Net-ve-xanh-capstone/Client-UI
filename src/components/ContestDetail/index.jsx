@@ -6,7 +6,6 @@ import {
   School,
   Topic,
   Paid,
-  Schedule,
 } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import styles from './style.module.css';
@@ -20,9 +19,11 @@ import TopicFragment from '../TopicFragment';
 import ResourceFragment from '../ResourceFragment';
 import ScheduleFragment from '../ScheduleFragment';
 import AwardsFragment from '../awardsFragment/page..jsx';
-
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+import PaintingPage from '../../pages/paintingPage/page.jsx';
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
+  const [statusOfRound, setStatusRound] = useState(null);
 
   useEffect(() => {
     getContestDetail();
@@ -32,6 +33,7 @@ function ContestDetail({ contest, handleBack }) {
   const getContestDetail = async () => {
     try {
       const { data } = await getById(contest.id);
+      setStatusRound(data?.result.status);
       setContestDes(data?.result);
     } catch (e) {
       console.log('err', e);
@@ -46,6 +48,7 @@ function ContestDetail({ contest, handleBack }) {
         <ContestFragment
           contestFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -56,6 +59,7 @@ function ContestDetail({ contest, handleBack }) {
         <LevelFragment
           levelFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -64,8 +68,10 @@ function ContestDetail({ contest, handleBack }) {
       icon: <AccessTimeFilled />,
       component: (
         <RoundFragment
+          scheduleFrag={contestDes}
           roundFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -76,6 +82,7 @@ function ContestDetail({ contest, handleBack }) {
         <TopicFragment
           topicFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -87,6 +94,18 @@ function ContestDetail({ contest, handleBack }) {
         <ResourceFragment
           resourceFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
+        />
+      ),
+    },
+    {
+      title: 'Giải thưởng',
+      icon: <CardGiftcardIcon />,
+      component: (
+        <AwardsFragment
+          scheduleFrag={contestDes}
+          getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
@@ -97,16 +116,18 @@ function ContestDetail({ contest, handleBack }) {
         <ScheduleFragment
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
+          statusOfRound={statusOfRound}
         />
       ),
     },
     {
-      title: 'Giải thưởng',
+      title: 'Bài thi',
       icon: <CalendarMonth />,
       component: (
-        <AwardsFragment
+        <PaintingPage
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
+          contestId={contest.id}
         />
       ),
     },
@@ -121,7 +142,7 @@ function ContestDetail({ contest, handleBack }) {
           </IconButton>
         </div>
         <div>
-          <h2 className={styles.titleHeader}>Nét vẽ xanh</h2>
+          <h2 className={styles.titleHeader}>{contestDes?.name}</h2>
         </div>
       </div>
 
@@ -142,6 +163,10 @@ function ContestDetail({ contest, handleBack }) {
               <label
                 htmlFor={`tab${index + 1}`}
                 role="button"
+                style={{
+                  cursor: 'pointer',
+                  height: '100%',
+                }}
                 className={styles.tabLabel}>
                 {tab.icon}
                 <br />
@@ -152,9 +177,12 @@ function ContestDetail({ contest, handleBack }) {
         </ul>
 
         {/* bottom slider animation */}
+        {/* bottom slider animation */}
         <div className={styles.slider}>
           <div className={styles.indicator}></div>
         </div>
+        {/*ending bottom slider animation */}
+
         {/*ending bottom slider animation */}
 
         <div className={styles.content}>

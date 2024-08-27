@@ -69,21 +69,21 @@ function CategoryBlog() {
             <IconButton
               aria-label="delete"
               size="small"
-              color="info"
-              onClick={() => {
-                triggerEdit(value, tableData.rowData[0]);
-              }}>
-              <RemoveRedEyeIcon />
-            </IconButton>
-            <IconButton
-              aria-label="delete"
-              size="small"
               color="error"
               onClick={() => {
                 setIdCategory(value);
                 setOpenModal(true);
               }}>
               <DeleteIcon />
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="info"
+              onClick={() => {
+                triggerEdit(value, tableData.rowData[0]);
+              }}>
+              <RemoveRedEyeIcon />
             </IconButton>
           </div>
         ),

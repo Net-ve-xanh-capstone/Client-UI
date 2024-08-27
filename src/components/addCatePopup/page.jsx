@@ -121,15 +121,15 @@ function AddCatePopup({
       </div>
       <div className={styles.btn}>
         <span className={styles.btn_find} onClick={() => closePopup()}>
-          <h5>Cancel</h5>
+          <h5>Huỷ</h5>
         </span>
         {isEdit ? (
           <span className={styles.btn_find} onClick={() => triggerUpdate()}>
-            <h5>Save</h5>
+            <h5>Lưu</h5>
           </span>
         ) : (
           <span className={styles.btn_find} onClick={() => triggerAdding()}>
-            <h5>Add</h5>
+            <h5>Thêm</h5>
           </span>
         )}
       </div>

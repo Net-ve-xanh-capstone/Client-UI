@@ -91,12 +91,17 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
     }
   };
 
-  const isValidDate = (startTime, endTime) => {
+  // check datetime of user choosing level
+  const isValidDate = (startTime, endTime, listLevel) => {
+    console.log(listLevel);
+
     //check for edit and create
     if (roundData?.id) {
       const selectLevel = contestData.educationalLevel.find(item =>
         item.round.find(ele => ele.id === roundData.id),
       );
+      console.log('log ra ham selectlevel', selectLevel);
+
       if (selectLevel.round && selectLevel.round.length > 0) {
         for (let round of selectLevel.round) {
           const roundStart = new Date(round.startTime);
@@ -111,18 +116,50 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
         }
       }
     } else {
-      for (let level of contestData.educationalLevel) {
-        if (level.round && level.round.length > 0) {
-          for (let round of level.round) {
-            const roundStart = new Date(round.startTime);
-            const roundEnd = new Date(round.endTime);
-            roundEnd.setDate(roundEnd.getDate() + 1);
-            if (!(startTime > roundEnd || endTime < roundStart)) {
-              return false;
+      // get the value level of user choosing
+      // map the starttime and endtime of that level
+      // using date time in current round compare to input time of user
+      const eduLevel = contestData.educationalLevel;
+      for (let index in eduLevel) {
+        for (let userIndex in listLevel) {
+          if (eduLevel[index].id === listLevel[userIndex]) {
+            if (eduLevel[index].round && eduLevel[index].round.length > 0) {
+              for (let round of eduLevel[index].round) {
+                console.log(round);
+
+                const roundStart = new Date(round.startTime);
+                // const roundEnd = new Date(round.endTime);
+                // roundEnd.setDate(roundEnd.getDate() + 1);
+                if (
+                  !(
+                    startTime.setHours(0, 0, 0, 0) !==
+                    roundStart.setHours(0, 0, 0, 0)
+                  )
+                ) {
+                  return false;
+                }
+              }
             }
           }
         }
       }
+
+      // for (let level of contestData.educationalLevel) {
+      //   if (level.round && level.round.length > 0) {
+      //     for (let round of level.round) {
+      //       console.log(round);
+
+      //       const roundStart = new Date(round.startTime);
+      //       const roundEnd = new Date(round.endTime);
+
+      //       roundEnd.setDate(roundEnd.getDate() + 1);
+
+      //       if (!(startTime > roundEnd || endTime < roundStart)) {
+      //         return false;
+      //       }
+      //     }
+      //   }
+      // }
     }
 
     return true;
@@ -133,7 +170,7 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
     event.stopPropagation();
 
     let formErrors = {};
-
+    let currentRound = selectedLevel;
     const startDate = new Date(formData.startTime);
     const endDate = new Date(formData.endTime);
 
@@ -154,8 +191,10 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
       formErrors.startTime = 'Ngày bắt đầu phải nhỏ hơn ngày kết thúc';
     }
 
-    if (!isValidDate(startDate, endDate)) {
-      formErrors.startTime = 'Trùng ngày với vòng thi khác';
+    if (!isValidDate(startDate, endDate, currentRound)) {
+      console.log('loi kiem tra ngay');
+
+      formErrors.startTime = 'Trùng ngày với vòng thi khác của bảng';
     }
 
     if (Object.keys(formErrors).length === 0) {
@@ -296,7 +335,6 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
             <h4 className={styles.title}>Địa điểm thi</h4>
             <input
               className={styles.inputModal}
-              required
               type="text"
               name="location"
               value={formData.location}
@@ -304,7 +342,6 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
             />
             <h4 className={styles.title}>Mô tả</h4>
             <textarea
-              required
               name="description"
               value={formData.description}
               onChange={handleInputChange}></textarea>

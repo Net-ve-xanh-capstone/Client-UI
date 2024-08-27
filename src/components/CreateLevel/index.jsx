@@ -131,6 +131,26 @@ function CreateLevel({
     return ob;
   };
 
+  // catch if user trying to enter e character
+  const handleKeyDown = event => {
+    if (event.key === 'e' || event.key === 'E') {
+      event.preventDefault();
+    }
+  };
+  const handleInput = event => {
+    event.target.value = event.target.value.replace(/e/gi, '');
+  };
+
+  // cancel if user try to input float number
+  const keydowFloat = event => {
+    if (event.key === '.' || event.key === ',') {
+      event.preventDefault();
+    }
+  };
+  const inputFloat = event => {
+    event.target.value = event.target.value.replace(/[^0-9]/g, '');
+  };
+
   // Base on the roundData filter round with final or unfinal round
   const filterRoundList = val => {
     const final = val.filter(
@@ -333,6 +353,10 @@ function CreateLevel({
                     name="minAge"
                     value={formData.minAge}
                     onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    onInput={handleInput}
+                    min="3"
+                    max="99"
                   />
                 </div>
                 <div className={styles.small_age}>
@@ -344,10 +368,15 @@ function CreateLevel({
                     name="maxAge"
                     value={formData.maxAge}
                     onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    onInput={handleInput}
+                    min="3"
+                    max="99"
                   />
                 </div>
               </div>
             </div>
+
             {/* Round */} 
             <div className={styles.card_screen}>
               <h3 className={styles.title_zone}>Vòng thi</h3>
@@ -355,6 +384,7 @@ function CreateLevel({
                 <div className={styles.roundBlock}> 
                   <h5>Vòng sơ khảo:</h5>
                 </div> 
+
                 <div style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
@@ -411,7 +441,9 @@ function CreateLevel({
                 {errors.round1 && (
                   <p className={styles.error}>{errors.round1}</p>
                 )}
+
                 <div style={{ marginTop: '20px' }} className={styles.roundBlock}>
+
                   <h5>Vòng chung kết:</h5>
                 </div>
                 <div style={{ marginLeft: '20px' }} className="row">
@@ -471,7 +503,9 @@ function CreateLevel({
                 )}
               </div>
             </div>
+
             {/* Award */} 
+
             <div className={styles.card_screen}>
               <h3 className={styles.title_zone}>Cơ cấu giải thưởng</h3>
               <div className={styles.first_round}>
@@ -488,6 +522,8 @@ function CreateLevel({
                   readOnly={type === 'edit'}
                   value={formData.passRound1}
                   onChange={handleInputChange}
+                  onInput={inputFloat}
+                  onKeyDown={keydowFloat}
                 />
               </div>
               <h4 className={styles.title}>Số lượng giải</h4>
@@ -506,6 +542,8 @@ function CreateLevel({
                     readOnly={type === 'edit'}
                     value={formData.rank1}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>
@@ -523,6 +561,8 @@ function CreateLevel({
                     value={formData.rank3}
                     readOnly={type === 'edit'}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>
@@ -542,6 +582,8 @@ function CreateLevel({
                     value={formData.rank2}
                     readOnly={type === 'edit'}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>
@@ -559,6 +601,8 @@ function CreateLevel({
                     value={formData.rank4}
                     readOnly={type === 'edit'}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>

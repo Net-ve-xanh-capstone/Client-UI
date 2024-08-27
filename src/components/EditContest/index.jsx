@@ -5,11 +5,15 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import EditModal from '../EditModal';
 import { editContest } from '../../api/contestStaffApi';
+import { useSelector } from 'react-redux';
 
 function EditContest({ modalShow, onHide, contestEdit, callBack }) {
+  const { userInfo } = useSelector(state => state.auth);
+
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
+
   const findRoundTimes = levels => {
     let startTime = null;
     let endTime = null;
@@ -49,9 +53,10 @@ function EditContest({ modalShow, onHide, contestEdit, callBack }) {
         ...contestEdit,
         startTime: contestEdit.startTime.split('T')[0],
         endTime: contestEdit.endTime.split('T')[0],
-        currentUserId: contestEdit.createdBy,
+        currentUserId: userInfo.Id,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contestEdit]);
 
   const handleInputChange = event => {

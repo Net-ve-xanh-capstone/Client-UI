@@ -20,19 +20,24 @@ import AddIcon from '@mui/icons-material/Add';
 import styles from './style.module.css';
 import { TablePagination } from '@mui/material';
 
-const CustomFooter = ({ addEmptyRow, count, page, rowsPerPage, handlePageChange, handleRowsPerPageChange }) => {
+const CustomFooter = ({
+  addEmptyRow,
+  count,
+  page,
+  rowsPerPage,
+  handlePageChange,
+  handleRowsPerPageChange,
+}) => {
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      flexDirection: 'column',
-    }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}>
       <div className={`flex justify-content-center ${styles.row}`}>
-        <AddIcon
-          className={styles.btnAdd}
-          onClick={() => addEmptyRow()}
-        />
+      <AddIcon className={styles.btnAdd} onClick={() => addEmptyRow()} />
       </div>
       <TablePagination
         sx={{ width: '100%' }}
@@ -69,6 +74,7 @@ function ContestManagement() {
       const { data } = await getAll();
       const fetchedContest = data?.result || [];
       setContest(fetchedContest);
+      console.log(data);
     } catch (e) {
       console.log('error', e);
     }
@@ -83,12 +89,12 @@ function ContestManagement() {
   useEffect(() => {
     setContestPaging(getPaginatedData());
   }, [page, rowsPerPage, contest]);
-  
+
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
 
-  const handleRowsPerPageChange = (event) => {
+  const handleRowsPerPageChange = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -126,7 +132,7 @@ function ContestManagement() {
   };
 
   const handleActiveDate = data => {
-    if(data.rowData.every(item => item === undefined)) return false;
+    if (data.rowData.every(item => item === undefined)) return false;
     let currentDate = new Date().toJSON().slice(0, 10);
     const startDate = data.rowData[1].split('T')[0];
     const endDate = data.rowData[2].split('T')[0];
@@ -137,7 +143,7 @@ function ContestManagement() {
   };
 
   const handleActiveDelete = data => {
-    if(data.rowData.every(item => item === undefined)) return false;
+    if (data.rowData.every(item => item === undefined)) return false;
     let currentDate = new Date().toJSON().slice(0, 10);
     const startDate = data.rowData[1].split('T')[0];
 
@@ -145,7 +151,7 @@ function ContestManagement() {
 
     return true;
   };
-  
+
   const addEmptyRow = () => {
     const emptyRow = {
       id: '',
@@ -165,7 +171,9 @@ function ContestManagement() {
       options: {
         customBodyRender: value => (
           <span>
-            {value && value.length > 50 ? value.substring(0, 50) + '...' : value}
+            {value && value.length > 50
+              ? value.substring(0, 50) + '...'
+              : value}
           </span>
         ),
       },
@@ -189,22 +197,10 @@ function ContestManagement() {
       label: 'TÊN STAFF',
     },
     {
-      name: 'TRẠNG THÁI',
+      name: 'status',
+      label: 'TRẠNG THÁI',
       options: {
-        customBodyRender: (value, tableData) => {
-          const isActive = tableData && handleActiveDate(tableData);
-
-          return (
-            <>
-              <Switch
-                checked={isActive}
-                size="small"
-                color="success"
-                disabled
-              />
-            </>
-          );
-        },
+        customBodyRender: value => <span>{value}</span>,
       },
     },
     {
@@ -212,17 +208,10 @@ function ContestManagement() {
       label: 'TƯƠNG TÁC',
       options: {
         customBodyRender: (value, tableData) => (
-          <div className={styles.btnAction}>
+          <span className={styles.btnAction}>
             <span style={{ display: 'none' }} name="id">
               {value}
             </span>
-            <IconButton
-              aria-label="delete"
-              size="small"
-              color="info"
-              onClick={() => handleOpenDetail(value)}>
-              <RemoveRedEyeIcon />
-            </IconButton>
             {userInfo.role === 'Staff' && (
               <IconButton
                 aria-label="delete"
@@ -236,7 +225,14 @@ function ContestManagement() {
                 <DeleteIcon />
               </IconButton>
             )}
-          </div>
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="info"
+              onClick={() => handleOpenDetail(value)}>
+              <RemoveRedEyeIcon />
+            </IconButton>
+          </span>
         ),
       },
     },
@@ -280,7 +276,6 @@ function ContestManagement() {
       );
       handleOpenDetail(obj?.props?.children);
     },
-    
   };
 
   const getMuiTheme = () =>
@@ -310,11 +305,11 @@ function ContestManagement() {
           },
         },
       },
-    });
+  });
 
   const handleBack = () => {
     setIsOpenDetail(false);
-    getContest(); 
+    getContest();
   };
 
   const handlePostDone = () => {
@@ -355,14 +350,14 @@ function ContestManagement() {
             </div>
             <StyledEngineProvider injectFirst>
               <ThemeProvider theme={getMuiTheme()}>
-                <div className="table-contest table-contest-detail">
+                <span className="table-contest table-contest-detail">
                   <MUIDataTable
                     //title={'Quản lí cuộc thi'}
                     data={contestPaging}
                     columns={columns}
                     options={options}
                   />
-                </div>
+                </span>
               </ThemeProvider>
             </StyledEngineProvider>
           </div>

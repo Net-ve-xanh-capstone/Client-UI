@@ -15,7 +15,7 @@ import CreateTopicRound from '../CreateTopicRound/index.jsx';
 import { getById } from '../../api/contestStaffApi.js';
 import { deleteTopicRound } from '../../api/topicStaffApi.js';
 
-function TopicFragment({ topicFrag, getContestDetail }) {
+function TopicFragment({ topicFrag, getContestDetail, statusOfRound }) {
   const [topic, setTopic] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -23,6 +23,10 @@ function TopicFragment({ topicFrag, getContestDetail }) {
   const isEditing = checkEditButton(topicFrag.startTime);
   const [level, setLevel] = useState();
   const [editRoundData, setEditRoundData] = useState();
+
+  const isActive = !statusOfRound
+    .toLowerCase()
+    .includes('Chưa bắt đầu'.toLowerCase());
 
   const resetDetail = () => {
     setModalShow(false);
@@ -135,9 +139,15 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                             </div>
 
                             <div className={styles.col} data-label="Mô tả">
-                              <div>
-                                <>{topicData.topic.description}</>
-                              </div>
+                              {topicData.topic.description?.length > 40
+                                ? topicData.topic.description.slice(0, 30) +
+                                  '...'
+                                : topicData.topic.description}
+                              {topicData.topic.description?.length > 40 && (
+                                <div className={styles.tooltip}>
+                                  {topicData.topic.description}
+                                </div>
+                              )}
                             </div>
                             <div className={styles.col} data-label="Tương tác">
                               <IconButton
@@ -150,7 +160,8 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                                     topicData?.topic.id,
                                   )
                                 }
-                                disabled={checkEditButton(data.startTime)}>
+                                // disabled={checkEditButton(data.startTime)}
+                                disabled={isActive}>
                                 <DeleteIcon />
                               </IconButton>
                             </div>
@@ -163,7 +174,8 @@ function TopicFragment({ topicFrag, getContestDetail }) {
                     <button
                       className="btn btn-outline-primary btn-lg"
                       onClick={() => handleOpenCreate(data)}
-                      disabled={checkEditButton(data.startTime)}>
+                      // disabled={checkEditButton(data.startTime)}
+                      disabled={isActive}>
                       Thêm
                     </button>
                   </div>

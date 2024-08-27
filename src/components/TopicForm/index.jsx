@@ -48,6 +48,9 @@ function TopicForm({ modalShow, onHide, topicData }) {
     event.stopPropagation();
 
     let formErrors = {};
+    if (formData?.name?.length > 1 && formData?.name?.length < 100) {
+      formErrors.name = 'Chủ đề chỉ được từ 1-100 ký tự';
+    }
 
     if (Object.keys(formErrors).length === 0) {
       setValidated(true);
@@ -122,7 +125,10 @@ function TopicForm({ modalShow, onHide, topicData }) {
       )}
       <Modal
         show={modalShow}
-        onHide={onHide}
+        onHide={() => {
+          onHide();
+          setErrors({});
+        }}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered>
@@ -143,10 +149,9 @@ function TopicForm({ modalShow, onHide, topicData }) {
               name="name"
               value={formData.name}
               onChange={handleInputChange}></input>
-
+            <p style={{ color: '#eb0014', fontSize: '1rem' }}>{errors.name}</p>
             <h4 className={styles.title}>Mô tả</h4>
             <textarea
-              required
               name="description"
               value={formData.description}
               onChange={handleInputChange}></textarea>

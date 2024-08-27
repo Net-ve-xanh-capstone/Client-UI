@@ -12,13 +12,17 @@ import { formatDate } from '../../utils/formatDate.js';
 import DeleteModal from '../DeleteModal';
 import RoundForm from '../RoundForm/index.jsx';
 import styles from './style.module.css';
-function RoundFragment({ roundFrag, getContestDetail }) {
+function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [idRoundDelete, setIdRoundDelete] = useState();
   // const isEditing = checkEditButton(roundFrag.startTime);
   const [round, setRound] = useState();
   const [editRoundData, setEditRoundData] = useState();
+
+  const isActive = !statusOfRound
+    .toLowerCase()
+    .includes('Chưa bắt đầu'.toLowerCase());
 
   const resetDetail = () => {
     setModalShow(false);
@@ -30,6 +34,7 @@ function RoundFragment({ roundFrag, getContestDetail }) {
     try {
       const { data } = await getById(roundFrag.id);
       setRound(sortRoundsByStartTime(data?.result.educationalLevel));
+      console.log(data?.result.educationalLevel);
     } catch (e) {
       console.log('err', e);
     }
@@ -92,6 +97,7 @@ function RoundFragment({ roundFrag, getContestDetail }) {
 
   useEffect(() => {
     getRound();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roundFrag]);
   return (
     round && (
@@ -130,7 +136,9 @@ function RoundFragment({ roundFrag, getContestDetail }) {
                     {dataRound.level}
                   </div>
                   <div className={styles.col} data-label="Tên vòng thi">
-                    {data.name}
+                    {data.name?.length > 100
+                      ? data.name.slice(0, 99) + '...'
+                      : data.name}
                   </div>
                   <div className={styles.col} data-label="Ngày bắt đầu">
                     {formatDate(data.startTime)}
@@ -139,10 +147,22 @@ function RoundFragment({ roundFrag, getContestDetail }) {
                     {formatDate(data.endTime)}
                   </div>
                   <div className={styles.col} data-label="Địa điểm">
-                    {data.location}
+                    {data.location?.length > 100
+                      ? data.location.slice(0, 99) + '...'
+                      : data.location}
+
+                    {data.location?.length > 100 && (
+                      <div className={styles.tooltip}>{data.location}</div>
+                    )}
                   </div>
                   <div className={styles.col} data-label="Mô tả">
-                    {data.description}
+                    {data.description?.length > 100
+                      ? data.description.slice(0, 99) + '...'
+                      : data.description}
+
+                    {data.description?.length > 100 && (
+                      <div className={styles.tooltip}>{data.description}</div>
+                    )}
                   </div>
                   <div className={styles.col} data-label="Trạng thái">
                     <>
@@ -159,7 +179,8 @@ function RoundFragment({ roundFrag, getContestDetail }) {
                       size="large"
                       color="info"
                       onClick={() => handleOpenEdit(data.id)}
-                      disabled={checkEditButton(data.startTime)}>
+                      // disabled={checkEditButton(data.startTime)}
+                      disabled={isActive}>
                       <EditIcon />
                     </IconButton>
                     {/* <IconButton
@@ -180,7 +201,7 @@ function RoundFragment({ roundFrag, getContestDetail }) {
               className="btn btn-outline-primary btn-lg"
               onClick={() => handleOpenCreate()}
               // disabled={isEditing}
-            >
+              disabled={isActive}>
               Thêm
             </button>
           </div>

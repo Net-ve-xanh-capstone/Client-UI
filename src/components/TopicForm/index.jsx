@@ -154,7 +154,7 @@ function TopicForm({ modalShow, onHide, topicData }) {
               name="name"
               value={formData.name}
               onChange={handleInputChange}></input>
-            <p style={{ color: '#eb0014', fontSize: '1rem' }}>{errors.name}</p>
+            <p style={{ color: '#eb0014', fontSize: '1rem' }}>{errors?.name}</p>
             <h4 className={styles.title}>Mô tả</h4>
             <textarea
               name="description"

@@ -148,3 +148,10 @@
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+.loading {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}

@@ -12,6 +12,13 @@ import { formatDate } from '../../utils/formatDate.js';
 import DeleteModal from '../DeleteModal';
 import RoundForm from '../RoundForm/index.jsx';
 import styles from './style.module.css';
+import DownloadIcon from '@mui/icons-material/Download';
+import { dowloadExcel } from '../../api/dowloadApi.js';
+import axios from 'axios';
+import { saveAs } from 'file-saver';
+import axiosApi from '../../api/axiosApi.js';
+import { store } from '../../store/configureStore.js';
+
 function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -23,6 +30,25 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   const isActive = !statusOfRound
     .toLowerCase()
     .includes('Chưa bắt đầu'.toLowerCase());
+
+  // dowload file excel
+  const dowloadFile = async id => {
+    // Tạo một URL tạm thời từ blob để tải file
+    try {
+      const response = await dowloadExcel(id);
+      console.log(response);
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'file.xlsx'); // Đặt tên file bạn muốn lưu
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const resetDetail = () => {
     setModalShow(false);
@@ -165,13 +191,14 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
                     )}
                   </div>
                   <div className={styles.col} data-label="Trạng thái">
-                    <>
+                    {/* <>
                       <Switch
                         checked={checkActiveDate(data)}
                         color="success"
                         disabled
                       />
-                    </>
+                    </> */}
+                    {data?.status}
                   </div>
                   <div className={styles.col} data-label="Tương tác">
                     <IconButton
@@ -182,6 +209,15 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
                       // disabled={checkEditButton(data.startTime)}
                       disabled={isActive}>
                       <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="edit"
+                      size="large"
+                      color="info"
+                      onClick={() => dowloadFile(data.id)}
+                      // disabled={checkEditButton(data.startTime)}
+                      disabled={isActive}>
+                      <DownloadIcon />
                     </IconButton>
                     {/* <IconButton
                         aria-label="delete"

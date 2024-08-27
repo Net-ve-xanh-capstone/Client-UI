@@ -141,6 +141,10 @@ function ExaminerManagement() {
       },
     });
 
+  const handleOpenCreate = () => {
+    setModalShow(true);
+  };
+
   return (
     <div>
       <ViewExaminer
@@ -161,6 +165,11 @@ function ExaminerManagement() {
           <div className={styles.headerContainer}>
             <div>
               <h2 className={styles.titleHeader}>Quản lí giám khảo</h2>
+            </div>
+            <div className={styles.buttonContainer}>
+              <button className={styles.btnCreate} onClick={handleOpenCreate}>
+                <span>Thêm giám khảo</span>
+              </button>
             </div>
           </div>
           <StyledEngineProvider injectFirst>

@@ -489,9 +489,9 @@ function ModalForm({ modalShow, onHide }) {
               <h4 className={styles.title_zone}>Vòng thi</h4>
               <div style={{ marginLeft: '20px' }}>
                 <div className={styles.roundBlock}>
-                  <h5>Vòng sơ khảo</h5>
+                  <h5>Vòng Sơ Khảo:</h5>
                 </div>
-                <div className="row">
+                <div  style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
                     <input
@@ -525,9 +525,9 @@ function ModalForm({ modalShow, onHide }) {
                   <p className={styles.error}>{errors.round1}</p>
                 )}
                 <div className={styles.roundBlock}>
-                  <h5>Vòng chung kết</h5>
+                  <h5>Vòng Chung Kết:</h5>
                 </div>
-                <div className="row">
+                <div  style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
                     <input

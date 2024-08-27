@@ -2,7 +2,7 @@
     font-size: 16px;
     font-weight: 500;
     padding: 10px 0;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .titleHeader {
@@ -112,13 +112,14 @@
 .roundBlock h5 {
     color: black;
     font-weight: 500;
-    font-size: 14px;
-    border: 1px solid black;
+    font-size: 16px;
+    margin-top: 20px;
+    /* border: 1px solid black;
     padding: 10px 5px;
     border-radius: 10px;
     width: 150px;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 20px; */
 }
 
 .inputAward {

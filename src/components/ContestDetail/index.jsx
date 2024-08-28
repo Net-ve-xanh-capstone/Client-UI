@@ -2,25 +2,20 @@ import {
   AccessTimeFilled,
   ArrowBack,
   CalendarMonth,
-  Check,
   ColorLens,
   Paid,
   School,
   Topic,
 } from '@mui/icons-material';
 import {
-  Box,
-  Button,
   IconButton,
   Stack,
   Step,
-  StepButton,
   StepConnector,
   stepConnectorClasses,
   StepLabel,
   Stepper,
   styled,
-  Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { getById } from '../../api/contestStaffApi';

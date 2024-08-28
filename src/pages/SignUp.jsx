@@ -62,10 +62,13 @@ const SignUp = () => {
       .matches(regexPhone, 'Số điện thoại không hợp lệ')
       .required('Vui lòng nhập số điện thoại của bạn'),
     userName: yup.string().required('Vui lòng nhập tên tài khoản của bạn'),
-    password: yup.string().required('Vui lòng nhập mật khẩu của bạn').matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-      'Mật khẩu của bạn phải chứa 8 ký tự, bao gồm một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt.',
-    ),
+    password: yup
+      .string()
+      .required('Vui lòng nhập mật khẩu của bạn')
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+        'Mật khẩu của bạn phải chứa 8 ký tự, bao gồm một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt.',
+      ),
     gender: yup
       .boolean()
       .required('Vui lòng chọn giới tính')
@@ -349,17 +352,20 @@ const SignUp = () => {
                       </DialogContent>
                     </BootstrapDialog>
 
-                    <button className="submit">
+                    <button className="submit flex justify-content-center align-items-center h-100 p-0">
                       {loading ? (
-                        <FadeLoader
-                          color={color.purple}
-                          loading={loading}
-                          size={2}
-                        />
+                        <div>
+                          <FadeLoader
+                            color={color.purple}
+                            loading={loading}
+                            size={2}
+                          />
+                        </div>
                       ) : (
-                        'Đăng ký'
+                        <div style={{ padding: '2rem' }}>Đăng ký</div>
                       )}
                     </button>
+
                     <div className="mt-5 text-right h5">
                       Bạn đã có tài khoản? {''}
                       <Link

@@ -156,17 +156,20 @@ const Login = () => {
                       </Link>
                     </div>
 
-                    <button className="submit">
+                    <button className="submit flex justify-content-center align-items-center h-100 p-0">
                       {loading ? (
-                        <FadeLoader
-                          color={color.purple}
-                          loading={loading}
-                          size={2}
-                        />
+                        <div>
+                          <FadeLoader
+                            color={color.purple}
+                            loading={loading}
+                            size={2}
+                          />
+                        </div>
                       ) : (
-                        'Đăng nhập'
+                        <div style={{ padding: '2rem' }}>Đăng nhập</div>
                       )}
                     </button>
+
                     <div className="mt-5 text-right h5">
                       Bạn chưa có tài khoản? {''}
                       <Link

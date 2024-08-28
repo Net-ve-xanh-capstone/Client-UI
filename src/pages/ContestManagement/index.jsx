@@ -15,17 +15,16 @@ import ContestDetail from '../../components/ContestDetail';
 import DeleteModal from '../../components/DeleteModal';
 import ModalForm from '../../components/ModalForm';
 import { formatDate } from '../../utils/formatDate';
-import AddIcon from '@mui/icons-material/Add';
 import styles from './style.module.css';
 import { TablePagination } from '@mui/material';
 
 const CustomFooter = ({
-                        count,
-                        page,
-                        rowsPerPage,
-                        handlePageChange,
-                        handleRowsPerPageChange,
-                      }) => {
+  count,
+  page,
+  rowsPerPage,
+  handlePageChange,
+  handleRowsPerPageChange,
+}) => {
   return (
     <div
       style={{

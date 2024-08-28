@@ -1,318 +1,331 @@
 /* colors */
 :root {
-    --linear: linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%);
-    --dark: #333;
-    --pink: #8a208c;
-    --accent: var(--linear);
-    --accent-inactive: #bccff7;
+  --linear: linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%);
+  --dark: #333;
+  --pink: #8a208c;
+  --accent: var(--linear);
+  --accent-inactive: #bccff7;
 
-    --tab-count: 8;
-    --indicator-width: 50px;
-    --indicator-height: 4px;
+  --tab-count: 8;
+  --indicator-width: 60px;
+  --indicator-height: 4px;
 }
 
 @media (max-width: 800px) {
-    .titleHeader {
-        font-size: 20px !important;
-    }
+  .titleHeader {
+    font-size: 20px !important;
+  }
 
-    .tabs .content section h2 {
-        font-size: 16px !important;
-    }
+  .tabs .content section h2 {
+    font-size: 16px !important;
+  }
 
-    .tabs .tabList .tabItem label {
-        height: 30px !important;
-    }
-
+  .tabs .tabList .tabItem label {
+    height: 30px !important;
+  }
 }
 
 .heading {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 50px 0px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 0px;
 }
 
 .heading .iconBox {
-    position: absolute;
-    left: 20px;
+  position: absolute;
+  left: 20px;
 }
 
 .heading .backIcon {
-    font-size: 24px;
+  font-size: 24px;
 }
 
 .titleHeader {
-    cursor: default;
-    background: var(--linear);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: var(--pink);
+  cursor: default;
+  background: var(--linear);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--pink);
 }
 
 .tabs {
-    left: 50%;
-    transform: translateX(-50%);
-    position: relative;
-    background: white;
-    padding: 50px;
-    padding-bottom: 80px;
-    width: 95%;
-    height: auto;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-    border-radius: 5px;
-    min-width: calc(var(--tab-count) * 60px);
+  left: 50%;
+  transform: translateX(-50%);
+  position: relative;
+  background: white;
+  padding: 50px;
+  padding-bottom: 80px;
+  width: 95%;
+  height: auto;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  border-radius: 5px;
+  min-width: calc(var(--tab-count) * 60px);
 }
 
-input[name="tab-control"] {
-    display: none;
+input[name='tab-control'] {
+  display: none;
 }
 
 .tabs .content section h2,
 .tabs .tabList .tabItem label {
-    font-weight: bold;
-    font-size: 18px;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .tabs .tabList {
-    list-style-type: none;
-    padding-left: 0;
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 10px;
-    justify-content: space-between;
-    align-items: flex-end;
-    flex-wrap: wrap;
+  list-style-type: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
 }
 
 .tabs .tabList .tabItem {
-    box-sizing: border-box;
-    flex: 1;
-    width: calc(100% / var(--tab-count));
-    padding: 0 10px;
-    text-align: center;
+  box-sizing: border-box;
+  flex: 1;
+  width: calc(100% / var(--tab-count));
+  padding: 0 10px;
+  text-align: center;
 }
 
 .tabs .tabList .tabItem label {
-    color: gray;
-    padding: 5px auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    white-space: nowrap;
-    -webkit-touch-callout: none;
-    user-select: none;
-    height: 20px;
+  color: gray;
+  padding: 5px auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+  -webkit-touch-callout: none;
+  user-select: none;
+  height: 20px;
 }
 
 .tabs .tabList .tabItem label br {
-    display: none;
+  display: none;
 }
 
 .tabs .tabList .tabItem label svg {
-    height: 1.2em;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 0.2em;
-
+  height: 1.2em;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.2em;
 }
 
 .tabs .slider {
-    position: relative;
-    width: calc(100% / var(--tab-count));
-    transition: all .5s cubic-bezier(0.38, 0.8, 0.32, 1.07);
+  position: relative;
+  width: calc(100% / var(--tab-count));
+  transition: all 0.5s cubic-bezier(0.38, 0.8, 0.32, 1.07);
 }
 
 .tabs .slider .indicator {
-    position: relative;
-    width: var(--indicator-width);
-    max-width: 100%;
-    margin: 0 auto;
-    height: var(--indicator-height);
-    background: var(--accent);
-    border-radius: 1px;
+  position: relative;
+  width: var(--indicator-width);
+  max-width: 100%;
+  margin: 0 auto;
+  height: var(--indicator-height);
+  background: var(--accent);
+  border-radius: 1px;
 }
 
 .tabs .content {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
 .tabs .content section {
-    display: none;
-    animation-name: content;
-    animation-direction: normal;
-    animation-duration: 0.3s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: 1;
-    line-height: 1.4;
+  display: none;
+  animation-name: content;
+  animation-direction: normal;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  line-height: 1.4;
 }
 
 .tabs .content section h2 {
-    color: var(--accent);
-    display: none;
+  color: var(--accent);
+  display: none;
 }
 
 .tabs .content section h2::after {
-    content: "";
-    position: relative;
-    display: block;
-    width: 30px;
-    height: 3px;
-    background: var(--accent);
-    margin-top: 5px;
-    left: 1px;
+  content: '';
+  position: relative;
+  display: block;
+  width: 30px;
+  height: 3px;
+  background: var(--accent);
+  margin-top: 5px;
+  left: 1px;
 }
 
-input[name="tab-control"]:nth-of-type(1):checked~ul>li:nth-child(1) label,
-input[name="tab-control"]:nth-of-type(2):checked~ul>li:nth-child(2) label,
-input[name="tab-control"]:nth-of-type(3):checked~ul>li:nth-child(3) label,
-input[name="tab-control"]:nth-of-type(4):checked~ul>li:nth-child(4) label,
-input[name="tab-control"]:nth-of-type(5):checked~ul>li:nth-child(5) label,
-input[name="tab-control"]:nth-of-type(6):checked~ul>li:nth-child(6) label,
-input[name="tab-control"]:nth-of-type(7):checked~ul>li:nth-child(7) label,
-input[name="tab-control"]:nth-of-type(8):checked~ul>li:nth-child(8) label {
-    cursor: default;
-    background: var(--linear);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: var(--pink);
+input[name='tab-control']:nth-of-type(1):checked ~ ul > li:nth-child(1) label,
+input[name='tab-control']:nth-of-type(2):checked ~ ul > li:nth-child(2) label,
+input[name='tab-control']:nth-of-type(3):checked ~ ul > li:nth-child(3) label,
+input[name='tab-control']:nth-of-type(4):checked ~ ul > li:nth-child(4) label,
+input[name='tab-control']:nth-of-type(5):checked ~ ul > li:nth-child(5) label,
+input[name='tab-control']:nth-of-type(6):checked ~ ul > li:nth-child(6) label,
+input[name='tab-control']:nth-of-type(7):checked ~ ul > li:nth-child(7) label,
+input[name='tab-control']:nth-of-type(8):checked ~ ul > li:nth-child(8) label {
+  cursor: default;
+  background: var(--linear);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--pink);
 }
 
-
-
-input[name="tab-control"]:nth-of-type(1):checked~.slider {
-    transform: translateX(0%);
+input[name='tab-control']:nth-of-type(1):checked ~ .slider {
+  transform: translateX(0%);
 }
 
-input[name="tab-control"]:nth-of-type(2):checked~.slider {
-    transform: translateX(100%);
+input[name='tab-control']:nth-of-type(2):checked ~ .slider {
+  transform: translateX(100%);
 }
 
-input[name="tab-control"]:nth-of-type(3):checked~.slider {
-    transform: translateX(200%);
+input[name='tab-control']:nth-of-type(3):checked ~ .slider {
+  transform: translateX(200%);
 }
 
-input[name="tab-control"]:nth-of-type(4):checked~.slider {
-    transform: translateX(300%);
+input[name='tab-control']:nth-of-type(4):checked ~ .slider {
+  transform: translateX(300%);
 }
 
-input[name="tab-control"]:nth-of-type(5):checked~.slider {
-    transform: translateX(400%);
+input[name='tab-control']:nth-of-type(5):checked ~ .slider {
+  transform: translateX(400%);
 }
 
-input[name="tab-control"]:nth-of-type(6):checked~.slider {
-    transform: translateX(500%);
+input[name='tab-control']:nth-of-type(6):checked ~ .slider {
+  transform: translateX(500%);
 }
 
-input[name="tab-control"]:nth-of-type(7):checked~.slider {
-    transform: translateX(600%);
+input[name='tab-control']:nth-of-type(7):checked ~ .slider {
+  transform: translateX(600%);
 }
 
-input[name="tab-control"]:nth-of-type(8):checked~.slider {
-    transform: translateX(700%);
+input[name='tab-control']:nth-of-type(8):checked ~ .slider {
+  transform: translateX(700%);
 }
 
-
-input[name="tab-control"]:nth-of-type(1):checked~.content>section:nth-child(1),
-input[name="tab-control"]:nth-of-type(2):checked~.content>section:nth-child(2),
-input[name="tab-control"]:nth-of-type(3):checked~.content>section:nth-child(3),
-input[name="tab-control"]:nth-of-type(4):checked~.content>section:nth-child(4),
-input[name="tab-control"]:nth-of-type(5):checked~.content>section:nth-child(5),
-input[name="tab-control"]:nth-of-type(6):checked~.content>section:nth-child(6),
-input[name="tab-control"]:nth-of-type(7):checked~.content>section:nth-child(7),
-input[name="tab-control"]:nth-of-type(8):checked~.content>section:nth-child(8) {
-    display: block;
+input[name='tab-control']:nth-of-type(1):checked
+  ~ .content
+  > section:nth-child(1),
+input[name='tab-control']:nth-of-type(2):checked
+  ~ .content
+  > section:nth-child(2),
+input[name='tab-control']:nth-of-type(3):checked
+  ~ .content
+  > section:nth-child(3),
+input[name='tab-control']:nth-of-type(4):checked
+  ~ .content
+  > section:nth-child(4),
+input[name='tab-control']:nth-of-type(5):checked
+  ~ .content
+  > section:nth-child(5),
+input[name='tab-control']:nth-of-type(6):checked
+  ~ .content
+  > section:nth-child(6),
+input[name='tab-control']:nth-of-type(7):checked
+  ~ .content
+  > section:nth-child(7),
+input[name='tab-control']:nth-of-type(8):checked
+  ~ .content
+  > section:nth-child(8) {
+  display: block;
 }
 
 @keyframes content {
-    from {
-        opacity: 0;
-        transform: translateY(5%);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(5%);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0%);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
 }
 
 @media (max-width: 992px) {
+  .tabs {
+    padding: 20px;
+  }
 
-    .tabs {
-        padding: 20px
-    }
+  .tabs .tabList .tabItem label {
+    padding: 5px;
+    border-radius: 5px;
+  }
 
-    .tabs .tabList .tabItem label {
-        padding: 5px;
-        border-radius: 5px;
-    }
+  .tabs .tabList .tabItem label svg {
+    font-size: 16px;
+  }
 
-    .tabs .tabList .tabItem label svg {
-        font-size: 16px;
-    }
+  .tabs .tabList .tabItem label span {
+    display: none;
+  }
 
-    .tabs .tabList .tabItem label span {
-        display: none;
-    }
+  .tabs .slider {
+    display: none;
+  }
 
-    .tabs .slider {
-        display: none;
-    }
+  .tabs .content {
+    margin-top: 20px;
+  }
 
-    .tabs .content {
-        margin-top: 20px;
-    }
+  .tabs .content section h2 {
+    display: block;
+    color: var(--pink);
+    margin-bottom: 1rem;
+  }
 
-    .tabs .content section h2 {
-        display: block;
-        color: var(--pink);
-        margin-bottom: 1rem;
-    }
-
-    section p {
-        font-size: 12px;
-        line-height: 20px;
-        margin-bottom: 2rem;
-    }
-
+  section p {
+    font-size: 12px;
+    line-height: 20px;
+    margin-bottom: 2rem;
+  }
 }
 
 @media (max-width: 768px) {
-    .tabs {
-        padding: 20px
-    }
+  .tabs {
+    padding: 20px;
+  }
 
-    .tabs .tabList .tabItem label {
-        padding: 5px;
-        border-radius: 5px;
-    }
+  .tabs .tabList .tabItem label {
+    padding: 5px;
+    border-radius: 5px;
+  }
 
-    .tabs .tabList .tabItem label svg {
-        font-size: 16px;
-    }
+  .tabs .tabList .tabItem label svg {
+    font-size: 16px;
+  }
 
-    .tabs .tabList .tabItem label span {
-        display: none;
-    }
+  .tabs .tabList .tabItem label span {
+    display: none;
+  }
 
-    .tabs .slider {
-        display: none;
-    }
+  .tabs .slider {
+    display: none;
+  }
 
-    .tabs .content {
-        margin-top: 20px;
-    }
+  .tabs .content {
+    margin-top: 20px;
+  }
 
-    .tabs .content section h2 {
-        display: block;
-        color: var(--pink);
-    }
+  .tabs .content section h2 {
+    display: block;
+    color: var(--pink);
+  }
 
-    section p {
-        font-size: 12px;
-        line-height: 20px;
-    }
+  section p {
+    font-size: 12px;
+    line-height: 20px;
+  }
+}
+
+.stepperBtn {
+  cursor: pointer;
 }

@@ -2,12 +2,26 @@ import {
   AccessTimeFilled,
   ArrowBack,
   CalendarMonth,
+  Check,
   ColorLens,
   Paid,
   School,
   Topic,
 } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  Step,
+  StepButton,
+  StepConnector,
+  stepConnectorClasses,
+  StepLabel,
+  Stepper,
+  styled,
+  Typography,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { getById } from '../../api/contestStaffApi';
 import LoadingSkeleton from '../../components/loading/LoadingSkeleton';
@@ -23,10 +37,89 @@ import TopicFragment from '../TopicFragment';
 import styles from './style.module.css';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 
+const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 22,
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      backgroundImage: 'linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%)',
+    },
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      backgroundImage: 'linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%)',
+    },
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    height: 3,
+    border: 0,
+    backgroundColor: '#eaeaf0',
+    borderRadius: 1,
+    ...theme.applyStyles('dark', {
+      backgroundColor: theme.palette.grey[800],
+    }),
+  },
+}));
+
+const ColorlibStepIconRoot = styled('div')(({ theme }) => ({
+  backgroundColor: '#ccc',
+  zIndex: 1,
+  color: '#fff',
+  width: 50,
+  height: 50,
+  display: 'flex',
+  borderRadius: '50%',
+  justifyContent: 'center',
+  alignItems: 'center',
+  ...theme.applyStyles('dark', {
+    backgroundColor: theme.palette.grey[700],
+  }),
+  variants: [
+    {
+      props: ({ ownerState }) => ownerState.active,
+      style: {
+        backgroundImage:
+          'linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%)',
+        boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+      },
+    },
+    {
+      props: ({ ownerState }) => ownerState.completed,
+      style: {
+        backgroundImage:
+          'linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%)',
+      },
+    },
+  ],
+}));
+
+function ColorlibStepIcon(props) {
+  const { active, completed, className } = props;
+  const icons = {
+    1: <ColorLens />,
+    2: <School />,
+    3: <AccessTimeFilled />,
+    4: <Topic />,
+    5: <Paid />,
+    6: <CardGiftcardIcon />,
+    7: <CalendarMonth />,
+    8: <MenuBookIcon />,
+  };
+
+  return (
+    <ColorlibStepIconRoot
+      ownerState={{ completed, active }}
+      className={className}>
+      {icons[String(props.icon)]}
+    </ColorlibStepIconRoot>
+  );
+}
+
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
   const [statusOfRound, setStatusRound] = useState(null);
-
+  const [activeStep, setActiveStep] = React.useState(0);
   useEffect(() => {
     getContestDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,10 +135,9 @@ function ContestDetail({ contest, handleBack }) {
     }
   };
 
-  const tabs = [
+  const steps = [
     {
       title: 'Cuộc thi',
-      icon: <ColorLens />,
       component: (
         <ContestFragment
           contestFrag={contestDes}
@@ -56,7 +148,6 @@ function ContestDetail({ contest, handleBack }) {
     },
     {
       title: 'Đối tượng',
-      icon: <School />,
       component: (
         <LevelFragment
           levelFrag={contestDes}
@@ -67,7 +158,6 @@ function ContestDetail({ contest, handleBack }) {
     },
     {
       title: 'Vòng thi',
-      icon: <AccessTimeFilled />,
       component: (
         <RoundFragment
           scheduleFrag={contestDes}
@@ -79,7 +169,6 @@ function ContestDetail({ contest, handleBack }) {
     },
     {
       title: 'Chủ đề',
-      icon: <Topic />,
       component: (
         <TopicFragment
           topicFrag={contestDes}
@@ -91,7 +180,6 @@ function ContestDetail({ contest, handleBack }) {
 
     {
       title: 'Tài trợ',
-      icon: <Paid />,
       component: (
         <ResourceFragment
           resourceFrag={contestDes}
@@ -102,7 +190,6 @@ function ContestDetail({ contest, handleBack }) {
     },
     {
       title: 'Giải thưởng',
-      icon: <CardGiftcardIcon />,
       component: (
         <AwardsFragment
           scheduleFrag={contestDes}
@@ -113,7 +200,6 @@ function ContestDetail({ contest, handleBack }) {
     },
     {
       title: 'Lịch chấm',
-      icon: <CalendarMonth />,
       component: (
         <ScheduleFragment
           scheduleFrag={contestDes}
@@ -124,7 +210,6 @@ function ContestDetail({ contest, handleBack }) {
     },
     {
       title: 'Bài thi',
-      icon: <MenuBookIcon />,
       component: (
         <PaintingPage
           scheduleFrag={contestDes}
@@ -136,6 +221,27 @@ function ContestDetail({ contest, handleBack }) {
     },
     // Add more tabs here as needed
   ];
+
+  const totalSteps = () => {
+    return steps.length;
+  };
+
+  const isLastStep = () => {
+    return activeStep === totalSteps() - 1;
+  };
+
+  const handleStep = step => () => {
+    setActiveStep(step);
+  };
+
+  const handleNext = () => {
+    setActiveStep(prevActiveStep => prevActiveStep + 1);
+  };
+
+  const handleBackStep = () => {
+    setActiveStep(prevActiveStep => prevActiveStep - 1);
+  };
+
   return contestDes ? (
     <div className={styles.containerDetail}>
       <div className={styles.heading}>
@@ -149,8 +255,39 @@ function ContestDetail({ contest, handleBack }) {
         </div>
       </div>
 
-      <div className={styles.tabs} data-tab-count={tabs.length}>
-        {tabs.map((tab, index) => (
+      <div className={styles.tabs} data-tab-count={steps.length}>
+        <Stack sx={{ width: '100%' }} spacing={4}>
+          <Stepper
+            alternativeLabel
+            activeStep={activeStep}
+            connector={<ColorlibConnector />}>
+            {steps.map((item, index) => (
+              <Step
+                className={styles.stepperBtn}
+                key={item.title}
+                onClick={handleStep(index)}>
+                <StepLabel
+                  StepIconComponent={ColorlibStepIcon}
+                  sx={{
+                    ' & .MuiStepLabel-label': {
+                      fontSize: '1.8rem',
+                      fontWeight: '700',
+                    },
+                    ' & .MuiStepLabel-label.Mui-active': {
+                      fontWeight: 'bold',
+                      paddingBottom: '10px',
+                      borderBottom: '3px solid #8a208c',
+                    },
+                  }}>
+                  {item.title}
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </Stack>
+
+        {/*
+          {steps.map((tab, index) => (
           <input
             key={index}
             type="radio"
@@ -160,8 +297,10 @@ function ContestDetail({ contest, handleBack }) {
             className={styles.tabInput}
           />
         ))}
+          
+
         <ul className={styles.tabList}>
-          {tabs.map((tab, index) => (
+          {steps.map((tab, index) => (
             <li key={index} title={tab.title} className={styles.tabItem}>
               <label
                 htmlFor={`tab${index + 1}`}
@@ -178,23 +317,45 @@ function ContestDetail({ contest, handleBack }) {
             </li>
           ))}
         </ul>
+        */}
 
         {/* bottom slider animation */}
-        {/* bottom slider animation */}
+        {/* bottom slider animation 
         <div className={styles.slider}>
           <div className={styles.indicator}></div>
         </div>
-        {/*ending bottom slider animation */}
+        */}
 
         {/*ending bottom slider animation */}
-
-        <div className={styles.content}>
-          {tabs.map((tab, index) => (
-            <section key={index} className={styles.contentSection}>
-              <h2>{tab.title}</h2>
-              {tab.component}
+        {/*ending bottom slider animation */}
+        <div>
+          <React.Fragment>
+            <section className={styles.contentSection}>
+              <h2
+                style={{
+                  marginTop: '2rem',
+                }}>
+                {steps[activeStep].title}
+              </h2>
+              {steps[activeStep].component}
             </section>
-          ))}
+
+            {/**
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+              <Button
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBackStep}
+                sx={{ mr: 1 }}>
+                Quay lại
+              </Button>
+              <Box sx={{ flex: '1 1 auto' }} />
+              <Button onClick={handleNext} sx={{ mr: 1 }}>
+                Tiếp theo
+              </Button>
+            </Box>
+              */}
+          </React.Fragment>
         </div>
       </div>
     </div>

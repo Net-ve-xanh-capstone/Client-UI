@@ -20,13 +20,12 @@ import styles from './style.module.css';
 import { TablePagination } from '@mui/material';
 
 const CustomFooter = ({
-  addEmptyRow,
-  count,
-  page,
-  rowsPerPage,
-  handlePageChange,
-  handleRowsPerPageChange,
-}) => {
+                        count,
+                        page,
+                        rowsPerPage,
+                        handlePageChange,
+                        handleRowsPerPageChange,
+                      }) => {
   return (
     <div
       style={{
@@ -35,9 +34,6 @@ const CustomFooter = ({
         alignItems: 'center',
         flexDirection: 'column',
       }}>
-      <div className={`flex justify-content-center ${styles.row}`}>
-        <AddIcon className={styles.btnAdd} onClick={() => addEmptyRow()} />
-      </div>
       <TablePagination
         sx={{ width: '100%' }}
         rowsPerPage={rowsPerPage}
@@ -148,17 +144,17 @@ function ContestManagement() {
     );
   };
 
-  const addEmptyRow = () => {
-    const emptyRow = {
-      id: '',
-      name: '',
-      startTime: '',
-      endTime: '',
-      accountFullName: '',
-      status: '',
-    };
-    setContest([emptyRow, ...contest]);
-  };
+  // const addEmptyRow = () => {
+  //   const emptyRow = {
+  //     id: '',
+  //     name: '',
+  //     startTime: '',
+  //     endTime: '',
+  //     accountFullName: '',
+  //     status: '',
+  //   };
+  //   setContest([emptyRow, ...contest]);
+  // };
 
   const columns = [
     {
@@ -261,7 +257,6 @@ function ContestManagement() {
         page={page}
         rowsPerPage={rowsPerPage}
         handlePageChange={handlePageChange}
-        addEmptyRow={addEmptyRow}
         handleRowsPerPageChange={handleRowsPerPageChange}
         count={contest.length}
       />

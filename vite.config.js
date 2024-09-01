@@ -6,9 +6,7 @@ export default defineConfig({
   plugins: [
     react(),
     svgr({
-      svgrOptions: {
-        // svgr options
-      },
+      svgrOptions: {},
     }),
   ],
   optimizeDeps: { exclude: ['node_modules/.cache'] },

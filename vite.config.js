@@ -11,6 +11,5 @@ export default defineConfig({
       },
     }),
   ],
-  base: './Client-UI',
   optimizeDeps: { exclude: ['node_modules/.cache'] },
 });

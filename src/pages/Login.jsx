@@ -14,6 +14,7 @@ import { Dialog, DialogContent, IconButton, styled } from '@mui/material';
 import * as yup from 'yup';
 import { color } from '../constant/Color.js';
 import Role from '../constant/Role.js';
+
 const Login = () => {
   const [open, setOpen] = useState(false);
   const { userInfo } = useSelector(state => state.auth);
@@ -62,13 +63,13 @@ const Login = () => {
     if (success || jwtToken) {
       if (userInfo.role === Role.STAFF) {
         reset();
-        navigate('/Client-UI/staff-management/contest');
+        navigate('/staff-management/contest');
       } else if (userInfo.role === Role.ADMIN) {
         reset();
-        navigate('/Client-UI/admin-management/');
+        navigate('/admin-management/');
       } else {
         reset();
-        navigate('/Client-UI/');
+        navigate('/');
       }
     }
     if (error) {
@@ -90,7 +91,7 @@ const Login = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/Client-UI/">Trang chủ</Link>
+                    <Link to="/">Trang chủ</Link>
                   </li>
                   <li>Đăng nhập</li>
                 </ul>
@@ -173,7 +174,7 @@ const Login = () => {
                     <div className="mt-5 text-right h5">
                       Bạn chưa có tài khoản? {''}
                       <Link
-                        to={'/Client-UI/sign-up'}
+                        to={'/sign-up'}
                         className="font-weight-bold">
                         đăng ký
                       </Link>

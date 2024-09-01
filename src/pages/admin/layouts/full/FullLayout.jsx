@@ -29,7 +29,7 @@ const FullLayout = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!userInfo) {
-      navigate('/Client-UI/login');
+      navigate('/login');
     }
   }, [userInfo]);
 

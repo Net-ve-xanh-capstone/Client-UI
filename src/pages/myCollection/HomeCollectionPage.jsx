@@ -12,6 +12,7 @@ import lodash from 'lodash';
 import { useSelector } from 'react-redux';
 import ModalAddPainting from './modal/ModalAddPainting.jsx';
 import styles from './page.module.css';
+
 const GET_ALL_COLLECTION_BY_ACCOUNT = 'collections/getcollectionbyaccountid';
 const HomeCollectionPage = () => {
   const [message, setMessage] = useState('');
@@ -105,7 +106,7 @@ const HomeCollectionPage = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/Client-UI/">Trang chủ</Link>
+                    <Link to="/">Trang chủ</Link>
                   </li>
                   <li>Bộ sưu tập</li>
                 </ul>
@@ -163,7 +164,7 @@ const HomeCollectionPage = () => {
                           <div className="infor text-right">
                             <h4>
                               <Link
-                                to={`/Client-UI/collection-painting/${item.id}`}>
+                                to={`/collection-painting/${item.id}`}>
                                 {item.name}
                               </Link>
                             </h4>

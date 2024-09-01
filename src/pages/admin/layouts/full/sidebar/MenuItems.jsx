@@ -12,7 +12,7 @@ const Menuitems = [
     id: uniqueId(),
     title: 'Thống kê',
     icon: IconLayoutDashboard,
-    href: '/Client-UI/admin-management/dashboard',
+    href: '/admin-management/dashboard',
   },
   // {
   //   navlabel: true,
@@ -38,7 +38,7 @@ const Menuitems = [
     id: uniqueId(),
     title: 'Tài khoản',
     icon: IconUsers,
-    href: '/Client-UI/admin-management/sample-page',
+    href: '/admin-management/sample-page',
   },
 ];
 

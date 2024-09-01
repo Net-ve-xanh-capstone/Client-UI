@@ -14,7 +14,7 @@ const ExaminerRound = () => {
   // navigating to next page for render list of painting
   const navigateToMark = id => {
     goto({
-      pathname: '/Client-UI/mark-report',
+      pathname: '/mark-report',
       search: `?id=${id}`,
     });
   };
@@ -50,10 +50,10 @@ const ExaminerRound = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/Client-UI/">Trang chủ</Link>
+                    <Link to="/">Trang chủ</Link>
                   </li>
                   <li>
-                    <Link to="/Client-UI/mark-examiner">Lịch chấm</Link>
+                    <Link to="/mark-examiner">Lịch chấm</Link>
                   </li>
                   <li>Vòng thi</li>
                 </ul>

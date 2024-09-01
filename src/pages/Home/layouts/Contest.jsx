@@ -73,7 +73,7 @@ const Contest = () => {
                                 <div className="sc-card-contest">
                                   <div className="card-media">
                                     <Link
-                                      to={`/Client-UI/contest-detail/${contest?.id}`}>
+                                      to={`/contest-detail/${contest?.id}`}>
                                       <img
                                         className="object-fit-contain"
                                         src={contest?.logo}
@@ -84,7 +84,7 @@ const Contest = () => {
                                       <button
                                         onClick={() =>
                                           navigate(
-                                            `/Client-UI/contest-detail/${contest?.id}`,
+                                            `/contest-detail/${contest?.id}`,
                                           )
                                         }
                                         className="sc-button style-place-bid style fl-button pri-3">
@@ -95,7 +95,7 @@ const Contest = () => {
                                   <div className="card-title">
                                     <h5>
                                       <Link
-                                        to={`/Client-UI/contest-detail/${contest?.id}`}>
+                                        to={`/contest-detail/${contest?.id}`}>
                                         {contest?.name}
                                       </Link>
                                     </h5>

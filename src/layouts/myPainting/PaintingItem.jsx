@@ -24,14 +24,14 @@ const PaintingItem = props => {
     setSelectedPaintingId(id);
     setModalShow(true);
   };
-  
+
   const handleEditPainting = (status, contestId) => {
     if (paintingStatusEnable.includes(status)) {
-      navigate(`/Client-UI/submit/${contestId}`);
+      navigate(`/submit/${contestId}`);
     } else {
       setModalReject(true);
     }
-  }
+  };
 
   return (
     <Fragment>
@@ -111,7 +111,7 @@ const PaintingItem = props => {
                             <span>Cuộc thi</span>
                             <h6>
                               <div className="cursor-none">
-                              {item?.contestName}
+                                {item?.contestName}
                               </div>
                             </h6>
                           </div>
@@ -138,13 +138,13 @@ const PaintingItem = props => {
                         </div>
                       </div>
                       <div className="price w-50">
-                      <span>Mô tả</span>
+                        <span>Mô tả</span>
                         <div className="price-details">
                           <h5>{item?.description}</h5>
                         </div>
                       </div>
                     </div>
-                    <Link to={`/Client-UI/history/${item.id}`} className="view-history reload">Xem lịch sử</Link>
+                    <Link to={`/history/${item.id}`} className="view-history reload">Xem lịch sử</Link>
                   </div>
                 ))
               ) : (
@@ -241,11 +241,11 @@ const PaintingItemSkeleton = () => {
 
 const RejectModal = ({ showReject, onHide }) => {
   return (
-    <Modal 
-      animation 
-      scrollable 
-      show={showReject} 
-      onHide={onHide} 
+    <Modal
+      animation
+      scrollable
+      show={showReject}
+      onHide={onHide}
       centered
     >
       <Modal.Header closeButton></Modal.Header>

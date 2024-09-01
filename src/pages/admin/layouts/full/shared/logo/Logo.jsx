@@ -13,7 +13,7 @@ const Logo = () => {
   return (
     <LinkStyled
       className="select-none mb-15"
-      to="/Client-UI/admin-management/dashboard">
+      to="/admin-management/dashboard">
       <img className="select-none" src={LogoNetVeXanh} alt="logo" />
     </LinkStyled>
   );

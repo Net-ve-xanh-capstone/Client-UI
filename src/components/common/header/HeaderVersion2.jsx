@@ -67,11 +67,11 @@ const HeaderVersion2 = () => {
                 <div id="site-logo" className="clearfix">
                   <div id="site-logo-inner">
                     <Link
-                      to="/Client-UI"
+                      to="/"
                       rel="home"
                       className="main-logo select-none">
                       <img
-                        className='select-none'
+                        className="select-none"
                         id="logo_header"
                         src={logodark}
                         alt="nft-gaming"
@@ -144,7 +144,7 @@ const HeaderVersion2 = () => {
                         <TooltipMenu />
                       ) : (
                         <Link
-                          to="/Client-UI/login"
+                          to="/login"
                           className="sc-button header-slider style style-1 fl-button pri-1 select-none">
                           <span>Đăng nhập</span>
                         </Link>

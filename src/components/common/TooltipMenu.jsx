@@ -17,19 +17,19 @@ const TitleComponent = props => {
       id="menu-primary-menu"
       className="menu h5 select-none">
       <li className="mb-15">
-        <Link to="/Client-UI/my-painting">
+        <Link to="/my-painting">
           <i className="fab fa-accusoft mr-2"></i>
           <span>Tranh của tôi</span>
         </Link>
       </li>
       <li className="mb-15">
-        <Link to="/Client-UI/my-collection">
+        <Link to="/my-collection">
           <i className="fab fa-asymmetrik mr-2"></i>
           <span>Bộ sưu tập của tôi</span>
         </Link>
       </li>
       <li className="mb-15">
-        <Link to="/Client-UI/edit-profile">
+        <Link to="/edit-profile">
           <i className="fas fa-pencil-alt mr-2"></i>
           <span> Thông tin cá nhân</span>
         </Link>

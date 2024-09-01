@@ -33,7 +33,7 @@ const ExaminerMark = () => {
 
   const roundNavigate = id => {
     goTo({
-      pathname: '/Client-UI/mark-report',
+      pathname: '/mark-report',
       search: `?id=${id}`,
     });
   };
@@ -58,7 +58,7 @@ const ExaminerMark = () => {
                 <div className="breadcrumbs style2">
                   <ul>
                     <li>
-                      <Link to="/Client-UI/">Trang chủ</Link>
+                      <Link to="/">Trang chủ</Link>
                     </li>
                     <li>Lịch chấm</li>
                   </ul>

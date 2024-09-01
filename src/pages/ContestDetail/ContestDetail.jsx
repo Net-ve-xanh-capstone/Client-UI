@@ -78,7 +78,7 @@ const ContestDetail = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/Client-UI/">Trang chủ</Link>
+                    <Link to="/">Trang chủ</Link>
                   </li>
                   <li>Chi tiết cuộc thi</li>
                 </ul>
@@ -317,7 +317,7 @@ const registerButton = ({ status, check, contestId, userInfo }) => {
     if (check) {
       return (
         <Link
-          to={`/Client-UI/submit/${contestId}`}
+          to={`/submit/${contestId}`}
           className="sc-button loadmore style fl-button pri-3">
           <span>Đăng ký dự thi</span>
         </Link>
@@ -335,7 +335,7 @@ const registerButton = ({ status, check, contestId, userInfo }) => {
   if (!userInfo) {
     return (
       <Link
-        to={`/Client-UI/submit/${contestId}`}
+        to={`/submit/${contestId}`}
         className="sc-button loadmore style fl-button pri-3">
         <span>Đăng ký dự thi</span>
       </Link>

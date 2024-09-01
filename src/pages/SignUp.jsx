@@ -100,7 +100,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (jwtToken) {
-      navigate('/Client-UI/');
+      navigate('/');
     }
     if (success !== null) {
       setOpen(true);
@@ -113,7 +113,7 @@ const SignUp = () => {
       setTimeout(() => {
         setOpen(false);
         dispatch(setDefault());
-        navigate('/Client-UI/login');
+        navigate('/login');
       }, 3000);
     }
     // clear timeout
@@ -190,7 +190,7 @@ const SignUp = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/Client-UI/">Trang chủ</Link>
+                    <Link to="/">Trang chủ</Link>
                   </li>
                   <li>Đăng ký</li>
                 </ul>
@@ -369,7 +369,7 @@ const SignUp = () => {
                     <div className="mt-5 text-right h5">
                       Bạn đã có tài khoản? {''}
                       <Link
-                        to={'/Client-UI/login'}
+                        to={'/login'}
                         className="font-weight-bold">
                         đăng nhập
                       </Link>

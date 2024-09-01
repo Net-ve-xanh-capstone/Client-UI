@@ -19,12 +19,12 @@ import styles from './style.module.css';
 import { TablePagination } from '@mui/material';
 
 const CustomFooter = ({
-  count,
-  page,
-  rowsPerPage,
-  handlePageChange,
-  handleRowsPerPageChange,
-}) => {
+                        count,
+                        page,
+                        rowsPerPage,
+                        handlePageChange,
+                        handleRowsPerPageChange,
+                      }) => {
   return (
     <div
       style={{
@@ -342,7 +342,6 @@ function ContestManagement() {
               <ThemeProvider theme={getMuiTheme()}>
                 <span className="table-contest table-contest-detail">
                   <MUIDataTable
-                    //title={'Quản lí cuộc thi'}
                     data={contestPaging}
                     columns={columns}
                     options={options}

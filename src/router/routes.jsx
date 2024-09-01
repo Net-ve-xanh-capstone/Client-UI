@@ -51,13 +51,13 @@ const Shadow = Loadable(
 
 const routes = [
   {
-    path: '/Client-UI/',
+    path: '/',
     component: <Home />,
   },
-  { path: '/Client-UI/login', component: <Login /> },
-  { path: '/Client-UI/sign-up', component: <SignUp /> },
+  { path: 'login', component: <Login /> },
+  { path: 'sign-up', component: <SignUp /> },
   {
-    path: '/Client-UI/staff-management',
+    path: 'staff-management',
     component: (
       <ProtectedRoute role={Role.STAFF}>
         <StaffManage />
@@ -95,7 +95,7 @@ const routes = [
     ],
   },
   {
-    path: 'Client-UI/submit/:contestId',
+    path: 'submit/:contestId',
     component: (
       <ProtectedRoute role={Role.COMPETITOR}>
         <SubmitPage />
@@ -103,7 +103,7 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/edit-profile',
+    path: 'edit-profile',
     component: (
       <ProtectedRoute>
         <ProfilePage />
@@ -111,7 +111,7 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/my-painting',
+    path: 'my-painting',
     component: (
       <ProtectedRoute>
         <MyPaintingPage />
@@ -119,19 +119,19 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/blog',
+    path: 'blog',
     component: <BlogPage />,
   },
-  { path: 'Client-UI/contest-detail/:contestId', component: <ContestDetail /> },
-  { path: 'Client-UI/faq', component: <FAQPage /> },
-  { path: 'Client-UI/contact', component: <ContactPage /> },
-  { path: 'Client-UI/collection', component: <CollectionPage /> },
+  { path: 'contest-detail/:contestId', component: <ContestDetail /> },
+  { path: 'faq', component: <FAQPage /> },
+  { path: 'contact', component: <ContactPage /> },
+  { path: 'collection', component: <CollectionPage /> },
   {
-    path: 'Client-UI/collection-painting/:collectionId',
+    path: 'collection-painting/:collectionId',
     component: <PaintingOfCollectionPage />,
   },
   {
-    path: 'Client-UI/collection/:accountId',
+    path: 'collection/:accountId',
     component: (
       <ProtectedRoute>
         <CollectionPage />
@@ -139,7 +139,7 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/history/:paintingId',
+    path: 'history/:paintingId',
     component: (
       <ProtectedRoute>
         <HistoryPage />
@@ -147,7 +147,7 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/my-collection',
+    path: 'my-collection',
     component: (
       <ProtectedRoute>
         <HomeCollectionPage />
@@ -155,7 +155,7 @@ const routes = [
     ),
   },
   {
-    path: '/Client-UI/admin-management',
+    path: 'admin-management',
     component: <FullLayout />,
     children: [
       { path: '', component: <Navigate to="dashboard" /> },
@@ -167,7 +167,7 @@ const routes = [
   },
   { path: '/*', component: <NoResult /> },
   {
-    path: 'Client-UI/mark-report',
+    path: 'mark-report',
     component: (
       <ProtectedRoute role={Role.EXAMINER}>
         <MarkReport />
@@ -175,7 +175,7 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/mark-examiner',
+    path: 'mark-examiner',
     component: (
       <ProtectedRoute role={Role.EXAMINER}>
         <ExaminerMark />
@@ -183,7 +183,7 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/examiner-round',
+    path: 'examiner-round',
     component: (
       <ProtectedRoute role={Role.EXAMINER}>
         <ExaminerRound />

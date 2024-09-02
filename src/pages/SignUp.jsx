@@ -21,6 +21,7 @@ import { color } from '../constant/Color.js';
 import { regexEmail, regexFullNameVN, regexPhone } from '../constant/Regex.js';
 import { addressApi } from '../api/addressApi.js';
 import Swal from 'sweetalert2';
+import Role from '../constant/Role.js';
 
 const SignUp = () => {
   dayjs.extend(utc);
@@ -37,8 +38,9 @@ const SignUp = () => {
   });
 
   const {
-    register: { message, loading },
+    register: { loading },
     jwtToken,
+    userInfo,
   } = useSelector(state => state.auth);
   const schema = yup.object().shape({
     lastname: yup
@@ -86,6 +88,7 @@ const SignUp = () => {
     setValue,
     setError,
     watch,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -96,26 +99,17 @@ const SignUp = () => {
 
   useEffect(() => {
     if (jwtToken) {
-      navigate('/');
+      if (userInfo.role === Role.STAFF) {
+        reset();
+        navigate('/staff-management/contest');
+      } else if (userInfo.role === Role.ADMIN) {
+        reset();
+        navigate('/admin-management/');
+      } else {
+        reset();
+        navigate('/');
+      }
     }
-    // if (success !== null) {
-    //   setOpen(true);
-    //   setTimeout(() => {
-    //     setOpen(false);
-    //     dispatch(setDefault());
-    //   }, 3000);
-    // }
-    // if (success) {
-    //   setTimeout(() => {
-    //     setOpen(false);
-    //     dispatch(setDefault());
-    //     navigate('/login');
-    //   }, 3000);
-    // }
-    // clear timeout
-    return () => {
-      clearTimeout();
-    };
   }, [jwtToken]);
 
   useEffect(() => {

@@ -17,7 +17,6 @@ import Role from '../constant/Role.js';
 
 const Login = () => {
   const [open, setOpen] = useState(false);
-  const { userInfo } = useSelector(state => state.auth);
   // open dialog
   const schema = yup.object().shape({
     username: yup.string().required('Vui lòng nhập username của bạn'),
@@ -38,6 +37,7 @@ const Login = () => {
   const {
     login: { loading, success, error },
     jwtToken,
+    userInfo,
   } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();

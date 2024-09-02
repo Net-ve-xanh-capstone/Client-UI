@@ -156,7 +156,10 @@ const routes = [
   },
   {
     path: 'admin-management',
-    component: <FullLayout />,
+    component:
+      <ProtectedRoute role={Role.ADMIN}>
+        <FullLayout />
+      </ProtectedRoute>,
     children: [
       { path: '', component: <Navigate to="dashboard" /> },
       { path: 'dashboard', exact: true, component: <Dashboard /> },

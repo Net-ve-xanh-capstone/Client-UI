@@ -262,7 +262,7 @@ const SubmitPage = () => {
                     <div className="author">
                       <div className="text">
                         <span>Tác giả</span>
-                        <h5>{userInfo.nameid}</h5>
+                        <h5>{userInfo?.FullName}</h5>
                       </div>
                     </div>
                     <div className="text">

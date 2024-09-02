@@ -20,6 +20,7 @@ import { setDefault } from '../store/auth/authSlice';
 import { color } from '../constant/Color.js';
 import { regexEmail, regexFullNameVN, regexPhone } from '../constant/Regex.js';
 import { addressApi } from '../api/addressApi.js';
+import Swal from 'sweetalert2';
 
 const SignUp = () => {
   dayjs.extend(utc);
@@ -29,19 +30,14 @@ const SignUp = () => {
   const currentDate = dayjs(new Date());
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
   const [address, setAddress] = useState({
     districts: [],
     wards: [],
     selectedDistrict: '',
   });
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const {
-    register: { success, message, loading },
+    register: { message, loading },
     jwtToken,
   } = useSelector(state => state.auth);
   const schema = yup.object().shape({
@@ -102,25 +98,25 @@ const SignUp = () => {
     if (jwtToken) {
       navigate('/');
     }
-    if (success !== null) {
-      setOpen(true);
-      setTimeout(() => {
-        setOpen(false);
-        dispatch(setDefault());
-      }, 3000);
-    }
-    if (success) {
-      setTimeout(() => {
-        setOpen(false);
-        dispatch(setDefault());
-        navigate('/login');
-      }, 3000);
-    }
+    // if (success !== null) {
+    //   setOpen(true);
+    //   setTimeout(() => {
+    //     setOpen(false);
+    //     dispatch(setDefault());
+    //   }, 3000);
+    // }
+    // if (success) {
+    //   setTimeout(() => {
+    //     setOpen(false);
+    //     dispatch(setDefault());
+    //     navigate('/login');
+    //   }, 3000);
+    // }
     // clear timeout
     return () => {
       clearTimeout();
     };
-  }, [success]);
+  }, [jwtToken]);
 
   useEffect(() => {
     async function fetchData() {
@@ -133,14 +129,49 @@ const SignUp = () => {
 
     fetchData();
   }, []);
-  const handleRegister = async data => {
+  const handleRegister = async (data) => {
     const isValid = await trigger();
     if (!isValid) return;
-    else {
-      await dispatch(competitorRegister(data)).then(() => {
-        if (message) setOpen(true);
-      });
+
+    const register = await dispatch(competitorRegister(data));
+
+    if (register?.type === 'create/fulfilled') {
+      const message = register.payload?.message;
+      const content = 'Bạn sẽ được chuyển hướng về trang đăng nhập sau <b></b> giây.';
+      showAlert(message, content, 3000, () => navigate('/login'));
+    } else {
+      const message = register.payload;
+      const content = 'Thông báo sẽ đóng sau <b></b> giây.';
+      showAlert(message, content, 3000, () => dispatch(setDefault()));
     }
+  };
+
+  const showAlert = (message, content, timer, onCloseCallback) => {
+    let timerInterval;
+    Swal.fire({
+      title: message,
+      html: content,
+      timer: timer,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+        const timer = Swal.getPopup().querySelector('b');
+        timerInterval = setInterval(() => {
+          const secondsLeft = Math.round(Swal.getTimerLeft() / 1000);
+          timer.textContent = `${secondsLeft}`;
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      },
+      customClass: {
+        timerProgressBar: 'custom-progress-bar',
+      },
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.timer) {
+        onCloseCallback();
+      }
+    });
   };
 
   const handleKeyDown = e => {
@@ -328,30 +359,6 @@ const SignUp = () => {
                         />
                       </Grid>
                     </Grid>
-                    <BootstrapDialog
-                      onClose={handleClose}
-                      aria-labelledby="customized-dialog-title"
-                      open={open}>
-                      <IconButton
-                        aria-label="close"
-                        onClick={handleClose}
-                        sx={{
-                          position: 'absolute',
-                          right: 8,
-                          top: 6,
-                          color: theme => theme.palette.grey[500],
-                        }}>
-                        <CloseIcon />
-                      </IconButton>
-                      <DialogContent>
-                        <div className="space-y-20 pd-40">
-                          <h4 className="text-center font-weight-bold">
-                            {message ? message : ''}
-                          </h4>
-                        </div>
-                      </DialogContent>
-                    </BootstrapDialog>
-
                     <button className="submit flex justify-content-center align-items-center h-100 p-0">
                       {loading ? (
                         <div>

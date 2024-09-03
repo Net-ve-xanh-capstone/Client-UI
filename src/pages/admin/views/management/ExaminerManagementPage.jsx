@@ -184,6 +184,10 @@ const ExaminerManagementPage = () => {
               <IconButton
                 aria-label="delete"
                 size="small"
+                style={{
+                  height: '30px',
+                  width: '30px',
+                }}
                 color="error"
                 onClick={e => {
                   e.stopPropagation();
@@ -194,6 +198,10 @@ const ExaminerManagementPage = () => {
             )}
             <IconButton
               aria-label="delete"
+              style={{
+                height: '30px',
+                width: '30px',
+              }}
               size="small"
               color="info"
               // onClick={() => handleOpenDetail(value)}

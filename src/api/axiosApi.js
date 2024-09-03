@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { store } from '../store/configureStore.js';
+import { handleLogout, parseJwt } from '../utils/parseToken.js';
 
 const baseUrl = 'https://netvexanh.azurewebsites.net/api/';
 
@@ -16,10 +17,21 @@ const axiosApi = axios.create({
 });
 
 // Add a request interceptor
+// Add a request interceptor
 axiosApi.interceptors.request.use(
   config => {
-    const token = getToken();
+    const token = getToken(); // Lấy token từ localStorage/sessionStorage
     if (token) {
+      const decodedToken = parseJwt(token);
+      const currentTime = Math.floor(Date.now() / 1000); //(UNIX timestamp)
+
+      if (decodedToken && decodedToken.exp < currentTime) {
+        // Token đã hết hạn, thực hiện logout
+        handleLogout();
+        return Promise.reject('Token đã hết hạn');
+      }
+
+      // Nếu token còn hợp lệ, thêm vào headers
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;

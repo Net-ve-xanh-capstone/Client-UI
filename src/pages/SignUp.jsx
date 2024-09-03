@@ -13,15 +13,14 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import RadioCommon from '../components/checkbox/RadioCommon';
-import CloseIcon from '@mui/icons-material/Close';
 import { competitorRegister } from '../store/auth/authAction';
 import { FadeLoader } from 'react-spinners';
 import { setDefault } from '../store/auth/authSlice';
 import { color } from '../constant/Color.js';
 import { regexEmail, regexFullNameVN, regexPassword, regexPhone } from '../constant/Regex.js';
 import { addressApi } from '../api/addressApi.js';
-import Swal from 'sweetalert2';
 import Role from '../constant/Role.js';
+import ShowAlert from '../components/showAller/ShowAlert.jsx';
 
 const SignUp = () => {
   dayjs.extend(utc);
@@ -130,41 +129,14 @@ const SignUp = () => {
     if (register?.type === 'create/fulfilled') {
       const message = register.payload?.message;
       const content = 'Bạn sẽ được chuyển hướng về trang đăng nhập sau <b></b> giây.';
-      showAlert(message, content, 3000, () => navigate('/login'));
+      ShowAlert(message, content, 3000, () => navigate('/login'));
     } else {
       const message = register.payload;
       const content = 'Thông báo sẽ đóng sau <b></b> giây.';
-      showAlert(message, content, 3000, () => dispatch(setDefault()));
+      ShowAlert(message, content, 3000, () => dispatch(setDefault()));
     }
   };
 
-  const showAlert = (message, content, timer, onCloseCallback) => {
-    let timerInterval;
-    Swal.fire({
-      title: message,
-      html: content,
-      timer: timer,
-      timerProgressBar: true,
-      didOpen: () => {
-        Swal.showLoading();
-        const timer = Swal.getPopup().querySelector('b');
-        timerInterval = setInterval(() => {
-          const secondsLeft = Math.round(Swal.getTimerLeft() / 1000);
-          timer.textContent = `${secondsLeft}`;
-        }, 100);
-      },
-      willClose: () => {
-        clearInterval(timerInterval);
-      },
-      customClass: {
-        timerProgressBar: 'custom-progress-bar',
-      },
-    }).then((result) => {
-      if (result.dismiss === Swal.DismissReason.timer) {
-        onCloseCallback();
-      }
-    });
-  };
 
   const handleKeyDown = e => {
     if (e.key === '-' || e.key === '+') {

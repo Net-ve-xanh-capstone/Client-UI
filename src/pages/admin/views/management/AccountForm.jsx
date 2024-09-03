@@ -12,22 +12,21 @@ import styles from './style.module.css';
 import RadioCommon from '../../../../components/checkbox/RadioCommon.jsx';
 import Role from '../../../../constant/Role.js';
 import { addNewStaff } from '../../../../api/authenApi.js';
+import { toast } from 'react-toastify';
 
 const AccountForm = forwardRef(({ modalShow, toggle }, ref) => {
-  const [date, setDate] = useState(new Date());
+  const currentDate = new Date();
+  const [date, setDate] = useState(currentDate);
   const genders = [
     { value: '0', label: 'Nam' },
     { value: '1', label: 'Nữ' },
   ];
 
-  const roles = [
-    { value: Role.ADMIN, label: 'Admin' },
-    { value: Role.EXAMINER, label: 'Examiner' },
-  ];
-
   useImperativeHandle(ref, () => ({
     handleOpen: () => {
+      reset();
       toggle();
+      setDate(currentDate);
     },
   }));
 
@@ -78,7 +77,36 @@ const AccountForm = forwardRef(({ modalShow, toggle }, ref) => {
       address: 'N/A',
       role: Role.STAFF,
     };
-    const test = await addNewStaff(payload);
+    await addNewStaff(payload)
+      .then((response) => {
+        const message = response?.data?.message;
+        toast.success(message,
+          {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+        toggle();
+      })
+      .catch((error) => {
+        const message = error.response ? error.response.data.message : 'Đã xảy ra lỗi.';
+        toast.error(message,
+          {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+      });
   };
 
   const handleKeyDown = event => {
@@ -115,7 +143,7 @@ const AccountForm = forwardRef(({ modalShow, toggle }, ref) => {
             Tạo tài khoản của staff
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ height: '54vh', overflow: 'hidden' }}>
+        <Modal.Body style={{ height: '70vh', overflow: 'hidden' }}>
           <form onSubmit={handleSubmit(onSubmit)} className={styles.modalForm}>
             {/* -------FullName & Email----------- */}
             <Grid container spacing={2}>
@@ -164,12 +192,13 @@ const AccountForm = forwardRef(({ modalShow, toggle }, ref) => {
                 <Controller
                   name="birthday"
                   control={control}
+                  defaultValue={currentDate}
                   render={() => (
                     <DatePicker
                       selected={date}
                       dateFormat="dd/MM/yyyy"
                       placeholderText="Chọn ngày sinh"
-                      maxDate={date}
+                      maxDate={currentDate}
                       onChange={handleChangeBirthday}
                     />
                   )}

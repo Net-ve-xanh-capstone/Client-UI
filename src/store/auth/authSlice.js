@@ -23,13 +23,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: state => {
-      localStorage.removeItem('userToken');
+      localStorage.removeItem('persist:auth');
       state.userInfo = null;
       state.jwtToken = null;
       state.login.success = false;
-    },
-    setCredentials: (state, { payload }) => {
-      state.userInfo = payload;
     },
     setDefault: state => {
       state.login = {
@@ -79,5 +76,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, setCredentials, setDefault } = authSlice.actions;
+export const { logout, setDefault } = authSlice.actions;
 export default authSlice.reducer;

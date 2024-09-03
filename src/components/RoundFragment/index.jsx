@@ -75,7 +75,6 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
     try {
       const { data } = await getById(roundFrag.id);
       setRound(sortRoundsByStartTime(data?.result.educationalLevel));
-      console.log(data?.result.educationalLevel);
     } catch (e) {
       console.log('err', e);
     }

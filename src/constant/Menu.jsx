@@ -38,12 +38,6 @@ const menus = [
         links: '/blog',
         public: true,
       },
-      // {
-      //   id: 2,
-      //   sub: 'Chi tiết bài đọc',
-      //   links: '/Client-UI/blog-details',
-      //   public: true,
-      // },
     ],
   },
   {
@@ -76,12 +70,6 @@ const menus = [
         links: '/mark-examiner',
         public: false,
         role: [Role.EXAMINER],
-      },
-      {
-        id: 4,
-        sub: 'Không có kết quả',
-        links: '/no-result',
-        public: true,
       },
     ],
   },

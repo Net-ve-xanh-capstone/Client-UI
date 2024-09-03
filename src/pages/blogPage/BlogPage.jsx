@@ -1,6 +1,5 @@
 import { Pagination } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
-import { getAllBlog } from '../../api/blogApi.js';
+import React, { useRef } from 'react';
 import CardBlog from '../../components/cardBlog/page.jsx';
 import Footer from '../../components/common/footer/Footer.jsx';
 import HeaderVersion2 from '../../components/common/header/HeaderVersion2.jsx';
@@ -8,14 +7,20 @@ import HerosBlog from '../../components/herosBlog/page.jsx';
 import SidebarBlog from '../../components/sidebarBlog/page.jsx';
 import styles from './blog.module.css';
 
-function BlogPage() {
-  const [blogList, setBlogList] = useState([]);
-  const [totalPage, setTotalPage] = useState(0);
-  const [pageNumber, setPageNumber] = useState(1);
+import { BlogProvider } from './provider/blog.provider.jsx';
+import { useBlogProvider } from './provider/index.js';
+
+function Blog() {
+  const {
+    category,
+    totalPage,
+    setPageNumber,
+    filterBlog,
+  } = useBlogProvider();
   const moveToBox = useRef(null);
   const activeMoving = () => {
     moveToBox.current?.scrollIntoView({
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   };
 
@@ -24,36 +29,15 @@ function BlogPage() {
     setPageNumber(value);
   };
 
-  // fetch data
-  const fetchDataBlog = async () => {
-    await getAllBlog(pageNumber)
-      .then((res) => {
-        const data = res.data.result;
-        setTotalPage(data.totalPage);
-        setBlogList(data.list);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  // fetch data when re-render
-  useEffect(() => {
-    fetchDataBlog();
-  }, []);
-
-  // fetch data when re-render
-  useEffect(() => {
-    fetchDataBlog();
-  }, [pageNumber]);
-
   return (
     <div className="home-5">
       <HeaderVersion2 />
       <div className={styles.container}>
         <div className={styles.subcontainer}>
           <HerosBlog activeMoving={activeMoving} />
-          <SidebarBlog ref={moveToBox}>
+          <SidebarBlog category={category} ref={moveToBox}>
             <>
-              <CardBlog blogList={blogList} />
+              <CardBlog blogList={filterBlog} />
               <Pagination
                 count={totalPage}
                 color="secondary"
@@ -64,12 +48,12 @@ function BlogPage() {
                   display: 'flex',
                   justifyContent: 'center',
                   '.MuiPaginationItem-text': {
-                    fontSize: '1.5rem'
+                    fontSize: '1.5rem',
                   },
                   '.Mui-selected': {
                     backgroundColor: '#5142fc !important', // Customize the selected item background color
-                    color: 'white' // Ensure text is readable on selected background
-                  }
+                    color: 'white', // Ensure text is readable on selected background
+                  },
                 }}
               />
             </>
@@ -80,4 +64,13 @@ function BlogPage() {
     </div>
   );
 }
+
+function BlogPage() {
+  return (
+    <BlogProvider>
+      <Blog />
+    </BlogProvider>
+  );
+}
+
 export default BlogPage;

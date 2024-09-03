@@ -138,7 +138,7 @@ const ProfilePage = () => {
       }
     }
     refetch();
-  }, [data, refetch, userInfo.Id]);
+  }, [refetch, userInfo.Id]);
 
   if (isLoading) {
     return <DotLoaderCustom />;
@@ -163,7 +163,6 @@ const ProfilePage = () => {
                   <li>
                     <Link to="/">Trang chủ</Link>
                   </li>
-
                   <li>Thông tin cá nhân</li>
                 </ul>
               </div>

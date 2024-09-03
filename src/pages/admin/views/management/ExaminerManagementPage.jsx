@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import DashboardCard from '../../components/shared/DashboardCard';
 import PageContainer from '../../components/container/PageContainer';
 import {
@@ -22,6 +22,8 @@ import { Tooltip } from '@mui/material';
 import { toast } from 'react-toastify';
 import { Loop } from '@mui/icons-material';
 import ActiveModal from '../../../../components/ActiveModal/index.jsx';
+import styles from './style.module.css';
+import AccountForm from './AccountForm.jsx';
 
 const renderWithTooltip = (value, maxLength = 20) => (
   <Tooltip title={value}>
@@ -68,6 +70,12 @@ const ExaminerManagementPage = () => {
   const [idDelete, setIdDelete] = useState(null);
   const [status, setStatus] = useState('');
   const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const handleOpenRef = useRef(null);
+  useEffect(() => {
+    fetchAccount();
+  }, []);
+
   const handleOpenDelete = id => {
     const status = accountant.find(val => val.id === id).status;
     setStatus(status);
@@ -99,12 +107,13 @@ const ExaminerManagementPage = () => {
         filterTable: 'Lọc bảng',
       },
     },
-    onRowClick: (rowData, rowMeta) => {},
+    onRowClick: (rowData, rowMeta) => {
+    },
   };
 
   const columns = [
     {
-      name: 'username',
+      name: 'fullName',
       label: 'HỌ VÀ TÊN',
       options: {
         customBodyRender: value => renderWithTooltip(value, 30),
@@ -220,10 +229,6 @@ const ExaminerManagementPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAccount();
-  }, []);
-
   const handleDelete = async () => {
     try {
       if (status === 'Active') {
@@ -262,9 +267,23 @@ const ExaminerManagementPage = () => {
     }
   };
 
+  const toggleModal = useCallback(() => {
+    setModalShow(prevState => !prevState);
+  }, []);
+
+  const handleAddAccount = useCallback(() => {
+    handleOpenRef.current?.handleOpen();
+  }, []);
+
   return (
     <PageContainer title="Quản lý giám khảo" description="Quản lý giám khảo">
-      <DashboardCard title="Quản lý giám khảo">
+      <DashboardCard title="Quản lý giám khảo" action={
+        <div className={styles.buttonContainer}>
+          <button className={styles.btnCreate} onClick={handleAddAccount}>
+            <span>Tạo tài khoản cho Staff</span>
+          </button>
+        </div>
+      }>
         <StyledEngineProvider injectFirst>
           <ThemeProvider theme={getMuiTheme()}>
             <span className="table-contest table-contest-detail">
@@ -284,6 +303,11 @@ const ExaminerManagementPage = () => {
           status={status}
         />
       </DashboardCard>
+      <AccountForm
+        ref={handleOpenRef}
+        modalShow={modalShow}
+        toggle={toggleModal}
+      />
     </PageContainer>
   );
 };

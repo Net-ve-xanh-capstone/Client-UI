@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { useSelector } from 'react-redux';
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 import styles from './style.module.css';
 import { addNewExaminer } from '../../api/examinerStaffApi.js';
@@ -8,8 +7,6 @@ import Select from 'react-select';
 import { toast } from 'react-toastify';
 
 function AddExaminer({ modalShow, onHide }) {
-  const { userInfo } = useSelector(state => state.auth);
-
   const [valueChane, setValueChange] = useState({
     fullName: '',
     email: '',

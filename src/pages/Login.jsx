@@ -45,7 +45,6 @@ const Login = () => {
   const handleLogin = async data => {
     // Trigger validate form
     const isValid = await trigger();
-
     if (!isValid) return;
     else {
       dispatch(competitorLogin(data)).then(res => {

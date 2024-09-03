@@ -15,13 +15,12 @@ const NavItem = ({ item, level, pathDirect, onClick }) => {
   const Icon = item.icon;
   const theme = useTheme();
   const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
-
   const ListItemStyled = styled(ListItemButton)(() => ({
     whiteSpace: 'nowrap',
     marginBottom: '2px',
     padding: '8px 10px',
     borderRadius: '8px',
-    fontSize: '1.5rem',
+    fontSize: '14px',
     backgroundColor: level > 1 ? 'transparent !important' : 'inherit',
     color: theme.palette.text.secondary,
     paddingLeft: '10px',
@@ -58,7 +57,11 @@ const NavItem = ({ item, level, pathDirect, onClick }) => {
           }}>
           {itemIcon}
         </ListItemIcon>
-        <ListItemText>
+        <ListItemText sx={{
+          '& .MuiListItemText-primary': {
+            fontSize: '12px',
+          },
+        }}>
           <>{item.title}</>
         </ListItemText>
       </ListItemStyled>

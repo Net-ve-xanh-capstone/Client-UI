@@ -163,7 +163,7 @@ const routes = [
     children: [
       { path: '', component: <Navigate to="dashboard" /> },
       { path: 'dashboard', exact: true, component: <Dashboard /> },
-      { path: 'sample-page', exact: true, component: <ExaminerManagementPage /> },
+      { path: 'account', exact: true, component: <ExaminerManagementPage /> },
       { path: 'ui/typography', exact: true, component: <TypographyPage /> },
       { path: 'ui/shadow', exact: true, component: <Shadow /> },
     ],

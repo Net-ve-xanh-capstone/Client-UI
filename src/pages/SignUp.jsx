@@ -18,7 +18,7 @@ import { competitorRegister } from '../store/auth/authAction';
 import { FadeLoader } from 'react-spinners';
 import { setDefault } from '../store/auth/authSlice';
 import { color } from '../constant/Color.js';
-import { regexEmail, regexFullNameVN, regexPhone } from '../constant/Regex.js';
+import { regexEmail, regexFullNameVN, regexPassword, regexPhone } from '../constant/Regex.js';
 import { addressApi } from '../api/addressApi.js';
 import Swal from 'sweetalert2';
 import Role from '../constant/Role.js';
@@ -63,10 +63,8 @@ const SignUp = () => {
     password: yup
       .string()
       .required('Vui lòng nhập mật khẩu của bạn')
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-        'Mật khẩu của bạn phải chứa 8 ký tự, bao gồm một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt.',
-      ),
+      .matches(regexPassword,
+        'Mật khẩu của bạn phải chứa 8 ký tự, bao gồm một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt.'),
     gender: yup
       .boolean()
       .required('Vui lòng chọn giới tính')
@@ -281,6 +279,7 @@ const SignUp = () => {
                           control={control}
                           error={errors?.gender?.message}
                           name="gender"
+                          defaultValue={false}
                           valueArray={valueArray}
                         />
                       </Grid>

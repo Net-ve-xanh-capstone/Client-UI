@@ -38,7 +38,7 @@ const Menuitems = [
     id: uniqueId(),
     title: 'Tài khoản',
     icon: IconUsers,
-    href: '/admin-management/sample-page',
+    href: '/admin-management/account',
   },
 ];
 

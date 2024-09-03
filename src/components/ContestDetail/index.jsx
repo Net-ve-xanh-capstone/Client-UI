@@ -25,12 +25,14 @@ import LevelFragment from '../LevelFragment';
 import ResourceFragment from '../ResourceFragment';
 import RoundFragment from '../RoundFragment';
 import ScheduleFragment from '../ScheduleFragment';
+import CompetitorFragment from '../competitorsFragment';
 import AwardsFragment from '../awardsFragment/page..jsx';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import PaintingPage from '../../pages/paintingPage/page.jsx';
 import TopicFragment from '../TopicFragment';
 import styles from './style.module.css';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import { AccountCircle } from '@mui/icons-material';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -99,7 +101,8 @@ function ColorlibStepIcon(props) {
     5: <Paid />,
     6: <CardGiftcardIcon />,
     7: <CalendarMonth />,
-    8: <MenuBookIcon />,
+    8: <AccountCircle />,
+    9: <MenuBookIcon />,
   };
 
   return (
@@ -210,6 +213,16 @@ function ContestDetail({ contest, handleBack }) {
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
           contestId={contest.id}
+          statusOfRound={statusOfRound}
+        />
+      ),
+    },
+    {
+      title: 'Thống kê',
+      component: (
+        <CompetitorFragment
+          resourceFrag={contestDes}
+          getContestDetail={getContestDetail}
           statusOfRound={statusOfRound}
         />
       ),
@@ -336,20 +349,20 @@ function ContestDetail({ contest, handleBack }) {
             </section>
 
             {/**
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBackStep}
-                sx={{ mr: 1 }}>
-                Quay lại
-              </Button>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleNext} sx={{ mr: 1 }}>
-                Tiếp theo
-              </Button>
-            </Box>
-              */}
+             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+             <Button
+             color="inherit"
+             disabled={activeStep === 0}
+             onClick={handleBackStep}
+             sx={{ mr: 1 }}>
+             Quay lại
+             </Button>
+             <Box sx={{ flex: '1 1 auto' }} />
+             <Button onClick={handleNext} sx={{ mr: 1 }}>
+             Tiếp theo
+             </Button>
+             </Box>
+             */}
           </React.Fragment>
         </div>
       </div>

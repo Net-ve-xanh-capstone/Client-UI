@@ -48,7 +48,6 @@ const Login = () => {
     if (!isValid) return;
     else {
       dispatch(competitorLogin(data)).then(res => {
-        console.log(res);
         if (error) setOpen(true);
       });
     }

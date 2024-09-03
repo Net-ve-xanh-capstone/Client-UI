@@ -1,21 +1,16 @@
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Switch } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { getById } from '../../api/contestStaffApi.js';
 import { deleteRoundLevel } from '../../api/roundStaffApi.js';
-import { checkActiveDate } from '../../utils/checkActiveDate.js';
-import { checkEditButton } from '../../utils/checkEditButton.js';
 import { formatDate } from '../../utils/formatDate.js';
 import DeleteModal from '../DeleteModal';
 import RoundForm from '../RoundForm/index.jsx';
 import styles from './style.module.css';
 import DownloadIcon from '@mui/icons-material/Download';
-import { dowloadExcel } from '../../api/dowloadApi.js';
 import SendIcon from '@mui/icons-material/Send';
-import EditModal from '../EditModal/index.jsx';
+import { dowloadExcel } from '../../api/dowloadApi.js';
 import MailModal from './modalMail.jsx';
 
 function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
@@ -32,7 +27,6 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   const isActive = !statusOfRound
     .toLowerCase()
     .includes('Chưa bắt đầu'.toLowerCase());
-
   const openModalConfirm = id => {
     setOpenModal(true);
     setIdLevel(id);
@@ -48,15 +42,14 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   };
 
   // dowload file excel
-  const dowloadFile = async id => {
+  const downloadFile = async (levelData, roundData) => {
     try {
-      const response = await dowloadExcel(id);
-      console.log(response);
-
+      const fileName = levelData?.level + ' - ' + roundData?.name + '.xlsx';
+      const response = await dowloadExcel(roundData?.id);
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'file.xlsx'); // Đặt tên file bạn muốn lưu
+      link.setAttribute('download', fileName);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -78,11 +71,6 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
     } catch (e) {
       console.log('err', e);
     }
-  };
-
-  const hanldeOpenDelete = id => {
-    setIdRoundDelete(id);
-    setDeleteModalShow(true);
   };
 
   const handleDelete = async () => {
@@ -222,6 +210,7 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
                   </div>
                   <div className={styles.col} data-label="Tương tác">
                     <IconButton
+                      sx={{ paddingRight: '0 !important' }}
                       aria-label="edit"
                       size="large"
                       color="info"
@@ -231,10 +220,11 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
                       <EditIcon />
                     </IconButton>
                     <IconButton
+                      sx={{ paddingRight: '0 !important' }}
                       aria-label="edit"
                       size="large"
                       color="info"
-                      onClick={() => dowloadFile(data.id)}
+                      onClick={() => downloadFile(dataRound, data)}
                       // disabled={checkEditButton(data.startTime)}
                       disabled={
                         !data?.status
@@ -244,6 +234,7 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
                       <DownloadIcon />
                     </IconButton>
                     <IconButton
+                      sx={{ paddingRight: '0 !important' }}
                       aria-label="edit"
                       size="large"
                       color="info"

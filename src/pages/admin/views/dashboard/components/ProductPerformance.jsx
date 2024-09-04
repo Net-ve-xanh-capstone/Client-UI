@@ -1,149 +1,99 @@
-import React from 'react';
-import {
-  Typography,
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Chip,
-} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import DashboardCard from '../../../components/shared/DashboardCard';
-
-const products = [
-  {
-    id: '1',
-    name: 'Sunil Joshi',
-    post: 'Web Designer',
-    pname: 'Elite Admin',
-    priority: 'Low',
-    pbg: 'primary.main',
-    budget: '3.9',
-  },
-  {
-    id: '2',
-    name: 'Andrew McDownland',
-    post: 'Project Manager',
-    pname: 'Real Homes WP Theme',
-    priority: 'Medium',
-    pbg: 'secondary.main',
-    budget: '24.5',
-  },
-  {
-    id: '3',
-    name: 'Christopher Jamil',
-    post: 'Project Manager',
-    pname: 'MedicalPro WP Theme',
-    priority: 'High',
-    pbg: 'error.main',
-    budget: '12.8',
-  },
-  {
-    id: '4',
-    name: 'Nirav Joshi',
-    post: 'Frontend Engineer',
-    pname: 'Hosting Press HTML',
-    priority: 'Critical',
-    pbg: 'success.main',
-    budget: '2.4',
-  },
-];
+import { getAwardContestByYear } from '../../../../../api/adminApi.js';
 
 const ProductPerformance = () => {
+  const [year, setYear] = useState(0);
+  const [award, setAward] = useState([]);
+  const fetchAwardContestByYear = async () => {
+    try {
+      const { data } = await getAwardContestByYear();
+      const result = data?.result.map(val => {
+        return { year: val.year, awardQuanity: val.awardQuanity };
+      });
+      setAward(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAwardContestByYear();
+  }, []);
+
+  const handleChange = event => {
+    setYear(event.target.value);
+  };
+
   return (
-    <DashboardCard title="Product Performance">
-      <Box sx={{ overflow: 'auto', width: { xs: '280px', sm: 'auto' } }}>
+    <DashboardCard title="Giải thưởng hàng năm" action={
+      <Select
+        MenuProps={{ disablePortal: true, disableScrollLock: true }}
+        labelId="year-yy"
+        id="year-yy"
+        value={year}
+        size="small"
+        onChange={handleChange}>
+        {award.map((val, index) => (
+          <MenuItem defaultValue={0} key={index} value={index}>
+            {val.year}
+          </MenuItem>
+        ))}
+      </Select>
+    }>
+      <Box sx={{ overflow: 'auto', width: { xs: 'auto', sm: 'auto' } }}>
         <Table
-          aria-label="simple table"
+          aria-label="giải thưởng"
           sx={{
             whiteSpace: 'nowrap',
             mt: 2,
           }}>
           <TableHead>
-            <TableRow>
+            <TableRow sx={{
+              '& .MuiTableCell-root': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                borderBottom: '1px solid rgba(0, 0, 0, 0.5)',
+              },
+            }}>
               <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Id
+                <Typography textAlign={'center'} variant="subtitle2" fontWeight={600}>
+                  Tên giải
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Assigned
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Name
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Priority
-                </Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Budget
+                <Typography textAlign={'center'} variant="subtitle2" fontWeight={600}>
+                  Số lượng
                 </Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map(product => (
-              <TableRow key={product.name}>
-                <TableCell>
-                  <Typography
-                    sx={{
-                      fontSize: '15px',
-                      fontWeight: '500',
-                    }}>
-                    {product.id}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}>
-                    <Box>
-                      <Typography variant="subtitle2" fontWeight={600}>
-                        {product.name}
-                      </Typography>
-                      <Typography
-                        color="textSecondary"
-                        sx={{
-                          fontSize: '13px',
-                        }}>
-                        {product.post}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </TableCell>
-                <TableCell>
-                  <Typography
-                    color="textSecondary"
-                    variant="subtitle2"
-                    fontWeight={400}>
-                    {product.pname}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    sx={{
-                      px: '4px',
-                      backgroundColor: product.pbg,
-                      color: '#fff',
-                    }}
-                    size="small"
-                    label={product.priority}></Chip>
-                </TableCell>
-                <TableCell align="right">
-                  <Typography variant="h6">${product.budget}k</Typography>
-                </TableCell>
-              </TableRow>
-            ))}
+            {award[year]?.awardQuanity.map((val, idx) =>
+              (
+                <TableRow key={idx}>
+                  <TableCell>
+                    <Typography
+                      color="textSecondary"
+                      sx={{
+                        fontSize: '13px',
+                      }}>
+                      {val.name}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      color="textSecondary"
+                      align={'right'}
+                      sx={{
+                        fontSize: '13px',
+                      }}>
+                      {val.quantity}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ),
+            )}
           </TableBody>
         </Table>
       </Box>

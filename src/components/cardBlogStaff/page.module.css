@@ -119,6 +119,7 @@
      flex-direction: column;
      align-items: flex-start;
      gap: 1rem;
+
  }
 
  .check_btn {
@@ -126,10 +127,13 @@
      display: flex;
      justify-content: space-between;
      position: relative;
+
  }
 
- .check_btn h3 {
+ .check_btn p {
      color: #5142fc;
+     font-size: 2.5rem;
+     font-weight: 700;
  }
 
  .tag_list {
@@ -184,7 +188,6 @@
 
 
  @media (min-width: 300px) {
-
      .main_title {
          cursor: default;
          background: var(--linear);
@@ -240,6 +243,22 @@
          height: auto;
          align-items: center;
      }
+
+     .check_btn p {
+         color: #5142fc;
+         font-size: 2.2rem;
+         font-weight: 700;
+
+         line-clamp: 2;
+         overflow: hidden;
+         display: -webkit-box;
+         -webkit-line-clamp: 2;
+         -webkit-box-orient: vertical;
+     }
+
+     .description {
+         font-size: 1.5rem;
+     }
  }
 
  @media (min-width: 414px) {
@@ -257,6 +276,19 @@
          width: 100%;
          height: 40rem;
          flex: none;
+     }
+
+     .check_btn p {
+         color: #5142fc;
+         font-size: 2.5rem;
+         font-weight: 700;
+
+         line-clamp: 3;
+         overflow: hidden;
+         display: -webkit-box;
+         -webkit-line-clamp: 3;
+         -webkit-box-orient: vertical;
+
      }
 
  }
@@ -406,9 +438,20 @@
          position: relative;
      }
 
-     .check_btn h3 {
+     .check_btn p {
          color: #5142fc;
+         font-size: 2.5rem;
+         font-weight: 700;
+
+         line-clamp: 3;
+         overflow: hidden;
+         display: -webkit-box;
+         -webkit-line-clamp: 3;
+         -webkit-box-orient: vertical;
+
      }
+
+
 
      .tag_list {
          width: 100%;
@@ -431,5 +474,8 @@
          transition: all 0.2s ease;
      }
 
+     .description {
+         font-size: 1.9rem;
+     }
 
  }

@@ -19,6 +19,9 @@ function ModalEditPainting({
   fetchData,
   dataPainting,
   setPageNumber,
+  currentSeach,
+  currentPage,
+  isDisabel,
 }) {
   const { userInfo } = useSelector(state => state.auth);
 
@@ -376,8 +379,8 @@ function ModalEditPainting({
         progress: undefined,
         theme: 'light',
       });
-      setPageNumber(1);
-      fetchData(1);
+      setPageNumber(currentPage);
+      fetchData(currentSeach);
       onHide();
     } catch (error) {
       toast.warning(error, {
@@ -780,7 +783,7 @@ function ModalEditPainting({
                 </div>
               </div>
             </div>
-            {dataPainting?.status === 'Đã nộp' && (
+            {(dataPainting?.status === 'Đã nộp' || !isDisabel) && (
               <div className={styles.btn_trigger}>
                 <span
                   className={styles.btn_find}

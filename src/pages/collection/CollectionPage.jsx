@@ -93,7 +93,7 @@ const CollectionPage = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/Client-UI/">Trang chủ</Link>
+                    <Link to="/">Trang chủ</Link>
                   </li>
                   <li>Bộ sưu tập</li>
                 </ul>
@@ -148,7 +148,7 @@ const CollectionPage = () => {
                           <div className="infor text-right">
                             <h4>
                               <Link
-                                to={`/Client-UI/collection-painting/${item.id}`}>
+                                to={`/collection-painting/${item.id}`}>
                                 {item.name}
                               </Link>
                             </h4>

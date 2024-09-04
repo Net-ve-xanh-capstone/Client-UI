@@ -23,13 +23,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: state => {
-      localStorage.removeItem('userToken');
+      localStorage.removeItem('persist:auth');
       state.userInfo = null;
       state.jwtToken = null;
       state.login.success = false;
-    },
-    setCredentials: (state, { payload }) => {
-      state.userInfo = payload;
     },
     setDefault: state => {
       state.login = {
@@ -74,10 +71,10 @@ const authSlice = createSlice({
     builder.addCase(competitorRegister.rejected, (state, { payload }) => {
       state.register.loading = false;
       state.register.success = payload.success;
-      state.register.message = payload.message;
+      state.register.message = payload;
     });
   },
 });
 
-export const { logout, setCredentials, setDefault } = authSlice.actions;
+export const { logout, setDefault } = authSlice.actions;
 export default authSlice.reducer;

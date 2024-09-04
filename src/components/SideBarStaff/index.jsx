@@ -26,11 +26,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '../../store/auth/authSlice.js';
 
 const SideBarStaff = ({
-  collapsed,
-  toggled,
-  handleToggleSidebar,
-  handleCollapsedChange,
-}) => {
+                        collapsed,
+                        toggled,
+                        handleToggleSidebar,
+                        handleCollapsedChange,
+                      }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
@@ -42,12 +42,6 @@ const SideBarStaff = ({
       icon: <FaPalette />,
       path: '/contest',
       name: ' Cuộc thi',
-      new: false,
-    },
-    {
-      icon: <ColorLensIcon />,
-      path: '/painting',
-      name: 'Bài dự thi',
       new: false,
     },
     {
@@ -91,13 +85,13 @@ const SideBarStaff = ({
 
   const handleItemClick = val => {
     if (val) {
-      navigate(`/Client-UI/staff-management${val}`);
+      navigate(`/staff-management${val}`);
     }
   };
 
   const triggerLogout = () => {
     dispatch(logout());
-    navigate('/Client-UI/login');
+    navigate('/login');
   };
 
   useEffect(() => {

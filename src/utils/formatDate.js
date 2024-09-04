@@ -21,7 +21,7 @@ export const parseDateEdit = string => {
   return formattedDate;
 };
 
-export const parseDateScnd = string => {
+export const parseDataVietnam = string => {
   const initialDate = string;
   const dateObject = new Date(initialDate);
   const year = dateObject.getFullYear();

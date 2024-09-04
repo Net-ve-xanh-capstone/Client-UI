@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { formatDate } from '../../utils/formatDate';
 import EditContest from '../EditContest';
-import { checkEditButton } from '../../utils/checkEditButton';
 
-function ContestFragment({ contestFrag, getContestDetail }) {
+function ContestFragment({ contestFrag, getContestDetail, statusOfRound }) {
   const [modalShow, setModalShow] = useState(false);
-  const isEditing = checkEditButton(contestFrag.startTime);
+  const isActive = !statusOfRound
+    .toLowerCase()
+    .includes('Chưa bắt đầu'.toLowerCase());
+
   const resetDetail = () => {
     getContestDetail();
   };
@@ -34,7 +36,7 @@ function ContestFragment({ contestFrag, getContestDetail }) {
         <button
           className="btn btn-outline-primary btn-lg"
           onClick={() => setModalShow(true)}
-          disabled={isEditing}>
+          disabled={isActive}>
           Chỉnh sửa
         </button>
       </div>

@@ -17,7 +17,6 @@ import { topicApi } from '../api/topicApi';
 import { paintingApi } from '../api/paintingApi';
 import { paintingStatus, paintingStatusDisable } from '../constant/Status.js';
 import Swal from 'sweetalert2';
-import { addressApi } from '../api/addressApi.js';
 
 const getAllPaintingByCompetitorIdEndpoint =
   'paintings/getpaintingbyaccountcontest';
@@ -33,7 +32,7 @@ const SubmitPage = () => {
   const { progress, url, error } = useUploadImage(file);
   const userInfo = useSelector(state => state.auth.userInfo);
   const today = new Date().toISOString().slice(0, 10);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await topicApi.getAllTopic(
@@ -64,7 +63,7 @@ const SubmitPage = () => {
     resolver: yupResolver(schema),
     reValidateMode: 'onChange',
   });
-  
+
   const handlePreviewImage = e => {
     const file = e.target.files[0];
     file.preview = URL.createObjectURL(file);
@@ -73,7 +72,7 @@ const SubmitPage = () => {
     setError('file', '');
     setFile(file);
   };
-  
+
   const handleDraftPainting = async e => {
     // Trigger validate form
     const isValid = await trigger();
@@ -102,19 +101,19 @@ const SubmitPage = () => {
         description: e.description,
         roundTopicId: topicId,
         accountId: userInfo.Id,
-      }
+      };
     }
     SwalComponent(
       'Bạn có chắc chắn lưu bài?',
       endpoint,
       method,
-      data, 
-      'Lưu bài thành công', 
+      data,
+      'Lưu bài thành công',
       'Bạn đã hủy lưu bài',
-      setRefreshTrigger
+      setRefreshTrigger,
     );
   };
-  
+
   const handleSubmitPainting = async e => {
     const isValid = await trigger();
     if (!isValid) return;
@@ -142,7 +141,7 @@ const SubmitPage = () => {
         name: e.name,
         description: e.description,
         roundTopicId: topicId,
-      }
+      };
     }
     SwalComponent(
       'Bạn có chắc chắn nộp bài?',
@@ -151,15 +150,15 @@ const SubmitPage = () => {
       data,
       'Nộp bài thành công',
       'Bạn đã hủy nộp bài',
-      setRefreshTrigger
+      setRefreshTrigger,
     );
   };
-  
+
   const getDropdownOptions = (data, defaultValue = '') => {
     const value = watch(data) || defaultValue;
     return value;
   };
-  
+
   const handleSelectDropdownOption = (name, value) => {
     setValue(name, value.name);
     setTopicId(value.id);
@@ -209,7 +208,7 @@ const SubmitPage = () => {
         setValue('topic', data.topicName);
         setTopicId(data.roundTopicId);
         setValue('file', data.image);
-        if(paintingStatusDisable.some(status => status === data.status)) {
+        if (paintingStatusDisable.some(status => status === data.status)) {
           setDisable(true);
         } else {
           setDisable(false);
@@ -231,7 +230,7 @@ const SubmitPage = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/Client-UI/">Trang chủ</Link>
+                    <Link to="/">Trang chủ</Link>
                   </li>
                   <li>
                     <Link to="#">Trang</Link>
@@ -263,7 +262,7 @@ const SubmitPage = () => {
                     <div className="author">
                       <div className="text">
                         <span>Tác giả</span>
-                        <h5>{userInfo.nameid}</h5>
+                        <h5>{userInfo?.FullName}</h5>
                       </div>
                     </div>
                     <div className="text">
@@ -302,7 +301,7 @@ const SubmitPage = () => {
                       disabled={disable}
                     />
                   </label>
-                  
+
                   <div>
                     {/* Tên tranh */}
                     <h4 className="title-create-item disable-select">Tên bức tranh</h4>
@@ -318,7 +317,7 @@ const SubmitPage = () => {
                       disabled={disable}
                       readOnly={disable}
                     />
-                    
+
                     {/* Mô tả */}
                     <h4 className="title-create-item">Mô tả bức tranh</h4>
                     <TextareaCommon
@@ -331,7 +330,7 @@ const SubmitPage = () => {
                       autoFocus
                       disabled={disable}
                     />
-                    
+
                     {/* Chủ đề */}
                     <div className="inner-row-form style-2">
                       <div id="item-create" className="dropdown">
@@ -406,31 +405,31 @@ const SwalComponent = (title, endpoint, method, data, successMsg, cancelMsg, set
             Swal.fire(successMsg, '', 'success').then(
               () => {
                 setRefreshTrigger(prev => !prev);
-              }
+              },
             );
           })
           .catch(error => {
             Swal.fire(error?.response?.data?.message, 'Hãy thử lại sau bạn nhé', 'error');
           });
-      } else if(method === 'PUT') {
+      } else if (method === 'PUT') {
         paintingApi
           .updatePainting(endpoint, data)
           .then(() => {
             Swal.fire(successMsg, '', 'success').then(
               () => {
                 setRefreshTrigger(prev => !prev);
-              }
+              },
             );
           })
           .catch(error => {
             Swal.fire(error?.response?.data?.message, 'Hãy thử lại sau bạn nhé', 'error');
           });
       }
-      
+
     } else if (result.isDismissed) {
       Swal.fire(cancelMsg, '', 'info');
     }
   });
-}
+};
 
 export default SubmitPage;

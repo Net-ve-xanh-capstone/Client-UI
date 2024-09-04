@@ -2,20 +2,10 @@ import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import IconButton from '@mui/material/IconButton';
-import {
-  createTheme,
-  StyledEngineProvider,
-  ThemeProvider,
-} from '@mui/material/styles';
-import Switch from '@mui/material/Switch';
+import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
-import {
-  activeCompetitor,
-  blockCompetitor,
-  getAllCompetitor,
-  getCompetitorByid,
-} from '../../api/competitor.js';
+import { activeCompetitor, blockCompetitor, getAllCompetitor, getCompetitorById } from '../../api/competitor.js';
 import ModalInforUser from '../../components/ModalInforUser/page.jsx';
 import { formatDate } from '../../utils/formatDate';
 import styles from './page.module.css';
@@ -89,7 +79,7 @@ function CompetitorManage() {
   // get user by id
   const handleOpenDetail = async id => {
     try {
-      const res = await getCompetitorByid(id);
+      const res = await getCompetitorById(id);
       const data = res.data.result;
       if (data === null) {
         return;

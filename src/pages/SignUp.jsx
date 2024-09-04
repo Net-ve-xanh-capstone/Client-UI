@@ -5,22 +5,22 @@ import TextFieldCommon from '../components/input/TextfieldCommon';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Grid, styled, Dialog, DialogContent, IconButton } from '@mui/material';
+import { Dialog, DialogContent, Grid, IconButton, styled } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DatepickerCommon from '../components/datepicker/DatePickerCommon';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import RadioCommon from '../components/checkbox/RadioCommon';
-import CloseIcon from '@mui/icons-material/Close';
 import { competitorRegister } from '../store/auth/authAction';
 import { FadeLoader } from 'react-spinners';
 import { setDefault } from '../store/auth/authSlice';
 import { color } from '../constant/Color.js';
-import { regexEmail, regexFullNameVN, regexPhone } from '../constant/Regex.js';
-import { Dropdown } from '../components/dropdown';
+import { regexEmail, regexFullNameVN, regexPassword, regexPhone } from '../constant/Regex.js';
 import { addressApi } from '../api/addressApi.js';
+import Role from '../constant/Role.js';
+import ShowAlert from '../components/showAller/ShowAlert.jsx';
 
 const SignUp = () => {
   dayjs.extend(utc);
@@ -30,22 +30,17 @@ const SignUp = () => {
   const currentDate = dayjs(new Date());
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
   const [address, setAddress] = useState({
     districts: [],
     wards: [],
     selectedDistrict: '',
   });
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const {
-    register: { success, message, loading },
+    register: { loading },
     jwtToken,
+    userInfo,
   } = useSelector(state => state.auth);
-
   const schema = yup.object().shape({
     lastname: yup
       .string()
@@ -64,7 +59,11 @@ const SignUp = () => {
       .matches(regexPhone, 'Số điện thoại không hợp lệ')
       .required('Vui lòng nhập số điện thoại của bạn'),
     userName: yup.string().required('Vui lòng nhập tên tài khoản của bạn'),
-    password: yup.string().required('Vui lòng nhập mật khẩu của bạn'),
+    password: yup
+      .string()
+      .required('Vui lòng nhập mật khẩu của bạn')
+      .matches(regexPassword,
+        'Mật khẩu của bạn phải chứa 8 ký tự, bao gồm một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt.'),
     gender: yup
       .boolean()
       .required('Vui lòng chọn giới tính')
@@ -86,6 +85,7 @@ const SignUp = () => {
     setValue,
     setError,
     watch,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -96,27 +96,18 @@ const SignUp = () => {
 
   useEffect(() => {
     if (jwtToken) {
-      navigate('/Client-UI/');
+      if (userInfo.role === Role.STAFF) {
+        reset();
+        navigate('/staff-management/contest');
+      } else if (userInfo.role === Role.ADMIN) {
+        reset();
+        navigate('/admin-management/');
+      } else {
+        reset();
+        navigate('/');
+      }
     }
-    if (success !== null) {
-      setOpen(true);
-      setTimeout(() => {
-        setOpen(false);
-        dispatch(setDefault());
-      }, 3000);
-    }
-    if (success) {
-      setTimeout(() => {
-        setOpen(false);
-        dispatch(setDefault());
-        navigate('/Client-UI/login');
-      }, 3000);
-    }
-    // clear timeout
-    return () => {
-      clearTimeout();
-    };
-  }, [success]);
+  }, [jwtToken]);
 
   useEffect(() => {
     async function fetchData() {
@@ -129,15 +120,23 @@ const SignUp = () => {
 
     fetchData();
   }, []);
-  const handleRegister = async data => {
+  const handleRegister = async (data) => {
     const isValid = await trigger();
     if (!isValid) return;
-    else {
-      await dispatch(competitorRegister(data)).then(() => {
-        if (message) setOpen(true);
-      });
+
+    const register = await dispatch(competitorRegister(data));
+
+    if (register?.type === 'create/fulfilled') {
+      const message = register.payload?.message;
+      const content = 'Bạn sẽ được chuyển hướng về trang đăng nhập sau <b></b> giây.';
+      ShowAlert(message, content, 3000, () => navigate('/login'));
+    } else {
+      const message = register.payload;
+      const content = 'Thông báo sẽ đóng sau <b></b> giây.';
+      ShowAlert(message, content, 3000, () => dispatch(setDefault()));
     }
   };
+
 
   const handleKeyDown = e => {
     if (e.key === '-' || e.key === '+') {
@@ -186,7 +185,7 @@ const SignUp = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/Client-UI/">Trang chủ</Link>
+                    <Link to="/">Trang chủ</Link>
                   </li>
                   <li>Đăng ký</li>
                 </ul>
@@ -252,6 +251,7 @@ const SignUp = () => {
                           control={control}
                           error={errors?.gender?.message}
                           name="gender"
+                          defaultValue={false}
                           valueArray={valueArray}
                         />
                       </Grid>
@@ -324,45 +324,24 @@ const SignUp = () => {
                         />
                       </Grid>
                     </Grid>
-                    <BootstrapDialog
-                      onClose={handleClose}
-                      aria-labelledby="customized-dialog-title"
-                      open={open}>
-                      <IconButton
-                        aria-label="close"
-                        onClick={handleClose}
-                        sx={{
-                          position: 'absolute',
-                          right: 8,
-                          top: 6,
-                          color: theme => theme.palette.grey[500],
-                        }}>
-                        <CloseIcon />
-                      </IconButton>
-                      <DialogContent>
-                        <div className="space-y-20 pd-40">
-                          <h4 className="text-center font-weight-bold">
-                            {message ? message : ''}
-                          </h4>
-                        </div>
-                      </DialogContent>
-                    </BootstrapDialog>
-
-                    <button className="submit">
+                    <button className="submit flex justify-content-center align-items-center h-100 p-0">
                       {loading ? (
-                        <FadeLoader
-                          color={color.purple}
-                          loading={loading}
-                          size={2}
-                        />
+                        <div>
+                          <FadeLoader
+                            color={color.purple}
+                            loading={loading}
+                            size={2}
+                          />
+                        </div>
                       ) : (
-                        'Đăng ký'
+                        <div style={{ padding: '2rem' }}>Đăng ký</div>
                       )}
                     </button>
+
                     <div className="mt-5 text-right h5">
                       Bạn đã có tài khoản? {''}
                       <Link
-                        to={'/Client-UI/login'}
+                        to={'/login'}
                         className="font-weight-bold">
                         đăng nhập
                       </Link>

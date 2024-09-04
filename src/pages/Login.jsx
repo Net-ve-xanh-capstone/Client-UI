@@ -13,9 +13,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogContent, IconButton, styled } from '@mui/material';
 import * as yup from 'yup';
 import { color } from '../constant/Color.js';
+import Role from '../constant/Role.js';
+
 const Login = () => {
   const [open, setOpen] = useState(false);
-  const { userInfo } = useSelector(state => state.auth);
   // open dialog
   const schema = yup.object().shape({
     username: yup.string().required('Vui lòng nhập username của bạn'),
@@ -36,6 +37,7 @@ const Login = () => {
   const {
     login: { loading, success, error },
     jwtToken,
+    userInfo,
   } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,11 +45,9 @@ const Login = () => {
   const handleLogin = async data => {
     // Trigger validate form
     const isValid = await trigger();
-
     if (!isValid) return;
     else {
       dispatch(competitorLogin(data)).then(res => {
-        console.log(res);
         if (error) setOpen(true);
       });
     }
@@ -59,12 +59,15 @@ const Login = () => {
 
   useEffect(() => {
     if (success || jwtToken) {
-      if (userInfo.role === 'Staff') {
+      if (userInfo.role === Role.STAFF) {
         reset();
-        navigate('/Client-UI/staff-management/contest');
+        navigate('/staff-management/contest');
+      } else if (userInfo.role === Role.ADMIN) {
+        reset();
+        navigate('/admin-management/');
       } else {
         reset();
-        navigate('/Client-UI/');
+        navigate('/');
       }
     }
     if (error) {
@@ -86,7 +89,7 @@ const Login = () => {
               <div className="breadcrumbs style2">
                 <ul>
                   <li>
-                    <Link to="/Client-UI/">Trang chủ</Link>
+                    <Link to="/">Trang chủ</Link>
                   </li>
                   <li>Đăng nhập</li>
                 </ul>
@@ -152,20 +155,25 @@ const Login = () => {
                       </Link>
                     </div>
 
-                    <button className="submit">
+                    <button className="submit flex justify-content-center align-items-center h-100 p-0">
                       {loading ? (
-                        <FadeLoader
-                          color={color.purple}
-                          loading={loading}
-                          size={2}
-                        />
+                        <div>
+                          <FadeLoader
+                            color={color.purple}
+                            loading={loading}
+                            size={2}
+                          />
+                        </div>
                       ) : (
-                        'Đăng nhập'
+                        <div style={{ padding: '2rem' }}>Đăng nhập</div>
                       )}
                     </button>
+
                     <div className="mt-5 text-right h5">
                       Bạn chưa có tài khoản? {''}
-                      <Link to={'/Client-UI/sign-up'} className="font-weight-bold">
+                      <Link
+                        to={'/sign-up'}
+                        className="font-weight-bold">
                         đăng ký
                       </Link>
                     </div>

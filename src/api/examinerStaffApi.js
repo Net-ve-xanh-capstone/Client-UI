@@ -1,17 +1,21 @@
-import axiosApi from "./axiosApi"
+import axiosApi from './axiosApi';
 
 export const getAll = () => {
-    return axiosApi.get('accounts/getallexaminer')
-}
+  return axiosApi.get('accounts/getallexaminer');
+};
 
 export const getById = id => {
-    return axiosApi.get(`accounts/getaccountbyid/${id}`)
-}
+  return axiosApi.get(`accounts/getaccountbyid/${id}`);
+};
 
 export const banAccount = id => {
-    return axiosApi.patch(`accounts/inactiveaccount?id=${id}`)
-}
+  return axiosApi.patch(`accounts/inactiveaccount?id=${id}`);
+};
 
 export const unBanAccount = id => {
-    return axiosApi.patch(`accounts/activeaccount?id=${id}`)
-}
+  return axiosApi.patch(`accounts/activeaccount?id=${id}`);
+};
+
+export const addNewExaminer = payload => {
+  return axiosApi.post('authentications/registerforstaffandexaminer', payload);
+};

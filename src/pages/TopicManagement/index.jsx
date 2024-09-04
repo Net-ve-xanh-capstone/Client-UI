@@ -89,7 +89,14 @@ function TopicManagement() {
       name: 'description',
       label: 'MÔ TẢ',
       options: {
-        customBodyRender: value => <span>{value}</span>,
+        customBodyRender: value => (
+          <span className={styles.extendMore}>
+            {value?.length > 100 ? value.slice(0, 90) : value}
+            {value?.length > 100 && (
+              <span className={styles.tooltip}>{value}</span>
+            )}
+          </span>
+        ),
       },
     },
     {
@@ -98,13 +105,6 @@ function TopicManagement() {
       options: {
         customBodyRender: (value, tableData) => (
           <div className={styles.btnAction}>
-            <IconButton
-              aria-label="delete"
-              size="small"
-              color="info"
-              onClick={() => handleOpenEdit(value)}>
-              <EditIcon />
-            </IconButton>
             {userInfo.role === 'Staff' && (
               <IconButton
                 aria-label="delete"
@@ -114,6 +114,13 @@ function TopicManagement() {
                 <DeleteIcon />
               </IconButton>
             )}
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="info"
+              onClick={() => handleOpenEdit(value)}>
+              <EditIcon />
+            </IconButton>
           </div>
         ),
       },

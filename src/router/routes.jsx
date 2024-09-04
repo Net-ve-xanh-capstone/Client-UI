@@ -9,12 +9,14 @@ import TopicManagement from '../pages/TopicManagement/index.jsx';
 import ExaminerManagement from '../pages/ExaminerManagement/index.jsx';
 import SponsorManage from '../pages/sponsorPage/page.jsx';
 import CompetitorManage from '../pages/competitorManage/page.jsx';
-import PaintingPage from '../pages/paintingPage/page.jsx';
 import CollectionPage from '../pages/collection/CollectionPage.jsx';
 import PaintingOfCollectionPage from '../pages/collection/painting/PaintingOfCollectionPage.jsx';
 import HomeCollectionPage from '../pages/myCollection/HomeCollectionPage.jsx';
 import Loadable from '../pages/admin/layouts/full/shared/loadable/Loadable';
 import { Navigate } from 'react-router-dom';
+import MarkReport from '../components/MarkReport/index.jsx';
+import ExaminerMark from '../pages/ExaminerMark/page.jsx';
+import ExaminerRound from '../pages/examinerRound/page.jsx';
 
 const Home = lazy(() => import('../pages/Home/Home'));
 const BlogPage = lazy(() => import('../pages/blogPage/BlogPage'));
@@ -37,8 +39,8 @@ const FullLayout = lazy(() => import('../pages/admin/layouts/full/FullLayout'));
 const Dashboard = lazy(() =>
   import('../pages/admin/views/dashboard/Dashboard'),
 );
-const SamplePage = lazy(() =>
-  import('../pages/admin/views/sample-page/SamplePage'),
+const ExaminerManagementPage = lazy(() =>
+  import('../pages/admin/views/management/ExaminerManagementPage.jsx'),
 );
 const TypographyPage = Loadable(
   lazy(() => import('../pages/admin/views/utilities/TypographyPage')),
@@ -49,13 +51,13 @@ const Shadow = Loadable(
 
 const routes = [
   {
-    path: '/Client-UI/',
+    path: '/',
     component: <Home />,
   },
-  { path: '/Client-UI/login', component: <Login /> },
-  { path: '/Client-UI/sign-up', component: <SignUp /> },
+  { path: 'login', component: <Login /> },
+  { path: 'sign-up', component: <SignUp /> },
   {
-    path: '/Client-UI/staff-management',
+    path: 'staff-management',
     component: (
       <ProtectedRoute role={Role.STAFF}>
         <StaffManage />
@@ -87,17 +89,13 @@ const routes = [
         component: <SponsorManage />,
       },
       {
-        path: 'painting',
-        component: <PaintingPage />,
-      },
-      {
         path: 'competitor',
         component: <CompetitorManage />,
       },
     ],
   },
   {
-    path: 'Client-UI/submit/:contestId',
+    path: 'submit/:contestId',
     component: (
       <ProtectedRoute role={Role.COMPETITOR}>
         <SubmitPage />
@@ -105,7 +103,7 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/edit-profile',
+    path: 'edit-profile',
     component: (
       <ProtectedRoute>
         <ProfilePage />
@@ -113,7 +111,7 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/my-painting',
+    path: 'my-painting',
     component: (
       <ProtectedRoute>
         <MyPaintingPage />
@@ -121,19 +119,19 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/blog',
+    path: 'blog',
     component: <BlogPage />,
   },
-  { path: 'Client-UI/contest-detail/:contestId', component: <ContestDetail /> },
-  { path: 'Client-UI/faq', component: <FAQPage /> },
-  { path: 'Client-UI/contact', component: <ContactPage /> },
-  { path: 'Client-UI/collection', component: <CollectionPage /> },
+  { path: 'contest-detail/:contestId', component: <ContestDetail /> },
+  { path: 'faq', component: <FAQPage /> },
+  { path: 'contact', component: <ContactPage /> },
+  { path: 'collection', component: <CollectionPage /> },
   {
-    path: 'Client-UI/collection-painting/:collectionId',
+    path: 'collection-painting/:collectionId',
     component: <PaintingOfCollectionPage />,
   },
   {
-    path: 'Client-UI/collection/:accountId',
+    path: 'collection/:accountId',
     component: (
       <ProtectedRoute>
         <CollectionPage />
@@ -141,7 +139,7 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/history/:paintingId',
+    path: 'history/:paintingId',
     component: (
       <ProtectedRoute>
         <HistoryPage />
@@ -149,7 +147,7 @@ const routes = [
     ),
   },
   {
-    path: 'Client-UI/my-collection',
+    path: 'my-collection',
     component: (
       <ProtectedRoute>
         <HomeCollectionPage />
@@ -157,17 +155,44 @@ const routes = [
     ),
   },
   {
-    path: '/Client-UI/admin-management',
-    component: <FullLayout />,
+    path: 'admin-management',
+    component:
+      <ProtectedRoute role={Role.ADMIN}>
+        <FullLayout />
+      </ProtectedRoute>,
     children: [
       { path: '', component: <Navigate to="dashboard" /> },
       { path: 'dashboard', exact: true, component: <Dashboard /> },
-      { path: 'sample-page', exact: true, component: <SamplePage /> },
+      { path: 'account', exact: true, component: <ExaminerManagementPage /> },
       { path: 'ui/typography', exact: true, component: <TypographyPage /> },
       { path: 'ui/shadow', exact: true, component: <Shadow /> },
     ],
   },
   { path: '/*', component: <NoResult /> },
+  {
+    path: 'mark-report',
+    component: (
+      <ProtectedRoute role={Role.EXAMINER}>
+        <MarkReport />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'mark-examiner',
+    component: (
+      <ProtectedRoute role={Role.EXAMINER}>
+        <ExaminerMark />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'examiner-round',
+    component: (
+      <ProtectedRoute role={Role.EXAMINER}>
+        <ExaminerRound />
+      </ProtectedRoute>
+    ),
+  },
 ];
 
 export default routes;

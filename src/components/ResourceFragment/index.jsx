@@ -12,7 +12,7 @@ import DeleteModal from '../DeleteModal';
 import ResourceForm from '../ResourceForm';
 import styles from './style.module.css';
 
-function ResourceFragment({ resourceFrag, getContestDetail }) {
+function ResourceFragment({ resourceFrag, getContestDetail, statusOfRound }) {
   const [resource, setResource] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [type, setType] = useState();
@@ -24,8 +24,13 @@ function ResourceFragment({ resourceFrag, getContestDetail }) {
     getResource();
   };
 
+  const isActive = !statusOfRound
+    .toLowerCase()
+    .includes('Chưa bắt đầu'.toLowerCase());
+
   useEffect(() => {
     getResource();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resourceFrag]);
 
   const getResource = async () => {
@@ -126,18 +131,20 @@ function ResourceFragment({ resourceFrag, getContestDetail }) {
                     <IconButton
                       aria-label="delete"
                       size="large"
-                      color="info"
-                      onClick={() => handleOpenEdit(data)}
-                      disabled={isEditing}>
-                      <EditIcon />
+                      color="error"
+                      onClick={() => hanldeOpenDelete(data.id)}
+                      // disabled={isEditing}
+                      disabled={isActive}>
+                      <DeleteIcon />
                     </IconButton>
                     <IconButton
                       aria-label="delete"
                       size="large"
-                      color="error"
-                      onClick={() => hanldeOpenDelete(data.id)}
-                      disabled={isEditing}>
-                      <DeleteIcon />
+                      color="info"
+                      onClick={() => handleOpenEdit(data)}
+                      // disabled={isEditing}
+                      disabled={isActive}>
+                      <EditIcon />
                     </IconButton>
                   </div>
                 </div>
@@ -151,7 +158,8 @@ function ResourceFragment({ resourceFrag, getContestDetail }) {
         <button
           className="btn btn-outline-primary btn-lg"
           onClick={handleOpenCreate}
-          disabled={isEditing}>
+          // disabled={isEditing}
+          disabled={isActive}>
           Thêm
         </button>
       </div>

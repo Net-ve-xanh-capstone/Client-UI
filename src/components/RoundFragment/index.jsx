@@ -1,24 +1,62 @@
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Switch } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { getById } from '../../api/contestStaffApi.js';
 import { deleteRoundLevel } from '../../api/roundStaffApi.js';
-import { checkActiveDate } from '../../utils/checkActiveDate.js';
-import { checkEditButton } from '../../utils/checkEditButton.js';
 import { formatDate } from '../../utils/formatDate.js';
 import DeleteModal from '../DeleteModal';
 import RoundForm from '../RoundForm/index.jsx';
 import styles from './style.module.css';
-function RoundFragment({ roundFrag, getContestDetail }) {
+import DownloadIcon from '@mui/icons-material/Download';
+import SendIcon from '@mui/icons-material/Send';
+import { dowloadExcel } from '../../api/dowloadApi.js';
+import MailModal from './modalMail.jsx';
+
+function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [idRoundDelete, setIdRoundDelete] = useState();
   // const isEditing = checkEditButton(roundFrag.startTime);
   const [round, setRound] = useState();
   const [editRoundData, setEditRoundData] = useState();
+
+  const [openModal, setOpenModal] = useState(false);
+  const [idLevel, setIdLevel] = useState(null);
+
+  const isActive = !statusOfRound
+    .toLowerCase()
+    .includes('Chưa bắt đầu'.toLowerCase());
+  const openModalConfirm = id => {
+    setOpenModal(true);
+    setIdLevel(id);
+  };
+
+  // fetch sending email
+  const sendMail = async id => {
+    try {
+      await sendMail(id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // dowload file excel
+  const downloadFile = async (levelData, roundData) => {
+    try {
+      const fileName = levelData?.level + ' - ' + roundData?.name + '.xlsx';
+      const response = await dowloadExcel(roundData?.id);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const resetDetail = () => {
     setModalShow(false);
@@ -33,11 +71,6 @@ function RoundFragment({ roundFrag, getContestDetail }) {
     } catch (e) {
       console.log('err', e);
     }
-  };
-
-  const hanldeOpenDelete = id => {
-    setIdRoundDelete(id);
-    setDeleteModalShow(true);
   };
 
   const handleDelete = async () => {
@@ -92,10 +125,17 @@ function RoundFragment({ roundFrag, getContestDetail }) {
 
   useEffect(() => {
     getRound();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roundFrag]);
   return (
     round && (
       <>
+        <MailModal
+          show={openModal}
+          setShow={setOpenModal}
+          callBack={sendMail}
+          idLevel={idLevel}
+        />
         <RoundForm
           modalShow={modalShow}
           onHide={resetDetail}
@@ -130,7 +170,9 @@ function RoundFragment({ roundFrag, getContestDetail }) {
                     {dataRound.level}
                   </div>
                   <div className={styles.col} data-label="Tên vòng thi">
-                    {data.name}
+                    {data.name?.length > 100
+                      ? data.name.slice(0, 99) + '...'
+                      : data.name}
                   </div>
                   <div className={styles.col} data-label="Ngày bắt đầu">
                     {formatDate(data.startTime)}
@@ -139,28 +181,71 @@ function RoundFragment({ roundFrag, getContestDetail }) {
                     {formatDate(data.endTime)}
                   </div>
                   <div className={styles.col} data-label="Địa điểm">
-                    {data.location}
+                    {data.location?.length > 100
+                      ? data.location.slice(0, 99) + '...'
+                      : data.location}
+
+                    {data.location?.length > 100 && (
+                      <div className={styles.tooltip}>{data.location}</div>
+                    )}
                   </div>
                   <div className={styles.col} data-label="Mô tả">
-                    {data.description}
+                    {data.description?.length > 100
+                      ? data.description.slice(0, 99) + '...'
+                      : data.description}
+
+                    {data.description?.length > 100 && (
+                      <div className={styles.tooltip}>{data.description}</div>
+                    )}
                   </div>
                   <div className={styles.col} data-label="Trạng thái">
-                    <>
+                    {/* <>
                       <Switch
                         checked={checkActiveDate(data)}
                         color="success"
                         disabled
                       />
-                    </>
+                    </> */}
+                    {data?.status}
                   </div>
                   <div className={styles.col} data-label="Tương tác">
                     <IconButton
+                      sx={{ paddingRight: '0 !important' }}
                       aria-label="edit"
                       size="large"
                       color="info"
                       onClick={() => handleOpenEdit(data.id)}
-                      disabled={checkEditButton(data.startTime)}>
+                      // disabled={checkEditButton(data.startTime)}
+                      disabled={isActive}>
                       <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      sx={{ paddingRight: '0 !important' }}
+                      aria-label="edit"
+                      size="large"
+                      color="info"
+                      onClick={() => downloadFile(dataRound, data)}
+                      // disabled={checkEditButton(data.startTime)}
+                      disabled={
+                        !data?.status
+                          .toLowerCase()
+                          .includes('hoàn thành'.toLowerCase())
+                      }>
+                      <DownloadIcon />
+                    </IconButton>
+                    <IconButton
+                      sx={{ paddingRight: '0 !important' }}
+                      aria-label="edit"
+                      size="large"
+                      color="info"
+                      onClick={() => openModalConfirm(data.id)}
+                      // disabled={checkEditButton(data.startTime)}
+                      disabled={
+                        !data?.status
+                          .toLowerCase()
+                          .includes('hoàn thành'.toLowerCase())
+                      }>
+                      <SendIcon />
                     </IconButton>
                     {/* <IconButton
                         aria-label="delete"
@@ -180,7 +265,7 @@ function RoundFragment({ roundFrag, getContestDetail }) {
               className="btn btn-outline-primary btn-lg"
               onClick={() => handleOpenCreate()}
               // disabled={isEditing}
-            >
+              disabled={isActive}>
               Thêm
             </button>
           </div>

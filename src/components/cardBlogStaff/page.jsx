@@ -148,11 +148,7 @@ function BlogStaff() {
                     <div className={styles.text}>
                       <div className={styles.title}>
                         <div className={styles.check_btn}>
-                          <h3>
-                            {vl.title?.length > 20
-                              ? cutString(vl.title, 20) + '...'
-                              : vl.title}
-                          </h3>
+                          <p>{vl.title}</p>
                           <div
                             style={{
                               backgroundColor: 'transparent',
@@ -179,7 +175,7 @@ function BlogStaff() {
                             </div>
                           )}
                         </div>
-                        <p>
+                        <p className={styles.description}>
                           {vl.description?.length > 200
                             ? cutString(vl.description, 200) + '...'
                             : vl.description}

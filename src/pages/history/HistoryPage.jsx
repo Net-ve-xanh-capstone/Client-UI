@@ -31,7 +31,7 @@ const HistoryPage = () => {
       setUpdated(event?.updated);
       setFinalDecision(event?.finalDecision);
     }
-    console.log(history)
+    console.log(history);
   }, [data]);
 
   if (isLoading) return <span><DotLoaderCustom /></span>;
@@ -51,7 +51,7 @@ const HistoryPage = () => {
               </div>
               <div className="breadcrumbs style2">
                 <ul>
-                  <li><Link to="/Client-UI/">Trang chủ</Link></li>
+                  <li><Link to="/">Trang chủ</Link></li>
                   <li>Lịch sử</li>
                 </ul>
               </div>
@@ -63,53 +63,53 @@ const HistoryPage = () => {
         <div className="themesflat-container">
           <div className="row">
             {created?.time && (
-            <div className="col-lg-10 col-md-10 col-12">
-              <div className="sc-card-activity style1">
-                <div className="content">
-                  <div className="media">
-                    <img className='object-fit-contain' src={history?.image} alt="Painting" />
+              <div className="col-lg-10 col-md-10 col-12">
+                <div className="sc-card-activity style1">
+                  <div className="content">
+                    <div className="media">
+                      <img className="object-fit-contain" src={history?.image} alt="Painting" />
+                    </div>
+                    <div className="infor">
+                      <h3>
+                        <div>Tên tranh: {history?.name}</div>
+                      </h3>
+                      <div className="status text-black">{created?.message} vào ngày</div>
+                      <div className="author">{formatDate(created?.time)}</div>
+                    </div>
                   </div>
-                  <div className="infor">
-                    <h3>
-                      <div>Tên tranh: {history?.name}</div>
-                    </h3>
-                    <div className="status text-black">{created?.message} vào ngày</div>
-                    <div className="author">{formatDate(created?.time)}</div>
+                  <div className="button-active icon flex align-items-center justify-content-center">
+                    <FaHistory size="32px" />
                   </div>
-                </div>
-                <div className='button-active icon flex align-items-center justify-content-center'>
-                  <FaHistory size='32px' />
                 </div>
               </div>
-            </div>
             )}
             {reviewed?.time && (
-            <div className="col-lg-10 col-md-10 col-12">
-              <div className="sc-card-activity style1">
-                <div className="content">
-                  <div className="media">
-                    <img className='object-fit-contain' src={history?.image} alt="Painting" />
+              <div className="col-lg-10 col-md-10 col-12">
+                <div className="sc-card-activity style1">
+                  <div className="content">
+                    <div className="media">
+                      <img className="object-fit-contain" src={history?.image} alt="Painting" />
+                    </div>
+                    <div className="infor">
+                      <h3>
+                        <div>Tên tranh: {history?.name}</div>
+                      </h3>
+                      <div className="status text-black">{reviewed?.message} vào ngày</div>
+                      <div className="author">{formatDate(reviewed?.time)}</div>
+                    </div>
                   </div>
-                  <div className="infor">
-                    <h3>
-                      <div>Tên tranh: {history?.name}</div>
-                    </h3>
-                    <div className="status text-black">{reviewed?.message} vào ngày</div>
-                    <div className="author">{formatDate(reviewed?.time)}</div>
+                  <div className="button-active icon flex align-items-center justify-content-center">
+                    <FaHistory size="32px" />
                   </div>
-                </div>
-                <div className="button-active icon flex align-items-center justify-content-center">
-                  <FaHistory size="32px" />
                 </div>
               </div>
-            </div>
             )}
             {submitted?.time && (
               <div className="col-lg-10 col-md-10 col-12">
-              <div className="sc-card-activity style1">
+                <div className="sc-card-activity style1">
                   <div className="content">
                     <div className="media">
-                      <img className='object-fit-contain' src={history?.image} alt="Painting" />
+                      <img className="object-fit-contain" src={history?.image} alt="Painting" />
                     </div>
                     <div className="infor">
                       <h3>
@@ -119,10 +119,10 @@ const HistoryPage = () => {
                       <div className="author">{formatDate(submitted?.time)}</div>
                     </div>
                   </div>
-                <div className="button-active icon flex align-items-center justify-content-center">
-                <FaHistory size="32px" />
+                  <div className="button-active icon flex align-items-center justify-content-center">
+                    <FaHistory size="32px" />
+                  </div>
                 </div>
-              </div>
               </div>
             )}
             {updated?.time && (
@@ -130,7 +130,7 @@ const HistoryPage = () => {
                 <div className="sc-card-activity style1">
                   <div className="content">
                     <div className="media">
-                      <img className='object-fit-contain' src={history?.image} alt="Painting" />
+                      <img className="object-fit-contain" src={history?.image} alt="Painting" />
                     </div>
                     <div className="infor">
                       <h3>
@@ -141,7 +141,7 @@ const HistoryPage = () => {
                     </div>
                   </div>
                   <div className="button-active icon flex align-items-center justify-content-center">
-                  <FaHistory size="32px" />
+                    <FaHistory size="32px" />
                   </div>
                 </div>
               </div>
@@ -151,7 +151,7 @@ const HistoryPage = () => {
                 <div className="sc-card-activity style1">
                   <div className="content">
                     <div className="media">
-                      <img className='object-fit-contain' src={history?.image} alt="Painting" />
+                      <img className="object-fit-contain" src={history?.image} alt="Painting" />
                     </div>
                     <div className="infor">
                       <h3>
@@ -162,7 +162,7 @@ const HistoryPage = () => {
                     </div>
                   </div>
                   <div className="button-active icon flex align-items-center justify-content-center">
-                  <FaHistory size="32px" />
+                    <FaHistory size="32px" />
                   </div>
                 </div>
               </div>

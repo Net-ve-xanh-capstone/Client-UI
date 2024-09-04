@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import styles from './style.module.css';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import CreateModal from '../CreateModal';
-import { createLevel } from '../../api/levelStaffApi';
-import { parseDateEdit, parseDateScnd } from '../../utils/formatDate.js';
-import DatePicker from 'react-datepicker';
-import './datePicker.css';
+import { toast } from 'react-toastify';
 import { putLevel } from '../../api/educationLevel.js';
-import 'react-datepicker/dist/react-datepicker.css';
+import { createLevel } from '../../api/levelStaffApi';
+import { parseDateEdit } from '../../utils/formatDate.js';
+import './datePicker.css';
+import styles from './style.module.css';
 function CreateLevel({
   modalShow,
   onHide,
@@ -129,6 +127,26 @@ function CreateLevel({
       ob[value[index]?.rank] = value[index]?.quantity;
     }
     return ob;
+  };
+
+  // catch if user trying to enter e character
+  const handleKeyDown = event => {
+    if (event.key === 'e' || event.key === 'E') {
+      event.preventDefault();
+    }
+  };
+  const handleInput = event => {
+    event.target.value = event.target.value.replace(/e/gi, '');
+  };
+
+  // cancel if user try to input float number
+  const keydowFloat = event => {
+    if (event.key === '.' || event.key === ',') {
+      event.preventDefault();
+    }
+  };
+  const inputFloat = event => {
+    event.target.value = event.target.value.replace(/[^0-9]/g, '');
   };
 
   // Base on the roundData filter round with final or unfinal round
@@ -271,7 +289,7 @@ function CreateLevel({
         round2EndTime: objRound.finalRound[0]?.endTime.split('T')[0],
 
         // award
-        passRound1: objRound.unFinalRound[0]?.award[0].quantity,
+        passRound1: objRound.unFinalRound[0]?.award[0]?.quantity,
         rank1: rankFinal['Giải Nhất'],
         rank2: rankFinal['Giải Nhì'],
         rank3: rankFinal['Giải Ba'],
@@ -333,6 +351,10 @@ function CreateLevel({
                     name="minAge"
                     value={formData.minAge}
                     onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    onInput={handleInput}
+                    min="3"
+                    max="99"
                   />
                 </div>
                 <div className={styles.small_age}>
@@ -344,17 +366,23 @@ function CreateLevel({
                     name="maxAge"
                     value={formData.maxAge}
                     onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    onInput={handleInput}
+                    min="3"
+                    max="99"
                   />
                 </div>
               </div>
             </div>
-            {/* Round */} 
+
+            {/* Round */}
             <div className={styles.card_screen}>
               <h3 className={styles.title_zone}>Vòng thi</h3>
               <div style={{ marginLeft: '20px' }}>
-                <div className={styles.roundBlock}> 
+                <div className={styles.roundBlock}>
                   <h5>Vòng sơ khảo:</h5>
-                </div> 
+                </div>
+
                 <div style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
@@ -411,7 +439,10 @@ function CreateLevel({
                 {errors.round1 && (
                   <p className={styles.error}>{errors.round1}</p>
                 )}
-                <div style={{ marginTop: '20px' }} className={styles.roundBlock}>
+
+                <div
+                  style={{ marginTop: '20px' }}
+                  className={styles.roundBlock}>
                   <h5>Vòng chung kết:</h5>
                 </div>
                 <div style={{ marginLeft: '20px' }} className="row">
@@ -471,7 +502,9 @@ function CreateLevel({
                 )}
               </div>
             </div>
-            {/* Award */} 
+
+            {/* Award */}
+
             <div className={styles.card_screen}>
               <h3 className={styles.title_zone}>Cơ cấu giải thưởng</h3>
               <div className={styles.first_round}>
@@ -488,6 +521,8 @@ function CreateLevel({
                   readOnly={type === 'edit'}
                   value={formData.passRound1}
                   onChange={handleInputChange}
+                  onInput={inputFloat}
+                  onKeyDown={keydowFloat}
                 />
               </div>
               <h4 className={styles.title}>Số lượng giải</h4>
@@ -506,6 +541,8 @@ function CreateLevel({
                     readOnly={type === 'edit'}
                     value={formData.rank1}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>
@@ -523,6 +560,8 @@ function CreateLevel({
                     value={formData.rank3}
                     readOnly={type === 'edit'}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>
@@ -542,6 +581,8 @@ function CreateLevel({
                     value={formData.rank2}
                     readOnly={type === 'edit'}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>
@@ -559,6 +600,8 @@ function CreateLevel({
                     value={formData.rank4}
                     readOnly={type === 'edit'}
                     onChange={handleInputChange}
+                    onInput={inputFloat}
+                    onKeyDown={keydowFloat}
                   />
                   <p>giải</p>
                 </div>

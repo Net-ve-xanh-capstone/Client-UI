@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { getAll } from '../../api/examinerStaffApi';
 import ViewExaminer from '../../components/ViewExaminer';
 import styles from './style.module.css';
+import AddExaminer from '../../components/modalAddingExaminer/page.jsx';
 
 function ExaminerManagement() {
   const [modalShow, setModalShow] = useState(false);
@@ -19,12 +20,15 @@ function ExaminerManagement() {
   const { userInfo } = useSelector(state => state.auth);
   const [isActive, setIsActive] = useState(true);
 
+  const [showAdd, setShowAdd] = useState(false);
+
   useEffect(() => {
     getExaminer();
   }, []);
 
   const resetData = () => {
     setModalShow(false);
+    setShowAdd(false);
     getExaminer();
   };
 
@@ -141,8 +145,13 @@ function ExaminerManagement() {
       },
     });
 
+  const handleOpenCreate = () => {
+    setShowAdd(true);
+  };
+
   return (
     <div>
+      <AddExaminer modalShow={showAdd} onHide={resetData} />
       <ViewExaminer
         modalShow={modalShow}
         onHide={resetData}
@@ -161,6 +170,11 @@ function ExaminerManagement() {
           <div className={styles.headerContainer}>
             <div>
               <h2 className={styles.titleHeader}>Quản lí giám khảo</h2>
+            </div>
+            <div className={styles.buttonContainer}>
+              <button className={styles.btnCreate} onClick={handleOpenCreate}>
+                <span>Thêm giám khảo</span>
+              </button>
             </div>
           </div>
           <StyledEngineProvider injectFirst>

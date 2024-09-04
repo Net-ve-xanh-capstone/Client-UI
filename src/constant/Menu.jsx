@@ -9,7 +9,7 @@ const menus = [
       {
         id: 1,
         sub: 'Trang chủ',
-        links: '/Client-UI/',
+        links: '/',
         public: true,
       },
     ],
@@ -22,7 +22,7 @@ const menus = [
       {
         id: 1,
         sub: 'Câu hỏi thường gặp',
-        links: '/Client-UI/faq',
+        links: '/faq',
         public: true,
       },
     ],
@@ -35,15 +35,9 @@ const menus = [
       {
         id: 1,
         sub: 'Bài đọc',
-        links: '/Client-UI/blog',
+        links: '/blog',
         public: true,
       },
-      // {
-      //   id: 2,
-      //   sub: 'Chi tiết bài đọc',
-      //   links: '/Client-UI/blog-details',
-      //   public: true,
-      // },
     ],
   },
   {
@@ -54,7 +48,7 @@ const menus = [
       {
         id: 1,
         sub: 'Chỉnh sửa thông tin',
-        links: '/Client-UI/edit-profile',
+        links: '/edit-profile',
         public: false,
         role: [
           Role.COMPETITOR,
@@ -67,20 +61,27 @@ const menus = [
       {
         id: 2,
         sub: 'Bộ sưu tập',
-        links: '/Client-UI/collection',
+        links: '/collection',
         public: true,
+      },
+      {
+        id: 3,
+        sub: 'Chấm thi',
+        links: '/mark-examiner',
+        public: false,
+        role: [Role.EXAMINER],
       },
     ],
   },
   {
     id: 5,
     name: 'Liên hệ',
-    links: '/Client-UI/contact',
+    links: '/contact',
     namesub: [
       {
         id: 1,
         sub: 'Liên hệ',
-        links: '/Client-UI/contact',
+        links: '/contact',
         public: true,
       },
     ],

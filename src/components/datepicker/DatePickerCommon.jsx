@@ -3,8 +3,20 @@ import React from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { Controller } from 'react-hook-form';
 import { Fallback } from '../../constant/Fallback';
-const DatepickerCommon = (props) => {
-  const { control, error = '', disablePast = true, disableFuture = true, defaultValue, name, className, ...rest } = props;
+import dayjs from 'dayjs';
+const DatepickerCommon = props => {
+  const {
+    control,
+    error = '',
+    disablePast = true,
+    disableFuture = true,
+    defaultValue,
+    name,
+    className,
+    ...rest
+  } = props;
+
+  const minDate = dayjs('2001-01-01T00:00:00.000');
   return (
     <div>
       {error ? <span className="text-danger h5">{error}</span> : null}
@@ -12,30 +24,32 @@ const DatepickerCommon = (props) => {
         control={control}
         name={name}
         defaultValue={defaultValue}
-        rules={{ required: true }}
+        onChange={e => e.preventDefault()}
         render={({ field: { onChange, value } }) => {
           return (
             <DatePicker
               disableFuture={disableFuture}
-              slotProps={{ textField: { variant: 'standard', 
-                }}}
-              sx={{ width: '100%',
+              minDate={minDate}
+              onChange={(value, event) => {
+                onChange(value);
+              }}
+              slotProps={{ textField: { variant: 'standard' } }}
+              sx={{
+                width: '80%',
                 '& .css-1eed5fa-MuiInputBase-root-MuiInput-root::before': {
                   content: 'none',
                 },
               }}
-              onChange={onChange}
-              onAccept={onChange}
+              onKeyDown={e => e.preventDefault()}
               value={value}
               {...rest}
             />
           );
-        }}
-      ></Controller>
+        }}></Controller>
     </div>
   );
 };
 
 export default withErrorBoundary(DatepickerCommon, {
-  FallbackComponent: Fallback
+  FallbackComponent: Fallback,
 });

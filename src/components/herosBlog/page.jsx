@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './hero.module.css';
 import herosImage from '../../assets/images/blog/herosBlog.png';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 function HerosBlog({ activeMoving }) {
   const subtitle = 'Các bài viết hữu ích';
@@ -30,28 +29,28 @@ function HerosBlog({ activeMoving }) {
           </div>
         </div>
       </div>
-      <div className={styles.tagheros}>
-        <h2 className="tf-title pb-20">Hash Tag</h2>
-        <div className={styles.hashtag}>
-          <div className={styles.tag_list}>
-            <div className={styles.hashtag_card}>
-              <h6>Hello</h6>
-            </div>
-            <div className={styles.hashtag_card}>
-              <h6>Hello</h6>
-            </div>
-            <div className={styles.hashtag_card}>
-              <h6>Hello</h6>
-            </div>
-            <div className={styles.hashtag_card}>
-              <h6>Hello</h6>
-            </div>
-          </div>
-          <div className={styles.icon}>
-            <KeyboardArrowDownIcon sx={{ fontSize: '5rem', color: '#5142fc' }} />
-          </div>
-        </div>
-      </div>
+      {/*<div className={styles.tagheros}>*/}
+      {/*  <h2 className="tf-title pb-20">Hash Tag</h2>*/}
+      {/*  <div className={styles.hashtag}>*/}
+      {/*    <div className={styles.tag_list}>*/}
+      {/*      <div className={styles.hashtag_card}>*/}
+      {/*        <h6>Hello</h6>*/}
+      {/*      </div>*/}
+      {/*      <div className={styles.hashtag_card}>*/}
+      {/*        <h6>Hello</h6>*/}
+      {/*      </div>*/}
+      {/*      <div className={styles.hashtag_card}>*/}
+      {/*        <h6>Hello</h6>*/}
+      {/*      </div>*/}
+      {/*      <div className={styles.hashtag_card}>*/}
+      {/*        <h6>Hello</h6>*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*    <div className={styles.icon}>*/}
+      {/*      <KeyboardArrowDownIcon sx={{ fontSize: '5rem', color: '#5142fc' }} />*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
     </div>
   );
 }

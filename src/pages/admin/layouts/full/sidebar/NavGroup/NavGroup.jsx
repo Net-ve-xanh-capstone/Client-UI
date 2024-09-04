@@ -8,7 +8,7 @@ const NavGroup = ({ item }) => {
   ))(({ theme }) => ({
     ...theme.typography.overline,
     fontWeight: '700',
-    fontSize: '1rem',
+    fontSize: '16px',
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(0),
     color: theme.palette.text.primary,

@@ -26,18 +26,42 @@
 }
 
 .roundTableResponse .col:nth-child(1) {
-    flex-basis: 30%;
+    flex-basis: 33.3%;
 }
 
 .roundTableResponse .col:nth-child(2) {
-    flex-basis: 55%;
+    flex-basis: 33.3%;
+    position: relative;
 }
 
 .roundTableResponse .col:nth-child(3) {
-    flex-basis: 15%;
+    flex-basis: 33.3%;
     text-align: center;
 }
 
+
+.roundTableResponse .col:nth-child(2):hover>.tooltip {
+    display: block;
+
+}
+
+.tooltip {
+    height: auto;
+    width: 40rem;
+    font-size: 10px;
+    display: none;
+    position: absolute;
+    bottom: 60%;
+    right: 0;
+    transform: translate(0, -1rem);
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+    word-break: break-word;
+
+    background-color: #ffffff;
+    border-radius: 0.625rem;
+    padding: 2rem;
+    animation: fadeIn 0.8s ease 0s 1 normal forwards;
+}
 
 .roundTableResponse .col button:hover {
     border: none;
@@ -77,5 +101,15 @@
         content: attr(data-label);
         flex-basis: 50%;
         text-align: right;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0.2;
+    }
+
+    100% {
+        opacity: 1;
     }
 }

@@ -6,5 +6,9 @@ export const authenApi = {
   },
   competitorRegister: async (endpoint, data, config) => {
     return await axiosApi.post(endpoint, data, config);
-  }
+  },
+};
+
+export const addNewStaff = payload => {
+  return axiosApi.post('authentications/register', payload);
 };

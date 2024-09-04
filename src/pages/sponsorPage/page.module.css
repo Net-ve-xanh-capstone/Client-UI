@@ -155,3 +155,39 @@
 .btnAction button:focus {
     border: none;
 }
+
+.extendMore {
+    position: relative;
+}
+
+.extendMore:hover>.tooltip {
+    display: block;
+}
+
+.tooltip {
+    height: auto;
+    width: 40rem;
+    font-size: 10px;
+    display: none;
+    position: absolute;
+    bottom: 60%;
+    right: 0;
+    transform: translate(0, -1rem);
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+    word-break: break-word;
+
+    background-color: #ffffff;
+    border-radius: 0.625rem;
+    padding: 2rem;
+    animation: fadeIn 0.8s ease 0s 1 normal forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0.2;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

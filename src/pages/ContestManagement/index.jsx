@@ -3,7 +3,6 @@ import {
   StyledEngineProvider,
   ThemeProvider,
 } from '@mui/material/styles';
-import Switch from '@mui/material/Switch';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,24 +15,24 @@ import ContestDetail from '../../components/ContestDetail';
 import DeleteModal from '../../components/DeleteModal';
 import ModalForm from '../../components/ModalForm';
 import { formatDate } from '../../utils/formatDate';
-import AddIcon from '@mui/icons-material/Add';
 import styles from './style.module.css';
 import { TablePagination } from '@mui/material';
 
-const CustomFooter = ({ addEmptyRow, count, page, rowsPerPage, handlePageChange, handleRowsPerPageChange }) => {
+const CustomFooter = ({
+                        count,
+                        page,
+                        rowsPerPage,
+                        handlePageChange,
+                        handleRowsPerPageChange,
+                      }) => {
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      flexDirection: 'column',
-    }}>
-      <div className={`flex justify-content-center ${styles.row}`}>
-        <AddIcon
-          className={styles.btnAdd}
-          onClick={() => addEmptyRow()}
-        />
-      </div>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}>
       <TablePagination
         sx={{ width: '100%' }}
         rowsPerPage={rowsPerPage}
@@ -83,12 +82,12 @@ function ContestManagement() {
   useEffect(() => {
     setContestPaging(getPaginatedData());
   }, [page, rowsPerPage, contest]);
-  
+
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
 
-  const handleRowsPerPageChange = (event) => {
+  const handleRowsPerPageChange = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -126,7 +125,7 @@ function ContestManagement() {
   };
 
   const handleActiveDate = data => {
-    if(data.rowData.every(item => item === undefined)) return false;
+    if (data.rowData.every(item => item === undefined)) return false;
     let currentDate = new Date().toJSON().slice(0, 10);
     const startDate = data.rowData[1].split('T')[0];
     const endDate = data.rowData[2].split('T')[0];
@@ -137,26 +136,24 @@ function ContestManagement() {
   };
 
   const handleActiveDelete = data => {
-    if(data.rowData.every(item => item === undefined)) return false;
-    let currentDate = new Date().toJSON().slice(0, 10);
-    const startDate = data.rowData[1].split('T')[0];
-
-    if (currentDate < startDate) return false;
-
-    return true;
+    return (
+      data?.rowData[4].toLowerCase().includes('Hoàn thành'.toLowerCase()) ||
+      data?.rowData[4].toLowerCase().includes('Đang tiến hành'.toLowerCase()) ||
+      data?.rowData[4].toLowerCase().includes('Đã xóa'.toLowerCase())
+    );
   };
-  
-  const addEmptyRow = () => {
-    const emptyRow = {
-      id: '',
-      name: '',
-      startTime: '',
-      endTime: '',
-      accountFullName: '',
-      status: '',
-    };
-    setContest([emptyRow, ...contest]);
-  };
+
+  // const addEmptyRow = () => {
+  //   const emptyRow = {
+  //     id: '',
+  //     name: '',
+  //     startTime: '',
+  //     endTime: '',
+  //     accountFullName: '',
+  //     status: '',
+  //   };
+  //   setContest([emptyRow, ...contest]);
+  // };
 
   const columns = [
     {
@@ -165,7 +162,9 @@ function ContestManagement() {
       options: {
         customBodyRender: value => (
           <span>
-            {value && value.length > 50 ? value.substring(0, 50) + '...' : value}
+            {value && value.length > 50
+              ? value.substring(0, 50) + '...'
+              : value}
           </span>
         ),
       },
@@ -189,22 +188,10 @@ function ContestManagement() {
       label: 'TÊN STAFF',
     },
     {
-      name: 'TRẠNG THÁI',
+      name: 'status',
+      label: 'TRẠNG THÁI',
       options: {
-        customBodyRender: (value, tableData) => {
-          const isActive = tableData && handleActiveDate(tableData);
-
-          return (
-            <>
-              <Switch
-                checked={isActive}
-                size="small"
-                color="success"
-                disabled
-              />
-            </>
-          );
-        },
+        customBodyRender: value => <span>{value}</span>,
       },
     },
     {
@@ -212,17 +199,10 @@ function ContestManagement() {
       label: 'TƯƠNG TÁC',
       options: {
         customBodyRender: (value, tableData) => (
-          <div className={styles.btnAction}>
+          <span className={styles.btnAction}>
             <span style={{ display: 'none' }} name="id">
               {value}
             </span>
-            <IconButton
-              aria-label="delete"
-              size="small"
-              color="info"
-              onClick={() => handleOpenDetail(value)}>
-              <RemoveRedEyeIcon />
-            </IconButton>
             {userInfo.role === 'Staff' && (
               <IconButton
                 aria-label="delete"
@@ -236,7 +216,14 @@ function ContestManagement() {
                 <DeleteIcon />
               </IconButton>
             )}
-          </div>
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="info"
+              onClick={() => handleOpenDetail(value)}>
+              <RemoveRedEyeIcon />
+            </IconButton>
+          </span>
         ),
       },
     },
@@ -269,7 +256,6 @@ function ContestManagement() {
         page={page}
         rowsPerPage={rowsPerPage}
         handlePageChange={handlePageChange}
-        addEmptyRow={addEmptyRow}
         handleRowsPerPageChange={handleRowsPerPageChange}
         count={contest.length}
       />
@@ -280,7 +266,6 @@ function ContestManagement() {
       );
       handleOpenDetail(obj?.props?.children);
     },
-    
   };
 
   const getMuiTheme = () =>
@@ -314,7 +299,7 @@ function ContestManagement() {
 
   const handleBack = () => {
     setIsOpenDetail(false);
-    getContest(); 
+    getContest();
   };
 
   const handlePostDone = () => {
@@ -355,14 +340,13 @@ function ContestManagement() {
             </div>
             <StyledEngineProvider injectFirst>
               <ThemeProvider theme={getMuiTheme()}>
-                <div className="table-contest table-contest-detail">
+                <span className="table-contest table-contest-detail">
                   <MUIDataTable
-                    //title={'Quản lí cuộc thi'}
                     data={contestPaging}
                     columns={columns}
                     options={options}
                   />
-                </div>
+                </span>
               </ThemeProvider>
             </StyledEngineProvider>
           </div>

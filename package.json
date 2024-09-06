@@ -12,7 +12,8 @@
     "lint": "eslint --fix --ext js,jsx src/",
     "build": "npm run generate-html && vite build",
     "generate-html": "mkdir -p dist && cp index.html dist/",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "debug": "react-scripts --inspect start"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

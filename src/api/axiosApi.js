@@ -2,7 +2,7 @@ import axios from 'axios';
 import { store } from '../store/configureStore.js';
 import { handleLogout, parseJwt } from '../utils/parseToken.js';
 
-const baseUrl = 'http://localhost:5001/api/';
+const baseUrl = 'https://netvexanh.azurewebsites.net/api/';
 
 const getToken = () => {
   const state = store.getState();

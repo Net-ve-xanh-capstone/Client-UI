@@ -454,7 +454,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
     setLoadingUser(true);
     try {
       const res = await axios.get(
-        `https://localhost:5001/finalround/${id}`,
+        `https://netvexanh.azurewebsites.net/finalround/${id}`,
       );
       setCodeStudent(
         res.result.length

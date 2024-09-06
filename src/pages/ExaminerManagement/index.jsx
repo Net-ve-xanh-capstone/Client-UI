@@ -181,7 +181,6 @@ function ExaminerManagement() {
             <ThemeProvider theme={getMuiTheme()}>
               <div className="table-contest table-examiner">
                 <MUIDataTable
-                  //title={'Quản lí chủ đề'}
                   data={examiner}
                   columns={columns}
                   options={options}

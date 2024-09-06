@@ -218,7 +218,7 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
-      title: 'Thống kê',
+      title: 'Thí Sinh',
       component: (
         <CompetitorFragment
           resourceFrag={contestDes}

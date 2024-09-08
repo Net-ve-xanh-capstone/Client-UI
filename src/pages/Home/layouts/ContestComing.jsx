@@ -66,7 +66,7 @@ const ContestComing = () => {
             <div className="col-md-12">
               <div className="heading-live-auctions">
                 <h2 className="tf-title pb-20">Các cuộc thi khác</h2>
-                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                <FormControl sx={{ m: 1, minWidth: 150 }} size="medium">
                   <InputLabel id="demo-simple-select-label">
                     Trạng thái
                   </InputLabel>

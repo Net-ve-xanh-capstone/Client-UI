@@ -1,168 +1,178 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import IconButton from '@mui/material/IconButton';
 import React, { useEffect, useState } from 'react';
-import { DotLoader } from 'react-spinners';
-import { color } from '../../constant/Color.js';
-import { toast } from 'react-toastify';
-import { getById } from '../../api/contestStaffApi.js';
-import { deleteResource } from '../../api/resourceStaffApi.js';
-import { checkEditButton } from '../../utils/checkEditButton';
-import DeleteModal from '../DeleteModal';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material/styles';
+import MUIDataTable from 'mui-datatables';
+import { getConmpetitors, getRounds } from '../../api/competitorApi.js';
 import ResourceForm from '../ResourceForm';
 import styles from './style.module.css';
 
-function CompetitorFragment({ resourceFrag, getContestDetail, statusOfRound }) {
-  const [resource, setResource] = useState();
+function CompetitorFragment({ resourceFrag, statusOfRound }) {
+  const [resource, setResource] = useState([]);
   const [modalShow, setModalShow] = useState(false);
-  const [type, setType] = useState();
-  const [deleteModalShow, setDeleteModalShow] = useState(false);
-  const [idResourceDelete, setIdResourceDelete] = useState();
-  const isEditing = checkEditButton(resourceFrag.startTime);
-  const resetDetail = () => {
-    setModalShow(false);
-    getResource();
-  };
-
-  const isActive = !statusOfRound
-    .toLowerCase()
-    .includes('Chưa bắt đầu'.toLowerCase());
+  const [selectedRound, setSelectedRound] = useState('');
+  const [rounds, setRounds] = useState([]);
 
   useEffect(() => {
-    getResource();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resourceFrag]);
+    fetchRounds();
+  }, []);
 
-  const getResource = async () => {
+  useEffect(() => {
+    if (selectedRound) {
+      getResource(selectedRound);
+    } else {
+      // Load all competitors if no round is selected
+      getResource();
+    }
+  }, [selectedRound]);
+
+  const fetchRounds = async () => {
     try {
-      const { data } = await getById(resourceFrag.id);
-      setResource(data?.result);
+      const { data } = await getRounds(resourceFrag.id);
+      const flattenedRounds = data?.result?.educationalLevel.flatMap(level =>
+        level.round.map(round => ({
+          id: round.id,
+          name: `${level.description} - ${round.name}`,
+        })),
+      );
+      setRounds(flattenedRounds);
     } catch (e) {
-      console.log('err', e);
+      console.error('Error fetching rounds:', e);
     }
   };
 
-  const handleOpenCreate = () => {
-    setModalShow(true);
-    setType('create');
-  };
-
-  const handleOpenEdit = data => {
-    setType(data);
-    setModalShow(true);
-  };
-
-  const hanldeOpenDelete = id => {
-    setIdResourceDelete(id);
-    setDeleteModalShow(true);
-  };
-
-  const handleDelete = async () => {
+  const getResource = async (roundId = '') => {
     try {
-      const { data } = await deleteResource(idResourceDelete);
-      if (data?.result) {
-        toast.success('Xóa nhà tài trợ thành công', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-        getContestDetail();
-      }
+      const { data } = await getConmpetitors(roundId);
+      setResource(data?.result || []);
     } catch (e) {
-      console.log('err', e);
+      console.error('Error fetching competitors:', e);
     }
   };
+
+  const handleRoundChange = event => {
+    setSelectedRound(event.target.value);
+  };
+
+  // Columns for the table remain unchanged
+  const columns = [
+    { name: 'code', label: 'Mã Thí Sinh' },
+    { name: 'fullName', label: 'Họ và tên' },
+    { name: 'age', label: 'Tuổi' },
+    { name: 'gender', label: 'Giới tính' },
+    { name: 'status', label: 'Tình trạng' },
+    {
+      name: 'prize',
+      label: 'Giải Thưởng',
+      options: {
+        customBodyRender: value => (value ? value : 'Chưa có'),
+      },
+    },
+    {
+      name: 'round',
+      label: 'Vòng thi',
+      options: {
+        customBodyRender: (value, tableMeta) => (
+          <span>{value ? value.name : 'Không có vòng thi'}</span>
+        ),
+      },
+    },
+  ];
+
+  const options = {
+    selectableRows: 'none',
+    elevation: 5,
+    rowsPerPage: 4,
+    rowsPerPageOptions: [4, 10, 20, 30],
+    print: false,
+    download: false,
+    filter: false,
+    responsive: 'standard',
+    textLabels: {
+      body: {
+        noMatch: 'Không có dữ liệu',
+      },
+      pagination: {
+        rowsPerPage: 'Số hàng mỗi trang:',
+        displayRows: 'của',
+      },
+      toolbar: {
+        search: 'Tìm kiếm',
+        viewColumns: 'Xem cột',
+      },
+    },
+  };
+
+  const getMuiTheme = () =>
+    createTheme({
+      typography: {
+        fontSize: 20,
+      },
+      palette: {
+        background: {
+          default: '#0f172a',
+        },
+        mode: 'light',
+      },
+      components: {
+        MuiTableCell: {
+          styleOverrides: {
+            head: {
+              padding: '10px 10px',
+              fontWeight: 'bold',
+              borderBottom: '1px solid black',
+            },
+            body: {
+              color: '#000',
+              fontWeight: 'bold',
+              borderBottom: '1px solid black',
+            },
+          },
+        },
+      },
+    });
+
   return (
     <>
       <ResourceForm
         modalShow={modalShow}
-        onHide={resetDetail}
+        onHide={() => setModalShow(false)}
         resourceData={resourceFrag}
-        type={type}
       />
-      <DeleteModal
-        show={deleteModalShow}
-        setShow={setDeleteModalShow}
-        title={'tài trợ'}
-        callBack={handleDelete}
-      />
-      <div className={styles.roundContainer}>
-        <ul className={styles.roundTableResponse}>
-          <li className={styles.roundHeader}>
-            <div className={styles.col}>No.</div>
-            <div className={styles.col}>Tài trợ</div>
-            <div className={styles.col}>Đơn vị tài trợ</div>
-            <div className={styles.col}>Tương tác</div>
-          </li>
-          {resource?.resource.length === 0 ? (
-            <div className="text-center">
-              <h4>Chưa có thí sinh nào</h4>
-            </div>
-          ) : (
-            resource?.resource.map((data, index) => (
-              <li key={data.id} className={styles.tableRow}>
-                <div className={styles.col} data-label="No.">
-                  {index + 1}
-                </div>
-                <div className={styles.col} data-label="Tài trợ">
-                  {data.sponsorship}
-                </div>
-                <div
-                  className={styles.col}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                  data-label="Đơn vị tài trợ">
-                  <div>{data.sponsor.name}</div>
-                </div>
-                <div className={styles.col}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                    }}>
-                    <IconButton
-                      aria-label="delete"
-                      size="large"
-                      color="error"
-                      onClick={() => hanldeOpenDelete(data.id)}
-                      // disabled={isEditing}
-                      disabled={isActive}>
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      size="large"
-                      color="info"
-                      onClick={() => handleOpenEdit(data)}
-                      // disabled={isEditing}
-                      disabled={isActive}>
-                      <EditIcon />
-                    </IconButton>
-                  </div>
-                </div>
-              </li>
-            ))
-          )}
-        </ul>
+
+      {/* Dropdown Filter for Rounds */}
+      <div className={styles.filterContainer}>
+        <FormControl fullWidth>
+          <InputLabel id="round-filter-label">Lọc theo vòng thi</InputLabel>
+          <Select
+            labelId="round-filter-label"
+            id="round-filter"
+            value={selectedRound}
+            label="Lọc theo vòng thi"
+            onChange={handleRoundChange}>
+            <MenuItem value="">
+              <em>Tất cả các vòng</em>
+            </MenuItem>
+            {rounds.map(round => (
+              <MenuItem key={round.id} value={round.id}>
+                {round.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </div>
 
-      <div className="flex justify-content-end mt-20">
-        <button
-          className="btn btn-outline-primary btn-lg"
-          onClick={handleOpenCreate}
-          // disabled={isEditing}
-          disabled={isActive}>
-          Thêm
-        </button>
-      </div>
+      {/* Competitor Table */}
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={getMuiTheme()}>
+          <div className="table-contest table-examiner">
+            <MUIDataTable data={resource} columns={columns} options={options} />
+          </div>
+        </ThemeProvider>
+      </StyledEngineProvider>
     </>
   );
 }

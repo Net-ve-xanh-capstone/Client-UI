@@ -16,14 +16,19 @@ export const paintingStatusEnable = ['Bản nháp', 'New'];
 export const paintingStatusActive = 'Đang tiến hành';
 
 export const accountStatusMap = {
-  'Active': 'Hoạt Động',
-  'Inactive': 'Không hoạt động',
+  Active: 'Hoạt Động',
+  Inactive: 'Không hoạt động',
 };
 
-
 export const roleMap = {
-  'Admin': 'Quản trị viên',
-  'Competitor': 'Thí sinh',
-  'Examiner': 'Giám khảo',
-  'Staff': 'Nhân viên',
+  Admin: 'Quản trị viên',
+  Competitor: 'Thí sinh',
+  Examiner: 'Giám khảo',
+  Staff: 'Nhân viên',
+};
+
+export const EContestStatus = {
+  NOT_STARTED: 'NotStarted ',
+  IN_PROCESS: 'InProcess',
+  COMPLETED: 'Complete',
 };

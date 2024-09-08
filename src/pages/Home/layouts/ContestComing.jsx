@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
@@ -10,21 +10,46 @@ import 'swiper/scss/pagination';
 import { Fallback } from '../../../constant/Fallback';
 import { withErrorBoundary } from 'react-error-boundary';
 import LoadingSkeleton from '../../../components/loading/LoadingSkeleton.jsx';
-import useFetchData from '../../../hooks/useQueryData.js';
 import { formatDate } from '../../../utils/formatDate.js';
 import { color } from '../../../constant/Color.js';
 import { userAvatar } from '../../../constant/imageDefault.js';
 import PropTypes from 'prop-types';
-import { paintingStatusActive } from '../../../constant/Status.js';
+import {
+  EContestStatus,
+  paintingStatusActive,
+} from '../../../constant/Status.js';
+import { useQuery } from '@tanstack/react-query';
+import { contestApi } from '../../../api/contestApi.js';
+import { Dropdown } from '../../../components/dropdown';
+import { FormControl } from '@mui/material';
+import { InputLabel } from '@mui/material';
+import { Select } from '@mui/material';
+import { MenuItem } from '@mui/material';
 
 const ContestComing = () => {
-  const { isLoading, isError, data, error } = useFetchData(
-    'contests/getallcontest',
-  );
+  const [status, setStatus] = useState(EContestStatus.NOT_STARTED);
+  const filterStatus = [
+    { name: 'Chưa bắt đầu', value: EContestStatus.NOT_STARTED },
+    { name: 'Đang diễn ra', value: EContestStatus.IN_PROCESS },
+    { name: 'Đã kết thúc', value: EContestStatus.COMPLETED },
+  ];
+  const { isLoading, isError, data, error, refetch } = useQuery({
+    queryKey: ['contestStatus', status],
+    queryFn: async () =>
+      await contestApi.getContestByStatus(
+        'contests/getcontestbystatus',
+        status,
+      ),
+    enabled: !!status,
+  });
   const contests = data?.data?.result.filter(
     item => item.status !== paintingStatusActive,
   );
   const navigate = useNavigate();
+  const handleChangeStatus = e => {
+    setStatus(e.target.value);
+    refetch();
+  };
 
   if (isLoading) {
     return <ContestLoading></ContestLoading>;
@@ -40,7 +65,25 @@ const ContestComing = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="heading-live-auctions">
-                <h2 className="tf-title pb-20">Cuộc Thi Sắp Diễn Ra</h2>
+                <h2 className="tf-title pb-20">Các cuộc thi khác</h2>
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                  <InputLabel id="demo-simple-select-label">
+                    Trạng thái
+                  </InputLabel>
+                  <Select
+                    MenuProps={{ disableScrollLock: true }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={status}
+                    label="stauts"
+                    onChange={handleChangeStatus}>
+                    {filterStatus.map(item => (
+                      <MenuItem key={item.value} value={item.value}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </div>
             </div>
             <div className="col-md-12">
@@ -72,8 +115,7 @@ const ContestComing = () => {
                               <div className="slider-item">
                                 <div className="sc-card-contest">
                                   <div className="card-media">
-                                    <Link
-                                      to={`/contest-detail/${contest?.id}`}>
+                                    <Link to={`/contest-detail/${contest?.id}`}>
                                       <img
                                         className="object-fit-contain"
                                         src={contest?.logo}

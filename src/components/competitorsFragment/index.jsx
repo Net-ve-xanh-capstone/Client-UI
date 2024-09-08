@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
 import { getConmpetitors, getRounds } from '../../api/competitorApi.js';
 import ResourceForm from '../ResourceForm';
@@ -32,7 +36,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
         level.round.map(round => ({
           id: round.id,
           name: `${level.description} - ${round.name}`,
-        }))
+        })),
       );
       setRounds(flattenedRounds);
     } catch (e) {
@@ -49,7 +53,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     }
   };
 
-  const handleRoundChange = (event) => {
+  const handleRoundChange = event => {
     setSelectedRound(event.target.value);
   };
 
@@ -59,7 +63,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     { name: 'fullName', label: 'Họ và tên' },
     { name: 'age', label: 'Tuổi' },
     { name: 'gender', label: 'Giới tính' },
-    {name: 'status',label: 'Tình trạng'},
+    { name: 'status', label: 'Tình trạng' },
     {
       name: 'prize',
       label: 'Giải Thưởng',
@@ -82,6 +86,10 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     selectableRows: 'none',
     elevation: 5,
     rowsPerPage: 4,
+    rowsPerPageOptions: [4, 10, 20, 30],
+    print: false,
+    download: false,
+    filter: false,
     responsive: 'standard',
     textLabels: {
       body: {
@@ -134,7 +142,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
         onHide={() => setModalShow(false)}
         resourceData={resourceFrag}
       />
-      
+
       {/* Dropdown Filter for Rounds */}
       <div className={styles.filterContainer}>
         <FormControl fullWidth>
@@ -144,12 +152,11 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
             id="round-filter"
             value={selectedRound}
             label="Lọc theo vòng thi"
-            onChange={handleRoundChange}
-          >
+            onChange={handleRoundChange}>
             <MenuItem value="">
               <em>Tất cả các vòng</em>
             </MenuItem>
-            {rounds.map((round) => (
+            {rounds.map(round => (
               <MenuItem key={round.id} value={round.id}>
                 {round.name}
               </MenuItem>
@@ -162,11 +169,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={getMuiTheme()}>
           <div className="table-contest table-examiner">
-            <MUIDataTable
-              data={resource}
-              columns={columns}
-              options={options}
-            />
+            <MUIDataTable data={resource} columns={columns} options={options} />
           </div>
         </ThemeProvider>
       </StyledEngineProvider>

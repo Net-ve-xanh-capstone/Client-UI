@@ -75,7 +75,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
       name: 'round',
       label: 'Vòng thi',
       options: {
-        customBodyRender: (value, tableMeta) => (
+        customBodyRender: value => (
           <span>{value ? value.name : 'Không có vòng thi'}</span>
         ),
       },
@@ -168,7 +168,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
       {/* Competitor Table */}
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={getMuiTheme()}>
-          <div className="table-contest table-examiner">
+          <div className="table-contest table-competitors">
             <MUIDataTable data={resource} columns={columns} options={options} />
           </div>
         </ThemeProvider>

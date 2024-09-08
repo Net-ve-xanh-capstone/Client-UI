@@ -4,13 +4,37 @@ import Footer from '../components/common/footer/Footer';
 import { Link } from 'react-router-dom';
 import { TextFieldCommon } from '../components/input/TextfieldCommon';
 import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { forgetPassword } from '../api/authenApi';
+import ShowAlert from '../components/showAller/ShowAlert';
 
 const ForgotPasswordPage = () => {
-  const { control, handleSubmit, errors } = useForm({});
+  const schema = yup.object().shape({
+    userName: yup.string().required('Vui lòng nhập username của bạn'),
+  });
 
-  const handleForgot = data => {
-    console.log(data);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const handleForgot = async data => {
+    const content = 'Thông báo sẽ đóng sau <b></b> giây.';
+    try {
+      const res = await forgetPassword(data);
+      const message = res?.data?.message;
+      ShowAlert(message, content, 3000);
+    } catch (error) {
+      console.log(error);
+      const message = error?.response?.data?.message;
+      ShowAlert(message, content, 3000);
+    }
   };
+
   return (
     <div>
       <HeaderVersion1 />
@@ -45,12 +69,12 @@ const ForgotPasswordPage = () => {
                     className="select-none">
                     <TextFieldCommon
                       control={control}
-                      error={errors?.username?.message}
-                      id="username"
-                      name="username"
+                      error={errors?.userName?.message}
+                      id="userName"
+                      name="userName"
                       tabIndex="1"
                       type="text"
-                      placeholder="Nhập tài khoản của bạn"
+                      placeholder="Nhập tên tài khoản của bạn"
                       autoFocus
                     />
 

@@ -5,9 +5,8 @@ import {
   AccordionSummary,
   IconButton,
 } from '@mui/material';
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import AddingModal from '../addingModal/page.jsx';
-import ListRoundAward from '../listAward/page.jsx';
 import styles from '../listAward/page.module.css';
 import { deleteAward } from '../../../api/awrdApi.js';
 import { toast } from 'react-toastify';

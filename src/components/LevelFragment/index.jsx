@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CreateLevel from '../CreateLevel';
-import { checkEditButton } from '../../utils/checkEditButton';
 import DeleteModal from '../DeleteModal';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { deleteLevel } from '../../api/levelStaffApi';
 import IconButton from '@mui/material/IconButton';

@@ -150,7 +150,7 @@ const Login = () => {
                       placeholder="Mật khẩu"
                     />
                     <div className="row-form style-1 flex-row-reverse">
-                      <Link to="#" className="forgot-pass">
+                      <Link to="/forgot-password" className="forgot-pass">
                         Quên mật khẩu ?
                       </Link>
                     </div>

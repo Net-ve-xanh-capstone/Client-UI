@@ -1,1 +1,0 @@
-import{J as t}from"./index-DGNUADwj.js";const n=()=>t.get("contests/getquantitypaintingforyear"),e=()=>t.get("contests/getawardquantityforyear"),o=()=>t.get("accounts/getallaccount"),r=a=>t.patch("accounts/inactiveaccount",{},{params:{id:a}}),s=a=>t.patch("accounts/activeaccount",{},{params:{id:a}});export{e as a,o as b,s as c,n as g,r as i};

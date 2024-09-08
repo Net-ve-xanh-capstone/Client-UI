@@ -2,7 +2,7 @@ import axios from 'axios';
 import { store } from '../store/configureStore.js';
 import { handleLogout, parseJwt } from '../utils/parseToken.js';
 
-const baseUrl = 'http://localhost:5001/api/';
+const baseUrl = 'https://netvexanh.azurewebsites.net/api/';
 
 const getToken = () => {
   const state = store.getState();
@@ -28,7 +28,7 @@ axiosApi.interceptors.request.use(
       if (decodedToken && decodedToken.exp < currentTime) {
         // Token đã hết hạn, thực hiện logout
         handleLogout();
-        return Promise.reject('Token đã hết hạn');
+        return Promise.reject('Phiên đăng nhập đã hết hạn');
       }
 
       // Nếu token còn hợp lệ, thêm vào headers
@@ -43,12 +43,12 @@ axiosApi.interceptors.request.use(
 
 // Add a response interceptor
 axiosApi.interceptors.response.use(
-  function(response) {
+  function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     return response;
   },
-  function(error) {
+  function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     return Promise.reject(error);

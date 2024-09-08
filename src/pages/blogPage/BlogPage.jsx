@@ -11,12 +11,8 @@ import { BlogProvider } from './provider/blog.provider.jsx';
 import { useBlogProvider } from './provider/index.js';
 
 function Blog() {
-  const {
-    category,
-    totalPage,
-    setPageNumber,
-    filterBlog,
-  } = useBlogProvider();
+  const { category, totalPage, setPageNumber, resetCategories, filterBlog } =
+    useBlogProvider();
   const moveToBox = useRef(null);
   const activeMoving = () => {
     moveToBox.current?.scrollIntoView({
@@ -27,6 +23,7 @@ function Blog() {
   // change value of page when navigating
   const handleChange = (_, value) => {
     setPageNumber(value);
+    resetCategories();
   };
 
   return (

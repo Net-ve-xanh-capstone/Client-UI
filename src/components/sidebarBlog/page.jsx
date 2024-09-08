@@ -1,14 +1,16 @@
 import FlareIcon from '@mui/icons-material/Flare';
 import SearchIcon from '@mui/icons-material/Search';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import styles from './page.module.css';
 import { FormControlLabel, FormGroup } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import { useBlogProvider } from '../../pages/blogPage/provider/index.js';
 
 const SidebarBlog = forwardRef((props, ref) => {
+  const [search, setSearch] = useState('');
   const { category, children } = props;
-  const { handleCheckCategoryName } = useBlogProvider();
+  const { handleCheckCategoryName, handleSearchBlog, checkBox } =
+    useBlogProvider();
   return (
     <div className={styles.section} ref={ref}>
       <div className={styles.left_side}>{children}</div>
@@ -23,24 +25,34 @@ const SidebarBlog = forwardRef((props, ref) => {
             />
             <h3>Tìm bài viết</h3>
           </div>
-          <div className={styles.side_choose}>
-            <input type="text" />
+          <form className={styles.side_choose}>
+            <input
+              type="text"
+              onChange={event => setSearch(event.target.value)}
+            />
             <SearchIcon
               sx={{
                 fontSize: '3rem',
                 color: '#5142fc',
               }}
+              onClick={() => handleSearchBlog(search)}
             />
-          </div>
+          </form>
           <FormGroup>
             {category.map((category, idx) => (
               <FormControlLabel
-                control={<Checkbox />}
+                control={
+                  <Checkbox
+                    checked={checkBox.includes(category)}
+                    onChange={event =>
+                      handleCheckCategoryName(event.target.value)
+                    }
+                  />
+                }
                 key={idx}
                 value={category}
                 label={category}
                 aria-label={category}
-                onChange={(event) => handleCheckCategoryName(event.target.value)}
               />
             ))}
           </FormGroup>

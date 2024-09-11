@@ -90,9 +90,13 @@ function ModalForm({ modalShow, onHide }) {
     name: 'round',
   });
 
+  console.log('roundFields', roundFields);
+
   const handleAddEducationalLevel = () => {
     // Tạo tên bảng mới dựa trên số lượng bảng hiện tại
-    const nextLevelName = `Bảng ${String.fromCharCode(65 + levelFields.length)}`; // 'A' = 65 trong mã ASCII
+    const nextLevelName = `Bảng ${String.fromCharCode(
+      65 + levelFields.length,
+    )}`; // 'A' = 65 trong mã ASCII
 
     const levelObj = {
       level: nextLevelName,
@@ -103,7 +107,7 @@ function ModalForm({ modalShow, onHide }) {
     appendLevel(levelObj); // Thêm level mới vào field array
   };
 
-  const handleRemoveEducationalLevelItem = (index) => {
+  const handleRemoveEducationalLevelItem = index => {
     // Xóa mục
     removeLevel(index);
     // Sắp xếp lại tên bảng
@@ -127,7 +131,7 @@ function ModalForm({ modalShow, onHide }) {
     appendRound(roundObj);
   };
 
-  const handleRemoveRoundItem = (index) => {
+  const handleRemoveRoundItem = index => {
     removeRound(index);
     const updatedFields = getValues('round');
     const updatedFieldsWithNewNames = updatedFields?.map((field, idx) => ({
@@ -251,11 +255,13 @@ function ModalForm({ modalShow, onHide }) {
   // catch if user trying to enter e character
   const handleKeyDown = event => {
     //Chặn nhập bé hơn 3 và lớn hơn 99
-    if (event.key === 'e'
-      || event.key === '-'
-      || event.key === '+'
-      || event.key === 'E'
-      || event.key === '.') {
+    if (
+      event.key === 'e' ||
+      event.key === '-' ||
+      event.key === '+' ||
+      event.key === 'E' ||
+      event.key === '.'
+    ) {
       event.preventDefault();
     }
   };
@@ -284,7 +290,9 @@ function ModalForm({ modalShow, onHide }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ height: '80vh', overflow: 'hidden' }}>
-          <form onSubmit={handleSubmit(handleSubmitForm)} className={styles.modalForm}>
+          <form
+            onSubmit={handleSubmit(handleSubmitForm)}
+            className={styles.modalForm}>
             {/* thong tin cuoc thi */}
             <div className={styles.first_zone}>
               <h3 className={styles.title_zone}>Thông tin cuộc thi</h3>
@@ -298,7 +306,9 @@ function ModalForm({ modalShow, onHide }) {
                 })}
               />
               {/*message tên cuộc thi*/}
-              {errors?.name && <p className={styles.error}>{errors.name?.message}</p>}
+              {errors?.name && (
+                <p className={styles.error}>{errors.name?.message}</p>
+              )}
               <div className={styles.outside}>
                 <div className={`row ${styles.data_time}`}>
                   <div className={styles.div_data}>
@@ -315,7 +325,11 @@ function ModalForm({ modalShow, onHide }) {
                     />
                     {/*message thời gian bắt đầu*/}
                     {errors?.startTime && (
-                      <p style={{ display: 'inline-block' }} className={styles.error}>{errors.startTime?.message}</p>
+                      <p
+                        style={{ display: 'inline-block' }}
+                        className={styles.error}>
+                        {errors.startTime?.message}
+                      </p>
                     )}
                   </div>
                   <div className={styles.div_data}>
@@ -331,18 +345,22 @@ function ModalForm({ modalShow, onHide }) {
                       min={
                         competitionStartTime
                           ? new Date(
-                            new Date(competitionStartTime).setDate(
-                              new Date(competitionStartTime).getDate() + 1,
-                            ),
-                          )
-                            .toISOString()
-                            .split('T')[0]
+                              new Date(competitionStartTime).setDate(
+                                new Date(competitionStartTime).getDate() + 1,
+                              ),
+                            )
+                              .toISOString()
+                              .split('T')[0]
                           : ''
                       }
                     />
                     {/*message thời gian kết thúc*/}
                     {errors?.endTime && (
-                      <p style={{ display: 'inline-block' }} className={styles.error}>{errors.endTime?.message}</p>
+                      <p
+                        style={{ display: 'inline-block' }}
+                        className={styles.error}>
+                        {errors.endTime?.message}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -352,8 +370,7 @@ function ModalForm({ modalShow, onHide }) {
                 name="content"
                 {...register('content', {
                   required: 'Vui lòng nhập nội dung cuộc thi',
-                })}>
-              </textarea>
+                })}></textarea>
               {/*message nội dung cuộc thi*/}
               {errors?.content && (
                 <p className={styles.error}>{errors.content?.message}</p>
@@ -367,7 +384,19 @@ function ModalForm({ modalShow, onHide }) {
               {levelFields.map((item, index) => {
                 return (
                   <div key={index} className={styles.levelBlock}>
-                    <h4 className={styles.title}>{item?.level}</h4>
+                    <div className={styles.remove_block}>
+                      <h4 className={styles.title}>{item?.level}</h4>
+
+                      {/*Nếu như chỉ có 1 phần tử thì không xuất hiện*/}
+                      {levelFields.length > 1 && (
+                        <RemoveCircleOutlineIcon
+                          className={styles.icon_remove}
+                          onClick={() =>
+                            handleRemoveEducationalLevelItem(index)
+                          }
+                        />
+                      )}
+                    </div>
                     <div className={styles.levelblock_input}>
                       <div className={styles.input_place}>
                         <span>
@@ -383,9 +412,12 @@ function ModalForm({ modalShow, onHide }) {
                             className={styles.level_textarea}
                             type="text"
                             name="description"
-                            {...register(`educationalLevel.${index}.description`, {
-                              required: 'Vui lòng điền thông tin mô tả',
-                            })}
+                            {...register(
+                              `educationalLevel.${index}.description`,
+                              {
+                                required: 'Vui lòng điền thông tin mô tả',
+                              },
+                            )}
                           />
                         </span>
                         {errors?.educationalLevel?.[index]?.description && (
@@ -434,9 +466,14 @@ function ModalForm({ modalShow, onHide }) {
                               {...register(`educationalLevel.${index}.maxAge`, {
                                 required: 'Tuổi kết thúc là bắt buộc',
                                 max: 99,
-                                validate: (value) => {
-                                  const minAge = parseInt(watch(`educationalLevel.${index}.minAge`));
-                                  return value > minAge || 'Tuổi phải lớn hơn tuổi bắt đầu ít nhất 1 tuổi';
+                                validate: value => {
+                                  const minAge = parseInt(
+                                    watch(`educationalLevel.${index}.minAge`),
+                                  );
+                                  return (
+                                    value > minAge ||
+                                    'Tuổi phải lớn hơn tuổi bắt đầu ít nhất 1 tuổi'
+                                  );
                                 },
                               })}
                             />
@@ -446,16 +483,6 @@ function ModalForm({ modalShow, onHide }) {
                           <p className={styles.error}>
                             {errors.educationalLevel[index].maxAge.message}
                           </p>
-                        )}
-                      </div>
-                      <div className={styles.remove_block}>
-                        {/*Nếu như chỉ có 1 phần tử thì không xuất hiện*/}
-                        {levelFields.length > 1 && (
-                          <RemoveCircleOutlineIcon
-                            color={'error'}
-                            className={styles.icon_remove}
-                            onClick={() => handleRemoveEducationalLevelItem(index)}
-                          />
                         )}
                       </div>
                     </div>
@@ -469,9 +496,7 @@ function ModalForm({ modalShow, onHide }) {
                   fontSize={'large'}
                   className={styles.icon_add}
                   onClick={handleAddEducationalLevel}
-                  color={'success'}
-                >
-                </AddCircleOutlineIcon>
+                />
               </div>
             </div>
             {/* ket thuc doi tuong tham gia */}
@@ -479,35 +504,44 @@ function ModalForm({ modalShow, onHide }) {
             {/* ngay bat dau va ngay ket thuc */}
             <div className={styles.first_zone}>
               <h4 className={styles.title_zone}>Vòng thi</h4>
-              <div style={{ marginLeft: '20px' }}>
+              <div>
                 {roundFields.map((item, index) => {
                   return (
                     <>
                       <div key={index} className={styles.roundBlock}>
-                        {item?.name ? (
-                          <h5>{item?.name}</h5>
-                        ) : (
-                          <input
-                            type={'text'}
-                            name={`round.${index}.name`}
-                            id={`round.${index}.name`}
-                            placeholder={'Tên vòng thi'}
-                            style={{
-                              width: '50%',
-                            }}
-                            className={styles.formControl}
-                            {...register(`round.${index}.name`, {
-                              required: 'Vui lòng nhập tên vòng thi',
-                            })}
-                          />
-                        )}
-                        {errors?.round?.[index]?.name && (
-                          <p className={styles.error}>
-                            {errors.round[index].name?.message}
-                          </p>
-                        )}
+                        <div className={` ${styles.remove_block}`}>
+                          {item?.name ? (
+                            <h5>{item?.name}</h5>
+                          ) : (
+                            <input
+                              type={'text'}
+                              name={`round.${index}.name`}
+                              id={`round.${index}.name`}
+                              placeholder={'Tên vòng thi'}
+                              style={{
+                                width: '50%',
+                              }}
+                              className={styles.formControl}
+                              {...register(`round.${index}.name`, {
+                                required: 'Vui lòng nhập tên vòng thi',
+                              })}
+                            />
+                          )}
+                          {errors?.round?.[index]?.name && (
+                            <p className={styles.error}>
+                              {errors.round[index].name?.message}
+                            </p>
+                          )}
+                          {/*Nếu như chỉ có 2 phần tử thì không xuất hiện*/}
+                          {item?.roundNumber > 2 && (
+                            <RemoveCircleOutlineIcon
+                              className={styles.icon_remove}
+                              onClick={() => handleRemoveRoundItem(index)}
+                            />
+                          )}
+                        </div>
 
-                        <div style={{ marginLeft: '20px' }} className="row">
+                        <div className="row">
                           <div className="col-md-5">
                             <h5 className={styles.title}>Thời gian bắt đầu</h5>
                             <input
@@ -515,7 +549,11 @@ function ModalForm({ modalShow, onHide }) {
                               name={`round.${index}.startTime`}
                               id={`round.${index}.startTime`}
                               className={styles.formControl}
-                              min={index > 0 ? watch(`round.${index - 1}.endTime`) : competitionStartTime}
+                              min={
+                                index > 0
+                                  ? watch(`round.${index - 1}.endTime`)
+                                  : competitionStartTime
+                              }
                               max={competitionEndTime}
                               {...register(`round.${index}.startTime`, {
                                 required: 'Vui lòng chọn thời gian bắt đầu',
@@ -542,9 +580,12 @@ function ModalForm({ modalShow, onHide }) {
                               name={`round.${index}.endTime`}
                               id={`round.${index}.endTime`}
                               className={styles.formControl}
-                              min={watch(`round.${index}.startTime`)
-                                || (index > 0 ? watch(`round.${index - 1}.endTime`)
-                                  : competitionStartTime)}
+                              min={
+                                watch(`round.${index}.startTime`) ||
+                                (index > 0
+                                  ? watch(`round.${index - 1}.endTime`)
+                                  : competitionStartTime)
+                              }
                               max={competitionEndTime}
                               {...register(`round.${index}.endTime`, {
                                 required: 'Vui lòng chọn thời gian kết thúc',
@@ -564,19 +605,6 @@ function ModalForm({ modalShow, onHide }) {
                               </p>
                             )}
                           </div>
-                          <div style={{
-                            marginLeft: 0,
-                            alignItems: 'flex-end',
-                          }} className={`col-md-2 ${styles.remove_block}`}>
-                            {/*Nếu như chỉ có 2 phần tử thì không xuất hiện*/}
-                            {roundFields.length > 2 && (
-                              <RemoveCircleOutlineIcon
-                                color={'error'}
-                                className={styles.icon_remove}
-                                onClick={() => handleRemoveRoundItem(index)}
-                              />
-                            )}
-                          </div>
                         </div>
                       </div>
                     </>
@@ -589,10 +617,8 @@ function ModalForm({ modalShow, onHide }) {
                   <AddCircleOutlineIcon
                     fontSize={'large'}
                     className={styles.icon_add}
-                    color={'success'}
                     onClick={handleAddRound}
-                  >
-                  </AddCircleOutlineIcon>
+                  />
                 </div>
               </div>
             </div>

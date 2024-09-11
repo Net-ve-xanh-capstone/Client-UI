@@ -99,6 +99,9 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
         onHide={triggerHide}
         roundId={items?.id}
         recallData={recallData}
+        checkedFinalRound={items.name
+          .toLowerCase()
+          .includes('vòng chung kết'.toLowerCase())}
       />
       <AddingModal
         modalShow={editModalShow}
@@ -107,6 +110,9 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
         recallData={recallData}
         isEdit
         dataEdit={infomation}
+        checkedFinalRound={items.name
+          .toLowerCase()
+          .includes('vòng chung kết'.toLowerCase())}
       />
       <DeleteModal
         show={deleteModalShow}
@@ -191,18 +197,14 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
                   ))}
               </ul>
             </div>
-            {items.name
-              .toLowerCase()
-              .includes('vòng chung kết'.toLowerCase()) ? (
-              <div className="flex justify-content-end mt-20">
-                <button
-                  className="btn btn-outline-primary btn-lg"
-                  disabled={isActive}
-                  onClick={() => triggerOpenPopup()}>
-                  Thêm giải thưởng
-                </button>
-              </div>
-            ) : null}
+            <div className="flex justify-content-end mt-20">
+              <button
+                className="btn btn-outline-primary btn-lg"
+                disabled={isActive}
+                onClick={() => triggerOpenPopup()}>
+                Thêm giải thưởng
+              </button>
+            </div>
           </AccordionDetails>
         </Accordion>
       </div>

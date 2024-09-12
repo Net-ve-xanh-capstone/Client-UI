@@ -150,7 +150,7 @@ const Login = () => {
                       placeholder="Mật khẩu"
                     />
                     <div className="row-form style-1 flex-row-reverse">
-                      <Link to="#" className="forgot-pass">
+                      <Link to="/forgot-password" className="forgot-pass">
                         Quên mật khẩu ?
                       </Link>
                     </div>
@@ -171,9 +171,7 @@ const Login = () => {
 
                     <div className="mt-5 text-right h5">
                       Bạn chưa có tài khoản? {''}
-                      <Link
-                        to={'/sign-up'}
-                        className="font-weight-bold">
+                      <Link to={'/sign-up'} className="font-weight-bold">
                         đăng ký
                       </Link>
                     </div>

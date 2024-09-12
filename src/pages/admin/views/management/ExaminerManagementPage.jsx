@@ -25,7 +25,7 @@ import ActiveModal from '../../../../components/ActiveModal/index.jsx';
 import styles from './style.module.css';
 import AccountForm from './AccountForm.jsx';
 
-const renderWithTooltip = (value, maxLength = 20) => (
+export const renderWithTooltip = (value, maxLength = 20) => (
   <Tooltip title={value}>
     <span>
       {value && value.length > maxLength
@@ -107,8 +107,7 @@ const ExaminerManagementPage = () => {
         filterTable: 'Lọc bảng',
       },
     },
-    onRowClick: (rowData, rowMeta) => {
-    },
+    onRowClick: (rowData, rowMeta) => {},
   };
 
   const columns = [
@@ -285,13 +284,15 @@ const ExaminerManagementPage = () => {
 
   return (
     <PageContainer title="Quản lý giám khảo" description="Quản lý giám khảo">
-      <DashboardCard title="Quản lý giám khảo" action={
-        <div className={styles.buttonContainer}>
-          <button className={styles.btnCreate} onClick={handleAddAccount}>
-            <span>Tạo tài khoản cho Staff</span>
-          </button>
-        </div>
-      }>
+      <DashboardCard
+        title="Quản lý giám khảo"
+        action={
+          <div className={styles.buttonContainer}>
+            <button className={styles.btnCreate} onClick={handleAddAccount}>
+              <span>Tạo tài khoản cho Staff</span>
+            </button>
+          </div>
+        }>
         <StyledEngineProvider injectFirst>
           <ThemeProvider theme={getMuiTheme()}>
             <span className="table-contest table-contest-detail">

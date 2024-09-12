@@ -15,9 +15,10 @@ import { useSelector } from 'react-redux';
 import { debounce } from 'lodash';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-const GET_ALL_COLLECTIONS_BY_ACCOUNT_ID = 'collections/getcollectionbyaccountid'
-const CREATE_COLLECTION = 'collections'
-const ADD_COLLECTION = 'paintingcollections/addpaintingtocollection'
+const GET_ALL_COLLECTIONS_BY_ACCOUNT_ID =
+  'collections/getcollectionbyaccountid';
+const CREATE_COLLECTION = 'collections';
+const ADD_COLLECTION = 'paintingcollections/addpaintingtocollection';
 const CardCollectionModal = props => {
   const schemaAddCollection = yup.object().shape({
     collection: yup.string().required('Vui lòng chọn bộ sưu tập'),
@@ -27,7 +28,7 @@ const CardCollectionModal = props => {
   });
   const {
     watch: watchAddCollection,
-    formState: { errors: errorsAddCollection},
+    formState: { errors: errorsAddCollection },
     setValue: setValueAddCollection,
     setError: setErrorAddCollection,
     reset: resetAddCollection,
@@ -38,7 +39,7 @@ const CardCollectionModal = props => {
   });
 
   const {
-    formState: { errors: errorsCreateCollection},
+    formState: { errors: errorsCreateCollection },
     setError: setErrorCreateCollection,
     control: createCollectionControl,
     reset: resetCreateCollection,
@@ -47,7 +48,7 @@ const CardCollectionModal = props => {
     resolver: yupResolver(schemaCreateNewCollection),
     reValidateMode: 'onChange',
   });
-  
+
   const [indexTab, setIndexTab] = useState(0);
   const [collections, setCollections] = useState([]);
   const [filterCollections, setFilterCollections] = useState([]);
@@ -74,68 +75,70 @@ const CardCollectionModal = props => {
     return useMutation({
       mutationFn,
       onSuccess: () => {
-        queryClient.invalidateQueries([GET_ALL_COLLECTIONS_BY_ACCOUNT_ID, userInfo.Id]);
+        queryClient.invalidateQueries([
+          GET_ALL_COLLECTIONS_BY_ACCOUNT_ID,
+          userInfo.Id,
+        ]);
         setMessage(onSuccessMessage);
       },
       onError: () => {
         setMessage(onErrorMessage);
-      }
+      },
     });
   };
 
   const createCollectionMutation = useCustomMutation(
-    (data) => masterApi.create(CREATE_COLLECTION, data),
+    data => masterApi.create(CREATE_COLLECTION, data),
     'Tạo bộ sưu tập thành công',
-    'Tạo bộ sưu tập thất bại'
+    'Tạo bộ sưu tập thất bại',
   );
 
   const addCollectionMutation = useCustomMutation(
-    (data) => masterApi.create(ADD_COLLECTION, data),
+    data => masterApi.create(ADD_COLLECTION, data),
     'Thêm vào bộ sưu tập thành công',
-    'Đã có tranh trong bộ sưu tập'
+    'Đã có tranh trong bộ sưu tập',
   );
-  
 
-  const handleCreateCollection = (e) => {
+  const handleCreateCollection = e => {
     const data = {
       name: e.name,
       description: e.description,
       currentUserId: userInfo.Id,
-      listPaintingId: [paintingId]
+      listPaintingId: [paintingId],
     };
     createCollectionMutation.mutate(data);
   };
-  
+
   const handleAddCollection = () => {
     const data = {
       collectionId: collectionId,
       paintingId: paintingId,
-    }
+    };
     addCollectionMutation.mutate(data);
-  }
+  };
 
-  const handleSearch = async (search) => {
+  const handleSearch = async search => {
     if (!collections) {
       return;
     }
-    const filteredResults = collections.filter((item) => {
-      return item.name.toLowerCase().includes(search.toLowerCase())
+    const filteredResults = collections.filter(item => {
+      return item.name.toLowerCase().includes(search.toLowerCase());
     });
     setFilterCollections(filteredResults);
   };
 
   const debouncedSearch = useCallback(
-    debounce((query) => handleSearch(query), 500), 
-    [collections] 
+    debounce(query => handleSearch(query), 500),
+    [collections],
   );
-  
+
   // Hàm xử lý sự thay đổi input
-  const handleChange = (event) => {
+  const handleChange = event => {
     const value = event.target.value;
     setSearch(value);
     debouncedSearch(value);
   };
-  
+
   const onHide = () => {
     props.onHide();
     resetAddCollection();
@@ -144,8 +147,8 @@ const CardCollectionModal = props => {
     setSearch('');
     setFilterCollections(collections);
   };
-  
-  const handleChangeTab = (index) => {
+
+  const handleChangeTab = index => {
     setIndexTab(index);
     setMessage('');
     setSearch('');
@@ -153,10 +156,8 @@ const CardCollectionModal = props => {
     setErrorAddCollection('collection', '');
     setFilterCollections(collections);
   };
-  
-  const { isLoading, isError, data, error } = useFetchData(
-    GET_ALL_COLLECTIONS_BY_ACCOUNT_ID, userInfo.Id
-  );
+
+  const { data } = useFetchData(GET_ALL_COLLECTIONS_BY_ACCOUNT_ID, userInfo.Id);
   useEffect(() => {
     const collectionRes = data?.data?.result;
     if (collectionRes?.list?.length > 0) {
@@ -167,7 +168,7 @@ const CardCollectionModal = props => {
       setIndexTab(1);
     }
   }, [data, refresh]);
-  
+
   return (
     <Modal animation scrollable show={props.show} onHide={onHide}>
       <Modal.Header closeButton></Modal.Header>
@@ -187,11 +188,11 @@ const CardCollectionModal = props => {
               <div id="item-create" className="dropdown mt-5">
                 {filterCollections && filterCollections.length > 0 ? (
                   <div>
-                    <h3 className='mb-5'>Thêm vào bộ sưu tập</h3>
+                    <h3 className="mb-5">Thêm vào bộ sưu tập</h3>
                     {errorsAddCollection.collection && (
                       <span className="text-danger h5">
-                            {errorsAddCollection.collection.message}
-                          </span>
+                        {errorsAddCollection.collection.message}
+                      </span>
                     )}
                     <Dropdown>
                       <Dropdown.Select
@@ -200,14 +201,18 @@ const CardCollectionModal = props => {
                           'Chọn collection của bạn',
                         )}></Dropdown.Select>
                       <Dropdown.List>
-                        <Dropdown.Search defaultValue={search} onChange={
-                          handleChange
-                        }/>
+                        <Dropdown.Search
+                          defaultValue={search}
+                          onChange={handleChange}
+                        />
                         {filterCollections.map((collection, index) => (
                           <Dropdown.Option
                             key={index}
                             onClick={() =>
-                              handleSelectDropdownOption('collection', collection)
+                              handleSelectDropdownOption(
+                                'collection',
+                                collection,
+                              )
                             }>
                             {collection?.name}
                           </Dropdown.Option>
@@ -226,7 +231,9 @@ const CardCollectionModal = props => {
                     </Link>
                     {message && (
                       <div className="mt-4 text-center">
-                        <p style={{ color: '#000000', fontWeight: 'bold' }}>{message}</p>
+                        <p style={{ color: '#000000', fontWeight: 'bold' }}>
+                          {message}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -234,7 +241,7 @@ const CardCollectionModal = props => {
                   <div>
                     <h3>Bạn chưa có bộ sưu tập nào</h3>
                     <div id="item-create" className="dropdown mt-5">
-                      <h4 className='text-center'>Hãy tạo bộ sưu tập mới</h4>
+                      <h4 className="text-center">Hãy tạo bộ sưu tập mới</h4>
                     </div>
                   </div>
                 )}
@@ -243,7 +250,7 @@ const CardCollectionModal = props => {
             </TabPanel>
 
             <TabPanel className="mt-5" allowFullScreen>
-              <h3 className='mb-15'>Tạo bộ sưu tập mới</h3>
+              <h3 className="mb-15">Tạo bộ sưu tập mới</h3>
               <TextFieldCommon
                 control={createCollectionControl}
                 error={errorsCreateCollection.name?.message}
@@ -251,7 +258,7 @@ const CardCollectionModal = props => {
                 name="name"
                 tabIndex="1"
                 placeholder="Nhập tên của bộ sưu tập"
-                className='mb-15'
+                className="mb-15"
                 autoFocus
               />
               <div className="hr"></div>
@@ -261,7 +268,7 @@ const CardCollectionModal = props => {
                 name="description"
                 tabIndex="1"
                 placeholder="Nhập mô tả của bức tranh"
-                className='mb-15'
+                className="mb-15"
                 autoFocus
               />
               <Link
@@ -276,7 +283,9 @@ const CardCollectionModal = props => {
               </Link>
               {message && (
                 <div className="mt-4 text-center">
-                  <p style={{ color: '#000000', fontWeight: 'bold' }}>{message}</p>
+                  <p style={{ color: '#000000', fontWeight: 'bold' }}>
+                    {message}
+                  </p>
                 </div>
               )}
             </TabPanel>
@@ -286,6 +295,5 @@ const CardCollectionModal = props => {
     </Modal>
   );
 };
-
 
 export default CardCollectionModal;

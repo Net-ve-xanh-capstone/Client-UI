@@ -12,3 +12,7 @@ export const authenApi = {
 export const addNewStaff = payload => {
   return axiosApi.post('authentications/register', payload);
 };
+
+export const forgetPassword = payload => {
+  return axiosApi.post('authentications/forgot-password', payload);
+};

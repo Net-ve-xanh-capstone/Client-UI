@@ -4,6 +4,14 @@ import styles from './page.module.css';
 import { useSelector } from 'react-redux';
 import { createAward, putAwards } from '../../../api/awrdApi.js';
 import { toast } from 'react-toastify';
+import { autocompleteClasses, Popper, styled } from '@mui/material';
+
+const ranks = [
+  { title: 'Giải nhất' },
+  { title: 'Giải nhì' },
+  { title: 'Giải ba' },
+  { title: 'Giải khuyến khích' },
+];
 
 const AddingModal = ({
   modalShow,
@@ -12,6 +20,7 @@ const AddingModal = ({
   recallData,
   isEdit = false,
   dataEdit,
+  checkedFinalRound = false,
 }) => {
   const { userInfo } = useSelector(state => state.auth);
 
@@ -145,7 +154,7 @@ const AddingModal = ({
       setErrorField(objectError);
     } else {
       const payload = {
-        rank: fieldUpdate.rank,
+        rank: checkedFinalRound ? fieldUpdate.rank : 'Qua vòng loại',
         quantity: fieldUpdate.quantity,
         cash: fieldUpdate.cash,
         artifact: fieldUpdate.artifact,
@@ -154,7 +163,7 @@ const AddingModal = ({
       };
       const editPayload = {
         id: fieldUpdate?.id,
-        rank: fieldUpdate.rank,
+        rank: checkedFinalRound ? fieldUpdate.rank : 'Qua vòng loại',
         quantity: fieldUpdate.quantity,
         cash: fieldUpdate.cash,
         artifact: fieldUpdate.artifact,
@@ -185,6 +194,8 @@ const AddingModal = ({
   return (
     <>
       <Modal
+        backdropClassName={styles.modal_backdrop}
+        backdrop="static"
         show={modalShow}
         onHide={onHide}
         size="lg"
@@ -201,14 +212,27 @@ const AddingModal = ({
           <form onSubmit={handleSubmit} className={styles.modalForm}>
             <div className={styles.small_place}>
               <h4 className={styles.title}>Giải thưởng</h4>
-              <input
-                className={styles.inputModal}
-                required
-                type="text"
-                name="rank"
-                value={fieldUpdate.rank}
-                onChange={e => handleInput(e)}
-              />
+              {checkedFinalRound ? (
+                <input
+                  className={styles.inputModal}
+                  required
+                  type="text"
+                  name="rank"
+                  value={fieldUpdate.rank}
+                  onChange={e => handleInput(e)}
+                />
+              ) : (
+                <input
+                  className={styles.inputModal}
+                  required
+                  type="text"
+                  name="rank"
+                  readOnly
+                  value={'Qua vòng loại'}
+                  onChange={e => handleInput(e)}
+                />
+              )}
+
               <h4 className={styles.title}>Số lượng</h4>
               <input
                 className={styles.inputModal}
@@ -240,11 +264,34 @@ const AddingModal = ({
                 {isEdit ? 'Lưu' : 'Tạo'}
               </button>
             </div>
+            {/* <Autocomplete
+              id="ranks"
+              freeSolo
+              options={ranks.map(rank => rank?.title)}
+              renderInput={params => (
+                <TextField {...params} label="giải thưởng" />
+              )}
+              PopperComponent={StyledPopper}
+              slots={{
+                popper: { style: { zIndex: zIndex.appBar + 1 } },
+              }}
+            /> */}
           </form>
         </Modal.Body>
       </Modal>
     </>
   );
 };
+
+const StyledPopper = styled(Popper)({
+  [`& .${autocompleteClasses.listbox}`]: {
+    zIndex: 999999999999999,
+    boxSizing: 'border-box',
+    '& ul': {
+      padding: 0,
+      margin: 0,
+    },
+  },
+});
 
 export default AddingModal;

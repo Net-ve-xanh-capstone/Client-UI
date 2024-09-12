@@ -42,6 +42,8 @@ const Dashboard = lazy(() =>
 const ExaminerManagementPage = lazy(() =>
   import('../pages/admin/views/management/ExaminerManagementPage.jsx'),
 );
+const ForgotPasswordPage = lazy(() => import('../pages/ForgotPasswordPage'));
+
 const TypographyPage = Loadable(
   lazy(() => import('../pages/admin/views/utilities/TypographyPage')),
 );
@@ -56,6 +58,7 @@ const routes = [
   },
   { path: 'login', component: <Login /> },
   { path: 'sign-up', component: <SignUp /> },
+  { path: 'forgot-password', component: <ForgotPasswordPage /> },
   {
     path: 'staff-management',
     component: (
@@ -156,10 +159,11 @@ const routes = [
   },
   {
     path: 'admin-management',
-    component:
+    component: (
       <ProtectedRoute role={Role.ADMIN}>
         <FullLayout />
-      </ProtectedRoute>,
+      </ProtectedRoute>
+    ),
     children: [
       { path: '', component: <Navigate to="dashboard" /> },
       { path: 'dashboard', exact: true, component: <Dashboard /> },

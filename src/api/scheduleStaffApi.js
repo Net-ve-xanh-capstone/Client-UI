@@ -8,7 +8,7 @@ export const createFinal = payload => {
   return axiosApi.post('schedules/final', payload);
 };
 
-export const editShedule = payload => {
+export const editSchedule = payload => {
   return axiosApi.put('schedules', payload);
 };
 

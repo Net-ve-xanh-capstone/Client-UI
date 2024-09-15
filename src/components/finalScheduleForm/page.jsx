@@ -1,438 +1,407 @@
-import LoadingButton from '@mui/lab/LoadingButton';
-import Multiselect from 'multiselect-react-dropdown';
-import React, { useEffect, useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getAwardForScheduleByRoundId } from '../../api/awrdApi.js';
+import { useFieldArray, useForm, Controller } from 'react-hook-form';
+import { LoadingButton } from '@mui/lab';
+import Multiselect from 'multiselect-react-dropdown';
+import { Modal } from 'react-bootstrap';
+import DatePicker from 'react-datepicker';
+import { FormControlLabel, Switch, CircularProgress } from '@mui/material';
+import { RemoveCircleOutline, AddCircleOutline } from '@mui/icons-material';
 import { getAll } from '../../api/examinerStaffApi';
-import { createFinal, editShedule } from '../../api/scheduleStaffApi';
+import { createPreliminary, editSchedule } from '../../api/scheduleStaffApi';
+import { getAwardForScheduleByRoundId } from '../../api/awrdApi';
 import styles from './page.module.css';
-import { CircularProgress } from '@mui/material';
 
-function FinalScheduleForm({
-  modalShow,
-  onHide,
-  roundData,
-  scheduleData,
-  type,
-  roundId,
+const awardOrder = ['Giải Nhất', 'Giải Nhì', 'Giải Ba', 'Giải Khuyến Khích', 'Khác'];
+const sortAwards = (awards) => awards.sort((a, b) => awardOrder.indexOf(a.name) - awardOrder.indexOf(b.name));
+
+function FinalSchedule({
+    modalShow,
+    onHide,
+    roundData,
+    type,
+    roundId,
 }) {
-  let currentDate = new Date().toJSON().slice(0, 10);
-  const [isLoading, setIsLoading] = useState(false);
-  const [validated, setValidated] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [examiner, setExaminer] = useState([]);
-  const { userInfo } = useSelector(state => state.auth);
-  const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [examiners, setExaminers] = useState([]);
+    const { userInfo } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
+    const [awards, setAwards] = useState([]);
+    const [isAutoSchedule, setIsAutoSchedule] = useState(false);
+    const [awardLoading, setAwardLoading] = useState(false);
 
-  const [awardLoading, setAwardLoading] = useState(false);
-  const [award, setAward] = useState([]);
-
-  //get all award of this round to GET the ID and  NAME
-  const fetchAwardId = async id => {
-    setAwardLoading(true);
-    try {
-      const { data } = await getAwardForScheduleByRoundId(id);
-      const result = data.result.map(val => {
-        return { awardId: val.id, name: val.rank, quantity: val.quantity };
-      });
-
-      setAward(result);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setAwardLoading(false);
-    }
-  };
-
-  // get all examiner in system
-  const getExaminer = async () => {
-    try {
-      const { data } = await getAll();
-      setExaminer(data.result);
-    } catch (e) {
-      console.log('err', e);
-    }
-  };
-
-  // put schedule to server
-  const putSchedule = async payload => {
-    setIsLoading(true);
-    try {
-      await editShedule(payload);
-      toast.success('Chỉnh sửa lịch chấm thành công', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      onHide();
-    } catch (e) {
-      toast.error('Có lỗi xảy ra vui lòng thử lại', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      console.log('Err', e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // post information while complete
-  const postSchedule = async payload => {
-    setIsLoading(true);
-    try {
-      await createFinal(payload); // calling api here
-      toast.success('Thêm lịch chấm thi thành công', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      onHide();
-    } catch (error) {
-      toast.error('Thêm lịch chấm thi không thành công', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const intialState = {
-    description: type?.description || '',
-    roundId: roundData?.id,
-    endDate: type?.endDate?.split('T')[0] || '',
-    listExaminer: [],
-    currentUserId: userInfo?.Id,
-    judgedCount: '',
-  };
-
-  const [formData, setFormData] = useState(intialState);
-
-  const handleInputChange = event => {
-    try {
-      const { name, value } = event.target;
-      if (name === 'award') {
-        setAward(prv => [
-          ...prv,
-          { ...prv.awardId, ...prv.name, awardCount: value },
-        ]);
-      } else {
-        setFormData({
-          ...formData,
-          [name]: value,
-        });
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  // adding new examiner after user selected
-  const handleSelect = seletedList => {
-    const selectIds = seletedList.map(item => item.id);
-    setFormData({
-      ...formData,
-      listExaminer: selectIds,
-    });
-  };
-
-  // adding new award value to the state
-  const awardOnchange = (e, id) => {
-    let newValue = e.target.value;
-    const { value } = e.target;
-    for (let index in award) {
-      if (award[index].awardId === id) {
-        if (isNaN(newValue) || newValue < 0) {
-          // Có thể đặt giá trị về 0 hoặc thực hiện hành động khác tùy ý
-          newValue = 0;
-        }
-        setAward(prv =>
-          prv.map(val => {
-            if (val.awardId === id) {
-              return { ...val, quantity: newValue };
-            }
-            return val;
-          }),
-        );
-      }
-    }
-  };
-
-  //filter all examiner is still not asign to mark the painting
-  const filteredExaminers = examiner?.filter(
-    valExaminer =>
-      !scheduleData?.some(
-        scheduleVal => scheduleVal.examinerId === valExaminer.id,
-      ),
-  );
-
-  // adding value while edit
-  const editValue = val => {
-    const result = val?.awards?.map(val => {
-      return { awardId: val.id, name: val.rank, quantity: val.quantity };
-    });
-    console.log(result);
-
-    setAward(result);
-    setAwardLoading(false);
-    setFormData(prv => ({
-      ...prv,
-      roundId: roundData?.id,
-      endDate: val?.endDate?.split('T')[0],
-      description: val?.description,
-      judgedCount: val.judgeCount,
-    }));
-  };
-
-  //   change value in award
-  const convertAward = val => {
-    return val.map(val => {
-      return {
-        awardId: val.awardId,
-        awardCount: val.quantity,
-      };
-    });
-  };
-
-  // validation and then submit the form to server
-  const handleSubmit = async event => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    // adding validation here
-    if (formData.listExaminer.length === 0 && type === 'create') {
-      toast.error('Chưa chọn giám khảo nào', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      return;
-    }
-    let formErrors = {};
-
-    if (Object.keys(formErrors).length === 0) {
-      const awardList = convertAward(award);
-      // pass this payload to post api for saving new schedule
-      const payload = {
-        description: formData.description,
-        roundId: formData.roundId,
-        endDate: formData.endDate,
-        ListExaminer: formData.listExaminer,
-        judgedCount: formData.judgedCount,
-        currentUserId: formData.currentUserId,
-        awards: awardList,
-      };
-
-      const payloadEdit = {
-        id: roundId,
-        description: formData.description,
-        endDate: formData.endDate,
-        currentUserId: formData.currentUserId,
-      };
-      type === 'create' ? postSchedule(payload) : putSchedule(payloadEdit);
-      setValidated(true);
-      setErrors({});
-    } else {
-      setValidated(false);
-      setErrors(formErrors);
-    }
-  };
-
-  useEffect(() => {
-    getExaminer();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (userInfo === null) navigate('/login');
-    if (modalShow) {
-      setFormData(intialState);
-      if (roundId !== null && type === 'create') {
-        fetchAwardId(roundId);
-      }
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalShow]);
-
-  useEffect(() => {
-    if (modalShow) {
-      if (type !== 'create' && type !== undefined) {
-        editValue(type);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalShow]);
-
-  return (
-    <>
-      <Modal
-        show={modalShow}
-        onHide={onHide}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered>
-        <Modal.Header closeButton style={{ margin: '0 auto' }}>
-          <Modal.Title
-            id="contained-modal-title-vcenter"
-            style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            {type === 'create'
-              ? 'Thêm lịch chấm chung kết'
-              : 'Chỉnh sửa lịch chấm'}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ height: '60vh', overflow: 'hidden' }}>
-          <form onSubmit={handleSubmit} className={styles.modalForm}>
-            <h4 className={styles.title}>Giám khảo</h4>
-            <Multiselect
-              displayValue="fullName"
-              disablePreSelectedValues
-              onKeyPressFn={function noRefCheck() {}}
-              onRemove={e => handleSelect(e)}
-              onSelect={e => handleSelect(e)}
-              options={filteredExaminers}
-              disable={type !== 'create'}
-              selectedValues={
-                type === 'create'
-                  ? []
-                  : [{ id: type?.id, fullName: type?.examinerName }]
-              }
-              placeholder="Chọn giám khảo"
-              emptyRecordMsg="Không tìm thấy giám khảo nào"
-              avoidHighlightFirstOption="true"
-              style={{
-                chips: {
-                  background: 'var(--linear)',
-                },
-              }}
-              showArrow
-            />
-            <h4 className={styles.title}>Ngày chấm</h4>
-            {/* <input
-              required
-              type="date"
-              name="endDate"
-              id="endDate"
-              className={styles.formControl}
-              value={formData.endDate}
-              onChange={handleInputChange}
-              min={currentDate}
-            /> */}
-            <div>
-              <DatePicker
-                dateFormat="dd/MM/yyyy"
-                selected={formData.endDate}
-                className={styles.formControl}
-                onChange={date =>
-                  setFormData(prv => ({ ...prv, endDate: date }))
+    const { control, register, handleSubmit, formState: { errors }, reset } = useForm({
+        defaultValues: {
+            description: '',
+            roundId: roundData?.id,
+            endDate: null,
+            listExaminer: [],
+            currentUserId: userInfo?.Id,
+            judgedCount: 0,
+            awardCount: 0,
+            listScheduleSingleExaminer: [
+                {
+                    description: '',
+                    endDate: null,
+                    examinerId: '',
+                    judgedCount: 0,
+                    awards: [{ awardId: '', awardCount: 0 }]
                 }
-                minDate={currentDate}
-              />
-            </div>
-            <h4 className={styles.title}>Mô tả</h4>
-            <input
-              required
-              className={styles.inputModal}
-              type="text"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-            />
-            <h4 className={styles.title}>Số lượng bài chấm</h4>
-            <input
-              required
-              className={styles.inputModal}
-              type="number"
-              name="judgedCount"
-              value={formData.judgedCount}
-              onChange={handleInputChange}
-            />
-            <div className={styles.list_round}>
-              {awardLoading ? (
-                <div
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <CircularProgress
-                    color="secondary"
-                    sx={{ fontSize: '3rem' }}
-                  />
-                </div>
-              ) : (
-                award.map(val => (
-                  <div key={val.awardId} className={styles.round}>
-                    <h4 className={styles.title}>{val.name}</h4>
-                    <input
-                      required
-                      className={styles.grid_input}
-                      type="number"
-                      value={val.quantity}
-                      min="0"
-                      onChange={e => awardOnchange(e, val.awardId)}
+            ]
+        }
+    });
+
+    const [firstPrizeCount, setFirstPrizeCount] = useState(0);
+
+    const {
+        fields: examinerFields,
+        append: appendExaminer,
+        remove: removeExaminer,
+    } = useFieldArray({
+        control,
+        name: 'listScheduleSingleExaminer',
+    });
+
+    const fetchAwards = useCallback(async (id) => {
+        setAwardLoading(true);
+        try {
+            const { data } = await getAwardForScheduleByRoundId(id);
+            const result = data.result.map(val => ({
+                awardId: val.id,
+                name: val.rank,
+                quantity: val.quantity,
+                originalQuantity: val.quantity
+            }));
+            const sortedAwards = sortAwards(result);
+            setAwards(sortedAwards);
+
+            // Set the first prize count
+            const firstPrize = sortedAwards.find(award => award.name === 'Giải Nhất');
+            if (firstPrize) {
+                setFirstPrizeCount(firstPrize.originalQuantity);
+            }
+        } catch (error) {
+            console.error('Error fetching awards:', error);
+            toast.error('Failed to fetch awards');
+        } finally {
+            setAwardLoading(false);
+        }
+    }, []);
+
+    const fetchExaminers = async () => {
+        try {
+            const { data } = await getAll();
+            setExaminers(data.result);
+        } catch (error) {
+            console.error('Error fetching examiners:', error);
+            toast.error('Failed to fetch examiners');
+        }
+    };
+
+    const onSubmit = async (data) => {
+        setIsLoading(true);
+        try {
+            const payload = isAutoSchedule
+                ? {
+                    description: data.description,
+                    roundId: roundData?.id,
+                    endDate: data.endDate,
+                    listExaminer: data.listExaminer,
+                    judgedCount: data.judgedCount,
+                    currentUserId: userInfo?.Id,
+                    awards: [{ awardId: awards[0]?.awardId, awardCount: data.awardCount }],
+                }
+                : {
+                    roundId: roundData?.id,
+                    currentUserId: userInfo?.Id,
+                    listScheduleSingleExaminer: data.listScheduleSingleExaminer.map(examiner => ({
+                        ...examiner,
+                        awards: [{ awardId: awards[0]?.awardId, awardCount: examiner.awards[0].awardCount }]
+                    }))
+                };
+
+            const apiCall = type === 'create' ? createPreliminary : editSchedule;
+            await apiCall(payload);
+            toast.success(type === 'create' ? 'Schedule added successfully' : 'Schedule updated successfully');
+            onHide();
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            toast.error(type === 'create' ? 'Failed to add schedule' : 'Failed to update schedule');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!userInfo) navigate('/login');
+        if (modalShow) {
+            reset();
+            if (roundId) fetchAwards(roundId);
+        }
+        fetchExaminers();
+    }, [modalShow, roundId, userInfo, navigate, reset]);
+
+    useEffect(() => {
+        if (modalShow && type !== 'create') {
+            reset({
+                description: type?.description,
+                endDate: type?.endDate ? new Date(type.endDate) : null,
+                judgedCount: type?.judgedCount,
+                awardCount: type?.awards?.[0]?.quantity,
+            });
+        }
+    }, [modalShow, type, reset]);
+
+
+    const handleAddExaminer = () => {
+        if (examinerFields.length < firstPrizeCount) {
+            appendExaminer({
+                description: '',
+                endDate: null,
+                examinerId: '',
+                judgedCount: 0,
+                awards: [{ awardId: '', awardCount: 0 }]
+            });
+        } else {
+            toast.error(`Cannot add more examiners than the number of first prizes (${firstPrizeCount})`);
+        }
+    };
+
+    const renderAutoScheduleForm = () => (
+        <>
+            <h4 className={styles.title}>Examiners</h4>
+            <Controller
+                control={control}
+                name="listExaminer"
+                render={({ field }) => (
+                    <Multiselect
+                        {...field}
+                        displayValue="fullName"
+                        onRemove={(selectedList) => field.onChange(selectedList.map(item => item.id))}
+                        onSelect={(selectedList) => field.onChange(selectedList.map(item => item.id))}
+                        options={examiners}
+                        selectedValues={type !== 'create' ? [{ id: type?.id, fullName: type?.examinerName }] : []}
+                        placeholder="Select examiners"
                     />
-                    <div className={styles.grid_input_label}>
-                      Số lượng giải còn lại: {val.quantity}
-                    </div>
-                  </div>
-                ))
-              )}
+                )}
+            />
+
+            <h4 className={styles.title}>Judging Date</h4>
+            <Controller
+                control={control}
+                name="endDate"
+                render={({ field }) => (
+                    <DatePicker
+                        selected={field.value}
+                        onChange={(date) => field.onChange(date)}
+                        className={styles.formControl}
+                        dateFormat="dd/MM/yyyy"
+                    />
+                )}
+            />
+
+            <h4 className={styles.title}>Description</h4>
+            <input
+                {...register('description', { required: 'Please enter a description' })}
+                className={styles.inputModal}
+                type="text"
+            />
+            {errors.description && <p className={styles.error}>{errors.description.message}</p>}
+
+            <h4 className={styles.title}>Number of Judged Items</h4>
+            <input
+                {...register('judgedCount', { required: 'Please enter the number of judged items' })}
+                className={styles.inputModal}
+                type="number"
+            />
+            {errors.judgedCount && <p className={styles.error}>{errors.judgedCount.message}</p>}
+
+            <h4 className={styles.title}>Number of Awards</h4>
+            <input
+                {...register('awardCount', { required: 'Please enter the number of awards' })}
+                className={styles.inputModal}
+                type="number"
+            />
+            {errors.awardCount && <p className={styles.error}>{errors.awardCount.message}</p>}
+        </>
+    );
+
+    const renderManualScheduleForm = () => (
+        <div className={styles.first_zone}>
+            <h4 className={styles.title_zone}>Schedule for each examiner</h4>
+            <div className={styles.award_info}>
+                <h5>Award Information:</h5>
+                {awardLoading ? (
+                    <CircularProgress color="secondary" size={20} />
+                ) : (
+                    <ul>
+                        {awards.map(award => (
+                            <li key={award.awardId}>
+                                {award.name}: {award.originalQuantity}
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
 
-            <div style={{ textAlign: 'end' }}>
-              <LoadingButton
-                type="submit"
-                className={styles.btnCreate}
-                size="large"
-                loading={isLoading}
-                loadingPosition="center"
-                variant="contained">
-                <span style={{ fontWeight: 'bold', fontSize: '12px' }}>
-                  Lưu
-                </span>
-              </LoadingButton>
+            {examinerFields.map((item, index) => (
+                <div key={item.id} className={styles.roundBlock}>
+                    <div className={styles.remove_block}>
+                        <h5>Examiner {index + 1}</h5>
+                        {index > 0 && (
+                            <RemoveCircleOutline
+                                className={styles.icon_remove}
+                                onClick={() => removeExaminer(index)}
+                            />
+                        )}
+                    </div>
+
+                    <div className="row">
+                        <div className="col-md-6">
+                            <h5 className={styles.title}>Select Examiner</h5>
+                            <select
+                                {...register(`listScheduleSingleExaminer.${index}.examinerId`, { required: 'Please select an examiner' })}
+                                className={styles.formControl}
+                            >
+                                <option value="">Select examiner</option>
+                                {examiners.map((ex) => (
+                                    <option key={ex.id} value={ex.id}>{ex.fullName}</option>
+                                ))}
+                            </select>
+                            {errors.listScheduleSingleExaminer?.[index]?.examinerId && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].examinerId.message}</p>}
+                        </div>
+                        <div className="col-md-6">
+                            <h5 className={styles.title}>Judging Date</h5>
+                            <Controller
+                                control={control}
+                                name={`listScheduleSingleExaminer.${index}.endDate`}
+                                render={({ field }) => (
+                                    <DatePicker
+                                        selected={field.value}
+                                        onChange={(date) => field.onChange(date)}
+                                        className={styles.formControl}
+                                        dateFormat="dd/MM/yyyy"
+                                    />
+                                )}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-md-12">
+                            <h5 className={styles.title}>Description</h5>
+                            <input
+                                {...register(`listScheduleSingleExaminer.${index}.description`, { required: 'Please enter a description' })}
+                                className={styles.formControl}
+                                type="text"
+                            />
+                            {errors.listScheduleSingleExaminer?.[index]?.description && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].description.message}</p>}
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-md-6">
+                            <h5 className={styles.title}>Number of Judged Items</h5>
+                            <input
+                                {...register(`listScheduleSingleExaminer.${index}.judgedCount`, { required: 'Please enter the number of judged items' })}
+                                className={styles.formControl}
+                                type="number"
+                            />
+                            {errors.listScheduleSingleExaminer?.[index]?.judgedCount && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].judgedCount.message}</p>}
+                        </div>
+                        <div className="col-md-6">
+                            <h5 className={styles.title}>Number of Awards</h5>
+                            <input
+                                {...register(`listScheduleSingleExaminer.${index}.awards.0.awardCount`, { required: 'Please enter the number of awards' })}
+                                className={styles.formControl}
+                                type="number"
+                            />
+                            {errors.listScheduleSingleExaminer?.[index]?.awards?.[0]?.awardCount && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].awards[0].awardCount.message}</p>}
+                        </div>
+                    </div>
+
+                    <div className={styles.list_round}>
+                        {awardLoading ? (
+                            <div className={styles.loadingContainer}>
+                                <CircularProgress color="secondary" />
+                            </div>
+                        ) : (
+                            awards.map(award => (
+                                <div key={award.awardId} className={styles.round}>
+                                    <div>
+                                        <h4 className={styles.title}>{award.name}</h4>
+                                        <input
+                                            required
+                                            className={styles.grid_input}
+                                            type="number"
+                                            value={award.quantity}
+                                            min="0"
+                                            onChange={(e) => {
+                                                const newValue = Math.max(0, parseInt(e.target.value) || 0);
+                                                setAwards(prevAwards =>
+                                                    prevAwards.map(a =>
+                                                        a.awardId === award.awardId ? { ...a, quantity: newValue } : a
+                                                    )
+                                                );
+                                            }}
+                                        />
+                                        <div className={styles.grid_input_label}>
+                                            Remaining awards: {award.originalQuantity}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+            ))}
+            <div className={styles.add_block}>
+                <AddCircleOutline
+                    fontSize="large"
+                    className={styles.icon_add}
+                    onClick={handleAddExaminer}
+                />
             </div>
-          </form>
-        </Modal.Body>
-      </Modal>
-    </>
-  );
+        </div>
+    );
+
+    return (
+        <Modal show={modalShow} onHide={onHide} size="lg" centered>
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    {type === 'create' ? 'Add Schedule' : 'Edit Schedule'}
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <form onSubmit={handleSubmit(onSubmit)} className={styles.modalForm}>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={isAutoSchedule}
+                                onChange={() => setIsAutoSchedule(!isAutoSchedule)}
+                                name="scheduleType"
+                                color="primary"
+                            />
+                        }
+                        label={isAutoSchedule ? 'Automatic' : 'Manual'}
+                    />
+
+                    {isAutoSchedule ? renderAutoScheduleForm() : renderManualScheduleForm()}
+
+                    <LoadingButton
+                        variant="contained"
+                        type="submit"
+                        loading={isLoading}
+                        className={styles.submitButton}
+                    >
+                        {type === 'create' ? 'Add Schedule' : 'Update Schedule'}
+                    </LoadingButton>
+                </form>
+            </Modal.Body>
+        </Modal>
+    );
 }
 
-export default FinalScheduleForm;
+export default FinalSchedule;

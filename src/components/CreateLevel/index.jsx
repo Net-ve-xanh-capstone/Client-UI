@@ -10,6 +10,8 @@ import { createLevel } from '../../api/levelStaffApi';
 import { parseDateEdit } from '../../utils/formatDate.js';
 import './datePicker.css';
 import styles from './style.module.css';
+import moment from 'moment-timezone';
+
 function CreateLevel({
   modalShow,
   onHide,
@@ -23,6 +25,9 @@ function CreateLevel({
   const [errors, setErrors] = useState({});
   const { userInfo } = useSelector(state => state.auth);
   const navigate = useNavigate();
+  const formatDate = date => {
+    return moment(date).format('YYYY-MM-DDTHH:mm:ss');
+  };
 
   const intialState = {
     description: '',
@@ -60,7 +65,6 @@ function CreateLevel({
 
   // put information to server
   const updateInformation = async payload => {
-    console.log(payload);
     try {
       await putLevel(payload);
       toast.success('Cập nhật thành công', {
@@ -166,13 +170,12 @@ function CreateLevel({
     event.stopPropagation();
 
     let formErrors = {};
-
-    const startDate = new Date(formData.startTime);
-    const endDate = new Date(formData.endTime);
-    const round1StartDate = new Date(formData.round1StartTime);
-    const round1EndDate = new Date(formData.round1EndTime);
-    const round2StartDate = new Date(formData.round2StartTime);
-    const round2EndDate = new Date(formData.round2EndTime);
+    const startDate = startTime;
+    const endDate = endTime;
+    const round1StartDate = formatDate(formData.round1StartTime);
+    const round1EndDate = formatDate(formData.round1EndTime);
+    const round2StartDate = formatDate(formData.round2StartTime);
+    const round2EndDate = formatDate(formData.round2EndTime);
 
     if (startDate >= endDate) {
       formErrors.startTime = 'Ngày bắt đầu phải nhỏ hơn ngày kết thúc';
@@ -265,11 +268,17 @@ function CreateLevel({
     }
   };
 
+  const handleDateChange = (date, typeDate) => {
+    const dateInUTC = formatDate(date);
+    setFormData(prv => ({
+      ...prv,
+      [typeDate]: dateInUTC,
+    }));
+  };
+
   useEffect(() => {
     if (userInfo === null) navigate('/login');
     if (type === 'edit' && roundData) {
-      console.log(roundData);
-
       const objRound = filterRoundList(roundData.round);
       const rankFinal = getAllRank(objRound.finalRound[0]);
 
@@ -382,29 +391,16 @@ function CreateLevel({
                 <div className={styles.roundBlock}>
                   <h5>Vòng sơ khảo:</h5>
                 </div>
-
                 <div style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
-                    {/* <input
-                      required
-                      type="date"
-                      name="round1StartTime"
-                      id="round1StartTime"
-                      className={styles.formControl}
-                      value={formData.round1EndTime}
-                      defaultValue="05-01-2023"
-                      onChange={handleInputChange}
-                      min={parseDateEdit(startTime)}
-                      max={parseDateEdit(endTime)}
-                    /> */}
                     <DatePicker
                       dateFormat="dd/MM/yyyy"
                       selected={formData.round1StartTime}
                       className={styles.formControl}
                       readOnly={type === 'edit'}
                       onChange={date =>
-                        setFormData(prv => ({ ...prv, round1StartTime: date }))
+                        handleDateChange(date, 'round1StartTime')
                       }
                       minDate={parseDateEdit(startTime)}
                       maxDate={parseDateEdit(endTime)}
@@ -412,25 +408,12 @@ function CreateLevel({
                   </div>
                   <div className="col-md-6">
                     <h4 className={styles.title}>Thời gian kết thúc</h4>
-                    {/* <input
-                      required
-                      type="date"
-                      name="round1EndTime"
-                      id="round1EndTime"
-                      className={styles.formControl}
-                      value={formData.round1EndTime}
-                      onChange={handleInputChange}
-                      min={formData.round1StartTime}
-                      max={parseDateEdit(endTime)}
-                    /> */}
                     <DatePicker
                       dateFormat="dd/MM/yyyy"
                       selected={formData.round1EndTime}
                       className={styles.formControl}
                       readOnly={type === 'edit'}
-                      onChange={date =>
-                        setFormData(prv => ({ ...prv, round1EndTime: date }))
-                      }
+                      onChange={date => handleDateChange(date, 'round1EndTime')}
                       minDate={formData.round1StartTime}
                       maxDate={parseDateEdit(endTime)}
                     />
@@ -448,23 +431,12 @@ function CreateLevel({
                 <div style={{ marginLeft: '20px' }} className="row">
                   <div className="col-md-6">
                     <h5 className={styles.title}>Thời gian bắt đầu</h5>
-                    {/* <input
-                      required
-                      type="date"
-                      name="round2StartTime"
-                      id="round2StartTime"
-                      className={styles.formControl}
-                      value={formData.round2StartTime}
-                      onChange={handleInputChange}
-                      min={formData.round1EndTime}
-                      max={parseDateEdit(endTime)}
-                    /> */}
                     <DatePicker
                       selected={formData.round2StartTime}
                       className={styles.formControl}
                       readOnly={type === 'edit'}
                       onChange={date =>
-                        setFormData(prv => ({ ...prv, round2StartTime: date }))
+                        handleDateChange(date, 'round2StartTime')
                       }
                       dateFormat="dd/MM/yyyy"
                       minDate={formData.round1EndTime}
@@ -473,24 +445,11 @@ function CreateLevel({
                   </div>
                   <div className="col-md-6">
                     <h4 className={styles.title}>Thời gian kết thúc</h4>
-                    {/* <input
-                      required
-                      type="date"
-                      name="round2EndTime"
-                      id="round2EndTime"
-                      className={styles.formControl}
-                      value={formData.round2EndTime}
-                      onChange={handleInputChange}
-                      min={formData.round2StartTime}
-                      max={parseDateEdit(endTime)}
-                    /> */}
                     <DatePicker
                       selected={formData.round2EndTime}
                       className={styles.formControl}
                       readOnly={type === 'edit'}
-                      onChange={date =>
-                        setFormData(prv => ({ ...prv, round2EndTime: date }))
-                      }
+                      onChange={date => handleDateChange(date, 'round2EndTime')}
                       dateFormat="dd/MM/yyyy"
                       minDate={formData.round2StartTime}
                       maxDate={parseDateEdit(endTime)}

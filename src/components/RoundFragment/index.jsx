@@ -157,8 +157,10 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
             <li className={styles.roundHeader}>
               <div className={styles.col}>Đối tượng</div>
               <div className={styles.col}>Vòng thi</div>
-              <div className={styles.col}>bắt đầu</div>
-              <div className={styles.col}>kết thúc</div>
+              <div className={styles.col}>Bắt đầu</div>
+              <div className={styles.col}>Kết thúc</div>
+              <div className={styles.col}>Nộp bản cứng</div>
+              <div className={styles.col}>Công bố kết quả</div>
               <div className={styles.col}>Địa điểm</div>
               <div className={styles.col}>Mô tả</div>
               <div className={styles.col}>Trạng thái</div>
@@ -176,10 +178,16 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
                       : data.name}
                   </div>
                   <div className={styles.col} data-label="Ngày bắt đầu">
-                    {formatDate(data.startTime)}
+                    {formatDate(data?.startTime)}
                   </div>
-                  <div className={styles.col} data-label="Ngày két thúc">
-                    {formatDate(data.endTime)}
+                  <div className={styles.col} data-label="Ngày kết thúc">
+                    {formatDate(data?.endTime)}
+                  </div>
+                  <div className={styles.col} data-label="Ngày nộp bản cứng">
+                    {formatDate(data?.deadlineSubmissionDate)}
+                  </div>
+                  <div className={styles.col} data-label="Ngày công bố kết quả">
+                    {formatDate(data?.resultAnnouncementDate)}
                   </div>
                   <div className={styles.col} data-label="Địa điểm">
                     {data.location?.length > 100

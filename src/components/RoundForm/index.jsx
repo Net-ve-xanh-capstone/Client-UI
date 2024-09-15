@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import styles from './style.module.css';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CreateModal from '../CreateModal';
-import { formatDate } from '../../utils/formatDate';
 import EditModal from '../EditModal';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -90,80 +88,6 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
       console.log(e);
     }
   };
-
-  // check datetime of user choosing level
-  // const isValidDate = (startTime, endTime, listLevel) => {
-  //   console.log(listLevel);
-
-  //   //check for edit and create
-  //   if (roundData?.id) {
-  //     const selectLevel = contestData.educationalLevel.find(item =>
-  //       item.round.find(ele => ele.id === roundData.id),
-  //     );
-  //     console.log('log ra ham selectlevel', selectLevel);
-
-  //     if (selectLevel.round && selectLevel.round.length > 0) {
-  //       for (let round of selectLevel.round) {
-  //         const roundStart = new Date(round.startTime);
-  //         const roundEnd = new Date(round.endTime);
-  //         roundEnd.setDate(roundEnd.getDate() + 1);
-  //         if (
-  //           !(startTime > roundEnd || endTime < roundStart) &&
-  //           round.id !== roundData.id
-  //         ) {
-  //           return false;
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     // get the value level of user choosing
-  //     // map the starttime and endtime of that level
-  //     // using date time in current round compare to input time of user
-  //     const eduLevel = contestData.educationalLevel;
-  //     for (let index in eduLevel) {
-  //       for (let userIndex in listLevel) {
-  //         if (eduLevel[index].id === listLevel[userIndex]) {
-  //           if (eduLevel[index].round && eduLevel[index].round.length > 0) {
-  //             for (let round of eduLevel[index].round) {
-  //               console.log(round);
-
-  //               const roundStart = new Date(round.startTime);
-  //               // const roundEnd = new Date(round.endTime);
-  //               // roundEnd.setDate(roundEnd.getDate() + 1);
-  //               if (
-  //                 !(
-  //                   startTime.setHours(0, 0, 0, 0) !==
-  //                   roundStart.setHours(0, 0, 0, 0)
-  //                 )
-  //               ) {
-  //                 return false;
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-
-  //     // for (let level of contestData.educationalLevel) {
-  //     //   if (level.round && level.round.length > 0) {
-  //     //     for (let round of level.round) {
-  //     //       console.log(round);
-
-  //     //       const roundStart = new Date(round.startTime);
-  //     //       const roundEnd = new Date(round.endTime);
-
-  //     //       roundEnd.setDate(roundEnd.getDate() + 1);
-
-  //     //       if (!(startTime > roundEnd || endTime < roundStart)) {
-  //     //         return false;
-  //     //       }
-  //     //     }
-  //     //   }
-  //     // }
-  //   }
-
-  //   return true;
-  // };
 
   const handleSubmit = async event => {
     event.preventDefault();

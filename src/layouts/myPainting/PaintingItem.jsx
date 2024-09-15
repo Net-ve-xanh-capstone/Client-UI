@@ -2,7 +2,6 @@ import React, { useState, Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CardCollectionModal from './CardCollectionModal.jsx';
 import LoadingSkeleton from '../../components/loading/LoadingSkeleton.jsx';
-import { Grid } from '@mui/material';
 import { formatDate } from '../../utils/formatDate.js';
 import { paintingStatusEnable } from '../../constant/Status.js';
 import { Modal } from 'react-bootstrap';
@@ -20,7 +19,7 @@ const PaintingItem = props => {
     setVisible(prevValue => prevValue + 6);
   };
 
-  const handleShowModal = (id) => {
+  const handleShowModal = id => {
     setSelectedPaintingId(id);
     setModalShow(true);
   };
@@ -41,36 +40,45 @@ const PaintingItem = props => {
         <div>
           <div className="explore">
             <div className="box-epxlore justify-content-start">
-              {data.length > 0 ? (
+              {data.length > 0 &&
                 data.slice(0, visible).map((item, index) => (
                   <div
                     className={'sc-card-product mr-4 explode style2 mg-bt'}
                     key={index}>
                     <div className="card-media select-none">
                       <div>
-                        <img className="img-painting object-fit-contain" style={{
-                          height: '320px',
-                        }} src={item?.image} alt="painting" />
+                        <img
+                          className="img-painting object-fit-contain"
+                          style={{
+                            height: '320px',
+                          }}
+                          src={item?.image}
+                          alt="painting"
+                        />
                       </div>
                       <div className="button-place-bid">
                         <button
                           onClick={() => handleShowModal(item.id)}
                           className="sc-button style-place-bid style fl-button pri-3"
-                          style={{ width: '220px' }}
-                        >
+                          style={{ width: '220px' }}>
                           <span>Thêm vào bộ sưu tập</span>
                         </button>
                         <button
-                          onClick={() => handleEditPainting(item?.status, item?.contestId)}
+                          onClick={() =>
+                            handleEditPainting(item?.status, item?.contestId)
+                          }
                           className="sc-button style-place-bid style fl-button pri-3 mt-5"
-                          style={{ width: '220px' }}
-                        >
+                          style={{ width: '220px' }}>
                           <span>Chỉnh sửa bài nộp</span>
                         </button>
                       </div>
                       <div className="coming-soon">{item?.award}</div>
                     </div>
-                    <div onClick={() => handleEditPainting(item?.status, item?.contestId)} className="card-title">
+                    <div
+                      onClick={() =>
+                        handleEditPainting(item?.status, item?.contestId)
+                      }
+                      className="card-title">
                       <h5>
                         <div className="cursor-pointer">{item?.name}</div>
                       </h5>
@@ -98,9 +106,7 @@ const PaintingItem = props => {
                           <div className="info">
                             <span>Cấp</span>
                             <h6>
-                              <div className="cursor-none">
-                                {item?.level}
-                              </div>
+                              <div className="cursor-none">{item?.level}</div>
                             </h6>
                           </div>
                         </div>
@@ -144,16 +150,13 @@ const PaintingItem = props => {
                         </div>
                       </div>
                     </div>
-                    <Link to={`/history/${item.id}`} className="view-history reload">Xem lịch sử</Link>
+                    <Link
+                      to={`/history/${item.id}`}
+                      className="view-history reload">
+                      Xem lịch sử
+                    </Link>
                   </div>
-                ))
-              ) : (
-                <Grid ml={16}>
-                  <h2 className="centered-message-container">
-                    Bạn chưa có tranh nào!
-                  </h2>
-                </Grid>
-              )}
+                ))}
             </div>
             {visible < data.length && (
               <div className="btn-auction center">
@@ -241,17 +244,13 @@ const PaintingItemSkeleton = () => {
 
 const RejectModal = ({ showReject, onHide }) => {
   return (
-    <Modal
-      animation
-      scrollable
-      show={showReject}
-      onHide={onHide}
-      centered
-    >
+    <Modal animation scrollable show={showReject} onHide={onHide} centered>
       <Modal.Header closeButton></Modal.Header>
       <Modal.Body>
         <div className="space-y-20 pd-40">
-          <h4 className="text-center font-weight-bold">Tranh của bạn không thể chỉnh sửa sau khi nộp</h4>
+          <h4 className="text-center font-weight-bold">
+            Tranh của bạn không thể chỉnh sửa sau khi nộp
+          </h4>
         </div>
       </Modal.Body>
     </Modal>

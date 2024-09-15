@@ -58,7 +58,7 @@ export const BlogProvider = ({ children }) => {
         setTotalPage(Math.ceil(newBlogList.length / 5));
       }
     },
-    [blogList, checkBox, filterBlog],
+    [blogList, checkBox],
   );
 
   const handleSearchBlog = useCallback(

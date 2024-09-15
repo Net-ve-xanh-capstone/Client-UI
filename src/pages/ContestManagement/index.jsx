@@ -19,12 +19,12 @@ import styles from './style.module.css';
 import { TablePagination } from '@mui/material';
 
 const CustomFooter = ({
-                        count,
-                        page,
-                        rowsPerPage,
-                        handlePageChange,
-                        handleRowsPerPageChange,
-                      }) => {
+  count,
+  page,
+  rowsPerPage,
+  handlePageChange,
+  handleRowsPerPageChange,
+}) => {
   return (
     <div
       style={{
@@ -38,6 +38,10 @@ const CustomFooter = ({
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[4, 10, 20, 30]}
         count={count}
+        labelRowsPerPage="Số hàng mỗi trang:"
+        labelDisplayedRows={({ from, to, count }) =>
+          `${from}-${to} của ${count !== -1 ? count : `nhiều hơn ${to}`}`
+        }
         page={page}
         component="div"
         onPageChange={handlePageChange}
@@ -124,17 +128,6 @@ function ContestManagement() {
     }
   };
 
-  const handleActiveDate = data => {
-    if (data.rowData.every(item => item === undefined)) return false;
-    let currentDate = new Date().toJSON().slice(0, 10);
-    const startDate = data.rowData[1].split('T')[0];
-    const endDate = data.rowData[2].split('T')[0];
-
-    if (startDate <= currentDate && currentDate <= endDate) return true;
-
-    return false;
-  };
-
   const handleActiveDelete = data => {
     return (
       data?.rowData[4].toLowerCase().includes('Hoàn thành'.toLowerCase()) ||
@@ -185,7 +178,7 @@ function ContestManagement() {
     },
     {
       name: 'accountFullName',
-      label: 'TÊN STAFF',
+      label: 'TÊN NHÂN VIÊN',
     },
     {
       name: 'status',
@@ -260,7 +253,7 @@ function ContestManagement() {
         count={contest.length}
       />
     ),
-    onRowClick: (rowData, rowMeta) => {
+    onRowClick: rowData => {
       const obj = rowData[5]?.props?.children?.find(
         item => item.type === 'span',
       );

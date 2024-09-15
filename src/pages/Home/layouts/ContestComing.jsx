@@ -20,7 +20,6 @@ import {
 } from '../../../constant/Status.js';
 import { useQuery } from '@tanstack/react-query';
 import { contestApi } from '../../../api/contestApi.js';
-import { Dropdown } from '../../../components/dropdown';
 import { FormControl } from '@mui/material';
 import { InputLabel } from '@mui/material';
 import { Select } from '@mui/material';
@@ -30,7 +29,6 @@ const ContestComing = () => {
   const [status, setStatus] = useState(EContestStatus.NOT_STARTED);
   const filterStatus = [
     { name: 'Chưa bắt đầu', value: EContestStatus.NOT_STARTED },
-    { name: 'Đang diễn ra', value: EContestStatus.IN_PROCESS },
     { name: 'Đã kết thúc', value: EContestStatus.COMPLETED },
   ];
   const { isLoading, isError, data, error, refetch } = useQuery({

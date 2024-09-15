@@ -49,7 +49,7 @@ function TopicForm({ modalShow, onHide, topicData }) {
     event.stopPropagation();
 
     let formErrors = {};
-    if (formData?.name?.length > 1 && formData?.name?.length < 100) {
+    if (formData?.name?.length < 1 && formData?.name?.length > 100) {
       formErrors.name = 'Chủ đề chỉ được từ 1-100 ký tự';
     }
 

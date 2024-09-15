@@ -147,8 +147,7 @@ const CollectionPage = () => {
                           </div>
                           <div className="infor text-right">
                             <h4>
-                              <Link
-                                to={`/collection-painting/${item.id}`}>
+                              <Link to={`/collection-painting/${item.id}`}>
                                 {item.name}
                               </Link>
                             </h4>
@@ -218,7 +217,7 @@ const CollectionPage = () => {
             </div>
           ) : (
             <h2 className="text-center font-weight-bold">
-              Không có bộ sưu tập nào
+              Bạn chưa có bộ sưu tập nào!
             </h2>
           )}
         </div>

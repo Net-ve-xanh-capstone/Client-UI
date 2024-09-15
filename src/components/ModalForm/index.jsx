@@ -390,6 +390,7 @@ function ModalForm({ modalShow, onHide }) {
                       {/*Nếu như chỉ có 1 phần tử thì không xuất hiện*/}
                       {levelFields.length > 1 && (
                         <RemoveCircleOutlineIcon
+                          style={{ cursor: 'pointer' }}
                           className={styles.icon_remove}
                           onClick={() =>
                             handleRemoveEducationalLevelItem(index)
@@ -493,6 +494,7 @@ function ModalForm({ modalShow, onHide }) {
               {/*  Add thêm đối tượng tham gia*/}
               <div className={styles.add_block}>
                 <AddCircleOutlineIcon
+                  style={{ cursor: 'pointer' }}
                   fontSize={'large'}
                   className={styles.icon_add}
                   onClick={handleAddEducationalLevel}
@@ -535,6 +537,7 @@ function ModalForm({ modalShow, onHide }) {
                           {/*Nếu như chỉ có 2 phần tử thì không xuất hiện*/}
                           {item?.roundNumber > 2 && (
                             <RemoveCircleOutlineIcon
+                              style={{ cursor: 'pointer' }}
                               className={styles.icon_remove}
                               onClick={() => handleRemoveRoundItem(index)}
                             />
@@ -615,6 +618,7 @@ function ModalForm({ modalShow, onHide }) {
                 )}
                 <div className={styles.add_block}>
                   <AddCircleOutlineIcon
+                    style={{ cursor: 'pointer' }}
                     fontSize={'large'}
                     className={styles.icon_add}
                     onClick={handleAddRound}

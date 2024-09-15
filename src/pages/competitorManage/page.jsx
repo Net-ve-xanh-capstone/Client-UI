@@ -2,10 +2,19 @@ import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import IconButton from '@mui/material/IconButton';
-import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
 import React, { useEffect, useState } from 'react';
-import { activeCompetitor, blockCompetitor, getAllCompetitor, getCompetitorById } from '../../api/competitor.js';
+import {
+  activeCompetitor,
+  blockCompetitor,
+  getAllCompetitor,
+  getCompetitorById,
+} from '../../api/competitor.js';
 import ModalInforUser from '../../components/ModalInforUser/page.jsx';
 import { formatDate } from '../../utils/formatDate';
 import styles from './page.module.css';
@@ -94,7 +103,7 @@ function CompetitorManage() {
   const columns = [
     {
       name: 'code',
-      label: 'MÃ',
+      label: 'MÃ THÍ SINH',
       options: {
         customBodyRender: value => (
           <span>

@@ -11,12 +11,7 @@ import ModalEditPainting from '../../components/editPainting/page.jsx';
 import CardPainting from '../../components/paintingCard/page.jsx';
 import styles from './page.module.css';
 
-function PaintingPage({
-  scheduleFrag,
-  getContestDetail,
-  contestId,
-  statusOfRound,
-}) {
+function PaintingPage({ contestId, statusOfRound }) {
   const [totalPage, setTotalPage] = useState(2);
   const [pageNumber, setPageNumber] = useState(1);
   const [loadingPage, setLoadingPage] = useState(false);

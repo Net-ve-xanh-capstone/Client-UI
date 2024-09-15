@@ -43,6 +43,7 @@ const SidebarBlog = forwardRef((props, ref) => {
               <FormControlLabel
                 control={
                   <Checkbox
+                    size="large"
                     checked={checkBox.includes(category)}
                     onChange={event =>
                       handleCheckCategoryName(event.target.value)

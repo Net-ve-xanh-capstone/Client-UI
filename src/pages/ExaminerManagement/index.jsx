@@ -49,7 +49,7 @@ function ExaminerManagement() {
   const columns = [
     {
       name: 'code',
-      label: 'MÃ',
+      label: 'MÃ GIÁM KHẢO',
       options: {
         customBodyRender: value => <span>{value}</span>,
       },

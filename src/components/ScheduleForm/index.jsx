@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -13,18 +13,17 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { getById } from '../../api/awardApi.js';
 import { getAll } from '../../api/examinerStaffApi.js';
-import { createPreliminary, editSchedule } from '../../api/scheduleStaffApi.js';
+import { createManualPreliminary, createAutoPreliminary, editSchedule } from '../../api/scheduleStaffApi.js';
 import styles from './style.module.css';
+import { CircularProgress } from '@mui/material';
+import { getAwardForScheduleByRoundId } from '../../api/awrdApi';
 
 function ScheduleForm({
   modalShow,
   onHide,
   roundData,
-  scheduleData,
   type,
   roundId,
-  competitionStartTime,
-  competitionEndTime,
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [examiner, setExaminer] = useState([]);
@@ -32,23 +31,24 @@ function ScheduleForm({
   const navigate = useNavigate();
   const [award, setAward] = useState([]);
   const [isAutoSchedule, setIsAutoSchedule] = useState(false);
+  const [awardLoading, setAwardLoading] = useState(false);
+  const [awards, setAwards] = useState([]);
+  const [paintingForSchedule, setPaintingForSchedule] = useState(false);
 
-  const { control, register, handleSubmit, formState: { errors }, getValues, reset, watch } = useForm({
+  const { control, register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm({
     defaultValues: {
-      description: type?.description || '',
+      description: '',
       roundId: roundData?.id,
-      endDate: type?.endDate ? new Date(type.endDate) : null,
+      endDate: null,
       listExaminer: [],
       currentUserId: userInfo?.Id,
-      judgedCount: 0,
-      awardCount: 0,
       listScheduleSingleExaminer: [
         {
           description: '',
           endDate: null,
           examinerId: '',
           judgedCount: 0,
-          awards: [{ awardId: '', awardCount: 0 }]
+          awards: []
         }
       ]
     }
@@ -75,7 +75,7 @@ function ScheduleForm({
     }
   };
 
-  const getExaminer = async () => {
+  const fetchExaminers = async () => {
     try {
       const { data } = await getAll();
       setExaminer(data.result);
@@ -94,28 +94,31 @@ function ScheduleForm({
           roundId: roundData?.id,
           endDate: data.endDate,
           listExaminer: data.listExaminer,
-          judgedCount: data.judgedCount,
-          currentUserId: userInfo?.Id,
-          awards: [
-            {
-              awardId: award[0]?.awardId,
-              awardCount: data.awardCount,
-            },
-          ],
+          currentUserId: userInfo?.Id
         };
       } else {
         payload = {
           roundId: roundData?.id,
           currentUserId: userInfo?.Id,
           listScheduleSingleExaminer: data.listScheduleSingleExaminer.map(examiner => ({
-            ...examiner,
-            awards: [{ awardId: award[0]?.awardId, awardCount: examiner.awards[0].awardCount }]
+            description: examiner.description,
+            endDate: examiner.endDate,
+            examinerId: examiner.examinerId,
+            judgedCount: parseInt(examiner.judgedCount),
+            awards: examiner.awards.filter(award => award.awardCount > 0).map(award => ({
+              awardId: award.awardId,
+              awardCount: parseInt(award.awardCount)
+            }))
           }))
         };
       }
 
       if (type === 'create') {
-        await createPreliminary(payload);
+        if (isAutoSchedule) {
+          await createAutoPreliminary(payload);
+        } else {
+          await createManualPreliminary(payload);
+        }
         toast.success('Thêm lịch chấm thi thành công');
       } else {
         await editSchedule(payload);
@@ -130,6 +133,7 @@ function ScheduleForm({
     }
   };
 
+
   const handleAddExaminer = () => {
     appendExaminer({
       description: '',
@@ -140,9 +144,47 @@ function ScheduleForm({
     });
   };
 
-  useEffect(() => {
-    getExaminer();
+  const fetchAwards = useCallback(async (id) => {
+    setAwardLoading(true);
+    try {
+      const { data } = await getAwardForScheduleByRoundId(id);
+
+      const quantityPainting = data.result.paintingForSchedule; // Số lượng paintings trong schedule
+      const list = data.result.listAward;
+
+      const result = list.map(val => ({
+        awardId: val.id,
+        name: val.rank,
+        quantity: 0,
+        originalQuantity: val.quantity
+      }));
+
+      setAwards(result);
+      setPaintingForSchedule(quantityPainting);
+
+      // Initialize awards for each examiner
+      setValue('listScheduleSingleExaminer', examinerFields.map(field => ({
+        ...field,
+        awards: result.map(award => ({ awardId: award.awardId, awardCount: 0 }))
+      })));
+
+    } catch (error) {
+      console.error('Error fetching awards:', error);
+      toast.error('Failed to fetch awards');
+    } finally {
+      setAwardLoading(false);
+    }
   }, []);
+
+
+  useEffect(() => {
+    if (!userInfo) navigate('/login');
+    if (modalShow) {
+      reset();
+      if (roundId) fetchAwards(roundId);
+    }
+    fetchExaminers();
+  }, [modalShow, roundId, userInfo, navigate, reset]);
 
   useEffect(() => {
     if (!userInfo) navigate('/login');
@@ -204,8 +246,7 @@ function ScheduleForm({
                   />
                 )}
               />
-
-              <h4 className={styles.title}>Ngày chấm</h4>
+              <h4 className={styles.title}>Ngày Chấm</h4>
               <Controller
                 control={control}
                 name="endDate"
@@ -215,6 +256,7 @@ function ScheduleForm({
                     onChange={(date) => field.onChange(date)}
                     className={styles.formControl}
                     dateFormat="dd/MM/yyyy"
+                    minDate={new Date()}  // Ngăn không cho chọn quá khứ
                   />
                 )}
               />
@@ -226,22 +268,6 @@ function ScheduleForm({
                 type="text"
               />
               {errors.description && <p className={styles.error}>{errors.description.message}</p>}
-
-              <h4 className={styles.title}>Số lượng bài chấm</h4>
-              <input
-                {...register('judgedCount', { required: 'Vui lòng nhập số lượng bài chấm' })}
-                className={styles.inputModal}
-                type="number"
-              />
-              {errors.judgedCount && <p className={styles.error}>{errors.judgedCount.message}</p>}
-
-              <h4 className={styles.title}>Số lượng giải thưởng</h4>
-              <input
-                {...register('awardCount', { required: 'Vui lòng nhập số lượng giải thưởng' })}
-                className={styles.inputModal}
-                type="number"
-              />
-              {errors.awardCount && <p className={styles.error}>{errors.awardCount.message}</p>}
             </>
           ) : (
             <div className={styles.first_zone}>
@@ -283,6 +309,7 @@ function ScheduleForm({
                             onChange={(date) => field.onChange(date)}
                             className={styles.formControl}
                             dateFormat="dd/MM/yyyy"
+                            minDate={new Date()}  // Ngăn chọn ngày trong quá khứ
                           />
                         )}
                       />
@@ -303,7 +330,7 @@ function ScheduleForm({
 
                   <div className="row">
                     <div className="col-md-6">
-                      <h5 className={styles.title}>Số lượng bài chấm</h5>
+                      <h5 className={styles.title}>Sô lượng bài thi : {paintingForSchedule}</h5>
                       <input
                         {...register(`listScheduleSingleExaminer.${index}.judgedCount`, { required: 'Vui lòng nhập số lượng bài chấm' })}
                         className={styles.formControl}
@@ -311,19 +338,55 @@ function ScheduleForm({
                       />
                       {errors.listScheduleSingleExaminer?.[index]?.judgedCount && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].judgedCount.message}</p>}
                     </div>
-                    <div className="col-md-6">
-                      <h5 className={styles.title}>Số lượng giải thưởng</h5>
-                      <input
-                        {...register(`listScheduleSingleExaminer.${index}.awards.0.awardCount`, { required: 'Vui lòng nhập số lượng giải thưởng' })}
-                        className={styles.formControl}
-                        type="number"
-                      />
-                      {errors.listScheduleSingleExaminer?.[index]?.awards?.[0]?.awardCount && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].awards[0].awardCount.message}</p>}
+                    <div className={styles.list_round}>
+                      {awardLoading ? (
+                        <div className={styles.loadingContainer}>
+                          <CircularProgress color="secondary" />
+                        </div>
+                      ) : (
+                        awards.map((award, awardIndex) => (
+                          <div key={award.awardId} className={styles.round}>
+                            <div>
+                              <h4 className={styles.title}>
+                                Số Lượng Bài Thi Qua {award.name} : {Math.max(award.originalQuantity - award.quantity, 0)}
+                              </h4>
+                              <input
+                                {...register(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardId`)}
+                                type="hidden"
+                                value={award.awardId}
+                              />
+                              <input
+                                {...register(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`, {
+                                  required: 'Vui lòng nhập số lượng',
+                                  valueAsNumber: true, // Chuyển đổi giá trị input thành số
+                                  validate: (value) => value <= award.originalQuantity || `Số lượng không được vượt quá ${award.originalQuantity}`
+                                })}
+                                className={styles.formControl}
+                                type="number"
+                                value={award.quantity}
+                                min="0"
+                                max={award.originalQuantity} // Giới hạn giá trị lớn nhất
+                                onChange={(e) => {
+                                  const newValue = Math.min(
+                                    award.originalQuantity, // Giới hạn giá trị tối đa không vượt quá originalQuantity
+                                    Math.max(0, parseInt(e.target.value) || 0)
+                                  );
+                                  setAwards(prevAwards =>
+                                    prevAwards.map(a =>
+                                      a.awardId === award.awardId ? { ...a, quantity: newValue } : a
+                                    )
+                                  );
+                                }}
+                              />
+                            </div>
+                          </div>
+                        ))
+                      )}
                     </div>
                   </div>
                 </div>
 
-                
+
               ))}
               <div className={styles.add_block}>
                 <AddCircleOutlineIcon

@@ -5,10 +5,11 @@ import MUIDataTable from 'mui-datatables';
 import { getConmpetitors, getRounds } from '../../api/competitorApi.js';
 import ResourceForm from '../ResourceForm';
 import styles from './style.module.css';
+import * as XLSX from 'xlsx';
 
 function CompetitorFragment({ resourceFrag, statusOfRound }) {
   const [resource, setResource] = useState([]);
-  const [loading, setLoading] = useState(false); // Thêm state loading
+  const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedRound, setSelectedRound] = useState('');
   const [rounds, setRounds] = useState([]);
@@ -21,7 +22,6 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     if (selectedRound) {
       getResource(selectedRound);
     } else {
-      // Load all competitors if no round is selected
       getResource();
     }
   }, [selectedRound]);
@@ -46,24 +46,20 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     'Giải Nhì': 2,
     'Giải Ba': 3,
     'Giải Khuyến Khích': 4,
-    null: 6,  // null sẽ được xếp cuối cùng
+    null: 6,
   };
 
-  // Hàm để lấy và sắp xếp dữ liệu
   const getResource = async (roundId = '') => {
-    setLoading(true); // Bắt đầu loading
+    setLoading(true);
     try {
       const { data } = await getConmpetitors(roundId);
       let resourceData = data?.result || [];
 
-      // Sắp xếp dữ liệu dựa trên prizePriority
       resourceData.sort((a, b) => {
         const prizeA = a.prize || null;
         const prizeB = b.prize || null;
-
-        const priorityA = prizePriority[prizeA] !== undefined ? prizePriority[prizeA] : 5; // Nếu không có trong prizePriority, xếp vào "other"
+        const priorityA = prizePriority[prizeA] !== undefined ? prizePriority[prizeA] : 5;
         const priorityB = prizePriority[prizeB] !== undefined ? prizePriority[prizeB] : 5;
-
         return priorityA - priorityB;
       });
 
@@ -71,7 +67,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     } catch (e) {
       console.error('Error fetching competitors:', e);
     } finally {
-      setLoading(false); // Kết thúc loading
+      setLoading(false);
     }
   };
 
@@ -79,7 +75,6 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     setSelectedRound(event.target.value);
   };
 
-  // Columns for the table remain unchanged
   const columns = [
     { name: 'code', label: 'Mã Thí Sinh' },
     { name: 'fullName', label: 'Họ và tên' },
@@ -93,15 +88,6 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
         customBodyRender: value => (value ? value : 'Chưa có'),
       },
     },
-    {
-      name: 'round',
-      label: 'Vòng thi',
-      options: {
-        customBodyRender: (value, tableMeta) => (
-          <span>{value ? value.name : 'Không có vòng thi'}</span>
-        ),
-      },
-    },
   ];
 
   const options = {
@@ -110,8 +96,8 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     rowsPerPage: 4,
     rowsPerPageOptions: [4, 10, 20, 30],
     responsive: 'standard',
-    print: false, // Ẩn nút print nếu bạn muốn tùy chỉnh
-    download: true, // Bật nút download
+    print: false,
+    download: true,
     filter: false,
     textLabels: {
       body: {
@@ -128,32 +114,27 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
       },
     },
     
-    // Custom Download behavior
-    onDownload: async (buildHead, buildBody, columns, data) => {
-      // Thay vì dùng cơ chế mặc định, bạn gọi API của bạn
-      try {
-        const response = await myCustomApiForDownloadingData();
-        if (response.status === 200) {
-          // Thực hiện download với dữ liệu từ API của bạn
-          const blob = new Blob([response.data], { type: 'text/csv' });
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = 'data.csv';
-          link.click();
-        }
-      } catch (error) {
-        console.error('Lỗi khi tải xuống:', error);
-      }
-      return false; // Không sử dụng cơ chế tải xuống mặc định của MUIDataTable
+    onDownload: (buildHead, buildBody, columns, data) => {
+      const ws = XLSX.utils.json_to_sheet(
+        data.map(row => ({
+          'Mã Thí Sinh': row.data[0],
+          'Họ và tên': row.data[1],
+          'Tuổi': row.data[2],
+          'Giới tính': row.data[3],
+          'Tình trạng': row.data[4],
+          'Giải Thưởng': row.data[5],
+          'Vòng thi': row.data[6]?.props?.children || 'Không có vòng thi'
+        }))
+      );
+      
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Competitors");
+      
+      XLSX.writeFile(wb, "competitors.xlsx");
+      
+      return false;
     },
-  
-    // Tương tự bạn có thể tùy chỉnh chức năng print nếu cần
-    onPrint: () => {
-      // Gọi API của bạn hoặc thực hiện hành động tùy chỉnh
-      console.log("Thực hiện hành động tùy chỉnh khi in");
-      return false; // Ngăn hành vi print mặc định
-    },
-  
+    
     onRowClick: (rowData, rowMeta) => {
       handleOpenDetail(rowData[2]?.props?.children);
     },
@@ -188,6 +169,11 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
       },
     });
 
+  const handleOpenDetail = (competitorId) => {
+    // Implement your logic for opening competitor details
+    console.log('Opening details for competitor:', competitorId);
+  };
+
   return (
     <>
       <ResourceForm
@@ -196,7 +182,6 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
         resourceData={resourceFrag}
       />
 
-      {/* Dropdown Filter for Rounds */}
       <div className={styles.filterContainer}>
         <FormControl fullWidth>
           <InputLabel id="round-filter-label">Lọc theo vòng thi</InputLabel>
@@ -208,7 +193,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
             onChange={handleRoundChange}
           >
             <MenuItem value="">
-              <em>Tất cả các vòng</em>
+              <em>Tất cả vòng thi</em>
             </MenuItem>
             {rounds.map((round) => (
               <MenuItem key={round.id} value={round.id}>
@@ -219,11 +204,10 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
         </FormControl>
       </div>
 
-      {/* Competitor Table */}
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={getMuiTheme()}>
           <div className="table-contest">
-            {loading ? ( // Hiển thị spinner khi dữ liệu đang được tải
+            {loading ? (
               <Box sx={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
                 <CircularProgress />
               </Box>

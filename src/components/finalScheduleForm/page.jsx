@@ -10,7 +10,7 @@ import DatePicker from 'react-datepicker';
 import { FormControlLabel, Switch, CircularProgress } from '@mui/material';
 import { RemoveCircleOutline, AddCircleOutline } from '@mui/icons-material';
 import { getAll } from '../../api/examinerStaffApi';
-import { createPreliminary, editSchedule } from '../../api/scheduleStaffApi';
+import { createAutoFinal, createManualFinal, editSchedule } from '../../api/scheduleStaffApi';
 import { getAwardForScheduleByRoundId } from '../../api/awrdApi';
 import styles from './page.module.css';
 
@@ -29,25 +29,25 @@ function FinalSchedule({
     const { userInfo } = useSelector((state) => state.auth);
     const navigate = useNavigate();
     const [awards, setAwards] = useState([]);
+    const [award, setAward] = useState([]);
     const [isAutoSchedule, setIsAutoSchedule] = useState(false);
     const [awardLoading, setAwardLoading] = useState(false);
+    const [paintingForSchedule, setPaintingForSchedule] = useState(false);
 
-    const { control, register, handleSubmit, formState: { errors }, reset } = useForm({
+    const { control, register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm({
         defaultValues: {
             description: '',
             roundId: roundData?.id,
             endDate: null,
             listExaminer: [],
             currentUserId: userInfo?.Id,
-            judgedCount: 0,
-            awardCount: 0,
             listScheduleSingleExaminer: [
                 {
                     description: '',
                     endDate: null,
                     examinerId: '',
                     judgedCount: 0,
-                    awards: [{ awardId: '', awardCount: 0 }]
+                    awards: []
                 }
             ]
         }
@@ -68,20 +68,31 @@ function FinalSchedule({
         setAwardLoading(true);
         try {
             const { data } = await getAwardForScheduleByRoundId(id);
-            const result = data.result.map(val => ({
+
+            const quantityPainting = data.result.paintingForSchedule; // Số lượng paintings trong schedule
+            const list = data.result.listAward;
+
+            const result = list.map(val => ({
                 awardId: val.id,
                 name: val.rank,
-                quantity: val.quantity,
+                quantity: 0,
                 originalQuantity: val.quantity
             }));
             const sortedAwards = sortAwards(result);
             setAwards(sortedAwards);
+            setPaintingForSchedule(quantityPainting);
 
             // Set the first prize count
             const firstPrize = sortedAwards.find(award => award.name === 'Giải Nhất');
             if (firstPrize) {
                 setFirstPrizeCount(firstPrize.originalQuantity);
             }
+
+            // Initialize awards for each examiner
+            setValue('listScheduleSingleExaminer', examinerFields.map(field => ({
+                ...field,
+                awards: result.map(award => ({ awardId: award.awardId, awardCount: 0 }))
+            })));
         } catch (error) {
             console.error('Error fetching awards:', error);
             toast.error('Failed to fetch awards');
@@ -103,32 +114,47 @@ function FinalSchedule({
     const onSubmit = async (data) => {
         setIsLoading(true);
         try {
-            const payload = isAutoSchedule
-                ? {
+            let payload;
+            if (isAutoSchedule) {
+                payload = {
                     description: data.description,
                     roundId: roundData?.id,
                     endDate: data.endDate,
                     listExaminer: data.listExaminer,
-                    judgedCount: data.judgedCount,
-                    currentUserId: userInfo?.Id,
-                    awards: [{ awardId: awards[0]?.awardId, awardCount: data.awardCount }],
-                }
-                : {
+                    currentUserId: userInfo?.Id
+                };
+            } else {
+                payload = {
                     roundId: roundData?.id,
                     currentUserId: userInfo?.Id,
                     listScheduleSingleExaminer: data.listScheduleSingleExaminer.map(examiner => ({
-                        ...examiner,
-                        awards: [{ awardId: awards[0]?.awardId, awardCount: examiner.awards[0].awardCount }]
+                        description: examiner.description,
+                        endDate: examiner.endDate,
+                        examinerId: examiner.examinerId,
+                        judgedCount: parseInt(examiner.judgedCount),
+                        awards: examiner.awards.filter(award => award.awardCount > 0).map(award => ({
+                            awardId: award.awardId,
+                            awardCount: parseInt(award.awardCount)
+                        }))
                     }))
                 };
+            }
 
-            const apiCall = type === 'create' ? createPreliminary : editSchedule;
-            await apiCall(payload);
-            toast.success(type === 'create' ? 'Schedule added successfully' : 'Schedule updated successfully');
+            if (type === 'create') {
+                if (isAutoSchedule) {
+                    await createAutoFinal(payload);
+                } else {
+                    await createManualFinal(payload);
+                }
+                toast.success('Thêm lịch chấm thi thành công');
+            } else {
+                await editSchedule(payload);
+                toast.success('Chỉnh sửa lịch chấm thành công');
+            }
             onHide();
         } catch (error) {
+            toast.error(type === 'create' ? 'Thêm lịch chấm thi không thành công' : 'Có lỗi xảy ra vui lòng thử lại');
             console.error('Error submitting form:', error);
-            toast.error(type === 'create' ? 'Failed to add schedule' : 'Failed to update schedule');
         } finally {
             setIsLoading(false);
         }
@@ -165,13 +191,13 @@ function FinalSchedule({
                 awards: [{ awardId: '', awardCount: 0 }]
             });
         } else {
-            toast.error(`Cannot add more examiners than the number of first prizes (${firstPrizeCount})`);
+            toast.error(`Số lượng giám khảo không nhiều hơn số lượng giải nhất (${firstPrizeCount} giải)`);
         }
     };
 
     const renderAutoScheduleForm = () => (
         <>
-            <h4 className={styles.title}>Examiners</h4>
+            <h4 className={styles.title}>Giám Khảo</h4>
             <Controller
                 control={control}
                 name="listExaminer"
@@ -183,12 +209,11 @@ function FinalSchedule({
                         onSelect={(selectedList) => field.onChange(selectedList.map(item => item.id))}
                         options={examiners}
                         selectedValues={type !== 'create' ? [{ id: type?.id, fullName: type?.examinerName }] : []}
-                        placeholder="Select examiners"
                     />
                 )}
             />
 
-            <h4 className={styles.title}>Judging Date</h4>
+            <h4 className={styles.title}>Ngày Chấm</h4>
             <Controller
                 control={control}
                 name="endDate"
@@ -209,47 +234,17 @@ function FinalSchedule({
                 type="text"
             />
             {errors.description && <p className={styles.error}>{errors.description.message}</p>}
-
-            <h4 className={styles.title}>Number of Judged Items</h4>
-            <input
-                {...register('judgedCount', { required: 'Please enter the number of judged items' })}
-                className={styles.inputModal}
-                type="number"
-            />
-            {errors.judgedCount && <p className={styles.error}>{errors.judgedCount.message}</p>}
-
-            <h4 className={styles.title}>Number of Awards</h4>
-            <input
-                {...register('awardCount', { required: 'Please enter the number of awards' })}
-                className={styles.inputModal}
-                type="number"
-            />
-            {errors.awardCount && <p className={styles.error}>{errors.awardCount.message}</p>}
         </>
     );
 
     const renderManualScheduleForm = () => (
         <div className={styles.first_zone}>
-            <h4 className={styles.title_zone}>Schedule for each examiner</h4>
-            <div className={styles.award_info}>
-                <h5>Award Information:</h5>
-                {awardLoading ? (
-                    <CircularProgress color="secondary" size={20} />
-                ) : (
-                    <ul>
-                        {awards.map(award => (
-                            <li key={award.awardId}>
-                                {award.name}: {award.originalQuantity}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
+            <h4 className={styles.title_zone}>Tạo Lịch Chấm</h4>
 
             {examinerFields.map((item, index) => (
                 <div key={item.id} className={styles.roundBlock}>
                     <div className={styles.remove_block}>
-                        <h5>Examiner {index + 1}</h5>
+                        <h5>Giám Khảo {index + 1}</h5>
                         {index > 0 && (
                             <RemoveCircleOutline
                                 className={styles.icon_remove}
@@ -260,12 +255,11 @@ function FinalSchedule({
 
                     <div className="row">
                         <div className="col-md-6">
-                            <h5 className={styles.title}>Select Examiner</h5>
+                            <h5 className={styles.title}>Giám Khảo</h5>
                             <select
                                 {...register(`listScheduleSingleExaminer.${index}.examinerId`, { required: 'Please select an examiner' })}
                                 className={styles.formControl}
                             >
-                                <option value="">Select examiner</option>
                                 {examiners.map((ex) => (
                                     <option key={ex.id} value={ex.id}>{ex.fullName}</option>
                                 ))}
@@ -273,7 +267,7 @@ function FinalSchedule({
                             {errors.listScheduleSingleExaminer?.[index]?.examinerId && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].examinerId.message}</p>}
                         </div>
                         <div className="col-md-6">
-                            <h5 className={styles.title}>Judging Date</h5>
+                            <h5 className={styles.title}>Ngày Chấm</h5>
                             <Controller
                                 control={control}
                                 name={`listScheduleSingleExaminer.${index}.endDate`}
@@ -283,6 +277,7 @@ function FinalSchedule({
                                         onChange={(date) => field.onChange(date)}
                                         className={styles.formControl}
                                         dateFormat="dd/MM/yyyy"
+                                        minDate={new Date()}  // Ngăn chọn ngày trong quá khứ
                                     />
                                 )}
                             />
@@ -302,24 +297,14 @@ function FinalSchedule({
                     </div>
 
                     <div className="row">
-                        <div className="col-md-6">
-                            <h5 className={styles.title}>Number of Judged Items</h5>
-                            <input
-                                {...register(`listScheduleSingleExaminer.${index}.judgedCount`, { required: 'Please enter the number of judged items' })}
-                                className={styles.formControl}
-                                type="number"
-                            />
-                            {errors.listScheduleSingleExaminer?.[index]?.judgedCount && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].judgedCount.message}</p>}
-                        </div>
-                        <div className="col-md-6">
-                            <h5 className={styles.title}>Number of Awards</h5>
-                            <input
-                                {...register(`listScheduleSingleExaminer.${index}.awards.0.awardCount`, { required: 'Please enter the number of awards' })}
-                                className={styles.formControl}
-                                type="number"
-                            />
-                            {errors.listScheduleSingleExaminer?.[index]?.awards?.[0]?.awardCount && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].awards[0].awardCount.message}</p>}
-                        </div>
+
+                        <h5 className={styles.title}>Sô lượng bài thi : {paintingForSchedule}</h5>
+                        <input
+                            {...register(`listScheduleSingleExaminer.${index}.judgedCount`, { required: 'Please enter the number of judged items' })}
+                            className={styles.formControl}
+                            type="number"
+                        />
+                        {errors.listScheduleSingleExaminer?.[index]?.judgedCount && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].judgedCount.message}</p>}
                     </div>
 
                     <div className={styles.list_round}>
@@ -328,18 +313,33 @@ function FinalSchedule({
                                 <CircularProgress color="secondary" />
                             </div>
                         ) : (
-                            awards.map(award => (
+                            awards.map((award, awardIndex) => (
                                 <div key={award.awardId} className={styles.round}>
                                     <div>
-                                        <h4 className={styles.title}>{award.name}</h4>
+                                        <h4 className={styles.title}>
+                                            {award.name} : {Math.max(award.originalQuantity - award.quantity, 0)}
+                                        </h4>
                                         <input
-                                            required
-                                            className={styles.grid_input}
+                                            {...register(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardId`)}
+                                            type="hidden"
+                                            value={award.awardId}
+                                        />
+                                        <input
+                                            {...register(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`, {
+                                                required: 'Vui lòng nhập số lượng',
+                                                valueAsNumber: true, // Chuyển đổi giá trị input thành số
+                                                validate: (value) => value <= award.originalQuantity || `Số lượng không được vượt quá ${award.originalQuantity}`
+                                            })}
+                                            className={styles.formControl}
                                             type="number"
                                             value={award.quantity}
                                             min="0"
+                                            max={award.originalQuantity} // Giới hạn giá trị lớn nhất
                                             onChange={(e) => {
-                                                const newValue = Math.max(0, parseInt(e.target.value) || 0);
+                                                const newValue = Math.min(
+                                                    award.originalQuantity, // Giới hạn giá trị tối đa không vượt quá originalQuantity
+                                                    Math.max(0, parseInt(e.target.value) || 0)
+                                                );
                                                 setAwards(prevAwards =>
                                                     prevAwards.map(a =>
                                                         a.awardId === award.awardId ? { ...a, quantity: newValue } : a
@@ -347,11 +347,9 @@ function FinalSchedule({
                                                 );
                                             }}
                                         />
-                                        <div className={styles.grid_input_label}>
-                                            Remaining awards: {award.originalQuantity}
-                                        </div>
                                     </div>
                                 </div>
+
                             ))
                         )}
                     </div>
@@ -385,7 +383,7 @@ function FinalSchedule({
                                 color="primary"
                             />
                         }
-                        label={isAutoSchedule ? 'Automatic' : 'Manual'}
+                        label={isAutoSchedule ? 'Tự Động' : 'Thủ Công'}
                     />
 
                     {isAutoSchedule ? renderAutoScheduleForm() : renderManualScheduleForm()}

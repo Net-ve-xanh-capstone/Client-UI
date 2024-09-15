@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import DeleteModal from '../../DeleteModal/index.jsx';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { formatCurrencyVND } from '../../../utils/formatCurrency.js';
 
 const ListAward = memo(({ items, recallData, statusOfRound }) => {
   const [openAdd, setOpenAdd] = useState(false);
@@ -92,6 +93,16 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
     setOpenAdd(false);
   };
 
+  const disableAddAward = () => {
+    if (
+      items?.award?.length > 0 &&
+      !items?.name.toLowerCase().includes('Vòng chung kết'.toLowerCase())
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <>
       <AddingModal
@@ -160,7 +171,7 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
                         <div>{val?.quantity}</div>
                       </div>
                       <div className={styles.col} data-label="Hiện kim">
-                        <div>{val?.cash}</div>
+                        <div>{formatCurrencyVND(val?.cash)}</div>
                       </div>
                       <div className={styles.col} data-label="Hiện vật">
                         <div>{val?.artifact}</div>
@@ -176,7 +187,7 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
                             aria-label="delete"
                             size="large"
                             color="error"
-                            disabled={isActive}
+                            disabled={isActive || disableAddAward()}
                             onClick={() => {
                               setDeleteModalShow(true);
                               setAwardId(val.id);
@@ -200,7 +211,7 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
             <div className="flex justify-content-end mt-20">
               <button
                 className="btn btn-outline-primary btn-lg"
-                disabled={isActive}
+                disabled={isActive || disableAddAward()}
                 onClick={() => triggerOpenPopup()}>
                 Thêm giải thưởng
               </button>

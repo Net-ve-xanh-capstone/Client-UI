@@ -32,7 +32,7 @@
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-top: auto;
+  margin-top: 1rem;
 }
 
 .modalForm .inputModal {
@@ -155,5 +155,6 @@
 }
 
 .modal_backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+  height: 60vh;
+  max-height: 60vh;
 }

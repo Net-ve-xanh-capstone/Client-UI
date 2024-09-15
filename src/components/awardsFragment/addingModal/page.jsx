@@ -4,14 +4,6 @@ import styles from './page.module.css';
 import { useSelector } from 'react-redux';
 import { createAward, putAwards } from '../../../api/awrdApi.js';
 import { toast } from 'react-toastify';
-import { autocompleteClasses, Popper, styled } from '@mui/material';
-
-const ranks = [
-  { title: 'Giải nhất' },
-  { title: 'Giải nhì' },
-  { title: 'Giải ba' },
-  { title: 'Giải khuyến khích' },
-];
 
 const AddingModal = ({
   modalShow,
@@ -156,7 +148,7 @@ const AddingModal = ({
       const payload = {
         rank: checkedFinalRound ? fieldUpdate.rank : 'Qua vòng loại',
         quantity: fieldUpdate.quantity,
-        cash: fieldUpdate.cash,
+        cash: checkedFinalRound ? fieldUpdate.cash : 0,
         artifact: fieldUpdate.artifact,
         roundId: roundId,
         createdBy: userInfo.Id,
@@ -165,7 +157,7 @@ const AddingModal = ({
         id: fieldUpdate?.id,
         rank: checkedFinalRound ? fieldUpdate.rank : 'Qua vòng loại',
         quantity: fieldUpdate.quantity,
-        cash: fieldUpdate.cash,
+        cash: checkedFinalRound ? fieldUpdate.cash : 0,
         artifact: fieldUpdate.artifact,
         updatedBy: userInfo.Id,
       };
@@ -194,18 +186,17 @@ const AddingModal = ({
   return (
     <>
       <Modal
-        backdropClassName={styles.modal_backdrop}
+        contentClassName={styles.modal_backdrop}
         backdrop="static"
         show={modalShow}
         onHide={onHide}
-        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered>
         <Modal.Header closeButton style={{ margin: '0 auto' }}>
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            Thêm giải thưởng
+            {isEdit ? 'Chỉnh sửa giải thưởng' : 'Thêm giải thưởng'}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ height: '55vh', overflow: 'hidden' }}>
@@ -242,17 +233,25 @@ const AddingModal = ({
                 value={fieldUpdate.quantity}
                 onChange={e => handleInput(e)}
               />
-              <h4 className={styles.title}>Hiện kim</h4>
+              <h4 className={styles.title}>Tiền mặt</h4>
               <input
                 className={styles.inputModal}
+                style={{
+                  userSelect: !checkedFinalRound ? 'none' : 'auto',
+                }}
+                disabled={!checkedFinalRound}
                 type="number"
                 name="cash"
                 value={fieldUpdate.cash}
                 onChange={e => handleInput(e)}
               />
-              <h4 className={styles.title}>Hiện vật</h4>
+              <h4 className={styles.title}>Phần thưởng</h4>
               <input
                 className={styles.inputModal}
+                style={{
+                  userSelect: !checkedFinalRound ? 'none' : 'auto',
+                }}
+                disabled={!checkedFinalRound}
                 type="text"
                 name="artifact"
                 value={fieldUpdate.artifact}
@@ -264,34 +263,11 @@ const AddingModal = ({
                 {isEdit ? 'Lưu' : 'Tạo'}
               </button>
             </div>
-            {/* <Autocomplete
-              id="ranks"
-              freeSolo
-              options={ranks.map(rank => rank?.title)}
-              renderInput={params => (
-                <TextField {...params} label="giải thưởng" />
-              )}
-              PopperComponent={StyledPopper}
-              slots={{
-                popper: { style: { zIndex: zIndex.appBar + 1 } },
-              }}
-            /> */}
           </form>
         </Modal.Body>
       </Modal>
     </>
   );
 };
-
-const StyledPopper = styled(Popper)({
-  [`& .${autocompleteClasses.listbox}`]: {
-    zIndex: 999999999999999,
-    boxSizing: 'border-box',
-    '& ul': {
-      padding: 0,
-      margin: 0,
-    },
-  },
-});
 
 export default AddingModal;

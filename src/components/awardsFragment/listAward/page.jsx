@@ -7,7 +7,7 @@ import {
   AccordionSummary,
   IconButton,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { deleteAward } from '../../../api/awrdApi.js';
 import DeleteModal from '../../DeleteModal/index.jsx';

@@ -152,8 +152,8 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
                   }}>
                   <div className={styles.col}>Giải thưởng</div>
                   <div className={styles.col}>Số lượng</div>
-                  <div className={styles.col}>Hiện kim</div>
-                  <div className={styles.col}>Hiện vật</div>
+                  <div className={styles.col}>Tiền mặt</div>
+                  <div className={styles.col}>Phần thưởng</div>
                   <div className={styles.col}>Tương tác</div>
                 </li>
                 {items?.award?.length > 0 &&
@@ -170,10 +170,10 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
                       <div className={styles.col} data-label="Số lượng">
                         <div>{val?.quantity}</div>
                       </div>
-                      <div className={styles.col} data-label="Hiện kim">
+                      <div className={styles.col} data-label="Tiền mặt">
                         <div>{formatCurrencyVND(val?.cash)}</div>
                       </div>
-                      <div className={styles.col} data-label="Hiện vật">
+                      <div className={styles.col} data-label="Phần thưởng">
                         <div>{val?.artifact}</div>
                       </div>
                       <div className={styles.col} data-label="Tương tác">

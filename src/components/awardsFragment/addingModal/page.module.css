@@ -155,6 +155,6 @@
 }
 
 .modal_backdrop {
-  height: 60vh;
-  max-height: 60vh;
+  height: auto;
+  max-height: auto;
 }

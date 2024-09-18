@@ -13,7 +13,7 @@ export const createAutoFinal = payload => {
 };
 
 export const createManualFinal = payload => {
-  return axiosApi.post('schedules/final', payload);
+  return axiosApi.post('schedules/final-round/manual-assign', payload);
 };
 
 export const editSchedule = payload => {

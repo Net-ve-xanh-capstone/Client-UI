@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -10,31 +10,26 @@ import DatePicker from 'react-datepicker';
 import { FormControlLabel, Switch, CircularProgress } from '@mui/material';
 import { RemoveCircleOutline, AddCircleOutline } from '@mui/icons-material';
 import { getAll } from '../../api/examinerStaffApi';
-import { createAutoFinal, createManualFinal, editSchedule } from '../../api/scheduleStaffApi';
+import { createAutoFinal, createManualFinal } from '../../api/scheduleStaffApi';
 import { getAwardForScheduleByRoundId } from '../../api/awrdApi';
 import styles from './page.module.css';
 
 const awardOrder = ['Giải Nhất', 'Giải Nhì', 'Giải Ba', 'Giải Khuyến Khích', 'Khác'];
 const sortAwards = (awards) => awards.sort((a, b) => awardOrder.indexOf(a.name) - awardOrder.indexOf(b.name));
 
-function FinalSchedule({
-    modalShow,
-    onHide,
-    roundData,
-    type,
-    roundId,
-}) {
+function FinalSchedule({ modalShow, onHide, roundData, roundId }) {
     const [isLoading, setIsLoading] = useState(false);
     const [examiners, setExaminers] = useState([]);
     const { userInfo } = useSelector((state) => state.auth);
     const navigate = useNavigate();
     const [awards, setAwards] = useState([]);
-    const [award, setAward] = useState([]);
     const [isAutoSchedule, setIsAutoSchedule] = useState(false);
     const [awardLoading, setAwardLoading] = useState(false);
-    const [paintingForSchedule, setPaintingForSchedule] = useState(false);
+    const [paintingForSchedule, setPaintingForSchedule] = useState(0);
+    const [firstPrizeCount, setFirstPrizeCount] = useState(0);
+    const [totalAwardedCounts, setTotalAwardedCounts] = useState({});
 
-    const { control, register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm({
+    const { control, register, handleSubmit, formState: { errors }, reset, setValue, getValues, watch } = useForm({
         defaultValues: {
             description: '',
             roundId: roundData?.id,
@@ -53,8 +48,6 @@ function FinalSchedule({
         }
     });
 
-    const [firstPrizeCount, setFirstPrizeCount] = useState(0);
-
     const {
         fields: examinerFields,
         append: appendExaminer,
@@ -69,37 +62,83 @@ function FinalSchedule({
         try {
             const { data } = await getAwardForScheduleByRoundId(id);
 
-            const quantityPainting = data.result.paintingForSchedule; // Số lượng paintings trong schedule
+            const quantityPainting = data.result.paintingForSchedule;
             const list = data.result.listAward;
 
             const result = list.map(val => ({
                 awardId: val.id,
                 name: val.rank,
-                quantity: 0,
+                quantity: val.quantity,
                 originalQuantity: val.quantity
             }));
             const sortedAwards = sortAwards(result);
             setAwards(sortedAwards);
             setPaintingForSchedule(quantityPainting);
 
-            // Set the first prize count
             const firstPrize = sortedAwards.find(award => award.name === 'Giải Nhất');
             if (firstPrize) {
                 setFirstPrizeCount(firstPrize.originalQuantity);
             }
 
-            // Initialize awards for each examiner
             setValue('listScheduleSingleExaminer', examinerFields.map(field => ({
                 ...field,
                 awards: result.map(award => ({ awardId: award.awardId, awardCount: 0 }))
             })));
+
+            setTotalAwardedCounts(result.reduce((acc, award) => ({
+                ...acc,
+                [award.awardId]: 0
+            }), {}));
         } catch (error) {
             console.error('Error fetching awards:', error);
             toast.error('Failed to fetch awards');
         } finally {
             setAwardLoading(false);
         }
-    }, []);
+    }, [setValue, examinerFields]);
+
+    useEffect(() => {
+        const subscription = watch((value, { name, type }) => {
+            if (name && name.includes('awards') && type === 'change') {
+                const newTotalAwardedCounts = { ...totalAwardedCounts };
+
+                // Tính toán lại tổng số giải đã được nhập
+                awards.forEach(award => {
+                    newTotalAwardedCounts[award.awardId] = value.listScheduleSingleExaminer.reduce(
+                        (sum, examiner) =>
+                            sum + (examiner.awards.find(a => a.awardId === award.awardId)?.awardCount || 0),
+                        0
+                    );
+                });
+
+                console.log('newTotalAwardedCounts:', newTotalAwardedCounts);  // Kiểm tra giá trị của state
+                setTotalAwardedCounts(newTotalAwardedCounts);  // Cập nhật lại state tổng
+            }
+        });
+        return () => subscription.unsubscribe();
+    }, [watch, awards, totalAwardedCounts]);
+
+
+    const calculateRemainingAwards = useCallback((awardId) => {
+        const award = awards.find(a => a.awardId === awardId);
+        if (!award) return 0;
+
+        // Sử dụng giá trị đã được cập nhật từ totalAwardedCounts
+        const remaining = Math.max(award.originalQuantity - (totalAwardedCounts[awardId] || 0), 0);
+
+        console.log('Award ID:', awardId, 'Remaining:', remaining);  // Kiểm tra giá trị tính toán
+        return remaining;
+    }, [awards, totalAwardedCounts]);
+
+    useEffect(() => {
+        const subscription = watch((value, { name, type }) => {
+            console.log('watch triggered:', { value, name, type });  // Log toàn bộ giá trị
+        });
+
+        return () => subscription.unsubscribe();
+    }, [watch]);
+
+
 
     const fetchExaminers = async () => {
         try {
@@ -123,6 +162,7 @@ function FinalSchedule({
                     listExaminer: data.listExaminer,
                     currentUserId: userInfo?.Id
                 };
+                await createAutoFinal(payload);
             } else {
                 payload = {
                     roundId: roundData?.id,
@@ -138,22 +178,12 @@ function FinalSchedule({
                         }))
                     }))
                 };
+                await createManualFinal(payload);
             }
-
-            if (type === 'create') {
-                if (isAutoSchedule) {
-                    await createAutoFinal(payload);
-                } else {
-                    await createManualFinal(payload);
-                }
-                toast.success('Thêm lịch chấm thi thành công');
-            } else {
-                await editSchedule(payload);
-                toast.success('Chỉnh sửa lịch chấm thành công');
-            }
+            toast.success('Thêm lịch chấm thi thành công');
             onHide();
         } catch (error) {
-            toast.error(type === 'create' ? 'Thêm lịch chấm thi không thành công' : 'Có lỗi xảy ra vui lòng thử lại');
+            toast.error('Thêm lịch chấm thi không thành công');
             console.error('Error submitting form:', error);
         } finally {
             setIsLoading(false);
@@ -169,18 +199,6 @@ function FinalSchedule({
         fetchExaminers();
     }, [modalShow, roundId, userInfo, navigate, reset]);
 
-    useEffect(() => {
-        if (modalShow && type !== 'create') {
-            reset({
-                description: type?.description,
-                endDate: type?.endDate ? new Date(type.endDate) : null,
-                judgedCount: type?.judgedCount,
-                awardCount: type?.awards?.[0]?.quantity,
-            });
-        }
-    }, [modalShow, type, reset]);
-
-
     const handleAddExaminer = () => {
         if (examinerFields.length < firstPrizeCount) {
             appendExaminer({
@@ -188,7 +206,10 @@ function FinalSchedule({
                 endDate: null,
                 examinerId: '',
                 judgedCount: 0,
-                awards: [{ awardId: '', awardCount: 0 }]
+                awards: awards.map(award => ({
+                    awardId: award.awardId,
+                    awardCount: 0
+                }))
             });
         } else {
             toast.error(`Số lượng giám khảo không nhiều hơn số lượng giải nhất (${firstPrizeCount} giải)`);
@@ -317,7 +338,7 @@ function FinalSchedule({
                                 <div key={award.awardId} className={styles.round}>
                                     <div>
                                         <h4 className={styles.title}>
-                                            {award.name} : {Math.max(award.originalQuantity - award.quantity, 0)}
+                                            {award.name} : {calculateRemainingAwards(award.awardId)}
                                         </h4>
                                         <input
                                             {...register(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardId`)}
@@ -327,29 +348,25 @@ function FinalSchedule({
                                         <input
                                             {...register(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`, {
                                                 required: 'Vui lòng nhập số lượng',
-                                                valueAsNumber: true, // Chuyển đổi giá trị input thành số
-                                                validate: (value) => value <= award.originalQuantity || `Số lượng không được vượt quá ${award.originalQuantity}`
+                                                valueAsNumber: true,
+                                                validate: (value) => {
+                                                    const remaining = calculateRemainingAwards(award.awardId);
+                                                    const currentValue = getValues(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`) || 0;
+                                                    return value <= (remaining + currentValue) || `Số lượng không được vượt quá ${remaining + currentValue}`;
+                                                }
                                             })}
                                             className={styles.formControl}
                                             type="number"
-                                            value={award.quantity}
+                                            defaultValue={0}
                                             min="0"
-                                            max={award.originalQuantity} // Giới hạn giá trị lớn nhất
+                                            max={calculateRemainingAwards(award.awardId) + (getValues(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`) || 0)}
                                             onChange={(e) => {
-                                                const newValue = Math.min(
-                                                    award.originalQuantity, // Giới hạn giá trị tối đa không vượt quá originalQuantity
-                                                    Math.max(0, parseInt(e.target.value) || 0)
-                                                );
-                                                setAwards(prevAwards =>
-                                                    prevAwards.map(a =>
-                                                        a.awardId === award.awardId ? { ...a, quantity: newValue } : a
-                                                    )
-                                                );
+                                                const newValue = Math.max(0, parseInt(e.target.value) || 0);
+                                                setValue(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`, newValue);
                                             }}
                                         />
                                     </div>
                                 </div>
-
                             ))
                         )}
                     </div>
@@ -368,9 +385,7 @@ function FinalSchedule({
     return (
         <Modal show={modalShow} onHide={onHide} size="lg" centered>
             <Modal.Header closeButton>
-                <Modal.Title>
-                    {type === 'create' ? 'Add Schedule' : 'Edit Schedule'}
-                </Modal.Title>
+                <Modal.Title>Add Schedule</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form onSubmit={handleSubmit(onSubmit)} className={styles.modalForm}>
@@ -394,7 +409,7 @@ function FinalSchedule({
                         loading={isLoading}
                         className={styles.submitButton}
                     >
-                        {type === 'create' ? 'Add Schedule' : 'Update Schedule'}
+                        Add Schedule
                     </LoadingButton>
                 </form>
             </Modal.Body>

@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import {
-  createTheme,
-  StyledEngineProvider,
-  ThemeProvider,
-} from '@mui/material/styles';
+import { FormControl, InputLabel, MenuItem, Select, CircularProgress, Box } from '@mui/material';
+import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
 import { getConmpetitors, getRounds } from '../../api/competitorApi.js';
 import ResourceForm from '../ResourceForm';
 import styles from './style.module.css';
+import * as XLSX from 'xlsx';
 
 function CompetitorFragment({ resourceFrag, statusOfRound }) {
   const [resource, setResource] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedRound, setSelectedRound] = useState('');
   const [rounds, setRounds] = useState([]);
@@ -24,7 +22,6 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     if (selectedRound) {
       getResource(selectedRound);
     } else {
-      // Load all competitors if no round is selected
       getResource();
     }
   }, [selectedRound]);
@@ -36,7 +33,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
         level.round.map(round => ({
           id: round.id,
           name: `${level.description} - ${round.name}`,
-        })),
+        }))
       );
       setRounds(flattenedRounds);
     } catch (e) {
@@ -44,20 +41,40 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     }
   };
 
+  const prizePriority = {
+    'Giải Nhất': 1,
+    'Giải Nhì': 2,
+    'Giải Ba': 3,
+    'Giải Khuyến Khích': 4,
+    null: 6,
+  };
+
   const getResource = async (roundId = '') => {
+    setLoading(true);
     try {
       const { data } = await getConmpetitors(roundId);
-      setResource(data?.result || []);
+      let resourceData = data?.result || [];
+
+      resourceData.sort((a, b) => {
+        const prizeA = a.prize || null;
+        const prizeB = b.prize || null;
+        const priorityA = prizePriority[prizeA] !== undefined ? prizePriority[prizeA] : 5;
+        const priorityB = prizePriority[prizeB] !== undefined ? prizePriority[prizeB] : 5;
+        return priorityA - priorityB;
+      });
+
+      setResource(resourceData);
     } catch (e) {
       console.error('Error fetching competitors:', e);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleRoundChange = event => {
+  const handleRoundChange = (event) => {
     setSelectedRound(event.target.value);
   };
 
-  // Columns for the table remain unchanged
   const columns = [
     { name: 'code', label: 'Mã Thí Sinh' },
     { name: 'fullName', label: 'Họ và tên' },
@@ -71,15 +88,6 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
         customBodyRender: value => (value ? value : 'Chưa có'),
       },
     },
-    {
-      name: 'round',
-      label: 'Vòng thi',
-      options: {
-        customBodyRender: value => (
-          <span>{value ? value.name : 'Không có vòng thi'}</span>
-        ),
-      },
-    },
   ];
 
   const options = {
@@ -87,10 +95,10 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     elevation: 5,
     rowsPerPage: 4,
     rowsPerPageOptions: [4, 10, 20, 30],
-    print: false,
-    download: false,
-    filter: false,
     responsive: 'standard',
+    print: false,
+    download: true,
+    filter: false,
     textLabels: {
       body: {
         noMatch: 'Không có dữ liệu',
@@ -102,10 +110,36 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
       toolbar: {
         search: 'Tìm kiếm',
         viewColumns: 'Xem cột',
+        filterTable: 'Lọc bảng',
       },
     },
+    
+    onDownload: (buildHead, buildBody, columns, data) => {
+      const ws = XLSX.utils.json_to_sheet(
+        data.map(row => ({
+          'Mã Thí Sinh': row.data[0],
+          'Họ và tên': row.data[1],
+          'Tuổi': row.data[2],
+          'Giới tính': row.data[3],
+          'Tình trạng': row.data[4],
+          'Giải Thưởng': row.data[5],
+          'Vòng thi': row.data[6]?.props?.children || 'Không có vòng thi'
+        }))
+      );
+      
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Competitors");
+      
+      XLSX.writeFile(wb, "competitors.xlsx");
+      
+      return false;
+    },
+    
+    onRowClick: (rowData, rowMeta) => {
+      handleOpenDetail(rowData[2]?.props?.children);
+    },
   };
-
+  
   const getMuiTheme = () =>
     createTheme({
       typography: {
@@ -135,6 +169,11 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
       },
     });
 
+  const handleOpenDetail = (competitorId) => {
+    // Implement your logic for opening competitor details
+    console.log('Opening details for competitor:', competitorId);
+  };
+
   return (
     <>
       <ResourceForm
@@ -143,7 +182,6 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
         resourceData={resourceFrag}
       />
 
-      {/* Dropdown Filter for Rounds */}
       <div className={styles.filterContainer}>
         <FormControl fullWidth>
           <InputLabel id="round-filter-label">Lọc theo vòng thi</InputLabel>
@@ -152,11 +190,12 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
             id="round-filter"
             value={selectedRound}
             label="Lọc theo vòng thi"
-            onChange={handleRoundChange}>
+            onChange={handleRoundChange}
+          >
             <MenuItem value="">
-              <em>Tất cả các vòng</em>
+              <em>Tất cả vòng thi</em>
             </MenuItem>
-            {rounds.map(round => (
+            {rounds.map((round) => (
               <MenuItem key={round.id} value={round.id}>
                 {round.name}
               </MenuItem>
@@ -165,11 +204,20 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
         </FormControl>
       </div>
 
-      {/* Competitor Table */}
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={getMuiTheme()}>
-          <div className="table-contest table-competitors">
-            <MUIDataTable data={resource} columns={columns} options={options} />
+          <div className="table-contest">
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <MUIDataTable
+                data={resource}
+                columns={columns}
+                options={options}
+              />
+            )}
           </div>
         </ThemeProvider>
       </StyledEngineProvider>

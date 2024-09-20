@@ -1,15 +1,12 @@
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { paintingApi } from '../../api/paintingApi.js';
-import {
-  getAllRoundStaff,
-  getCompetitorFinalByRound,
-  roundTopicById,
-} from '../../api/roundStaffApi.js';
+import { getAllRoundStaff, roundTopicById } from '../../api/roundStaffApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 import styles from './page.module.css';
@@ -422,9 +419,9 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
       setContest(
         data !== null
           ? data.map(vl => ({
-              value: vl.id,
-              label: vl.name + ' - ' + vl.educationalLevelName,
-            }))
+            value: vl.id,
+            label: vl.name + ' - ' + vl.educationalLevelName,
+          }))
           : [],
       );
     } catch (error) {
@@ -456,7 +453,9 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
   const getCompetitorByRound = async id => {
     setLoadingUser(true);
     try {
-      const res = await getCompetitorFinalByRound(id);
+      const res = await axios.get(
+        `https://netvexanh.azurewebsites.net/finalround/${id}`,
+      );
       setCodeStudent(
         res.result.length
           ? res.result.map(vl => ({ value: vl.id, label: vl.code }))
@@ -652,13 +651,13 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                     </div>
                     {(fieldInput[vl.label].error !== '' ||
                       fieldInput[vl.label].error !== null) && (
-                      <div className={styles.error_text}>
-                        <span></span>
-                        <p className={styles.txt_error}>
-                          {fieldInput[vl.label].error}
-                        </p>
-                      </div>
-                    )}
+                        <div className={styles.error_text}>
+                          <span></span>
+                          <p className={styles.txt_error}>
+                            {fieldInput[vl.label].error}
+                          </p>
+                        </div>
+                      )}
                   </div>
                 ))}
               </div>
@@ -744,12 +743,12 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                   </div>
                   {(fieldInput.roundTopicId.error !== '' ||
                     fieldInput.roundTopicId.error !== null) && (
-                    <div className={styles.error_text}>
-                      <p className={styles.txt_error}>
-                        {fieldInput.roundTopicId.error}
-                      </p>
-                    </div>
-                  )}
+                      <div className={styles.error_text}>
+                        <p className={styles.txt_error}>
+                          {fieldInput.roundTopicId.error}
+                        </p>
+                      </div>
+                    )}
                 </div>
                 <div className={styles.topic_error}>
                   <div className={styles.field_painting}>
@@ -772,13 +771,13 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                   </div>
                   {(fieldInput.name.error !== '' ||
                     fieldInput.name.error !== null) && (
-                    <div className={styles.error_text}>
-                      <span></span>
-                      <p className={styles.txt_error}>
-                        {fieldInput.name.error}
-                      </p>
-                    </div>
-                  )}
+                      <div className={styles.error_text}>
+                        <span></span>
+                        <p className={styles.txt_error}>
+                          {fieldInput.name.error}
+                        </p>
+                      </div>
+                    )}
                 </div>
                 <div className={styles.topic_error}>
                   <div className={styles.field_painting}>
@@ -804,13 +803,13 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                   </div>
                   {(fieldInput.description.error !== '' ||
                     fieldInput.description.error !== null) && (
-                    <div className={styles.error_text}>
-                      <span></span>
-                      <p className={styles.txt_error}>
-                        {fieldInput.description.error}
-                      </p>
-                    </div>
-                  )}
+                      <div className={styles.error_text}>
+                        <span></span>
+                        <p className={styles.txt_error}>
+                          {fieldInput.description.error}
+                        </p>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>

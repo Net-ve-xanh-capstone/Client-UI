@@ -17,39 +17,25 @@
 
 
 }
-
-/* .modalForm {
-    padding: 20px;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: -17px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    position: absolute;
+.infoSection, .awardSection {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.modalForm>.inputModal {
-    padding: 5px 5px;
+.infoSection h5, .awardSection h5 {
+  margin-bottom: 15px;
+  color: #007bff;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 10px;
 }
 
-.modalForm .btnCreate {
-    margin-top: 10px;
-    padding: 7px 30px;
+.infoSection p, .awardSection p {
+  margin-bottom: 8px;
+  line-height: 1.6;
 }
-
-.modalForm .btnCreate:hover {
-    color: white;
-    border: none !important;
-}
-
-.modalForm .btnCreate:focus {
-    color: white;
-}
-
-.formControl {
-    padding: 5px 5px !important;
-} */
 
 .modalForm {
   display: flex;

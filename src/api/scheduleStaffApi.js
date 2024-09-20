@@ -1,14 +1,22 @@
 import axiosApi from './axiosApi';
 
-export const createPreliminary = payload => {
-  return axiosApi.post('schedules/preliminary', payload);
+export const createAutoPreliminary = payload => {
+  return axiosApi.post('schedules/qualifying-round/auto-assign', payload);
 };
 
-export const createFinal = payload => {
-  return axiosApi.post('schedules/final', payload);
+export const createManualPreliminary = payload => {
+  return axiosApi.post('schedules/final-round/manual-assign', payload);
 };
 
-export const editShedule = payload => {
+export const createAutoFinal = payload => {
+  return axiosApi.post('schedules/final-round/auto-assign', payload);
+};
+
+export const createManualFinal = payload => {
+  return axiosApi.post('schedules/final-round/manual-assign', payload);
+};
+
+export const editSchedule = payload => {
   return axiosApi.put('schedules', payload);
 };
 

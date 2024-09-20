@@ -9,6 +9,7 @@ import { LoadingButton } from '@mui/lab';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import { ROUND_NAME_TYPE } from './round-name-type.js';
 
 // eslint-disable-next-line react-refresh/only-export-components
 function ModalForm({ modalShow, onHide }) {
@@ -45,13 +46,13 @@ function ModalForm({ modalShow, onHide }) {
     ],
     round: [
       {
-        name: 'Vòng sơ khảo',
+        name: ROUND_NAME_TYPE.QUALIFYING,
         startTime: '',
         endTime: '',
         roundNumber: 1,
       },
       {
-        name: 'Vòng chung kết',
+        name: ROUND_NAME_TYPE.FINAL,
         startTime: '',
         endTime: '',
         roundNumber: 2,
@@ -90,8 +91,6 @@ function ModalForm({ modalShow, onHide }) {
     name: 'round',
   });
 
-  console.log('roundFields', roundFields);
-
   const handleAddEducationalLevel = () => {
     // Tạo tên bảng mới dựa trên số lượng bảng hiện tại
     const nextLevelName = `Bảng ${String.fromCharCode(
@@ -126,9 +125,27 @@ function ModalForm({ modalShow, onHide }) {
       name: '',
       startTime: '',
       endTime: '',
-      roundNumber: roundFields.length + 1,
+      roundNumber: 0,
     };
-    appendRound(roundObj);
+    //Thêm vòng thi mới vào field round array, nhưng trước round chung kết, và order lại roundNumber
+    const roundFinalIndex =
+      roundFields.findIndex(el => el.name === ROUND_NAME_TYPE.FINAL);
+    if (roundFinalIndex !== -1) {
+      roundFields.splice(roundFinalIndex, 0, roundObj);
+    } else {
+      appendRound(roundObj);
+    }
+
+    // Sort lại roundNumber
+    roundFields.forEach((round, index) => {
+      if (round.name === ROUND_NAME_TYPE.FINAL) {
+        round.roundNumber = roundFields.length; // Vòng chung kết có roundNumber lớn nhất
+      } else {
+        round.roundNumber = index + 1; // Các vòng khác có roundNumber tăng dần
+      }
+    });
+
+    reset({ round: roundFields });
   };
 
   const handleRemoveRoundItem = index => {
@@ -149,24 +166,12 @@ function ModalForm({ modalShow, onHide }) {
     onHide();
   };
 
-  // get value on round A and pass to state
-  // const handleChangeA = e => {
-  //   try {
-  //     const { name, value } = e.target;
-  //     setFormDataA(prv => ({ ...prv, [name]: value }));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+
   // handle submit with the error before adding calling to post api
   const handleSubmitForm = async payload => {
     const startDate = new Date(watch('startTime'));
     const endDate = new Date(watch('endTime'));
 
-    // const round1StartDate = new Date(formData.round1StartTime);
-    // const round1EndDate = new Date(formData.round1EndTime);
-    // const round2StartDate = new Date(formData.round2StartTime);
-    // const round2EndDate = new Date(formData.round2EndTime);
 
     if (startDate >= endDate) {
       setError('startTime', {
@@ -185,28 +190,6 @@ function ModalForm({ modalShow, onHide }) {
         round: payload.round,
       })),
     };
-
-    // if (round1StartDate < startDate || round1EndDate > endDate) {
-    //   formErrors.round1 =
-    //     'Vòng sơ khảo phải nằm trong khoảng thời gian cuộc thi';
-    // }
-    //
-    // if (round1StartDate > round1EndDate) {
-    //   formErrors.round1 = 'Ngày bắt đầu phải nhỏ hơn ngày kết thúc';
-    // }
-    //
-    // if (
-    //   round2StartDate < startDate ||
-    //   round2EndDate > endDate ||
-    //   round2StartDate <= round1EndDate
-    // ) {
-    //   formErrors.round2 =
-    //     'Vòng chung kết phải nằm trong khoảng thời gian cuộc thi và bắt đầu sau khi vòng sơ khảo kết thúc';
-    // }
-    //
-    // if (round2StartDate > round2EndDate) {
-    //   formErrors.round2 = 'Ngày bắt đầu phải nhỏ hơn ngày kết thúc';
-    // }
 
     if (Object.keys(errors).length === 0) {
       // chỉnh sữa các thông tin cần thiết phải được đưa vào trong db
@@ -345,12 +328,12 @@ function ModalForm({ modalShow, onHide }) {
                       min={
                         competitionStartTime
                           ? new Date(
-                              new Date(competitionStartTime).setDate(
-                                new Date(competitionStartTime).getDate() + 1,
-                              ),
-                            )
-                              .toISOString()
-                              .split('T')[0]
+                            new Date(competitionStartTime).setDate(
+                              new Date(competitionStartTime).getDate() + 1,
+                            ),
+                          )
+                            .toISOString()
+                            .split('T')[0]
                           : ''
                       }
                     />
@@ -534,8 +517,8 @@ function ModalForm({ modalShow, onHide }) {
                               {errors.round[index].name?.message}
                             </p>
                           )}
-                          {/*Nếu như chỉ có 2 phần tử thì không xuất hiện*/}
-                          {item?.roundNumber > 2 && (
+                          {/*Chỉ được xóa nếu không phải vòng sơ khảo và không phải vòng chung kết*/}
+                          {(item?.name !== ROUND_NAME_TYPE.QUALIFYING && item?.name !== ROUND_NAME_TYPE.FINAL) && (
                             <RemoveCircleOutlineIcon
                               style={{ cursor: 'pointer' }}
                               className={styles.icon_remove}
@@ -560,14 +543,6 @@ function ModalForm({ modalShow, onHide }) {
                               max={competitionEndTime}
                               {...register(`round.${index}.startTime`, {
                                 required: 'Vui lòng chọn thời gian bắt đầu',
-                                // validate: (value) => {
-                                //   const previousRoundEndTime = index > 0
-                                //     ? watch(`round.${index - 1}.endTime`)
-                                //     : competitionStartTime;
-                                //
-                                //   return value >= previousRoundEndTime
-                                //     || 'Thời gian bắt đầu phải sau thời gian kết thúc của vòng trước';
-                                // },
                               })}
                             />
                             {errors?.round?.[index]?.startTime && (
@@ -592,14 +567,6 @@ function ModalForm({ modalShow, onHide }) {
                               max={competitionEndTime}
                               {...register(`round.${index}.endTime`, {
                                 required: 'Vui lòng chọn thời gian kết thúc',
-                                // validate: (value) => {
-                                //   const previousRoundEndTime = index > 0
-                                //     ? watch(`round.${index - 1}.endTime`)
-                                //     : competitionStartTime;
-                                //
-                                //   return value > previousRoundEndTime
-                                //     || 'Thời gian kết thúc phải sau thời gian bắt đầu';
-                                // },
                               })}
                             />
                             {errors?.round?.[index]?.endTime && (

@@ -84,8 +84,8 @@ function ModalForm({ modalShow, onHide }) {
 
   const {
     fields: roundFields,
-    append: appendRound,
     remove: removeRound,
+    prepend: prependRound,
   } = useFieldArray({
     control,
     name: 'round',
@@ -127,25 +127,40 @@ function ModalForm({ modalShow, onHide }) {
       endTime: '',
       roundNumber: 0,
     };
-    //Thêm vòng thi mới vào field round array, nhưng trước round chung kết, và order lại roundNumber
-    const roundFinalIndex =
-      roundFields.findIndex(el => el.name === ROUND_NAME_TYPE.FINAL);
+
+    const roundFinalIndex = roundFields.findIndex(el => el.name === ROUND_NAME_TYPE.FINAL);
+    const newRoundFields = [...roundFields];
+
+    // Thêm vòng thi mới vào trước vòng chung kết (nếu tồn tại), nếu không thì thêm cuối cùng
     if (roundFinalIndex !== -1) {
-      roundFields.splice(roundFinalIndex, 0, roundObj);
+      newRoundFields.splice(roundFinalIndex, 0, roundObj);
     } else {
-      appendRound(roundObj);
+      newRoundFields.push(roundObj);
     }
 
-    // Sort lại roundNumber
-    roundFields.forEach((round, index) => {
-      if (round.name === ROUND_NAME_TYPE.FINAL) {
-        round.roundNumber = roundFields.length; // Vòng chung kết có roundNumber lớn nhất
+    // Cập nhật lại roundNumber và thời gian cho các vòng
+    newRoundFields.forEach((round, index) => {
+      round.roundNumber = index + 1; // Tăng dần roundNumber từ 1
+
+      // Thiết lập thời gian bắt đầu và kết thúc cho các vòng
+      if (index === 0) {
+        // Vòng đầu tiên
+        round.startTime = watch('round.0.startTime');
+        round.endTime = watch('round.0.endTime');
+      } else if (index === newRoundFields.length - 1 && round.name === ROUND_NAME_TYPE.FINAL) {
+        // Vòng chung kết, đảm bảo thời gian của vòng chung kết được giữ nguyên
+        round.startTime = watch(`round.${roundFinalIndex}.startTime`);
+        round.endTime = watch(`round.${roundFinalIndex}.endTime`);
       } else {
-        round.roundNumber = index + 1; // Các vòng khác có roundNumber tăng dần
+        // Các vòng khác, thời gian bắt đầu là thời gian kết thúc của vòng trước đó
+        round.startTime = watch(`round.${index - 1}.endTime`);
+        round.endTime = ''; // Thiết lập giá trị tạm thời cho endTime
       }
     });
 
-    reset({ round: roundFields });
+    // Cập nhật lại field array
+    const educationalLevelFields = getValues('educationalLevel');
+    reset({ educationalLevel: educationalLevelFields, round: newRoundFields });
   };
 
   const handleRemoveRoundItem = index => {

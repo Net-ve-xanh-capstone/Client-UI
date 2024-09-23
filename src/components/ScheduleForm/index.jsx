@@ -83,7 +83,7 @@ function ScheduleForm({ modalShow, onHide, roundData, type, roundId }) {
         errors.totalJudgedCount = `Số lượng bài thi của giám khảo ${index + 1} phải lớn hơn số lượng giải`;
       }
     });
-    
+
 
     if (totalJudgedCount > paintingForSchedule) {
       errors.totalJudgedCount = `Tổng số lượng bài thi (${totalJudgedCount}) vượt quá số lượng bài thi cho phép (${paintingForSchedule})`;
@@ -307,17 +307,15 @@ function ScheduleForm({ modalShow, onHide, roundData, type, roundId }) {
   };
 
   const customStyles = {
-    control: (base, state) => ({
+    control: (base) => ({
       ...base,
-      background: 'transparent',
-      border: 0,
+      background: '#ffffff',
+      border: '1px solod #070F2B',
       // match with the menu
       color: '#070F2B',
       // Overwrittes the different states of border
-      boxShadow:
-        'rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px',
-      height: '5rem',
       minWidth: '20rem',
+      padding: '10px',
       fontSize: '1.5rem !important',
       '&:hover': {
         // Overwrittes the different states of border
@@ -326,14 +324,11 @@ function ScheduleForm({ modalShow, onHide, roundData, type, roundId }) {
     }),
     menu: base => ({
       ...base,
-      // override border radius to match the box
       borderRadius: 0,
-      // kill the gap
       marginTop: 0,
     }),
     menuList: base => ({
       ...base,
-      // kill the white space on first and last option
       padding: 0,
     }),
   };
@@ -350,9 +345,9 @@ function ScheduleForm({ modalShow, onHide, roundData, type, roundId }) {
             isMulti
             options={examiners.map(examiner => ({
               value: examiner.id,
-              label: examiner.fullName
+              label: examiner.fullName,
             }))}
-            onChange={(selectedOptions) => 
+            onChange={(selectedOptions) =>
               field.onChange(selectedOptions.map(option => option.value))
             }
             value={field.value.map(id => {
@@ -364,22 +359,18 @@ function ScheduleForm({ modalShow, onHide, roundData, type, roundId }) {
           />
         )}
       />
-  
+
       <h4 className={styles.title_zone}>Ngày Chấm</h4>
-      <Controller
-        control={control}
+      <input
+        type="date"
         name="endDate"
-        render={({ field }) => (
-          <DatePicker
-            selected={field.value}
-            onChange={date => field.onChange(date)}
-            className={styles.formControl}
-            dateFormat="dd/MM/yyyy"
-            minDate={new Date()}
-          />
-        )}
+        id="endDate"
+        className={styles.formControl}
+        {...register('endDate', {
+          required: 'Vui lòng chọn thời gian kết thúc',
+        })}
+        min={new Date().toISOString().split('T')[0]}
       />
-  
       <h4 className={styles.title}>Mô tả</h4>
       <input
         {...register('description', { required: 'Vui lòng nhập mô tả' })}
@@ -418,16 +409,17 @@ function ScheduleForm({ modalShow, onHide, roundData, type, roundId }) {
                 render={({ field }) => (
                   <Select
                     styles={customStyles}
+                    placeholder="Chọn giám khảo"
                     options={examiners.map(examiner => ({
                       value: examiner.id,
-                      label: examiner.fullName
+                      label: examiner.fullName,
                     }))}
                     onChange={(selectedOption) => field.onChange(selectedOption.value)}
                     value={examiners
                       .filter(examiner => examiner.id === field.value)
                       .map(examiner => ({
                         value: examiner.id,
-                        label: examiner.fullName
+                        label: examiner.fullName,
                       }))[0]
                     }
                   />
@@ -436,28 +428,25 @@ function ScheduleForm({ modalShow, onHide, roundData, type, roundId }) {
             </div>
 
             <div className="col-md-6">
-            <h5 className={styles.title}>Ngày Chấm</h5>
-            <div className={styles.datePickerContainer}>
-              <Controller
-                control={control}
-                name={`listScheduleSingleExaminer.${index}.endDate`}
-                render={({ field }) => (
-                  <DatePicker
-                    selected={field.value}
-                    onChange={(date) => field.onChange(date)}
-                    className={`${styles.formControl} ${styles.datePicker}`}
-                    dateFormat="dd/MM/yyyy"
-                    minDate={new Date()}
-                  />
-                )}
-              />
+              <h5 className={styles.title}>Ngày Chấm</h5>
+              <div className={styles.datePickerContainer}>
+                <input
+                  type="date"
+                  name={`listScheduleSingleExaminer.${index}.endDate`}
+                  id={`listScheduleSingleExaminer.${index}.endDate`}
+                  className={styles.formControl}
+                  {...register(`listScheduleSingleExaminer.${index}.endDate`, {
+                    required: 'Vui lòng chọn thời gian kết thúc',
+                  })}
+                  min={new Date().toISOString().split('T')[0]}
+                />
+              </div>
+              {errors.listScheduleSingleExaminer?.[index]?.endDate && (
+                <p className={styles.error}>
+                  {errors.listScheduleSingleExaminer[index].endDate.message}
+                </p>
+              )}
             </div>
-            {errors.listScheduleSingleExaminer?.[index]?.endDate && (
-              <p className={styles.error}>
-                {errors.listScheduleSingleExaminer[index].endDate.message}
-              </p>
-            )}
-          </div>
           </div>
 
           <div className="row">
@@ -499,7 +488,8 @@ function ScheduleForm({ modalShow, onHide, roundData, type, roundId }) {
                       type="hidden"
                       value={award.awardId}
                     />
-                    <h5 className={styles.title}>{`Số Bài Thi Qua ${award.name}: ${calculateRemainingAwards(award.awardId)}`}</h5>
+                    <h5
+                      className={styles.title}>{`Số Bài Thi Qua ${award.name}: ${calculateRemainingAwards(award.awardId)}`}</h5>
                     <input
                       {...register(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`)}
                       className={styles.formControl}

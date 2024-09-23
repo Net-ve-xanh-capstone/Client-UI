@@ -4,16 +4,21 @@ import styles from './page.module.css';
 import { useSelector } from 'react-redux';
 import { createAward, putAwards } from '../../../api/awrdApi.js';
 import { toast } from 'react-toastify';
+import { formatCurrencyVND, formatNumber } from '../../../utils/formatUtils.js';
 
+const NUMBER_TYPE = {
+  CURRENCY: 'currency',
+  NUMBER: 'number',
+};
 const AddingModal = ({
-  modalShow,
-  onHide,
-  roundId,
-  recallData,
-  isEdit = false,
-  dataEdit,
-  checkedFinalRound = false,
-}) => {
+                       modalShow,
+                       onHide,
+                       roundId,
+                       recallData,
+                       isEdit = false,
+                       dataEdit,
+                       checkedFinalRound = false,
+                     }) => {
   const { userInfo } = useSelector(state => state.auth);
 
   const [fieldUpdate, setFieldUpdate] = useState({
@@ -127,6 +132,21 @@ const AddingModal = ({
     }));
   };
 
+  const handleInputNumber = (e, type) => {
+    const rawValue = e.target.value.replace(/[^\d]/g, ''); // Loại bỏ ký tự không phải số
+    let formattedValue;
+
+    if (type === NUMBER_TYPE.CURRENCY) {
+      formattedValue = formatCurrencyVND(rawValue); // Format thành VND
+      setFieldUpdate({ ...fieldUpdate, cash: rawValue }); // Cập nhật cash
+    } else if (type === NUMBER_TYPE.NUMBER) {
+      formattedValue = formatNumber(rawValue); // Format thành số nguyên
+      setFieldUpdate({ ...fieldUpdate, quantity: rawValue }); // Cập nhật quantity
+    }
+
+    e.target.value = formattedValue; // Hiển thị giá trị đã format
+  };
+
   // handle error after user sumbmit the form after filling on
   const handleSubmit = e => {
     e.preventDefault();
@@ -228,10 +248,10 @@ const AddingModal = ({
               <input
                 className={styles.inputModal}
                 required
-                type="number"
+                type="text"
                 name="quantity"
-                value={fieldUpdate.quantity}
-                onChange={e => handleInput(e)}
+                value={formatNumber(fieldUpdate.quantity)}
+                onChange={e => handleInputNumber(e, NUMBER_TYPE.NUMBER)}
               />
               <h4 className={styles.title}>Tiền mặt</h4>
               <input
@@ -240,10 +260,10 @@ const AddingModal = ({
                   userSelect: !checkedFinalRound ? 'none' : 'auto',
                 }}
                 disabled={!checkedFinalRound}
-                type="number"
+                type="text"
                 name="cash"
-                value={fieldUpdate.cash}
-                onChange={e => handleInput(e)}
+                value={formatCurrencyVND(fieldUpdate.cash)}
+                onChange={e => handleInputNumber(e, NUMBER_TYPE.CURRENCY)}
               />
               <h4 className={styles.title}>Phần thưởng</h4>
               <input

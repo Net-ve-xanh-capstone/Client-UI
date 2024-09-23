@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useFieldArray, useForm, Controller } from 'react-hook-form';
-import { LoadingButton } from '@mui/lab';
-import Multiselect from 'multiselect-react-dropdown';
+import Select from 'react-select';
 import { Modal } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import { FormControlLabel, Switch, CircularProgress } from '@mui/material';
@@ -29,23 +28,26 @@ function FinalSchedule({ modalShow, onHide, roundData, roundId }) {
     const [firstPrizeCount, setFirstPrizeCount] = useState(0);
     const [totalAwardedCounts, setTotalAwardedCounts] = useState({});
 
+    const defaultValues = {
+        description: '',
+        roundId: roundData?.id,
+        endDate: null,
+        listExaminer: [],
+        currentUserId: userInfo?.Id,
+        listScheduleSingleExaminer: [
+            {
+                description: '',
+                endDate: null,
+                examinerId: '',
+                judgedCount: 0,
+                awards: []
+            }
+        ]
+    };
+
     const { control, register, handleSubmit, formState: { errors }, reset, setValue, getValues, watch } = useForm({
-        defaultValues: {
-            description: '',
-            roundId: roundData?.id,
-            endDate: null,
-            listExaminer: [],
-            currentUserId: userInfo?.Id,
-            listScheduleSingleExaminer: [
-                {
-                    description: '',
-                    endDate: null,
-                    examinerId: '',
-                    judgedCount: 0,
-                    awards: []
-                }
-            ]
-        }
+        defaultValues,
+        mode: 'onSubmit'
     });
 
     const {
@@ -102,7 +104,6 @@ function FinalSchedule({ modalShow, onHide, roundData, roundId }) {
             if (name && name.includes('awards') && type === 'change') {
                 const newTotalAwardedCounts = { ...totalAwardedCounts };
 
-                // Tính toán lại tổng số giải đã được nhập
                 awards.forEach(award => {
                     newTotalAwardedCounts[award.awardId] = value.listScheduleSingleExaminer.reduce(
                         (sum, examiner) =>
@@ -111,34 +112,17 @@ function FinalSchedule({ modalShow, onHide, roundData, roundId }) {
                     );
                 });
 
-                console.log('newTotalAwardedCounts:', newTotalAwardedCounts);  // Kiểm tra giá trị của state
-                setTotalAwardedCounts(newTotalAwardedCounts);  // Cập nhật lại state tổng
+                setTotalAwardedCounts(newTotalAwardedCounts);
             }
         });
         return () => subscription.unsubscribe();
     }, [watch, awards, totalAwardedCounts]);
 
-
     const calculateRemainingAwards = useCallback((awardId) => {
         const award = awards.find(a => a.awardId === awardId);
         if (!award) return 0;
-
-        // Sử dụng giá trị đã được cập nhật từ totalAwardedCounts
-        const remaining = Math.max(award.originalQuantity - (totalAwardedCounts[awardId] || 0), 0);
-
-        console.log('Award ID:', awardId, 'Remaining:', remaining);  // Kiểm tra giá trị tính toán
-        return remaining;
+        return Math.max(award.originalQuantity - (totalAwardedCounts[awardId] || 0), 0);
     }, [awards, totalAwardedCounts]);
-
-    useEffect(() => {
-        const subscription = watch((value, { name, type }) => {
-            console.log('watch triggered:', { value, name, type });  // Log toàn bộ giá trị
-        });
-
-        return () => subscription.unsubscribe();
-    }, [watch]);
-
-
 
     const fetchExaminers = async () => {
         try {
@@ -150,7 +134,41 @@ function FinalSchedule({ modalShow, onHide, roundData, roundId }) {
         }
     };
 
+    const validateTotalCounts = (data) => {
+        let totalJudgedCount = 0;
+        let totalAwardCounts = {};
+        let errors = {};
+
+        data.listScheduleSingleExaminer.forEach((examiner) => {
+            totalJudgedCount += parseInt(examiner.judgedCount) || 0;
+            examiner.awards.forEach((award) => {
+                const awardId = award.awardId;
+                totalAwardCounts[awardId] = (totalAwardCounts[awardId] || 0) + (parseInt(award.awardCount) || 0);
+            });
+        });
+
+        if (totalJudgedCount > paintingForSchedule) {
+            errors.totalJudgedCount = `Tổng số lượng bài thi (${totalJudgedCount}) vượt quá số lượng bài thi cho phép (${paintingForSchedule})`;
+        }
+
+        awards.forEach((award) => {
+            if (totalAwardCounts[award.awardId] > award.quantity) {
+                errors[award.awardId] = `Tổng số lượng giải ${award.name} (${totalAwardCounts[award.awardId]}) vượt quá số lượng cho phép (${award.quantity})`;
+            }
+        });
+
+        return { isValid: Object.keys(errors).length === 0, errors };
+    };
+
     const onSubmit = async (data) => {
+        const { isValid, errors } = validateTotalCounts(data);
+        if (!isValid) {
+            Object.keys(errors).forEach(key => {
+                toast.error(errors[key]);
+            });
+            return;
+        }
+
         setIsLoading(true);
         try {
             let payload;
@@ -190,14 +208,28 @@ function FinalSchedule({ modalShow, onHide, roundData, roundId }) {
         }
     };
 
+    const resetAllState = useCallback(() => {
+        reset(defaultValues);
+        setIsAutoSchedule(false);
+        setAwards([]);
+        setPaintingForSchedule(0);
+        setTotalAwardedCounts({});
+    }, [reset]);
+
+    useEffect(() => {
+        if (!modalShow) {
+            resetAllState();
+        } else if (roundId) {
+            fetchAwards(roundId);
+        }
+    }, [modalShow, roundId, resetAllState]);
+
     useEffect(() => {
         if (!userInfo) navigate('/login');
         if (modalShow) {
-            reset();
-            if (roundId) fetchAwards(roundId);
+            fetchExaminers();
         }
-        fetchExaminers();
-    }, [modalShow, roundId, userInfo, navigate, reset]);
+    }, [modalShow, userInfo, navigate]);
 
     const handleAddExaminer = () => {
         if (examinerFields.length < firstPrizeCount) {
@@ -216,45 +248,82 @@ function FinalSchedule({ modalShow, onHide, roundData, roundId }) {
         }
     };
 
+    const customStyles = {
+        control: (base, state) => ({
+            ...base,
+            background: 'transparent',
+            border: 0,
+            color: '#070F2B',
+            boxShadow: 'rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px',
+            height: '5rem',
+            minWidth: '20rem',
+            fontSize: '1.5rem !important',
+            '&:hover': {
+                borderColor: 'none',
+            },
+        }),
+        menu: base => ({
+            ...base,
+            borderRadius: 0,
+            marginTop: 0,
+        }),
+        menuList: base => ({
+            ...base,
+            padding: 0,
+        }),
+    };
+
     const renderAutoScheduleForm = () => (
         <>
-            <h4 className={styles.title}>Giám Khảo</h4>
+            <h4 className={styles.title_zone}>Giám Khảo</h4>
             <Controller
                 control={control}
                 name="listExaminer"
                 render={({ field }) => (
-                    <Multiselect
+                    <Select
                         {...field}
-                        displayValue="fullName"
-                        onRemove={(selectedList) => field.onChange(selectedList.map(item => item.id))}
-                        onSelect={(selectedList) => field.onChange(selectedList.map(item => item.id))}
-                        options={examiners}
-                        selectedValues={type !== 'create' ? [{ id: type?.id, fullName: type?.examinerName }] : []}
+                        isMulti
+                        options={examiners.map(examiner => ({
+                            value: examiner.id,
+                            label: examiner.fullName
+                        }))}
+                        onChange={(selectedOptions) =>
+                            field.onChange(selectedOptions.map(option => option.value))
+                        }
+                        value={field.value.map(id => {
+                            const examiner = examiners.find(e => e.id === id);
+                            return examiner ? { value: examiner.id, label: examiner.fullName } : null;
+                        }).filter(Boolean)}
+                        styles={customStyles}
+                        placeholder="Chọn giám khảo"
                     />
                 )}
             />
 
-            <h4 className={styles.title}>Ngày Chấm</h4>
+            <h4 className={styles.title_zone}>Ngày Chấm</h4>
             <Controller
                 control={control}
                 name="endDate"
                 render={({ field }) => (
                     <DatePicker
                         selected={field.value}
-                        onChange={(date) => field.onChange(date)}
+                        onChange={date => field.onChange(date)}
                         className={styles.formControl}
                         dateFormat="dd/MM/yyyy"
+                        minDate={new Date()}
                     />
                 )}
             />
 
-            <h4 className={styles.title}>Description</h4>
+            <h4 className={styles.title}>Mô tả</h4>
             <input
-                {...register('description', { required: 'Please enter a description' })}
+                {...register('description', { required: 'Vui lòng nhập mô tả' })}
                 className={styles.inputModal}
                 type="text"
             />
-            {errors.description && <p className={styles.error}>{errors.description.message}</p>}
+            {errors.description && (
+                <p className={styles.error}>{errors.description.message}</p>
+            )}
         </>
     );
 
@@ -265,7 +334,7 @@ function FinalSchedule({ modalShow, onHide, roundData, roundId }) {
             {examinerFields.map((item, index) => (
                 <div key={item.id} className={styles.roundBlock}>
                     <div className={styles.remove_block}>
-                        <h5>Giám Khảo {index + 1}</h5>
+                        <h5 className={styles.title}>{`Giám Khảo ${index + 1}`}</h5>
                         {index > 0 && (
                             <RemoveCircleOutline
                                 className={styles.icon_remove}
@@ -277,101 +346,115 @@ function FinalSchedule({ modalShow, onHide, roundData, roundId }) {
                     <div className="row">
                         <div className="col-md-6">
                             <h5 className={styles.title}>Giám Khảo</h5>
-                            <select
-                                {...register(`listScheduleSingleExaminer.${index}.examinerId`, { required: 'Please select an examiner' })}
-                                className={styles.formControl}
-                            >
-                                {examiners.map((ex) => (
-                                    <option key={ex.id} value={ex.id}>{ex.fullName}</option>
-                                ))}
-                            </select>
-                            {errors.listScheduleSingleExaminer?.[index]?.examinerId && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].examinerId.message}</p>}
-                        </div>
-                        <div className="col-md-6">
-                            <h5 className={styles.title}>Ngày Chấm</h5>
                             <Controller
                                 control={control}
-                                name={`listScheduleSingleExaminer.${index}.endDate`}
+                                name={`listScheduleSingleExaminer.${index}.examinerId`}
                                 render={({ field }) => (
-                                    <DatePicker
-                                        selected={field.value}
-                                        onChange={(date) => field.onChange(date)}
-                                        className={styles.formControl}
-                                        dateFormat="dd/MM/yyyy"
-                                        minDate={new Date()}  // Ngăn chọn ngày trong quá khứ
+                                    <Select
+                                        styles={customStyles}
+                                        options={examiners.map(examiner => ({
+                                            value: examiner.id,
+                                            label: examiner.fullName
+                                        }))}
+                                        onChange={(selectedOption) => field.onChange(selectedOption.value)}
+                                        value={examiners
+                                            .filter(examiner => examiner.id === field.value)
+                                            .map(examiner => ({
+                                                value: examiner.id,
+                                                label: examiner.fullName
+                                            }))[0]
+                                        }
                                     />
                                 )}
+                            />
+                        </div>
+
+                        <div className="col-md-6">
+                            <h5 className={styles.title}>Ngày Chấm</h5>
+                            <div className={styles.datePickerContainer}>
+                                <Controller
+                                    control={control}
+                                    name={`listScheduleSingleExaminer.${index}.endDate`}
+                                    render={({ field }) => (
+                                        <DatePicker
+                                            selected={field.value}
+                                            onChange={(date) => field.onChange(date)}
+                                            className={`${styles.formControl} ${styles.datePicker}`}
+                                            dateFormat="dd/MM/yyyy"
+                                            minDate={new Date()}
+                                        />
+                                    )}
+                                />
+                            </div>
+                            {errors.listScheduleSingleExaminer?.[index]?.endDate && (
+                                <p className={styles.error}>
+                                    {errors.listScheduleSingleExaminer[index].endDate.message}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-md-12">
+                            <h5 className={styles.title}>Mô Tả</h5>
+                            <input
+                                {...register(`listScheduleSingleExaminer.${index}.description`)}
+                                className={styles.formControl}
+                                type="text"
                             />
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-md-12">
-                            <h5 className={styles.title}>Description</h5>
+                            <h5 className={styles.title}>{`Số Lượng Bài Thi : ${paintingForSchedule}`}</h5>
                             <input
-                                {...register(`listScheduleSingleExaminer.${index}.description`, { required: 'Please enter a description' })}
+                                {...register(`listScheduleSingleExaminer.${index}.judgedCount`)}
                                 className={styles.formControl}
-                                type="text"
+                                type="number"
+                                min="0"
+                                onChange={(e) => {
+                                    const value = Math.max(0, parseInt(e.target.value) || 0);
+                                    setValue(`listScheduleSingleExaminer.${index}.judgedCount`, value);
+                                }}
                             />
-                            {errors.listScheduleSingleExaminer?.[index]?.description && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].description.message}</p>}
                         </div>
                     </div>
-
                     <div className="row">
 
-                        <h5 className={styles.title}>Sô lượng bài thi : {paintingForSchedule}</h5>
-                        <input
-                            {...register(`listScheduleSingleExaminer.${index}.judgedCount`, { required: 'Please enter the number of judged items' })}
-                            className={styles.formControl}
-                            type="number"
-                        />
-                        {errors.listScheduleSingleExaminer?.[index]?.judgedCount && <p className={styles.error}>{errors.listScheduleSingleExaminer[index].judgedCount.message}</p>}
-                    </div>
-
-                    <div className={styles.list_round}>
                         {awardLoading ? (
                             <div className={styles.loadingContainer}>
                                 <CircularProgress color="secondary" />
                             </div>
                         ) : (
                             awards.map((award, awardIndex) => (
-                                <div key={award.awardId} className={styles.round}>
-                                    <div>
-                                        <h4 className={styles.title}>
-                                            {award.name} : {calculateRemainingAwards(award.awardId)}
-                                        </h4>
+                                <div className="col-md-6">
+                                    <div key={award.awardId} className={styles.round}>
                                         <input
                                             {...register(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardId`)}
                                             type="hidden"
                                             value={award.awardId}
                                         />
+                                        <h5 className={styles.title}>{`Số Bài Thi Đạt ${award.name}: ${calculateRemainingAwards(award.awardId)}`}</h5>
                                         <input
-                                            {...register(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`, {
-                                                required: 'Vui lòng nhập số lượng',
-                                                valueAsNumber: true,
-                                                validate: (value) => {
-                                                    const remaining = calculateRemainingAwards(award.awardId);
-                                                    const currentValue = getValues(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`) || 0;
-                                                    return value <= (remaining + currentValue) || `Số lượng không được vượt quá ${remaining + currentValue}`;
-                                                }
-                                            })}
+                                            {...register(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`)}
                                             className={styles.formControl}
                                             type="number"
-                                            defaultValue={0}
                                             min="0"
-                                            max={calculateRemainingAwards(award.awardId) + (getValues(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`) || 0)}
                                             onChange={(e) => {
-                                                const newValue = Math.max(0, parseInt(e.target.value) || 0);
-                                                setValue(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`, newValue);
+                                                const value = Math.max(0, parseInt(e.target.value) || 0);
+                                                setValue(`listScheduleSingleExaminer.${index}.awards.${awardIndex}.awardCount`, value);
                                             }}
                                         />
                                     </div>
                                 </div>
                             ))
                         )}
+
                     </div>
                 </div>
             ))}
+
             <div className={styles.add_block}>
                 <AddCircleOutline
                     fontSize="large"
@@ -383,9 +466,19 @@ function FinalSchedule({ modalShow, onHide, roundData, roundId }) {
     );
 
     return (
-        <Modal show={modalShow} onHide={onHide} size="lg" centered>
+        <Modal
+            show={modalShow}
+            onHide={() => {
+                resetAllState();
+                onHide();
+            }}
+            size="lg"
+            centered
+        >
             <Modal.Header closeButton>
-                <Modal.Title>Add Schedule</Modal.Title>
+                <Modal.Title>
+                    Thêm lịch chấm
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form onSubmit={handleSubmit(onSubmit)} className={styles.modalForm}>
@@ -401,16 +494,17 @@ function FinalSchedule({ modalShow, onHide, roundData, roundId }) {
                         label={isAutoSchedule ? 'Tự Động' : 'Thủ Công'}
                     />
 
-                    {isAutoSchedule ? renderAutoScheduleForm() : renderManualScheduleForm()}
+                    {isAutoSchedule
+                        ? renderAutoScheduleForm()
+                        : renderManualScheduleForm()}
 
-                    <LoadingButton
-                        variant="contained"
+                    <button
                         type="submit"
-                        loading={isLoading}
-                        className={styles.submitButton}
+                        className={styles.btnCreate}
+                        disabled={isLoading}
                     >
-                        Add Schedule
-                    </LoadingButton>
+                        {isLoading ? 'Đang xử lý...' : 'Lưu'}
+                    </button>
                 </form>
             </Modal.Body>
         </Modal>

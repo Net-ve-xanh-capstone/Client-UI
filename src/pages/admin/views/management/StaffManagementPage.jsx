@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import DashboardCard from '../../components/shared/DashboardCard';
-import PageContainer from '../../components/container/PageContainer';
+import DashboardCard from '../../components/shared/DashboardCard.jsx';
+import PageContainer from '../../components/container/PageContainer.jsx';
 import {
   createTheme,
   StyledEngineProvider,
@@ -64,7 +64,7 @@ const getMuiTheme = () =>
     },
   });
 
-const ExaminerManagementPage = () => {
+const StaffManagementPage = () => {
   const { userInfo } = useSelector(state => state.auth);
   const [accountant, setAccountant] = useState([]);
   const [idDelete, setIdDelete] = useState(null);
@@ -283,9 +283,9 @@ const ExaminerManagementPage = () => {
   }, []);
 
   return (
-    <PageContainer title="Quản lý giám khảo" description="Quản lý giám khảo">
+    <PageContainer title="Quản lý nhân viên" description="Quản lý nhân viên">
       <DashboardCard
-        title="Quản lý giám khảo"
+        title="Quản lý nhân viên"
         action={
           <div className={styles.buttonContainer}>
             <button className={styles.btnCreate} onClick={handleAddAccount}>
@@ -321,4 +321,4 @@ const ExaminerManagementPage = () => {
   );
 };
 
-export default ExaminerManagementPage;
+export default StaffManagementPage;

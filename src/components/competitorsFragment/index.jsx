@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { FormControl, InputLabel, MenuItem, Select, CircularProgress, Box } from '@mui/material';
+import { CircularProgress, Box } from '@mui/material';
+import Select from 'react-select';
 import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
 import { getConmpetitors, getRounds } from '../../api/competitorApi.js';
@@ -11,7 +12,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
   const [resource, setResource] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [selectedRound, setSelectedRound] = useState('');
+  const [selectedRound, setSelectedRound] = useState(null);
   const [rounds, setRounds] = useState([]);
 
   useEffect(() => {
@@ -20,7 +21,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
 
   useEffect(() => {
     if (selectedRound) {
-      getResource(selectedRound);
+      getResource(selectedRound.value);
     } else {
       getResource();
     }
@@ -31,8 +32,8 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
       const { data } = await getRounds(resourceFrag.id);
       const flattenedRounds = data?.result?.educationalLevel.flatMap(level =>
         level.round.map(round => ({
-          id: round.id,
-          name: `${level.description} - ${round.name}`,
+          value: round.id,
+          label: `${level.description} - ${round.name}`,
         }))
       );
       setRounds(flattenedRounds);
@@ -71,8 +72,8 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     }
   };
 
-  const handleRoundChange = (event) => {
-    setSelectedRound(event.target.value);
+  const handleRoundChange = (selectedOption) => {
+    setSelectedRound(selectedOption);
   };
 
   const columns = [
@@ -174,6 +175,42 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
     console.log('Opening details for competitor:', competitorId);
   };
 
+  const customStyles = {
+    control: (base, state) => ({
+      ...base,
+      background: 'transparent',
+      margin: '20px 0px 20px 0px',
+      border: 0,
+      // match with the menu
+      borderRadius: state.isFocused ? '2rem' : '2rem',
+      color: '#070F2B',
+      // Overwrittes the different states of border
+      borderColor: 'none !important',
+      // Removes weird border around container
+      boxShadow:
+        'rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px',
+      height: '5rem',
+      minWidth: '20rem',
+      fontSize: '1.5rem !important',
+      '&:hover': {
+        // Overwrittes the different states of border
+        borderColor: 'none',
+      },
+    }),
+    menu: base => ({
+      ...base,
+      // override border radius to match the box
+      borderRadius: 0,
+      // kill the gap
+      marginTop: 0,
+    }),
+    menuList: base => ({
+      ...base,
+      // kill the white space on first and last option
+      padding: 0,
+    }),
+  };
+
   return (
     <>
       <ResourceForm
@@ -183,25 +220,16 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
       />
 
       <div className={styles.filterContainer}>
-        <FormControl fullWidth>
-          <InputLabel id="round-filter-label">Lọc theo vòng thi</InputLabel>
-          <Select
-            labelId="round-filter-label"
-            id="round-filter"
-            value={selectedRound}
-            label="Lọc theo vòng thi"
-            onChange={handleRoundChange}
-          >
-            <MenuItem value="">
-              <em>Tất cả vòng thi</em>
-            </MenuItem>
-            {rounds.map((round) => (
-              <MenuItem key={round.id} value={round.id}>
-                {round.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+      <div className="col-md-3">
+        <Select
+          value={selectedRound}
+          onChange={handleRoundChange}
+          options={[{ value: '', label: 'Tất cả vòng thi' }, ...rounds]}
+          placeholder="Lọc theo vòng thi"
+          isClearable
+          styles={customStyles}
+        />
+        </div>
       </div>
 
       <StyledEngineProvider injectFirst>

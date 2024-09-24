@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 const Select = ({ placeholder = '', className = '' }) => {
   const { toggle, show, errors } = useDropdown();
-  
+
   return (
     <div
       id="item-create"
@@ -17,9 +17,9 @@ const Select = ({ placeholder = '', className = '' }) => {
         lineHeight: '28px',
         borderRadius: '4px',
         background: 'transparent',
-        color: '#8a8aa0',
+        color: 'var(--primary-color6);',
         width: '100%',
-        padding: '10px 0'
+        padding: '10px 0',
       }}
       className={classNames(className, errors?.length > 0 ? 'border-danger' : '')}
     >
@@ -30,7 +30,7 @@ const Select = ({ placeholder = '', className = '' }) => {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             style={{
-              width: '20px'
+              width: '20px',
             }}
             fill="none"
             viewBox="0 0 24 24"
@@ -43,7 +43,7 @@ const Select = ({ placeholder = '', className = '' }) => {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             style={{
-              width: '20px'
+              width: '20px',
             }}
             fill="none"
             viewBox="0 0 24 24"

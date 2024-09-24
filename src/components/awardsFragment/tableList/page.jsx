@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import DeleteModal from '../../DeleteModal/index.jsx';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { formatCurrencyVND } from '../../../utils/formatCurrency.js';
+import { formatCurrencyVND, formatNumber } from '../../../utils/formatUtils.js';
 
 const ListAward = memo(({ items, recallData, statusOfRound }) => {
   const [openAdd, setOpenAdd] = useState(false);
@@ -168,7 +168,7 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
                         {val?.rank}
                       </div>
                       <div className={styles.col} data-label="Số lượng">
-                        <div>{val?.quantity}</div>
+                        <div>{formatNumber(val?.quantity)}</div>
                       </div>
                       <div className={styles.col} data-label="Tiền mặt">
                         <div>{formatCurrencyVND(val?.cash)}</div>

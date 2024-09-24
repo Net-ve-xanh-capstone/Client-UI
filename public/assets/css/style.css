@@ -603,7 +603,7 @@ input[type='color'] {
     padding: 13px 15px;
     width: 100%;
     background: transparent;
-    color: #8a8aa0;
+    color: var(--primary-color6);
 }
 
 /* Input focus */
@@ -647,7 +647,7 @@ input[type='color']::placeholder {
     font-size: 18px;
     font-weight: 400;
     line-height: 28px;
-    color: #8a8aa0;
+    color: var(--primary-color6);
 }
 
 /* Button */
@@ -687,15 +687,15 @@ input[type='submit']:focus {
 
 /* Placeholder color */
 ::-webkit-input-placeholder {
-    color: #8a8aa0;
+    color: var(--primary-color6);
 }
 
 :-moz-placeholder {
-    color: #8a8aa0;
+    color: var(--primary-color6);
 }
 
 ::-moz-placeholder {
-    color: #8a8aa0;
+    color: var(--primary-color6);
     opacity: 1;
 }
 
@@ -711,7 +711,7 @@ input[type='submit']:focus {
 /* Since FF19 lowers the opacity of the placeholder by default */
 
 :-ms-input-placeholder {
-    color: #8a8aa0;
+    color: var(--primary-color6);
 }
 
 /* Typography

@@ -1,56 +1,19 @@
+/* General Styles */
 .title {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
+  margin: 10px 0 5px;
+  color: #333;
   padding: 10px 0;
-  margin-top: 0.5rem;
 }
 
 .titleHeader {
   font-size: 20px;
   font-weight: bold;
+  margin-top: 0.5rem;
 }
 
-@media (max-width: 800px) {
-  .modalForm {
-    right: -5px !important;
-  }
-
-
-}
-
-/* .modalForm {
-    padding: 20px;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: -17px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    position: absolute;
-}
-
-.modalForm>.inputModal {
-    padding: 5px 5px;
-}
-
-.modalForm .btnCreate {
-    margin-top: 10px;
-    padding: 7px 30px;
-}
-
-.modalForm .btnCreate:hover {
-    color: white;
-    border: none !important;
-}
-
-.modalForm .btnCreate:focus {
-    color: white;
-}
-
-.formControl {
-    padding: 5px 5px !important;
-} */
-
+/* Modal Form Styles */
 .modalForm {
   display: flex;
   flex-direction: column;
@@ -63,79 +26,38 @@
   overflow: auto;
 }
 
-.switchControl {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  /* Space below the switch control */
-}
-
-.title {
-  margin: 10px 0 5px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  /* Darker text for better readability */
-}
-
-.formControl {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  /* Simple border */
-  border-radius: 4px;
-  font-size: 14px;
-}
-
 .inputModal {
   width: 100%;
   padding: 10px;
-  border-radius: 4px;
   border: 1px solid #ccc;
+  border-radius: 4px;
   font-size: 14px;
-  box-sizing: border-box;
   margin-bottom: 15px;
-  /* Consistent spacing between inputs */
   background-color: #f9f9f9;
-  /* Light background for input fields */
 }
 
 .inputModal:focus {
   outline: none;
   border-color: #007bff;
-  /* Focus state color */
 }
 
-.btnCreate {
-  background-color: #007bff;
+.modalForm .btnCreate {
+  padding: 7px 30px;
+}
+
+.modalForm .btnCreate:hover {
   color: white;
-  font-weight: bold;
-  text-transform: uppercase;
-  padding: 10px 20px;
-  border-radius: 4px;
+  background-color: #5142fc70;
 }
 
-.btnCreate:hover {
-  background-color: #0056b3;
-  /* Darker color on hover */
+.modalForm .btnCreate:focus {
+  color: white;
 }
 
-@media (max-width: 768px) {
-  .modalForm {
-    padding: 15px;
-    /* Smaller padding for smaller screens */
-  }
-
-  .btnCreate {
-    width: 100%;
-    /* Button stretches full width on small screens */
-  }
-}
-
-.block {
+/* Block Container */
+.block,
+.roundBlock {
   width: 100%;
-  height: auto;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -145,7 +67,31 @@
   margin-top: 2rem;
 }
 
+.block h5,
+.roundBlock h5 {
+  font-size: 16px;
+  font-weight: 500;
+  color: black;
+}
 
+/* Media Queries */
+@media (max-width: 800px) {
+  .modalForm {
+    right: -5px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .modalForm {
+    padding: 15px;
+  }
+
+  .btnCreate {
+    width: 100%;
+  }
+}
+
+/* Examiners List */
 .examinersContainer {
   max-height: 400px;
   overflow-y: auto;
@@ -157,11 +103,32 @@
   padding-right: 10px;
 }
 
-.block {
+/* Form Controls */
+.formControl {
+  width: 100%;
+  padding: 8px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 15px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+
+
+/* Error Message */
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+/* Buttons for Adding and Removing */
+.addButton {
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
 }
 
 .removeButton {
@@ -173,55 +140,12 @@
   cursor: pointer;
 }
 
-.addButton {
-  background-color: #1890ff;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-
-
-.roundBlock {
-  width: 100%;
-  height: auto;
+/* Specific Layouts */
+.first_zone,
+.first_round {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  border: 1px solid #000;
-  border-radius: 0.625rem;
-  padding: 2rem;
-  margin-top: 2rem;
-}
-
-.roundBlock h5 {
-  color: black;
-  font-weight: 500;
-  font-size: 16px;
-}
-
-.inputAward {
-  width: 100px !important;
-  height: 40px;
-}
-
-.error {
-  color: red;
-  font-size: 14px;
-}
-
-.rankTitle {
-  width: 100px;
-}
-
-.first_zone {
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
   border: 1px solid #000;
   padding: 1rem;
   border-radius: 0.625rem;
@@ -235,14 +159,7 @@
   justify-content: flex-start;
 }
 
-.outside {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
 .data_time {
-  width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 2rem;
@@ -252,35 +169,47 @@
   flex: 1;
 }
 
-.first_round {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin-top: 2rem;
-}
-
+/* Blocks for Add and Remove */
 .add_block {
   display: flex;
   gap: 1rem;
-  margin-top: 1.2rem;
   align-items: center;
   justify-content: center;
+  margin-top: 1.2rem;
 }
 
-.add_block>.icon_add {
+.add_block .icon_add {
   width: 30px;
   height: 30px;
 }
 
 .remove_block {
   display: flex;
-  width: 100%;
-  max-width: 100% !important;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  max-width: 100% !important;
 }
 
-.remove_block>.icon_remove {
+.remove_block .icon_remove {
   width: 30px;
   height: 30px;
+}
+
+.outside {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.datePickerContainer {
+  position: relative; /* Thêm vị trí tương đối cho container */
+}
+
+.datePicker {
+  width: 100%; /* Đặt chiều rộng bằng 100% để giữ cho nó khớp với các trường khác */
+}
+
+.buttonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }

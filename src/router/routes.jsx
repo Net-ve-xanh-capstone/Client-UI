@@ -39,8 +39,11 @@ const FullLayout = lazy(() => import('../pages/admin/layouts/full/FullLayout'));
 const Dashboard = lazy(() =>
   import('../pages/admin/views/dashboard/Dashboard'),
 );
-const ExaminerManagementPage = lazy(() =>
-  import('../pages/admin/views/management/ExaminerManagementPage.jsx'),
+const StaffManagementPage = lazy(() =>
+  import('../pages/admin/views/management/StaffManagementPage.jsx'),
+);
+const CustomPage = lazy(() =>
+  import('../pages/admin/views/management/CustomPage.jsx'),
 );
 const ForgotPasswordPage = lazy(() => import('../pages/ForgotPasswordPage'));
 
@@ -167,7 +170,8 @@ const routes = [
     children: [
       { path: '', component: <Navigate to="dashboard" /> },
       { path: 'dashboard', exact: true, component: <Dashboard /> },
-      { path: 'account', exact: true, component: <ExaminerManagementPage /> },
+      { path: 'account', exact: true, component: <StaffManagementPage /> },
+      { path: 'custom', exact: true, component: <CustomPage /> },
       { path: 'ui/typography', exact: true, component: <TypographyPage /> },
       { path: 'ui/shadow', exact: true, component: <Shadow /> },
     ],

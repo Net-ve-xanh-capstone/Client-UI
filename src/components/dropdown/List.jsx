@@ -16,7 +16,7 @@ const List = ({ children, className }) => {
             lineHeight: '28px',
             borderRadius: '4px',
             background: 'transparent',
-            color: '#8a8aa0',
+            color: 'var(--primary-color6);',
             overflowY: 'auto',
             height: '180px',
           }}

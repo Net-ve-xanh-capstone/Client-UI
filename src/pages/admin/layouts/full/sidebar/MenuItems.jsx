@@ -1,3 +1,4 @@
+import { Settings } from '@mui/icons-material';
 import { IconLayoutDashboard, IconUsers } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -39,6 +40,12 @@ const Menuitems = [
     title: 'Tài khoản',
     icon: IconUsers,
     href: '/admin-management/account',
+  },
+  {
+    id: uniqueId(),
+    title: 'Custom',
+    icon: Settings,
+    href: '/admin-management/custom',
   },
 ];
 

@@ -129,8 +129,8 @@ function PaintingPage({ contestId, statusOfRound }) {
     { value: 'Draft', label: 'Bản nháp' },
     { value: 'Delete', label: 'Đã xóa' },
     { value: 'Pass', label: 'Qua Vòng 1' },
-    { value: 'NotPass', label: 'Không qua vòng 1' },
-    { value: 'FinalRound', label: 'Vòng chung kết' },
+    { value: 'NotPasFinalRounds', label: 'Không qua vòng 1' },
+    { value: '', label: 'Vòng chung kết' },
     { value: 'HasPrizes ', label: 'Có giải thưởng' },
   ];
 
@@ -375,7 +375,7 @@ function PaintingPage({ contestId, statusOfRound }) {
                     variant="rounded"
                   />
                 ))
-              ) : listPainting?.length ? (
+              ) : listPainting?.length > 0 && (
                 listPainting.map(val => (
                   <CardPainting
                     key={val.id}
@@ -383,34 +383,40 @@ function PaintingPage({ contestId, statusOfRound }) {
                     getPaintingByID={getPaintingByID}
                   />
                 ))
-              ) : (
-                <div className={styles.not_found}>
-                  <SearchOffIcon sx={{ fontSize: '10rem', color: '#7a798a' }} />
-                  <h2 className={`tf-title pb-20 ${styles.notfound_title}`}>
-                    Không có bài dự thi nào
-                  </h2>
-                </div>
               )}
             </div>
-            <Pagination
-              count={totalPage}
-              color="secondary"
-              size="large"
-              page={pageNumber}
-              onChange={handleChange}
-              sx={{
-                width: '70%',
-                display: 'flex',
-                justifyContent: 'center',
-                '.MuiPaginationItem-text': {
-                  fontSize: '1.5rem',
-                },
-                '.Mui-selected': {
-                  backgroundColor: '#5142fc !important', // Customize the selected item background color
-                  color: 'white', // Ensure text is readable on selected background
-                },
-              }}
-            />
+            {listPainting?.length === 0 && !loadingPage && (
+              <div className={styles.not_found}>
+                <SearchOffIcon
+                  sx={{
+                    fontSize: '5rem',
+                    color: '#5142fc',
+                  }}
+                />
+                <h3>Không tìm thấy kết quả</h3>
+              </div>
+            )}
+            {listPainting?.length > 0 && (
+              <Pagination
+                count={totalPage}
+                color="secondary"
+                size="large"
+                page={pageNumber}
+                onChange={handleChange}
+                sx={{
+                  width: '70%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  '.MuiPaginationItem-text': {
+                    fontSize: '1.5rem',
+                  },
+                  '.Mui-selected': {
+                    backgroundColor: '#5142fc !important', // Customize the selected item background color
+                    color: 'white', // Ensure text is readable on selected background
+                  },
+                }}
+              />
+            )}
           </div>
         </div>
         <div

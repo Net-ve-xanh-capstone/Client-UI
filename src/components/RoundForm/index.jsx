@@ -179,7 +179,7 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
         endTime: formData?.endTime,
         roundNumber: 2,
         levelList: formData?.listLevel,
-        createdBy: formData.currentUserId,
+        currentUserId: formData.currentUserId,
       };
       const { data } = await editRoundLevel(payload);
       if (data?.result) {

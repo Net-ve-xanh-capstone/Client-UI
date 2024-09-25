@@ -17,9 +17,13 @@ export const roundTopicById = id => {
 };
 
 export const getAllRoundStaff = () => {
-  return axiosApi.get(`rounds/roundsforstaff`);
+  return axiosApi.get('rounds/roundsforstaff');
 };
 
 export const getCompetitorFinalByRound = roundId => {
   return axiosApi.get(`rounds/competitorfinalbyround/${roundId}`);
+};
+
+export const finalRound = roundId => {
+  return axiosApi.get(`rounds/finalround/${roundId}`);
 };

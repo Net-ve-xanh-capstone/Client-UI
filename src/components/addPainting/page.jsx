@@ -358,7 +358,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
         theme: 'light',
       });
     } catch (error) {
-      toast.warning('Thêm cuộc thi không thành công vui lòng thử lại!', {
+      toast.warning('Thêm bài thi không thành công vui lòng thử lại!', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
@@ -442,7 +442,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
           ...prv[index],
           value:
             index === 'birthday'
-              ? competitorById[0][index]
+              ? new Date(competitorById[0][index]).toISOString().split('T')[0]
               : competitorById[0][index],
         },
       }));
@@ -455,11 +455,11 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
     try {
       const res = await finalRound(id);
       setCodeStudent(
-        res.result.length
-          ? res.result.map(vl => ({ value: vl.id, label: vl.code }))
+        res?.data?.result.length
+          ? res?.data?.result.map(vl => ({ value: vl.id, label: vl?.code + ' - ' + vl?.fullName }))
           : [],
       );
-      setListUser(res.result);
+      setListUser(res?.data?.result);
     } catch (error) {
       console.log(error);
     } finally {
@@ -481,8 +481,6 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
 
   // after click on the round selected then will setit to final
   const fetchRoundTopic = async (id, label) => {
-    console.log(label.split(' -')[0] === 'Vòng Chung Kết');
-
     finalCondition(label.split(' -')[0] === 'Vòng Chung Kết', id);
     setLoadingRound(true);
     try {

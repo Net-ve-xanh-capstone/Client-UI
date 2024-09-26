@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { paintingApi } from '../../api/paintingApi.js';
-import { getAllRoundStaff, roundTopicById } from '../../api/roundStaffApi.js';
+import { finalRound, getAllRoundStaff, roundTopicById } from '../../api/roundStaffApi.js';
 import { useUploadImage } from '../../hooks/firebaseImageUpload/useUploadImage.js';
 import { isEmail, isPhoneNumber } from '../../utils/validation.js';
 import styles from './page.module.css';
@@ -358,7 +358,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
         theme: 'light',
       });
     } catch (error) {
-      toast.warning('Thêm cuộc thi không thành công vui lòng thử lại!', {
+      toast.warning('Thêm bài thi không thành công vui lòng thử lại!', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
@@ -442,7 +442,7 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
           ...prv[index],
           value:
             index === 'birthday'
-              ? competitorById[0][index]
+              ? new Date(competitorById[0][index]).toISOString().split('T')[0]
               : competitorById[0][index],
         },
       }));
@@ -453,15 +453,13 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
   const getCompetitorByRound = async id => {
     setLoadingUser(true);
     try {
-      const res = await axios.get(
-        `https://netvexanh.azurewebsites.net/finalround/${id}`,
-      );
+      const res = await finalRound(id);
       setCodeStudent(
-        res.result.length
-          ? res.result.map(vl => ({ value: vl.id, label: vl.code }))
+        res?.data?.result.length
+          ? res?.data?.result.map(vl => ({ value: vl.id, label: vl?.code + ' - ' + vl?.fullName }))
           : [],
       );
-      setListUser(res.result);
+      setListUser(res?.data?.result);
     } catch (error) {
       console.log(error);
     } finally {
@@ -483,8 +481,6 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
 
   // after click on the round selected then will setit to final
   const fetchRoundTopic = async (id, label) => {
-    console.log(label.split(' -')[0] === 'Vòng Chung Kết');
-
     finalCondition(label.split(' -')[0] === 'Vòng Chung Kết', id);
     setLoadingRound(true);
     try {
@@ -651,13 +647,13 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                     </div>
                     {(fieldInput[vl.label].error !== '' ||
                       fieldInput[vl.label].error !== null) && (
-                        <div className={styles.error_text}>
-                          <span></span>
-                          <p className={styles.txt_error}>
-                            {fieldInput[vl.label].error}
-                          </p>
-                        </div>
-                      )}
+                      <div className={styles.error_text}>
+                        <span></span>
+                        <p className={styles.txt_error}>
+                          {fieldInput[vl.label].error}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -743,12 +739,12 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                   </div>
                   {(fieldInput.roundTopicId.error !== '' ||
                     fieldInput.roundTopicId.error !== null) && (
-                      <div className={styles.error_text}>
-                        <p className={styles.txt_error}>
-                          {fieldInput.roundTopicId.error}
-                        </p>
-                      </div>
-                    )}
+                    <div className={styles.error_text}>
+                      <p className={styles.txt_error}>
+                        {fieldInput.roundTopicId.error}
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <div className={styles.topic_error}>
                   <div className={styles.field_painting}>
@@ -771,13 +767,13 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                   </div>
                   {(fieldInput.name.error !== '' ||
                     fieldInput.name.error !== null) && (
-                      <div className={styles.error_text}>
-                        <span></span>
-                        <p className={styles.txt_error}>
-                          {fieldInput.name.error}
-                        </p>
-                      </div>
-                    )}
+                    <div className={styles.error_text}>
+                      <span></span>
+                      <p className={styles.txt_error}>
+                        {fieldInput.name.error}
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <div className={styles.topic_error}>
                   <div className={styles.field_painting}>
@@ -803,13 +799,13 @@ function ModalAddPainting({ modalShow, onHide, fetchData, setPageNumber }) {
                   </div>
                   {(fieldInput.description.error !== '' ||
                     fieldInput.description.error !== null) && (
-                      <div className={styles.error_text}>
-                        <span></span>
-                        <p className={styles.txt_error}>
-                          {fieldInput.description.error}
-                        </p>
-                      </div>
-                    )}
+                    <div className={styles.error_text}>
+                      <span></span>
+                      <p className={styles.txt_error}>
+                        {fieldInput.description.error}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

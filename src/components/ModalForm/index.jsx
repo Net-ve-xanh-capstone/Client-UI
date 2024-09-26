@@ -85,7 +85,6 @@ function ModalForm({ modalShow, onHide }) {
   const {
     fields: roundFields,
     remove: removeRound,
-    prepend: prependRound,
   } = useFieldArray({
     control,
     name: 'round',
@@ -111,13 +110,11 @@ function ModalForm({ modalShow, onHide }) {
     removeLevel(index);
     // Sắp xếp lại tên bảng
     const updatedFields = getValues('educationalLevel');
-    const updatedFieldsWithNewNames = updatedFields?.map((field, idx) => ({
-      ...field,
-      level: `Bảng ${String.fromCharCode(65 + idx)}`,
-    }));
+    updatedFields.forEach((field, idx) => {
+      field.level = `Bảng ${String.fromCharCode(65 + idx)}`;
+    });
 
     // Cập nhật giá trị của field array
-    reset({ educationalLevel: updatedFieldsWithNewNames });
   };
 
   const handleAddRound = () => {

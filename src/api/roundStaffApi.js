@@ -24,6 +24,14 @@ export const getCompetitorFinalByRound = roundId => {
   return axiosApi.get(`rounds/competitorfinalbyround/${roundId}`);
 };
 
+export const getRoundById = id => {
+  return axiosApi.get(`rounds/${id}`);
+};
+
+export const adminEdit = payload => {
+  return axiosApi.put(`rounds`, payload);
+};
+
 export const finalRound = roundId => {
   return axiosApi.get(`rounds/finalround/${roundId}`);
 };

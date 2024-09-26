@@ -25,6 +25,7 @@ const Sidebar = props => {
             sx: {
               width: sidebarWidth,
               boxSizing: 'border-box',
+              background: 'linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%)',
             },
           }}>
           {/* ------------------------------------------- */}
@@ -62,6 +63,7 @@ const Sidebar = props => {
         sx: {
           width: sidebarWidth,
           boxShadow: theme => theme.shadows[8],
+          background: 'linear-gradient(227.3deg, #8a208c 0%, #181b81 100.84%)',
         },
       }}>
       {/* ------------------------------------------- */}

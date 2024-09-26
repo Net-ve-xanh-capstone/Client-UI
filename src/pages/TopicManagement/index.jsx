@@ -8,13 +8,13 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { deleteTopic, getAll } from '../../api/topicStaffApi';
 import DeleteModal from '../../components/DeleteModal';
-import ModalForm from '../../components/ModalForm';
 import styles from './style.module.css';
 import { toast } from 'react-toastify';
 import TopicForm from '../../components/TopicForm';
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { renderWithTooltip } from '../admin/views/management/StaffManagementPage.jsx';
 
 function TopicManagement() {
   const [modalShow, setModalShow] = useState(false);
@@ -80,7 +80,7 @@ function TopicManagement() {
       options: {
         customBodyRender: value => (
           <span>
-            {value.length > 50 ? value.substring(0, 50) + '...' : value}
+            {renderWithTooltip(value, 20)}
           </span>
         ),
       },
@@ -91,10 +91,7 @@ function TopicManagement() {
       options: {
         customBodyRender: value => (
           <span className={styles.extendMore}>
-            {value?.length > 100 ? value.slice(0, 90) : value}
-            {value?.length > 100 && (
-              <span className={styles.tooltip}>{value}</span>
-            )}
+            {renderWithTooltip(value, 20)}
           </span>
         ),
       },

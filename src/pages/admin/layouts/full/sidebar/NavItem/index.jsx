@@ -22,7 +22,7 @@ const NavItem = ({ item, level, pathDirect, onClick }) => {
     borderRadius: '8px',
     fontSize: '14px',
     backgroundColor: level > 1 ? 'transparent !important' : 'inherit',
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.white_secondary,
     paddingLeft: '10px',
     '&:hover': {
       backgroundColor: theme.palette.primary.light,

@@ -14,6 +14,7 @@ import DeleteModal from '../../DeleteModal/index.jsx';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { formatCurrencyVND, formatNumber } from '../../../utils/formatUtils.js';
+import { renderWithTooltip } from '../../../pages/admin/views/management/StaffManagementPage.jsx';
 
 const ListAward = memo(({ items, recallData, statusOfRound }) => {
   const [openAdd, setOpenAdd] = useState(false);
@@ -165,16 +166,16 @@ const ListAward = memo(({ items, recallData, statusOfRound }) => {
                         gridTemplateColumns: 'repeat(5, 1fr)',
                       }}>
                       <div className={styles.col} data-label="Giải thưởng">
-                        {val?.rank}
+                        {renderWithTooltip(val?.rank)}
                       </div>
                       <div className={styles.col} data-label="Số lượng">
-                        <div>{formatNumber(val?.quantity)}</div>
+                        <div>{renderWithTooltip(formatNumber(val?.quantity))}</div>
                       </div>
                       <div className={styles.col} data-label="Tiền mặt">
-                        <div>{formatCurrencyVND(val?.cash)}</div>
+                        <div>{renderWithTooltip(formatCurrencyVND(val?.cash))}</div>
                       </div>
                       <div className={styles.col} data-label="Phần thưởng">
-                        <div>{val?.artifact}</div>
+                        <div>{renderWithTooltip(val?.artifact)}</div>
                       </div>
                       <div className={styles.col} data-label="Tương tác">
                         <div

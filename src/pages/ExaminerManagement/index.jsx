@@ -11,6 +11,7 @@ import { getAll } from '../../api/examinerStaffApi';
 import ViewExaminer from '../../components/ViewExaminer';
 import styles from './style.module.css';
 import AddExaminer from '../../components/modalAddingExaminer/page.jsx';
+import { renderWithTooltip } from '../admin/views/management/StaffManagementPage.jsx';
 
 function ExaminerManagement() {
   const [modalShow, setModalShow] = useState(false);
@@ -51,28 +52,28 @@ function ExaminerManagement() {
       name: 'code',
       label: 'MÃ GIÁM KHẢO',
       options: {
-        customBodyRender: value => <span>{value}</span>,
+        customBodyRender: value => <span>{renderWithTooltip(value)}</span>,
       },
     },
     {
       name: 'fullName',
       label: 'TÊN GIÁM KHẢO',
       options: {
-        customBodyRender: value => <span>{value}</span>,
+        customBodyRender: value => <span>{renderWithTooltip(value)}</span>,
       },
     },
     {
       name: 'email',
       label: 'EMAIL',
       options: {
-        customBodyRender: value => <span>{value}</span>,
+        customBodyRender: value => <span>{renderWithTooltip(value)}</span>,
       },
     },
     {
       name: 'phone',
       label: 'SỐ ĐIỆN THOẠI',
       options: {
-        customBodyRender: value => <span>{value}</span>,
+        customBodyRender: value => <span>{renderWithTooltip(value)}</span>,
       },
     },
     {

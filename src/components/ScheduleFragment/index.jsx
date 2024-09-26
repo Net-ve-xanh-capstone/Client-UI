@@ -14,7 +14,6 @@ import {
 } from '../../api/scheduleStaffApi.js';
 import {
   checkActiveScheduleButton,
-  checkEditButton,
 } from '../../utils/checkEditButton.js';
 import { formatDate } from '../../utils/formatDate.js';
 import DeleteModal from '../DeleteModal';
@@ -23,6 +22,7 @@ import ScheduleForm from '../ScheduleForm/index.jsx';
 import styles from './style.module.css';
 import FinalScheduleForm from '../finalScheduleForm/page.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
+import { renderWithTooltip } from '../../pages/admin/views/management/StaffManagementPage.jsx';
 
 function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
   const [type, setType] = useState();
@@ -37,7 +37,6 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
 
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [scheDuleIdDelete, setScheduleIdDelete] = useState();
-  const isEditing = checkEditButton(scheduleFrag.startTime);
   const [level, setLevel] = useState();
   const [editRoundData, setEditRoundData] = useState(null);
   const [roundId, setRoundId] = useState(null);
@@ -45,10 +44,6 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
   const [preliminaryList, setPreliminaryList] = useState([]);
   const [finalList, setFinalList] = useState([]);
   const [orderRound, setOrderRound] = useState([]);
-
-  const isActive = !statusOfRound
-    .toLowerCase()
-    .includes('Chưa bắt đầu'.toLowerCase());
 
   const getLevelRound = async () => {
     setLoading(true);
@@ -258,10 +253,10 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                               : 'repeat(6, 1fr)',
                           }}>
                           <div className={styles.col} data-label="Tên giám khảo">
-                            {scheduleData?.examinerName}
+                            {renderWithTooltip(scheduleData?.examinerName, 30)}
                           </div>
                           <div className={styles.col} data-label="Ngày chấm">
-                            <div>{formatDate(scheduleData?.endDate)}</div>
+                            <div>{renderWithTooltip(formatDate(scheduleData?.endDate), 20)}</div>
                           </div>
                           {roundChedule?.roundName
                             .toLowerCase()
@@ -270,14 +265,14 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                               <div
                                 className={styles.col}
                                 data-label="Tổng bài chấm">
-                                <div>{scheduleData?.judgeCount}</div>
+                                <div>{renderWithTooltip(scheduleData?.judgeCount)}</div>
                               </div>
                               {scheduleData?.awards?.map(val => (
                                 <div
                                   key={val.id}
                                   className={styles.col}
                                   data-label={val.rank}>
-                                  <div>{val.quantity}</div>
+                                  <div>{renderWithTooltip(val.quantity)}</div>
                                 </div>
                               ))}
                             </>
@@ -286,14 +281,14 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                               <div
                                 className={styles.col}
                                 data-label="Tổng bài chấm">
-                                <div>{scheduleData?.judgeCount}</div>
+                                <div>{renderWithTooltip(scheduleData?.judgeCount)}</div>
                               </div>
                               {scheduleData?.awards?.map(val => (
                                 <div
                                   key={val.id}
                                   className={styles.col}
                                   data-label="Đạt giải">
-                                  <span>{val.quantity}</span>
+                                  <span>{renderWithTooltip(val.quantity)}</span>
                                 </div>
                               ))}
                             </>
@@ -302,8 +297,9 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                           <div className={styles.col} data-label="Trạng thái">
                             <span>
                               {scheduleData?.status === 'Rating'
-                                ? 'Chưa chấm'
-                                : 'Đã chấm'}
+                                ? renderWithTooltip('Chưa chấm')
+                                : renderWithTooltip('Đã chấm')
+                              }
                             </span>
                           </div>
                           <div className={styles.col} data-label="Tương tác">

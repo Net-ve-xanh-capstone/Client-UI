@@ -7,11 +7,13 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './style.module.css';
+import { renderWithTooltip } from '../../pages/admin/views/management/StaffManagementPage.jsx';
+
 function LevelFragment({ levelFrag, getContestDetail, statusOfRound }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [idLevelDelete, setIdLevelDelete] = useState();
-
+  const [edit, setIsEdit] = useState(false);
   const [type, setType] = useState('');
   const [dataRound, setDataRound] = useState(null);
 
@@ -67,12 +69,14 @@ function LevelFragment({ levelFrag, getContestDetail, statusOfRound }) {
   const openCreate = () => {
     setModalShow(true);
     setType('create');
+    setIsEdit(false);
   };
   // open popup delete
   const openEdit = data => {
     setModalShow(true);
     setType('edit');
     setDataRound(data);
+    setIsEdit(true);
   };
 
   return (
@@ -85,6 +89,7 @@ function LevelFragment({ levelFrag, getContestDetail, statusOfRound }) {
         endTime={levelFrag.endTime}
         roundData={dataRound}
         type={type}
+        isEdit={edit}
       />
       <DeleteModal
         show={deleteModalShow}
@@ -105,7 +110,7 @@ function LevelFragment({ levelFrag, getContestDetail, statusOfRound }) {
           {levelFrag.educationalLevel.map(data => (
             <li key={data.id} className={styles.tableRow}>
               <div className={styles.col} data-label="Nội dung">
-                {data.level}
+                {renderWithTooltip(data?.level)}
               </div>
               <div
                 className={styles.col}
@@ -114,13 +119,15 @@ function LevelFragment({ levelFrag, getContestDetail, statusOfRound }) {
                   alignItems: 'center',
                 }}
                 data-label="Mô tả">
-                <div>{data.description || 'Chưa có'}</div>
+                <div>
+                  {renderWithTooltip(data?.description || 'Chưa có')}
+                </div>
               </div>
               <div className={styles.col} data-label="Từ tuổi">
-                {data.minAge}
+                {renderWithTooltip(data?.minAge)}
               </div>
               <div className={styles.col} data-label="Đến tuổi">
-                {data.maxAge}
+                {renderWithTooltip(data?.maxAge)}
               </div>
               <div className={styles.col} data-label="Tương tác">
                 <div

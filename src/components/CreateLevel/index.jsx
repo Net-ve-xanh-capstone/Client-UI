@@ -13,14 +13,15 @@ import styles from './style.module.css';
 import moment from 'moment-timezone';
 
 function CreateLevel({
-  modalShow,
-  onHide,
-  contestId,
-  startTime,
-  endTime,
-  type,
-  roundData,
-}) {
+                       modalShow,
+                       onHide,
+                       contestId,
+                       startTime,
+                       endTime,
+                       type,
+                       roundData,
+                       isEdit,
+                     }) {
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
   const { userInfo } = useSelector(state => state.auth);
@@ -50,7 +51,6 @@ function CreateLevel({
 
   const [formData, setFormData] = useState(intialState);
 
-  // get the value of input field and pass to the state
   const handleInputChange = event => {
     try {
       const { name, value } = event.target;
@@ -141,16 +141,6 @@ function CreateLevel({
   };
   const handleInput = event => {
     event.target.value = event.target.value.replace(/e/gi, '');
-  };
-
-  // cancel if user try to input float number
-  const keydowFloat = event => {
-    if (event.key === '.' || event.key === ',') {
-      event.preventDefault();
-    }
-  };
-  const inputFloat = event => {
-    event.target.value = event.target.value.replace(/[^0-9]/g, '');
   };
 
   // Base on the roundData filter round with final or unfinal round
@@ -318,12 +308,13 @@ function CreateLevel({
         onHide={onHide}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
+        contentClassName={isEdit ? styles.modal_backdrop_small : styles.modal_backdrop}
         centered>
         <Modal.Header closeButton style={{ margin: '0 auto' }}>
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            Thêm đối tượng
+            {isEdit ? 'Chỉnh sửa đối tượng' : 'Thêm đối tượng'}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ height: '70vh', overflow: 'hidden' }}>
@@ -385,187 +376,86 @@ function CreateLevel({
             </div>
 
             {/* Round */}
-            <div className={styles.card_screen}>
-              <h3 className={styles.title_zone}>Vòng thi</h3>
-              <div style={{ marginLeft: '20px' }}>
-                <div className={styles.roundBlock}>
-                  <h5>Vòng sơ khảo:</h5>
-                </div>
-                <div style={{ marginLeft: '20px' }} className="row">
-                  <div className="col-md-6">
-                    <h5 className={styles.title}>Thời gian bắt đầu</h5>
-                    <DatePicker
-                      dateFormat="dd/MM/yyyy"
-                      selected={formData.round1StartTime}
-                      className={styles.formControl}
-                      readOnly={type === 'edit'}
-                      onChange={date =>
-                        handleDateChange(date, 'round1StartTime')
-                      }
-                      minDate={parseDateEdit(startTime)}
-                      maxDate={parseDateEdit(endTime)}
-                    />
+            {
+              !isEdit && (<div className={styles.card_screen}>
+                <h3 className={styles.title_zone}>Vòng thi</h3>
+                <div style={{ marginLeft: '20px' }}>
+                  <div className={styles.roundBlock}>
+                    <h5>Vòng sơ khảo:</h5>
                   </div>
-                  <div className="col-md-6">
-                    <h4 className={styles.title}>Thời gian kết thúc</h4>
-                    <DatePicker
-                      dateFormat="dd/MM/yyyy"
-                      selected={formData.round1EndTime}
-                      className={styles.formControl}
-                      readOnly={type === 'edit'}
-                      onChange={date => handleDateChange(date, 'round1EndTime')}
-                      minDate={formData.round1StartTime}
-                      maxDate={parseDateEdit(endTime)}
-                    />
+                  <div style={{ marginLeft: '20px' }} className="row">
+                    <div className="col-md-6">
+                      <h5 className={styles.title}>Thời gian bắt đầu</h5>
+                      <DatePicker
+                        dateFormat="dd/MM/yyyy"
+                        selected={formData.round1StartTime}
+                        className={styles.formControl}
+                        readOnly={type === 'edit'}
+                        onChange={date =>
+                          handleDateChange(date, 'round1StartTime')
+                        }
+                        minDate={parseDateEdit(startTime)}
+                        maxDate={parseDateEdit(endTime)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <h4 className={styles.title}>Thời gian kết thúc</h4>
+                      <DatePicker
+                        dateFormat="dd/MM/yyyy"
+                        selected={formData.round1EndTime}
+                        className={styles.formControl}
+                        readOnly={type === 'edit'}
+                        onChange={date => handleDateChange(date, 'round1EndTime')}
+                        minDate={formData.round1StartTime}
+                        maxDate={parseDateEdit(endTime)}
+                      />
+                    </div>
                   </div>
-                </div>
-                {errors.round1 && (
-                  <p className={styles.error}>{errors.round1}</p>
-                )}
+                  {errors.round1 && (
+                    <p className={styles.error}>{errors.round1}</p>
+                  )}
 
-                <div
-                  style={{ marginTop: '20px' }}
-                  className={styles.roundBlock}>
-                  <h5>Vòng chung kết:</h5>
-                </div>
-                <div style={{ marginLeft: '20px' }} className="row">
-                  <div className="col-md-6">
-                    <h5 className={styles.title}>Thời gian bắt đầu</h5>
-                    <DatePicker
-                      selected={formData.round2StartTime}
-                      className={styles.formControl}
-                      readOnly={type === 'edit'}
-                      onChange={date =>
-                        handleDateChange(date, 'round2StartTime')
-                      }
-                      dateFormat="dd/MM/yyyy"
-                      minDate={formData.round1EndTime}
-                      maxDate={parseDateEdit(endTime)}
-                    />
+                  <div
+                    style={{ marginTop: '20px' }}
+                    className={styles.roundBlock}>
+                    <h5>Vòng chung kết:</h5>
                   </div>
-                  <div className="col-md-6">
-                    <h4 className={styles.title}>Thời gian kết thúc</h4>
-                    <DatePicker
-                      selected={formData.round2EndTime}
-                      className={styles.formControl}
-                      readOnly={type === 'edit'}
-                      onChange={date => handleDateChange(date, 'round2EndTime')}
-                      dateFormat="dd/MM/yyyy"
-                      minDate={formData.round2StartTime}
-                      maxDate={parseDateEdit(endTime)}
-                    />
+
+                  <div style={{ marginLeft: '20px' }} className="row">
+                    <div className="col-md-6">
+                      <h5 className={styles.title}>Thời gian bắt đầu</h5>
+                      <DatePicker
+                        selected={formData.round2StartTime}
+                        className={styles.formControl}
+                        readOnly={type === 'edit'}
+                        onChange={date =>
+                          handleDateChange(date, 'round2StartTime')
+                        }
+                        dateFormat="dd/MM/yyyy"
+                        minDate={formData.round1EndTime}
+                        maxDate={parseDateEdit(endTime)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <h4 className={styles.title}>Thời gian kết thúc</h4>
+                      <DatePicker
+                        selected={formData.round2EndTime}
+                        className={styles.formControl}
+                        readOnly={type === 'edit'}
+                        onChange={date => handleDateChange(date, 'round2EndTime')}
+                        dateFormat="dd/MM/yyyy"
+                        minDate={formData.round2StartTime}
+                        maxDate={parseDateEdit(endTime)}
+                      />
+                    </div>
                   </div>
+                  {errors.round2 && (
+                    <p className={styles.error}>{errors.round2}</p>
+                  )}
                 </div>
-                {errors.round2 && (
-                  <p className={styles.error}>{errors.round2}</p>
-                )}
-              </div>
-            </div>
+              </div>)
+            }
 
-            {/* Award */}
-
-            <div className={styles.card_screen}>
-              <h3 className={styles.title_zone}>Cơ cấu giải thưởng</h3>
-              <div className={styles.first_round}>
-                <h4 className={styles.title} style={{ margin: '0' }}>
-                  Số lượng bài thi đậu sơ khảo:
-                </h4>
-                <input
-                  className={styles.inputAward}
-                  required
-                  type="number"
-                  name="passRound1"
-                  min="1"
-                  max="99"
-                  readOnly={type === 'edit'}
-                  value={formData.passRound1}
-                  onChange={handleInputChange}
-                  onInput={inputFloat}
-                  onKeyDown={keydowFloat}
-                />
-              </div>
-              <h4 className={styles.title}>Số lượng giải</h4>
-              <div className="row mb-4 box-award">
-                <div
-                  className="col-md-6 d-flex justify-content-center align-items-center"
-                  style={{ gap: '20px' }}>
-                  <p className={styles.rankTitle}>Giải nhất:</p>
-                  <input
-                    className={styles.inputAward}
-                    required
-                    type="number"
-                    min="1"
-                    max="99"
-                    name="rank1"
-                    readOnly={type === 'edit'}
-                    value={formData.rank1}
-                    onChange={handleInputChange}
-                    onInput={inputFloat}
-                    onKeyDown={keydowFloat}
-                  />
-                  <p>giải</p>
-                </div>
-                <div
-                  className="col-md-6 d-flex justify-content-center align-items-center"
-                  style={{ gap: '20px' }}>
-                  <p className={styles.rankTitle}>Giải ba:</p>
-                  <input
-                    className={styles.inputAward}
-                    required
-                    type="number"
-                    min="1"
-                    max="99"
-                    name="rank3"
-                    value={formData.rank3}
-                    readOnly={type === 'edit'}
-                    onChange={handleInputChange}
-                    onInput={inputFloat}
-                    onKeyDown={keydowFloat}
-                  />
-                  <p>giải</p>
-                </div>
-              </div>
-              <div className="row">
-                <div
-                  className="col-md-6 d-flex justify-content-center align-items-center"
-                  style={{ gap: '20px' }}>
-                  <p className={styles.rankTitle}>Giải nhì:</p>
-                  <input
-                    className={styles.inputAward}
-                    required
-                    type="number"
-                    min="1"
-                    max="99"
-                    name="rank2"
-                    value={formData.rank2}
-                    readOnly={type === 'edit'}
-                    onChange={handleInputChange}
-                    onInput={inputFloat}
-                    onKeyDown={keydowFloat}
-                  />
-                  <p>giải</p>
-                </div>
-                <div
-                  className="col-md-6 d-flex justify-content-center align-items-center"
-                  style={{ gap: '20px' }}>
-                  <p className={styles.rankTitle}>Giải khuyến khích:</p>
-                  <input
-                    className={styles.inputAward}
-                    required
-                    type="number"
-                    min="1"
-                    max="99"
-                    name="rank4"
-                    value={formData.rank4}
-                    readOnly={type === 'edit'}
-                    onChange={handleInputChange}
-                    onInput={inputFloat}
-                    onKeyDown={keydowFloat}
-                  />
-                  <p>giải</p>
-                </div>
-              </div>
-            </div>
             <div style={{ textAlign: 'end' }}>
               {type === 'edit' ? (
                 <button className={styles.btnCreate} type="submit">

@@ -12,6 +12,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import { dowloadExcel } from '../../api/dowloadApi.js';
 import MailModal from './modalMail.jsx';
+import { renderWithTooltip } from '../../pages/admin/views/management/StaffManagementPage.jsx';
 
 function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   const [modalShow, setModalShow] = useState(false);
@@ -170,52 +171,31 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
               dataRound.round?.map(data => (
                 <li key={data.id} className={styles.tableRow}>
                   <div className={styles.col} data-label="Đối tượng">
-                    {dataRound.level}
+                    {renderWithTooltip(dataRound.level, 20)}
                   </div>
                   <div className={styles.col} data-label="Tên vòng thi">
-                    {data.name?.length > 100
-                      ? data.name.slice(0, 99) + '...'
-                      : data.name}
+                    {renderWithTooltip(data.name, 40)}
                   </div>
                   <div className={styles.col} data-label="Ngày bắt đầu">
-                    {formatDate(data?.startTime)}
+                    {renderWithTooltip(formatDate(data?.startTime), 20)}
                   </div>
                   <div className={styles.col} data-label="Ngày kết thúc">
-                    {formatDate(data?.endTime)}
+                    {renderWithTooltip(formatDate(data?.endTime), 20)}
                   </div>
                   <div className={styles.col} data-label="Ngày nộp bản cứng">
-                    {formatDate(data?.deadlineSubmissionDate)}
+                    {renderWithTooltip(formatDate(data?.deadlineSubmissionDate), 20)}
                   </div>
                   <div className={styles.col} data-label="Ngày công bố kết quả">
-                    {formatDate(data?.resultAnnouncementDate)}
+                    {renderWithTooltip(formatDate(data?.resultAnnouncementDate), 20)}
                   </div>
                   <div className={styles.col} data-label="Địa điểm">
-                    {data.location?.length > 100
-                      ? data.location.slice(0, 99) + '...'
-                      : data.location}
-
-                    {data.location?.length > 100 && (
-                      <div className={styles.tooltip}>{data.location}</div>
-                    )}
+                    {renderWithTooltip(data.location, 40)}
                   </div>
                   <div className={styles.col} data-label="Mô tả">
-                    {data.description?.length > 100
-                      ? data.description.slice(0, 99) + '...'
-                      : data.description}
-
-                    {data.description?.length > 100 && (
-                      <div className={styles.tooltip}>{data.description}</div>
-                    )}
+                    {renderWithTooltip(data.description, 40)}
                   </div>
                   <div className={styles.col} data-label="Trạng thái">
-                    {/* <>
-                      <Switch
-                        checked={checkActiveDate(data)}
-                        color="success"
-                        disabled
-                      />
-                    </> */}
-                    {data?.status}
+                    {renderWithTooltip(data?.status, 20)}
                   </div>
                   <div className={styles.col} data-label="Tương tác">
                     <IconButton

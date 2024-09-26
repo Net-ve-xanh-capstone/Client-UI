@@ -13,6 +13,7 @@ import { allCategory, deleteCate } from '../../api/categoryApi.js';
 import AddCatePopup from '../addCatePopup/page.jsx';
 import DeleteModal from '../DeleteModal/index.jsx';
 import styles from './page.module.css';
+import { renderWithTooltip } from '../../pages/admin/views/management/StaffManagementPage.jsx';
 
 function CategoryBlog() {
   const [listCate, setListCate] = useState([]);
@@ -57,7 +58,7 @@ function CategoryBlog() {
       name: 'name',
       label: 'TÊN THỂ LOẠI',
       options: {
-        customBodyRender: value => <span>{value}</span>,
+        customBodyRender: value => <span>{renderWithTooltip(value)}</span>,
       },
     },
     {

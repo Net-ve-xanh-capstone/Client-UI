@@ -19,6 +19,7 @@ import ModalInforUser from '../../components/ModalInforUser/page.jsx';
 import { formatDate } from '../../utils/formatDate';
 import styles from './page.module.css';
 import { toast } from 'react-toastify';
+import { renderWithTooltip } from '../admin/views/management/StaffManagementPage.jsx';
 
 function CompetitorManage() {
   const [modalShow, setModalShow] = useState(false);
@@ -107,7 +108,7 @@ function CompetitorManage() {
       options: {
         customBodyRender: value => (
           <span>
-            {value.length > 50 ? value.substring(0, 50) + '...' : value}
+            {renderWithTooltip(value, 20)}
           </span>
         ),
       },
@@ -118,7 +119,7 @@ function CompetitorManage() {
       options: {
         customBodyRender: value => (
           <span>
-            {value.length > 50 ? value.substring(0, 50) + '...' : value}
+            {renderWithTooltip(value, 50)}
           </span>
         ),
       },
@@ -127,7 +128,11 @@ function CompetitorManage() {
       name: 'birthday',
       label: 'NGÀY SINH',
       options: {
-        customBodyRender: value => formatDate(value),
+        customBodyRender: value => (
+          <span>
+            {renderWithTooltip(formatDate(value))}
+          </span>
+        ),
       },
     },
     {
@@ -136,7 +141,7 @@ function CompetitorManage() {
       options: {
         customBodyRender: value => (
           <span>
-            {value.length > 50 ? value.substring(0, 50) + '...' : value}
+            {renderWithTooltip(value, 30)}
           </span>
         ),
       },

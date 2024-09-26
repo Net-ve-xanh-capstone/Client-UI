@@ -1,6 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
-import { CircularProgress, Box, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Select as MuiSelect, MenuItem, FormControl, InputLabel } from '@mui/material';
+import {
+  CircularProgress,
+  Box,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  Select as MuiSelect,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 import Select from 'react-select';
 import EditIcon from '@mui/icons-material/Edit';
@@ -9,6 +23,7 @@ import { getAll, getById } from '../../../../api/contestStaffApi';
 import { getRoundById, adminEdit } from '../../../../api/roundStaffApi';
 import styles from './style.module.css';
 import { useSelector } from 'react-redux';
+import { renderWithTooltip } from './StaffManagementPage.jsx';
 
 const getMuiTheme = () =>
   createTheme({
@@ -48,7 +63,7 @@ const CustomPage = () => {
     { value: 'NotStarted', label: 'Chưa bắt đầu' },
     { value: 'InProcess', label: 'Đang tiến hành' },
     { value: 'Complete', label: 'Hoàn thành' },
-    { value: 'Delete', label: 'Đã xóa' }
+    { value: 'Delete', label: 'Đã xóa' },
   ];
 
   useEffect(() => {
@@ -66,7 +81,7 @@ const CustomPage = () => {
       const { data } = await getAll();
       const contestOptions = data?.result?.map(contest => ({
         value: contest.id,
-        label: contest.name
+        label: contest.name,
       })) || [];
       setContests(contestOptions);
     } catch (error) {
@@ -88,7 +103,7 @@ const CustomPage = () => {
             endTime: new Date(round.endTime).toLocaleDateString(),
             status: round.status,
             location: round.location || 'N/A',
-            topic: round.roundTopic[0]?.topic?.name || 'N/A'
+            topic: round.roundTopic[0]?.topic?.name || 'N/A',
           });
         });
       });
@@ -109,7 +124,7 @@ const CustomPage = () => {
       const { data } = await getRoundById(roundId);
       setEditingRound({
         ...data.result,
-        status: data.result.status || 'NotStarted' // Ensure status always has a value
+        status: data.result.status || 'NotStarted', // Ensure status always has a value
       });
       setOpenEditModal(true);
     } catch (error) {
@@ -125,14 +140,14 @@ const CustomPage = () => {
   const handleInputChange = (e) => {
     setEditingRound({
       ...editingRound,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleStatusChange = (event) => {
     setEditingRound({
       ...editingRound,
-      status: event.target.value
+      status: event.target.value,
     });
   };
 
@@ -148,9 +163,9 @@ const CustomPage = () => {
         currentUserId: userInfo.Id,
         status: editingRound.status,
         deadlineSubmissionDate: editingRound.deadlineSubmissionDate,
-        resultAnnouncementDate: editingRound.resultAnnouncementDate
+        resultAnnouncementDate: editingRound.resultAnnouncementDate,
       };
-      
+
       await adminEdit(updatedRound);
       handleCloseEditModal();
       if (selectedContest) {
@@ -166,24 +181,68 @@ const CustomPage = () => {
       NotStarted: 'Chưa bắt đầu',
       InProcess: 'Đang tiến hành',
       Complete: 'Hoàn thành',
-      Delete: 'Đã xóa'
+      Delete: 'Đã xóa',
     };
     return statusMap[status] || status;
   };
 
   const roundColumns = [
-    { name: 'name', label: 'Tên Vòng Thi' },
-    { name: 'startTime', label: 'Ngày Bắt Đầu' },
-    { name: 'endTime', label: 'Ngày Kết Thúc' },
+    {
+      name: 'name', label: 'Tên Vòng Thi', options: {
+        customBodyRender: (value) => (
+          <span>
+            {renderWithTooltip(value, 30)}
+          </span>
+        ),
+      },
+    },
+    {
+      name: 'startTime', label: 'Ngày Bắt Đầu', options: {
+        customBodyRender: (value) => (
+          <span>
+            {renderWithTooltip(value, 30)}
+          </span>
+        ),
+      },
+    },
+    {
+      name: 'endTime', label: 'Ngày Kết Thúc', options: {
+        customBodyRender: (value) => (
+          <span>
+            {renderWithTooltip(value, 30)}
+          </span>
+        ),
+      },
+    },
     {
       name: 'status',
       label: 'Tình Trạng',
       options: {
-        customBodyRender: (value) => translateStatus(value)
-      }
+        customBodyRender: (value) => (
+          <span>
+            {renderWithTooltip(translateStatus(value), 30)}
+          </span>
+        ),
+      },
     },
-    { name: 'location', label: 'Địa Điểm' },
-    { name: 'topic', label: 'Chủ Đề' },
+    {
+      name: 'location', label: 'Địa Điểm', options: {
+        customBodyRender: (value) => (
+          <span>
+            {renderWithTooltip(value, 30)}
+          </span>
+        ),
+      },
+    },
+    {
+      name: 'topic', label: 'Chủ Đề', options: {
+        customBodyRender: (value) => (
+          <span>
+            {renderWithTooltip(value, 30)}
+          </span>
+        ),
+      },
+    },
     {
       name: 'actions',
       label: 'Thao Tác',
@@ -192,9 +251,9 @@ const CustomPage = () => {
           <IconButton onClick={() => handleEditClick(rounds[tableMeta.rowIndex].id)}>
             <EditIcon />
           </IconButton>
-        )
-      }
-    }
+        ),
+      },
+    },
   ];
 
   const tableOptions = {

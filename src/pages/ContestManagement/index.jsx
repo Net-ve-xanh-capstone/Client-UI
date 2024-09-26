@@ -17,14 +17,15 @@ import ModalForm from '../../components/ModalForm';
 import { formatDate } from '../../utils/formatDate';
 import styles from './style.module.css';
 import { TablePagination } from '@mui/material';
+import { renderWithTooltip } from '../admin/views/management/StaffManagementPage.jsx';
 
 const CustomFooter = ({
-  count,
-  page,
-  rowsPerPage,
-  handlePageChange,
-  handleRowsPerPageChange,
-}) => {
+                        count,
+                        page,
+                        rowsPerPage,
+                        handlePageChange,
+                        handleRowsPerPageChange,
+                      }) => {
   return (
     <div
       style={{
@@ -155,9 +156,7 @@ function ContestManagement() {
       options: {
         customBodyRender: value => (
           <span>
-            {value && value.length > 50
-              ? value.substring(0, 50) + '...'
-              : value}
+            {value && renderWithTooltip(value, 20)}
           </span>
         ),
       },
@@ -166,25 +165,44 @@ function ContestManagement() {
       name: 'startTime',
       label: 'THỜI GIAN BẮT ĐẦU',
       options: {
-        customBodyRender: value => formatDate(value),
+        customBodyRender: value => (
+          <span>
+            {value && renderWithTooltip(formatDate(value), 20)}
+          </span>
+        ),
       },
     },
     {
       name: 'endTime',
       label: 'THỜI GIAN KẾT THÚC',
       options: {
-        customBodyRender: value => formatDate(value),
+        customBodyRender: value => (
+          <span>
+            {value && renderWithTooltip(formatDate(value), 20)}
+          </span>
+        ),
       },
     },
     {
       name: 'accountFullName',
       label: 'TÊN NHÂN VIÊN',
+      options: {
+        customBodyRender: value => (
+          <span>
+            {value && renderWithTooltip(value, 20)}
+          </span>
+        ),
+      },
     },
     {
       name: 'status',
       label: 'TRẠNG THÁI',
       options: {
-        customBodyRender: value => <span>{value}</span>,
+        customBodyRender: value => (
+          <span>
+            {value && renderWithTooltip(value, 20)}
+          </span>
+        ),
       },
     },
     {

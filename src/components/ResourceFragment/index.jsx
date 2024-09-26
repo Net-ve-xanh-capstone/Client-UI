@@ -11,6 +11,7 @@ import { checkEditButton } from '../../utils/checkEditButton';
 import DeleteModal from '../DeleteModal';
 import ResourceForm from '../ResourceForm';
 import styles from './style.module.css';
+import { renderWithTooltip } from '../../pages/admin/views/management/StaffManagementPage.jsx';
 
 function ResourceFragment({ resourceFrag, getContestDetail, statusOfRound }) {
   const [resource, setResource] = useState();
@@ -107,10 +108,10 @@ function ResourceFragment({ resourceFrag, getContestDetail, statusOfRound }) {
             resource?.resource.map((data, index) => (
               <li key={data.id} className={styles.tableRow}>
                 <div className={styles.col} data-label="No.">
-                  {index + 1}
+                  {renderWithTooltip(index + 1)}
                 </div>
                 <div className={styles.col} data-label="Tài trợ">
-                  {data.sponsorship}
+                  {renderWithTooltip(data?.sponsorship, 20)}
                 </div>
                 <div
                   className={styles.col}
@@ -120,7 +121,7 @@ function ResourceFragment({ resourceFrag, getContestDetail, statusOfRound }) {
                     justifyContent: 'space-between',
                   }}
                   data-label="Đơn vị tài trợ">
-                  <div>{data.sponsor.name}</div>
+                  <div>{renderWithTooltip(data?.sponsor?.name, 20)}</div>
                 </div>
                 <div className={styles.col}>
                   <div

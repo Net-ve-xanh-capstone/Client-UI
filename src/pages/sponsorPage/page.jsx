@@ -13,6 +13,7 @@ import AddNewSponsor from '../../components/addNewSponsor/page.jsx';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteModal from '../../components/DeleteModal/index.jsx';
+import { renderWithTooltip } from '../admin/views/management/StaffManagementPage.jsx';
 
 function SponsorManage() {
   const [listSponsor, setListSponsor] = useState([]);
@@ -96,21 +97,23 @@ function SponsorManage() {
       name: 'name',
       label: 'ĐƠN VỊ TÀI TRỢ',
       options: {
-        customBodyRender: value => <span>{value}</span>,
+        customBodyRender: value => <span>
+          {renderWithTooltip(value, 40)}
+        </span>,
       },
     },
     {
       name: 'delegate',
       label: 'NGƯỜI ĐẠI DIỆN',
       options: {
-        customBodyRender: value => <span>{value}</span>,
+        customBodyRender: value => <span>{renderWithTooltip(value, 20)}</span>,
       },
     },
     {
       name: 'phoneNumber',
       label: 'SỐ ĐIỆN THOẠI',
       options: {
-        customBodyRender: value => <span>{value}</span>,
+        customBodyRender: value => <span>{renderWithTooltip(value, 20)}</span>,
       },
     },
     {
@@ -119,10 +122,7 @@ function SponsorManage() {
       options: {
         customBodyRender: value => (
           <span className={styles.extendMore}>
-            {value?.length > 100 ? value.slice(0, 90) : value}
-            {value?.length > 100 && (
-              <span className={styles.tooltip}>{value}</span>
-            )}
+            {renderWithTooltip(value, 40)}
           </span>
         ),
       },

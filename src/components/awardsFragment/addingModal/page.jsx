@@ -206,7 +206,7 @@ const AddingModal = ({
   return (
     <>
       <Modal
-        contentClassName={styles.modal_backdrop}
+        contentClassName={checkedFinalRound ? styles.modal_backdrop : styles.modal_backdrop_small}
         backdrop="static"
         show={modalShow}
         onHide={onHide}
@@ -253,30 +253,31 @@ const AddingModal = ({
                 value={formatNumber(fieldUpdate.quantity)}
                 onChange={e => handleInputNumber(e, NUMBER_TYPE.NUMBER)}
               />
-              <h4 className={styles.title}>Tiền mặt</h4>
-              <input
-                className={styles.inputModal}
-                style={{
-                  userSelect: !checkedFinalRound ? 'none' : 'auto',
-                }}
-                disabled={!checkedFinalRound}
-                type="text"
-                name="cash"
-                value={formatCurrencyVND(fieldUpdate.cash)}
-                onChange={e => handleInputNumber(e, NUMBER_TYPE.CURRENCY)}
-              />
-              <h4 className={styles.title}>Phần thưởng</h4>
-              <input
-                className={styles.inputModal}
-                style={{
-                  userSelect: !checkedFinalRound ? 'none' : 'auto',
-                }}
-                disabled={!checkedFinalRound}
-                type="text"
-                name="artifact"
-                value={fieldUpdate.artifact}
-                onChange={e => handleInput(e)}
-              />
+              {checkedFinalRound && (
+                <div>
+                  <h4 className={styles.title}>Tiền mặt</h4>
+                  <input
+                    className={styles.inputModal}
+                    type="text"
+                    name="cash"
+                    value={formatCurrencyVND(fieldUpdate.cash)}
+                    onChange={e => handleInputNumber(e, NUMBER_TYPE.CURRENCY)}
+                  />
+                </div>
+              )}
+
+              {checkedFinalRound && (
+                <div>
+                  <h4 className={styles.title}>Phần thưởng</h4>
+                  <input
+                    className={styles.inputModal}
+                    type="text"
+                    name="artifact"
+                    value={fieldUpdate.artifact}
+                    onChange={e => handleInput(e)}
+                  />
+                </div>
+              )}
             </div>
             <div className={styles.btn}>
               <button className={styles.btnCreate} type="submit">

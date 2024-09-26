@@ -34,14 +34,6 @@ function CardPainting({ items, getPaintingByID }) {
             </span>
           </div>
         </span>
-        {/* <div className={`${styles.field} ${styles.title_field}`}>
-          <div className={styles.title_field}>
-            <p>Mã thí sinh: </p>
-          </div>
-          <div className={styles.des_field}>
-            <p>{items.competitorCode}</p>
-          </div>
-        </div> */}
         <div className={`${styles.field}`}>
           <div className={styles.title_field}>
             <p>Tác giả: </p>

@@ -22,40 +22,46 @@
 }
 
 .roundTableResponse .col:nth-child(1) {
-    flex-basis: 12.5%;
+    flex-basis: 10%;
+
 }
 
 .roundTableResponse .col:nth-child(2) {
     flex-basis: 12.5%;
+
 }
 
 .roundTableResponse .col:nth-child(3) {
-    flex-basis: 12.5%;
+    flex-basis: 10%;
 }
 
 .roundTableResponse .col:nth-child(4) {
-    flex-basis: 12.5%;
+    flex-basis: 10%;
 }
 
 .roundTableResponse .col:nth-child(5) {
-    flex-basis: 12.5%;
-    position: relative;
-
+    flex-basis: 10%;
 }
 
 .roundTableResponse .col:nth-child(6) {
-    flex-basis: 12.5%;
-    position: relative;
+    flex-basis: 10.5%;
 }
 
 .roundTableResponse .col:nth-child(7) {
-    flex-basis: 12.5%;
+    flex-basis: 22.5%;
     text-align: center;
 }
 
 .roundTableResponse .col:nth-child(8) {
+    flex-basis: 15.5%;
+}
+
+.roundTableResponse .col:nth-child(9) {
+    flex-basis: 15%;
+}
+
+.roundTableResponse .col:nth-child(10) {
     flex-basis: 12.5%;
-    text-align: center;
 }
 
 .roundTableResponse .col button:hover {
@@ -71,11 +77,11 @@
     font-weight: bold;
 }
 
-.roundTableResponse .col:nth-child(6):hover>.tooltip {
+.roundTableResponse .col:nth-child(6):hover > .tooltip {
     display: block;
 }
 
-.roundTableResponse .col:nth-child(5):hover>.tooltip {
+.roundTableResponse .col:nth-child(5):hover > .tooltip {
     display: block;
 }
 

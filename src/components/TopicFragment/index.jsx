@@ -14,6 +14,7 @@ import styles from './style.module.css';
 import CreateTopicRound from '../CreateTopicRound/index.jsx';
 import { getById } from '../../api/contestStaffApi.js';
 import { deleteTopicRound } from '../../api/topicStaffApi.js';
+import { renderWithTooltip } from '../../pages/admin/views/management/StaffManagementPage.jsx';
 
 function TopicFragment({ topicFrag, getContestDetail, statusOfRound }) {
   const [topic, setTopic] = useState();
@@ -135,19 +136,11 @@ function TopicFragment({ topicFrag, getContestDetail, statusOfRound }) {
                         data.roundTopic?.map((topicData, index) => (
                           <li key={index} className={styles.tableRow}>
                             <div className={styles.col} data-label="Tên chủ đề">
-                              {topicData.topic.name}
+                              {renderWithTooltip(topicData?.topic?.name, 20)}
                             </div>
 
                             <div className={styles.col} data-label="Mô tả">
-                              {topicData.topic.description?.length > 40
-                                ? topicData.topic.description.slice(0, 30) +
-                                  '...'
-                                : topicData.topic.description}
-                              {topicData.topic.description?.length > 40 && (
-                                <div className={styles.tooltip}>
-                                  {topicData.topic.description}
-                                </div>
-                              )}
+                              {renderWithTooltip(topicData?.topic?.description, 20)}
                             </div>
                             <div className={styles.col} data-label="Tương tác">
                               <IconButton

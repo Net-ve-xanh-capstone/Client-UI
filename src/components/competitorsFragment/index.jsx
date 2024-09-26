@@ -7,8 +7,9 @@ import { getConmpetitors, getRounds } from '../../api/competitorApi.js';
 import ResourceForm from '../ResourceForm';
 import styles from './style.module.css';
 import * as XLSX from 'xlsx';
+import { renderWithTooltip } from '../../pages/admin/views/management/StaffManagementPage.jsx';
 
-function CompetitorFragment({ resourceFrag, statusOfRound }) {
+function CompetitorFragment({ resourceFrag }) {
   const [resource, setResource] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -34,7 +35,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
         level.round.map(round => ({
           value: round.id,
           label: `${level.description} - ${round.name}`,
-        }))
+        })),
       );
       setRounds(flattenedRounds);
     } catch (e) {
@@ -77,16 +78,66 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
   };
 
   const columns = [
-    { name: 'code', label: 'Mã Thí Sinh' },
-    { name: 'fullName', label: 'Họ và tên' },
-    { name: 'age', label: 'Tuổi' },
-    { name: 'gender', label: 'Giới tính' },
-    { name: 'status', label: 'Tình trạng' },
+    {
+      name: 'code', label: 'Mã Thí Sinh', options: {
+        customBodyRender: value => (
+          <span>
+          {renderWithTooltip(value)}
+        </span>
+        ),
+      },
+    },
+    {
+      name: 'fullName', label: 'Họ và tên', options: {
+        customBodyRender: value => (
+          <span>
+          {renderWithTooltip(value)}
+        </span>
+        ),
+      },
+    },
+    {
+      name: 'age', label: 'Tuổi', options: {
+        customBodyRender: value => (
+          <span>
+          {renderWithTooltip(value)}
+        </span>
+        ),
+      },
+    },
+    {
+      name: 'gender', label: 'Giới tính', options: {
+        customBodyRender: value => (
+          <span>
+          {renderWithTooltip(value)}
+        </span>
+        ),
+      },
+    },
+    {
+      name: 'status', label: 'Tình trạng', options: {
+        customBodyRender: value => (
+          <span>
+          {renderWithTooltip(value)}
+        </span>
+        ),
+      },
+    },
     {
       name: 'prize',
       label: 'Giải Thưởng',
       options: {
-        customBodyRender: value => (value ? value : 'Chưa có'),
+        customBodyRender: value => (
+          value ? (
+            <span>
+          {renderWithTooltip(value)}
+          </span>
+          ) : (
+            <span>
+              {renderWithTooltip('Không có giải thưởng')}
+            </span>
+          )
+        ),
       },
     },
   ];
@@ -114,7 +165,7 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
         filterTable: 'Lọc bảng',
       },
     },
-    
+
     onDownload: (buildHead, buildBody, columns, data) => {
       const ws = XLSX.utils.json_to_sheet(
         data.map(row => ({
@@ -124,23 +175,23 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
           'Giới tính': row.data[3],
           'Tình trạng': row.data[4],
           'Giải Thưởng': row.data[5],
-          'Vòng thi': row.data[6]?.props?.children || 'Không có vòng thi'
-        }))
+          'Vòng thi': row.data[6]?.props?.children || 'Không có vòng thi',
+        })),
       );
-      
+
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Competitors");
-      
-      XLSX.writeFile(wb, "competitors.xlsx");
-      
+      XLSX.utils.book_append_sheet(wb, ws, 'Competitors');
+
+      XLSX.writeFile(wb, 'competitors.xlsx');
+
       return false;
     },
-    
-    onRowClick: (rowData, rowMeta) => {
+
+    onRowClick: (rowData) => {
       handleOpenDetail(rowData[2]?.props?.children);
     },
   };
-  
+
   const getMuiTheme = () =>
     createTheme({
       typography: {
@@ -220,15 +271,15 @@ function CompetitorFragment({ resourceFrag, statusOfRound }) {
       />
 
       <div className={styles.filterContainer}>
-      <div className="col-md-3">
-        <Select
-          value={selectedRound}
-          onChange={handleRoundChange}
-          options={[{ value: '', label: 'Tất cả vòng thi' }, ...rounds]}
-          placeholder="Lọc theo vòng thi"
-          isClearable
-          styles={customStyles}
-        />
+        <div className="col-md-3">
+          <Select
+            value={selectedRound}
+            onChange={handleRoundChange}
+            options={[{ value: '', label: 'Tất cả vòng thi' }, ...rounds]}
+            placeholder="Lọc theo vòng thi"
+            isClearable
+            styles={customStyles}
+          />
         </div>
       </div>
 

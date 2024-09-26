@@ -11,7 +11,7 @@ const NavGroup = ({ item }) => {
     fontSize: '16px',
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(0),
-    color: theme.palette.text.primary,
+    color: theme.palette.text.white_primary,
     lineHeight: '26px',
     padding: '3px 12px',
   }));

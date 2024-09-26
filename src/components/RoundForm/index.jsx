@@ -136,6 +136,8 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
         name: formData?.name,
         startTime: formData?.startTime,
         endTime: formData?.endTime,
+        description: formData?.description,
+        location: formData?.location,
         roundNumber: 2,
         levelList: selectedLevel,
         createdBy: formData.currentUserId,
@@ -179,6 +181,8 @@ function RoundForm({ modalShow, onHide, roundData, contestData }) {
         endTime: formData?.endTime,
         roundNumber: 2,
         levelList: formData?.listLevel,
+        description: formData?.description,
+        location: formData?.location,
         currentUserId: formData.currentUserId,
       };
       const { data } = await editRoundLevel(payload);

@@ -327,7 +327,7 @@ const registerButton = ({ status, check, contestId, userInfo }) => {
         <Link
           to="#"
           className="disable-button loadmore style fl-button pri-3 cursor-none">
-          <span>Bạn chưa đủ tuổi</span>
+          <span>Không có vòng thi hợp lệ</span>
         </Link>
       );
     }

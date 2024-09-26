@@ -26,6 +26,7 @@ const MyPaintingPage = () => {
           </div>
         </div>
       </section>
+      <Painting />
       <Footer />
     </div>
   );

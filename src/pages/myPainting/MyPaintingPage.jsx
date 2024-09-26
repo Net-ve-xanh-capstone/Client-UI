@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Header from '../../components/common/header/HeaderVersion1.jsx';
 import Footer from '../../components/common/footer/Footer.jsx';
 import Painting from '../../layouts/myPainting/Painting.jsx';
-import widgetSidebarData from '../../assets/fake-data/data-widget-sidebar';
 
 const MyPaintingPage = () => {
   return (
@@ -27,7 +26,6 @@ const MyPaintingPage = () => {
           </div>
         </div>
       </section>
-      <Painting data={widgetSidebarData} />
       <Footer />
     </div>
   );

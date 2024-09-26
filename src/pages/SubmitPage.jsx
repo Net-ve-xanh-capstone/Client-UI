@@ -12,6 +12,7 @@ import TextFieldCommon from '../components/input/TextfieldCommon';
 import TextareaCommon from '../components/textarea/TextareaCommon';
 import { Dropdown } from '../components/dropdown';
 import classNames from 'classnames';
+import formSubmit from '../assets/images/form-submit.png';
 import { useSelector } from 'react-redux';
 import { topicApi } from '../api/topicApi';
 import { paintingApi } from '../api/paintingApi';
@@ -29,7 +30,7 @@ const SubmitPage = () => {
   const [topicId, setTopicId] = useState(null);
   const [disable, setDisable] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(false);
-  const { progress, url, error } = useUploadImage(file);
+  const { url } = useUploadImage(file);
   const userInfo = useSelector(state => state.auth.userInfo);
   const today = new Date().toISOString().slice(0, 10);
 
@@ -111,6 +112,7 @@ const SubmitPage = () => {
       'Lưu bài thành công',
       'Bạn đã hủy lưu bài',
       setRefreshTrigger,
+      false,
     );
   };
 
@@ -148,9 +150,11 @@ const SubmitPage = () => {
       endpoint,
       method,
       data,
-      'Nộp bài thành công',
+      'Nộp bài thành công, bạn nhớ điền phiếu thông tin và bản cứng để nộp cho ban tổ chức nhé',
       'Bạn đã hủy nộp bài',
       setRefreshTrigger,
+      true,
+      () => downloadImage(),
     );
   };
 
@@ -165,25 +169,21 @@ const SubmitPage = () => {
     setError(name, '');
   };
 
-  // const handleCityChange = (e) => {
-  //   const cityId = e.target.value;
-  //   setAddress(prevState => ({
-  //     ...prevState,
-  //     selectedCity: cityId,
-  //     selectedDistrict: '',
-  //     districts: cityId ? prevState.cities.find(c => c.Id === cityId)?.Districts || [] : [],
-  //     wards: []
-  //   }));
-  // };
-  //
-  // const handleDistrictChange = (e) => {
-  //   const districtId = e.target.value;
-  //   setAddress(prevState => ({
-  //     ...prevState,
-  //     selectedDistrict: districtId,
-  //     wards: districtId ? prevState.districts.find(d => d.Id === districtId)?.Wards || [] : []
-  //   }));
-  // };
+
+  const downloadImage = () => {
+    // URL của ảnh
+    const imageUrl = formSubmit;
+
+    const link = document.createElement('a');
+    link.href = imageUrl;
+
+    link.download = 'phieu-thong-tin-net-ve-xanh.jpg';
+
+    document.body.appendChild(link);
+
+    link.click();
+    document.body.removeChild(link);
+  };
 
   useEffect(() => {
     //clean-up
@@ -391,7 +391,15 @@ const SubmitPage = () => {
   );
 };
 
-const SwalComponent = (title, endpoint, method, data, successMsg, cancelMsg, setRefreshTrigger) => {
+const SwalComponent = (title,
+                       endpoint,
+                       method,
+                       data,
+                       successMsg,
+                       cancelMsg,
+                       setRefreshTrigger,
+                       submit = false,
+                       downloadImage) => {
   Swal.fire({
     title: title,
     showCancelButton: true,
@@ -402,11 +410,20 @@ const SwalComponent = (title, endpoint, method, data, successMsg, cancelMsg, set
         paintingApi
           .postPainting(endpoint, data)
           .then(() => {
-            Swal.fire(successMsg, '', 'success').then(
-              () => {
-                setRefreshTrigger(prev => !prev);
-              },
-            );
+            Swal.fire({
+              title: successMsg,
+              icon: 'success',
+              showCancelButton: true,
+              confirmButtonText: 'Tải phiếu thông tin',
+              cancelButtonText: 'Đóng',
+            }).then(downloadResult => {
+              if (downloadResult.isConfirmed) {
+                if (submit && typeof downloadImage === 'function') {
+                  downloadImage();
+                }
+              }
+              setRefreshTrigger(prev => !prev);
+            });
           })
           .catch(error => {
             Swal.fire(error?.response?.data?.message, 'Hãy thử lại sau bạn nhé', 'error');
@@ -415,21 +432,28 @@ const SwalComponent = (title, endpoint, method, data, successMsg, cancelMsg, set
         paintingApi
           .updatePainting(endpoint, data)
           .then(() => {
-            Swal.fire(successMsg, '', 'success').then(
-              () => {
-                setRefreshTrigger(prev => !prev);
-              },
-            );
+            Swal.fire({
+              title: successMsg,
+              icon: 'success',
+              showCancelButton: true,
+              confirmButtonText: 'Tải form',
+              cancelButtonText: 'Đóng',
+            }).then(downloadResult => {
+              if (downloadResult.isConfirmed) {
+                if (submit && typeof downloadImage === 'function') {
+                  downloadImage();
+                }
+              }
+              setRefreshTrigger(prev => !prev);
+            });
           })
           .catch(error => {
             Swal.fire(error?.response?.data?.message, 'Hãy thử lại sau bạn nhé', 'error');
           });
       }
-
     } else if (result.isDismissed) {
       Swal.fire(cancelMsg, '', 'info');
     }
   });
 };
-
 export default SubmitPage;

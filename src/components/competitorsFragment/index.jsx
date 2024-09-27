@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { CircularProgress, Box } from '@mui/material';
 import Select from 'react-select';
-import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
 import { getConmpetitors, getRounds } from '../../api/competitorApi.js';
 import ResourceForm from '../ResourceForm';
@@ -60,8 +64,10 @@ function CompetitorFragment({ resourceFrag }) {
       resourceData.sort((a, b) => {
         const prizeA = a.prize || null;
         const prizeB = b.prize || null;
-        const priorityA = prizePriority[prizeA] !== undefined ? prizePriority[prizeA] : 5;
-        const priorityB = prizePriority[prizeB] !== undefined ? prizePriority[prizeB] : 5;
+        const priorityA =
+          prizePriority[prizeA] !== undefined ? prizePriority[prizeA] : 5;
+        const priorityB =
+          prizePriority[prizeB] !== undefined ? prizePriority[prizeB] : 5;
         return priorityA - priorityB;
       });
 
@@ -73,53 +79,57 @@ function CompetitorFragment({ resourceFrag }) {
     }
   };
 
-  const handleRoundChange = (selectedOption) => {
+  const handleRoundChange = selectedOption => {
     setSelectedRound(selectedOption);
+  };
+
+  const competitorStatusMap = {
+    Submitted: 'Đã nộp',
+    Accepted: 'Đã chấp nhận',
+    Rejected: 'Đã từ chối',
+    Draft: 'Bản nháp',
+    Delete: 'Đã xóa',
+    Pass: 'Qua vòng 1',
+    NotPass: 'Không qua vòng 1',
+    FinalRound: 'Vòng chung kết',
+    HasPrizes: 'Có giải thuởng',
   };
 
   const columns = [
     {
-      name: 'code', label: 'Mã Thí Sinh', options: {
-        customBodyRender: value => (
-          <span>
-          {renderWithTooltip(value)}
-        </span>
-        ),
+      name: 'code',
+      label: 'Mã Thí Sinh',
+      options: {
+        customBodyRender: value => <span>{renderWithTooltip(value)}</span>,
       },
     },
     {
-      name: 'fullName', label: 'Họ và tên', options: {
-        customBodyRender: value => (
-          <span>
-          {renderWithTooltip(value)}
-        </span>
-        ),
+      name: 'fullName',
+      label: 'Họ và tên',
+      options: {
+        customBodyRender: value => <span>{renderWithTooltip(value)}</span>,
       },
     },
     {
-      name: 'age', label: 'Tuổi', options: {
-        customBodyRender: value => (
-          <span>
-          {renderWithTooltip(value)}
-        </span>
-        ),
+      name: 'age',
+      label: 'Tuổi',
+      options: {
+        customBodyRender: value => <span>{renderWithTooltip(value)}</span>,
       },
     },
     {
-      name: 'gender', label: 'Giới tính', options: {
-        customBodyRender: value => (
-          <span>
-          {renderWithTooltip(value)}
-        </span>
-        ),
+      name: 'gender',
+      label: 'Giới tính',
+      options: {
+        customBodyRender: value => <span>{renderWithTooltip(value)}</span>,
       },
     },
     {
-      name: 'status', label: 'Tình trạng', options: {
+      name: 'status',
+      label: 'Tình trạng',
+      options: {
         customBodyRender: value => (
-          <span>
-          {renderWithTooltip(value)}
-        </span>
+          <span>{renderWithTooltip(competitorStatusMap[value])}</span>
         ),
       },
     },
@@ -127,17 +137,12 @@ function CompetitorFragment({ resourceFrag }) {
       name: 'prize',
       label: 'Giải Thưởng',
       options: {
-        customBodyRender: value => (
+        customBodyRender: value =>
           value ? (
-            <span>
-          {renderWithTooltip(value)}
-          </span>
+            <span>{renderWithTooltip(value)}</span>
           ) : (
-            <span>
-              {renderWithTooltip('Không có giải thưởng')}
-            </span>
-          )
-        ),
+            <span>{renderWithTooltip('Không có giải thưởng')}</span>
+          ),
       },
     },
   ];
@@ -171,7 +176,7 @@ function CompetitorFragment({ resourceFrag }) {
         data.map(row => ({
           'Mã Thí Sinh': row.data[0],
           'Họ và tên': row.data[1],
-          'Tuổi': row.data[2],
+          Tuổi: row.data[2],
           'Giới tính': row.data[3],
           'Tình trạng': row.data[4],
           'Giải Thưởng': row.data[5],
@@ -187,7 +192,7 @@ function CompetitorFragment({ resourceFrag }) {
       return false;
     },
 
-    onRowClick: (rowData) => {
+    onRowClick: (rowData, rowMeta) => {
       handleOpenDetail(rowData[2]?.props?.children);
     },
   };
@@ -221,7 +226,7 @@ function CompetitorFragment({ resourceFrag }) {
       },
     });
 
-  const handleOpenDetail = (competitorId) => {
+  const handleOpenDetail = competitorId => {
     // Implement your logic for opening competitor details
     console.log('Opening details for competitor:', competitorId);
   };
@@ -287,7 +292,12 @@ function CompetitorFragment({ resourceFrag }) {
         <ThemeProvider theme={getMuiTheme()}>
           <div className="table-contest">
             {loading ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  margin: '20px',
+                }}>
                 <CircularProgress />
               </Box>
             ) : (

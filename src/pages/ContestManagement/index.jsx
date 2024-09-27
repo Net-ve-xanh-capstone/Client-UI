@@ -20,12 +20,12 @@ import { TablePagination } from '@mui/material';
 import { renderWithTooltip } from '../admin/views/management/StaffManagementPage.jsx';
 
 const CustomFooter = ({
-                        count,
-                        page,
-                        rowsPerPage,
-                        handlePageChange,
-                        handleRowsPerPageChange,
-                      }) => {
+  count,
+  page,
+  rowsPerPage,
+  handlePageChange,
+  handleRowsPerPageChange,
+}) => {
   return (
     <div
       style={{
@@ -137,27 +137,13 @@ function ContestManagement() {
     );
   };
 
-  // const addEmptyRow = () => {
-  //   const emptyRow = {
-  //     id: '',
-  //     name: '',
-  //     startTime: '',
-  //     endTime: '',
-  //     accountFullName: '',
-  //     status: '',
-  //   };
-  //   setContest([emptyRow, ...contest]);
-  // };
-
   const columns = [
     {
       name: 'name',
       label: 'TÊN CUỘC THI',
       options: {
         customBodyRender: value => (
-          <span>
-            {value && renderWithTooltip(value, 20)}
-          </span>
+          <span>{value && renderWithTooltip(value, 20)}</span>
         ),
       },
     },
@@ -166,9 +152,7 @@ function ContestManagement() {
       label: 'THỜI GIAN BẮT ĐẦU',
       options: {
         customBodyRender: value => (
-          <span>
-            {value && renderWithTooltip(formatDate(value), 20)}
-          </span>
+          <span>{value && renderWithTooltip(formatDate(value), 20)}</span>
         ),
       },
     },
@@ -177,9 +161,7 @@ function ContestManagement() {
       label: 'THỜI GIAN KẾT THÚC',
       options: {
         customBodyRender: value => (
-          <span>
-            {value && renderWithTooltip(formatDate(value), 20)}
-          </span>
+          <span>{value && renderWithTooltip(formatDate(value), 20)}</span>
         ),
       },
     },
@@ -188,9 +170,7 @@ function ContestManagement() {
       label: 'TÊN NHÂN VIÊN',
       options: {
         customBodyRender: value => (
-          <span>
-            {value && renderWithTooltip(value, 20)}
-          </span>
+          <span>{value && renderWithTooltip(value, 20)}</span>
         ),
       },
     },
@@ -199,9 +179,7 @@ function ContestManagement() {
       label: 'TRẠNG THÁI',
       options: {
         customBodyRender: value => (
-          <span>
-            {value && renderWithTooltip(value, 20)}
-          </span>
+          <span>{value && renderWithTooltip(value, 20)}</span>
         ),
       },
     },

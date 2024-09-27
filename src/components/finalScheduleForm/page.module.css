@@ -184,7 +184,6 @@
 }
 
 
-
 .roundBlock {
   width: 100%;
   height: auto;
@@ -267,7 +266,7 @@
   justify-content: center;
 }
 
-.add_block>.icon_add {
+.add_block > .icon_add {
   width: 30px;
   height: 30px;
 }
@@ -280,7 +279,7 @@
   justify-content: space-between;
 }
 
-.remove_block>.icon_remove {
+.remove_block > .icon_remove {
   width: 30px;
   height: 30px;
 }

@@ -5,8 +5,25 @@ import Header from '../../components/common/header/HeaderVersion2';
 import Footer from '../../components/common/footer/Footer';
 import useFetchData from '../../hooks/useQueryData.js';
 import DotLoaderCustom from '../../components/dotLoader/DotLoader.jsx';
-import { color } from '../../constant/Color.js';
 import { formatDate } from '../../utils/formatDate.js';
+import { userAvatar } from '../../constant/imageDefault.js';
+import {
+  Timeline,
+  TimelineConnector, TimelineContent,
+  TimelineDot,
+  TimelineItem,
+  TimelineOppositeContent,
+  TimelineSeparator,
+} from '@mui/lab';
+import {
+  Avatar,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Grid,
+  Typography,
+} from '@mui/material';
 
 const TRACKING_PAINTING = 'paintings/tracking';
 const HistoryPage = () => {
@@ -61,113 +78,142 @@ const HistoryPage = () => {
       </section>
       <section className="tf-activity s1 tf-section">
         <div className="themesflat-container">
-          <div className="row">
-            {created?.time && (
-              <div className="col-lg-10 col-md-10 col-12">
-                <div className="sc-card-activity style1">
-                  <div className="content">
-                    <div className="media">
-                      <img className="object-fit-contain" src={history?.image} alt="Painting" />
-                    </div>
-                    <div className="infor">
-                      <h3>
-                        <div>Tên tranh: {history?.name}</div>
-                      </h3>
-                      <div className="status text-black">{created?.message} vào ngày</div>
-                      <div className="author">{formatDate(created?.time)}</div>
-                    </div>
-                  </div>
-                  <div className="button-active icon flex align-items-center justify-content-center">
-                    <FaHistory size="32px" />
-                  </div>
-                </div>
-              </div>
-            )}
-            {reviewed?.time && (
-              <div className="col-lg-10 col-md-10 col-12">
-                <div className="sc-card-activity style1">
-                  <div className="content">
-                    <div className="media">
-                      <img className="object-fit-contain" src={history?.image} alt="Painting" />
-                    </div>
-                    <div className="infor">
-                      <h3>
-                        <div>Tên tranh: {history?.name}</div>
-                      </h3>
-                      <div className="status text-black">{reviewed?.message} vào ngày</div>
-                      <div className="author">{formatDate(reviewed?.time)}</div>
-                    </div>
-                  </div>
-                  <div className="button-active icon flex align-items-center justify-content-center">
-                    <FaHistory size="32px" />
-                  </div>
-                </div>
-              </div>
-            )}
-            {submitted?.time && (
-              <div className="col-lg-10 col-md-10 col-12">
-                <div className="sc-card-activity style1">
-                  <div className="content">
-                    <div className="media">
-                      <img className="object-fit-contain" src={history?.image} alt="Painting" />
-                    </div>
-                    <div className="infor">
-                      <h3>
-                        <div>Tên tranh: {history?.name}</div>
-                      </h3>
-                      <div className="status text-black">{submitted?.message} vào ngày</div>
-                      <div className="author">{formatDate(submitted?.time)}</div>
-                    </div>
-                  </div>
-                  <div className="button-active icon flex align-items-center justify-content-center">
-                    <FaHistory size="32px" />
-                  </div>
-                </div>
-              </div>
-            )}
-            {updated?.time && (
-              <div className="col-lg-10 col-md-10 col-12">
-                <div className="sc-card-activity style1">
-                  <div className="content">
-                    <div className="media">
-                      <img className="object-fit-contain" src={history?.image} alt="Painting" />
-                    </div>
-                    <div className="infor">
-                      <h3>
-                        <div>Tên tranh: {history?.name}</div>
-                      </h3>
-                      <div className="status text-black">{updated?.message} vào ngày</div>
-                      <div className="author">{formatDate(updated?.time)}</div>
-                    </div>
-                  </div>
-                  <div className="button-active icon flex align-items-center justify-content-center">
-                    <FaHistory size="32px" />
-                  </div>
-                </div>
-              </div>
-            )}
-            {finalDecision?.time && (
-              <div className="col-lg-10 col-md-10 col-12">
-                <div className="sc-card-activity style1">
-                  <div className="content">
-                    <div className="media">
-                      <img className="object-fit-contain" src={history?.image} alt="Painting" />
-                    </div>
-                    <div className="infor">
-                      <h3>
-                        <div>Tên tranh: {history?.name}</div>
-                      </h3>
-                      <div className="status text-black">{finalDecision?.message} vào ngày</div>
-                      <div className="author">{formatDate(finalDecision?.time)}</div>
-                    </div>
-                  </div>
-                  <div className="button-active icon flex align-items-center justify-content-center">
-                    <FaHistory size="32px" />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          <Grid container flex>
+            <Grid container flex justifyContent="center" xs={12} md={12}>
+              <Card sx={{ maxWidth: '500px', p: '10px' }}>
+                <CardHeader
+                  sx={{
+                    '& .MuiCardHeader-title': {
+                      fontWeight: 700,
+                      fontSize: '14px',
+                      color: '#14141F',
+                    },
+                    '& .MuiCardHeader-subheader': {
+                      fontSize: '20px',
+                      fontWeight: 700,
+                      color: '#14141F',
+                    },
+                  }}
+                  avatar={
+                    <Avatar aria-label="recipe">
+                      <img src={userAvatar} alt="avatar" />
+                    </Avatar>
+                  }
+                  title={'Tác giả: ' + history?.ownerName}
+                  subheader={'Tên tranh: ' + history?.name}
+                />
+                <CardMedia
+                  component="img"
+                  sx={{
+                    height: '40rem',
+                    width: '100%',
+                    objectFit: 'contain',
+                  }}
+                  image={history?.image}
+                  alt="Bức tranh"
+                />
+                <CardContent>
+
+                </CardContent>
+              </Card>
+              <Timeline position="alternate">
+                {created?.time && (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineConnector />
+                      <TimelineDot>
+                        <FaHistory size="30px" />
+                      </TimelineDot>
+                      <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent sx={{ py: '22px', px: 2, fontSize: 14 }}>
+                      <Typography variant="h5" component="span">
+                        {created?.message} vào ngày
+                      </Typography>
+                      <Typography color="text.primary">{formatDate(created?.time)}</Typography>
+                    </TimelineContent>
+                  </TimelineItem>
+                )}
+                {reviewed?.time && (
+                  <TimelineItem>
+                    <TimelineOppositeContent
+                      sx={{ m: 'auto 0' }}
+                      variant="body2"
+                      fontSize={14}
+                      color="text.secondary"
+                    >
+                      {formatDate(reviewed?.time)}
+                    </TimelineOppositeContent>
+                    <TimelineSeparator>
+                      <TimelineConnector />
+                      <TimelineDot color="primary">
+                        <FaHistory size="30px" />
+                      </TimelineDot>
+                      <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent sx={{ py: '22px', px: 2, fontSize: 14 }}>
+                      <Typography variant="h6" component="span">
+                        {reviewed?.message} vào ngày
+                      </Typography>
+                      <Typography color="text.primary">{formatDate(reviewed?.time)}</Typography>
+                    </TimelineContent>
+                  </TimelineItem>
+                )}
+                {submitted?.time && (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineConnector />
+                      <TimelineDot color="primary" variant="outlined">
+                        <FaHistory size="30px" />
+                      </TimelineDot>
+                      <TimelineConnector sx={{ bgcolor: 'secondary.main' }} />
+                    </TimelineSeparator>
+                    <TimelineContent sx={{ py: '22px', px: 2, fontSize: 14 }}>
+                      <Typography variant="h6" component="span">
+                        {submitted?.message} vào ngày
+                      </Typography>
+                      <Typography color="text.primary">{formatDate(submitted?.time)}</Typography>
+                    </TimelineContent>
+                  </TimelineItem>
+                )}
+                {updated?.time && (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineConnector sx={{ bgcolor: 'secondary.main' }} />
+                      <TimelineDot color="secondary">
+                        <FaHistory size="30px" />
+                      </TimelineDot>
+                      <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent sx={{ py: '22px', px: 2, fontSize: 14 }}>
+                      <Typography variant="h6" component="span">
+                        {updated?.message} vào ngày
+                      </Typography>
+                      <Typography color="text.primary">{formatDate(updated?.time)}</Typography>
+                    </TimelineContent>
+                  </TimelineItem>
+                )}
+                {finalDecision?.time && (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineConnector />
+                      <TimelineDot color="primary" variant="outlined">
+                        <FaHistory size="30px" />
+                      </TimelineDot>
+                      <TimelineConnector sx={{ bgcolor: 'secondary.main' }} />
+                    </TimelineSeparator>
+                    <TimelineContent sx={{ py: '22px', px: 2, fontSize: 14 }}>
+                      <Typography variant="h6" component="span">
+                        {finalDecision?.message} vào ngày
+                      </Typography>
+                      <Typography color="text.primary">{formatDate(finalDecision?.time)}</Typography>
+                    </TimelineContent>
+                  </TimelineItem>
+                )}
+              </Timeline>
+            </Grid>
+
+          </Grid>
         </div>
       </section>
       <Footer />

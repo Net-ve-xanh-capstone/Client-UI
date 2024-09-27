@@ -98,7 +98,7 @@ function SponsorManage() {
       label: 'ĐƠN VỊ TÀI TRỢ',
       options: {
         customBodyRender: value => <span>
-          {renderWithTooltip(value, 40)}
+          {renderWithTooltip(value, 50)}
         </span>,
       },
     },

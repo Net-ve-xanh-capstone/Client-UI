@@ -413,8 +413,8 @@ const SwalComponent = (title,
             Swal.fire({
               title: successMsg,
               icon: 'success',
-              showCancelButton: true,
-              confirmButtonText: submit && 'Tải phiếu thông tin',
+              showCancelButton: submit,
+              confirmButtonText: submit ? 'Tải phiếu thông tin' : 'Đóng',
               cancelButtonText: 'Đóng',
             }).then(downloadResult => {
               if (downloadResult.isConfirmed) {
@@ -435,8 +435,8 @@ const SwalComponent = (title,
             Swal.fire({
               title: successMsg,
               icon: 'success',
-              showCancelButton: true,
-              confirmButtonText: submit && 'Tải phiếu thông tin',
+              showCancelButton: submit,
+              confirmButtonText: submit ? 'Tải phiếu thông tin' : 'Đóng',
               cancelButtonText: 'Đóng',
             }).then(downloadResult => {
               if (downloadResult.isConfirmed) {

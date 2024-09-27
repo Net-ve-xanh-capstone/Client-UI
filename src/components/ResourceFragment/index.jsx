@@ -111,7 +111,7 @@ function ResourceFragment({ resourceFrag, getContestDetail, statusOfRound }) {
                   {renderWithTooltip(index + 1)}
                 </div>
                 <div className={styles.col} data-label="Tài trợ">
-                  {renderWithTooltip(data?.sponsorship, 20)}
+                  {renderWithTooltip(data?.sponsorship, 50)}
                 </div>
                 <div
                   className={styles.col}
@@ -121,7 +121,7 @@ function ResourceFragment({ resourceFrag, getContestDetail, statusOfRound }) {
                     justifyContent: 'space-between',
                   }}
                   data-label="Đơn vị tài trợ">
-                  <div>{renderWithTooltip(data?.sponsor?.name, 20)}</div>
+                  <div>{renderWithTooltip(data?.sponsor?.name, 50)}</div>
                 </div>
                 <div className={styles.col}>
                   <div

@@ -43,7 +43,7 @@ const CollectionPage = () => {
         );
 
         if (filtered.length === 0 || !filtered) {
-          setMessage('Không tìm thấy bộ sưu tập nào');
+          setMessage('Không có bộ sưu tập nào');
           setVisible(0);
           setFilterCollection([]);
         } else {
@@ -190,35 +190,40 @@ const CollectionPage = () => {
                       />
                     </form>
                   </div>
-
-                  {/*<div className="widget widget-filter style-1 mgbt-0">*/}
-                  {/*  <div className="header-widget-filter">*/}
-                  {/*    <h3 className="title-widget">Filter</h3>*/}
-                  {/*    <Link to="#" className="clear-checkbox btn-filter style-2">*/}
-                  {/*      Clear All*/}
-                  {/*    </Link>*/}
-                  {/*  </div>*/}
-                  {/*  <form action="#" className="form-inner">*/}
-                  {/*    {*/}
-                  {/*      dataFilter.map((item, index) => (*/}
-                  {/*        <div key={index}>*/}
-                  {/*          <label>*/}
-                  {/*            {item.name}*/}
-                  {/*            <input type="checkbox" defaultChecked={item.checked} />*/}
-                  {/*            <span className="btn-checkbox"></span>*/}
-                  {/*          </label><br />*/}
-                  {/*        </div>*/}
-                  {/*      ))*/}
-                  {/*    }*/}
-                  {/*  </form>*/}
-                  {/*</div>*/}
                 </div>
               </div>
             </div>
           ) : (
-            <h2 className="text-center font-weight-bold">
-              Bạn chưa có bộ sưu tập nào!
-            </h2>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              flexDirection: 'row',
+            }}>
+              <div className="col-xl-8 col-lg-9 col-md-8 col-12">
+                <h2 className="text-center font-weight-bold">
+                  Không có bộ sưu tập nào
+                </h2>
+              </div>
+              <div className="col-xl-4 col-lg-3 col-md-4 col-12">
+                <div id="side-bar" className="side-bar style-2">
+                  <div className="widget widget-search mgbt-24">
+                    <form>
+                      <TextFieldCommon
+                        control={control}
+                        id="name"
+                        name="name"
+                        className="style-2"
+                        type="text"
+                        placeholder="Tìm tên bộ sưu tập"
+                        value={query}
+                        onChange={e => setQuery(e.target.value)}
+                      />
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </section>

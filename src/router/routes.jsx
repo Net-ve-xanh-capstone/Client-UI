@@ -119,7 +119,7 @@ const routes = [
   {
     path: 'my-painting',
     component: (
-      <ProtectedRoute>
+      <ProtectedRoute role={Role.COMPETITOR}>
         <MyPaintingPage />
       </ProtectedRoute>
     ),
@@ -139,7 +139,7 @@ const routes = [
   {
     path: 'collection/:accountId',
     component: (
-      <ProtectedRoute>
+      <ProtectedRoute role={Role.COMPETITOR}>
         <CollectionPage />
       </ProtectedRoute>
     ),
@@ -147,7 +147,7 @@ const routes = [
   {
     path: 'history/:paintingId',
     component: (
-      <ProtectedRoute>
+      <ProtectedRoute role={Role.COMPETITOR}>
         <HistoryPage />
       </ProtectedRoute>
     ),
@@ -155,7 +155,7 @@ const routes = [
   {
     path: 'my-collection',
     component: (
-      <ProtectedRoute>
+      <ProtectedRoute role={Role.COMPETITOR}>
         <HomeCollectionPage />
       </ProtectedRoute>
     ),

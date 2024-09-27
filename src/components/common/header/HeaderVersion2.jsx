@@ -93,39 +93,28 @@ const HeaderVersion2 = () => {
                     {menus.map((data, index) => (
                       <li
                         key={index}
-                        onClick={() =>
-                          handleOnClick(index)
-                        }
+                        onClick={() => handleOnClick(index)}
                         className={`menu-item ${
-                          data.namesub
+                          data.namesub && data.namesub.length > 1
                             ? 'menu-item-has-children'
                             : ''
                         } ${activeIndex === index ? 'active' : ''} `}>
-                        <Link to="#">{data.name}</Link>
-                        {data.namesub && (
+                        <Link
+                          to={data.namesub.length <= 1 ? data.namesub[0].links : '#'}>{data.name}</Link>
+                        {data.namesub && data.namesub.length > 1 && (
                           <ul className="sub-menu">
                             {data.namesub
                               .filter(hasAccess)
                               .map(submenu => (
                                 <li
-                                  key={
-                                    submenu.id
-                                  }
+                                  key={submenu.id}
                                   className={
-                                    window
-                                      .location
-                                      .pathname ===
-                                    submenu.links
+                                    window.location.pathname === submenu.links
                                       ? 'menu-item current-item'
                                       : 'menu-item'
                                   }>
-                                  <Link
-                                    to={
-                                      submenu.links
-                                    }>
-                                    {
-                                      submenu.sub
-                                    }
+                                  <Link to={submenu.links}>
+                                    {submenu.sub}
                                   </Link>
                                 </li>
                               ))}

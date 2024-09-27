@@ -117,7 +117,7 @@ function ColorlibStepIcon(props) {
 function ContestDetail({ contest, handleBack }) {
   const [contestDes, setContestDes] = useState();
   const [statusOfRound, setStatusRound] = useState(null);
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(2);
   useEffect(() => {
     getContestDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -197,22 +197,22 @@ function ContestDetail({ contest, handleBack }) {
       ),
     },
     {
-      title: 'Lịch chấm',
-      component: (
-        <ScheduleFragment
-          scheduleFrag={contestDes}
-          getContestDetail={getContestDetail}
-          statusOfRound={statusOfRound}
-        />
-      ),
-    },
-    {
       title: 'Bài thi',
       component: (
         <PaintingPage
           scheduleFrag={contestDes}
           getContestDetail={getContestDetail}
           contestId={contest.id}
+          statusOfRound={statusOfRound}
+        />
+      ),
+    },
+    {
+      title: 'Lịch chấm',
+      component: (
+        <ScheduleFragment
+          scheduleFrag={contestDes}
+          getContestDetail={getContestDetail}
           statusOfRound={statusOfRound}
         />
       ),
@@ -293,46 +293,6 @@ function ContestDetail({ contest, handleBack }) {
             ))}
           </Stepper>
         </Stack>
-
-        {/*
-          {steps.map((tab, index) => (
-          <input
-            key={index}
-            type="radio"
-            id={`tab${index + 1}`}
-            name="tab-control"
-            defaultChecked={index === 0}
-            className={styles.tabInput}
-          />
-        ))}
-          
-
-        <ul className={styles.tabList}>
-          {steps.map((tab, index) => (
-            <li key={index} title={tab.title} className={styles.tabItem}>
-              <label
-                htmlFor={`tab${index + 1}`}
-                role="button"
-                style={{
-                  cursor: 'pointer',
-                  height: '100%',
-                }}
-                className={styles.tabLabel}>
-                {tab.icon}
-                <br />
-                <span>{tab.title}</span>
-              </label>
-            </li>
-          ))}
-        </ul>
-        */}
-
-        {/* bottom slider animation */}
-        {/* bottom slider animation 
-        <div className={styles.slider}>
-          <div className={styles.indicator}></div>
-        </div>
-        */}
 
         {/*ending bottom slider animation */}
         {/*ending bottom slider animation */}

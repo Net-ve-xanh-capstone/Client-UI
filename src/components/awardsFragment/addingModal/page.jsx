@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { createAward, putAwards } from '../../../api/awrdApi.js';
 import { toast } from 'react-toastify';
 import { formatCurrencyVND, formatNumber } from '../../../utils/formatUtils.js';
+import { Autocomplete, Dialog, DialogContent, DialogTitle, IconButton, TextField, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 const NUMBER_TYPE = {
   CURRENCY: 'currency',
@@ -20,7 +22,12 @@ const AddingModal = ({
                        checkedFinalRound = false,
                      }) => {
   const { userInfo } = useSelector(state => state.auth);
-
+  const defaultRank = [
+    { title: 'Giải nhất', year: 1994 },
+    { title: 'Giải nhì', year: 1972 },
+    { title: 'Giải ba', year: 1974 },
+    { title: 'Giải khuyến khích', year: 2008 },
+  ];
   const [fieldUpdate, setFieldUpdate] = useState({
     id: '',
     rank: '',
@@ -205,33 +212,68 @@ const AddingModal = ({
 
   return (
     <>
-      <Modal
-        contentClassName={checkedFinalRound ? styles.modal_backdrop : styles.modal_backdrop_small}
-        backdrop="static"
-        show={modalShow}
-        onHide={onHide}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered>
-        <Modal.Header closeButton style={{ margin: '0 auto' }}>
-          <Modal.Title
-            id="contained-modal-title-vcenter"
-            style={{ fontWeight: 'bold', fontSize: '20px' }}>
-            {isEdit ? 'Chỉnh sửa giải thưởng' : 'Thêm giải thưởng'}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ height: '55vh', overflow: 'hidden' }}>
+      <Dialog
+        classes={{
+          paper: styles.modalForm,
+        }}
+        open={modalShow}
+        onClose={onHide}
+        maxWidth={'xs'}
+        fullWidth
+        hideBackdrop
+      >
+        <DialogTitle disableTypography style={{}}>
+          <Typography
+            sx={{
+              fontWeight: '700',
+              fontSize: '24px',
+              color: '#14141F',
+              textAlign: 'center',
+            }}
+          >{isEdit ? 'Chỉnh sửa giải thưởng' : 'Thêm giải thưởng'}</Typography>
+          <IconButton
+            sx={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              transform: 'translate(-0%, -0%)',
+              color: '#14141F',
+            }}
+            onClick={onHide}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent style={{ height: '100%', overflow: 'hidden' }}>
           <form onSubmit={handleSubmit} className={styles.modalForm}>
             <div className={styles.small_place}>
               <h4 className={styles.title}>Giải thưởng</h4>
               {checkedFinalRound ? (
-                <input
-                  className={styles.inputModal}
-                  required
-                  type="text"
-                  name="rank"
-                  value={fieldUpdate.rank}
-                  onChange={e => handleInput(e)}
-                />
+                // <input
+                //   className={styles.inputModal}
+                //   required
+                //   type="text"
+                //   name="rank"
+                //   value={fieldUpdate.rank}
+                //   onChange={e => handleInput(e)}
+                // />
+                <div>
+                  <Autocomplete
+                    id="free-solo-demo"
+                    freeSolo
+                    onChange={(e, value) => {
+                      setFieldUpdate({ ...fieldUpdate, rank: value });
+                    }}
+                    options={defaultRank.map((option) => option.title)}
+                    renderInput={(params) => <TextField
+                      {...params}
+                      name="rank"
+                      value={fieldUpdate.rank}
+                      onChange={e => handleInput(e)}
+                    />}
+                    PopperProps={{ transition: 'none', disablePortal: true }}
+                  />
+                </div>
+
               ) : (
                 <input
                   className={styles.inputModal}
@@ -285,8 +327,8 @@ const AddingModal = ({
               </button>
             </div>
           </form>
-        </Modal.Body>
-      </Modal>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

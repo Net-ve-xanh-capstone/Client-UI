@@ -26,7 +26,7 @@ function CardPainting({ items, getPaintingByID }) {
               className={styles.status}
               style={{
                 backgroundColor:
-                  items.status === 'Accepted' || items.status === 'Submitted'
+                  items.status === 'Đã chấp nhận' || items.status === 'Đã nộp'
                     ? 'rgba(57, 153, 24, 0.7)'
                     : 'rgba(255, 0, 0, 0.7)',
               }}>

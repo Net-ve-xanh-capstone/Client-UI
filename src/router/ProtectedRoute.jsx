@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import Role from '../constant/Role.js';
 
 const ProtectedRoute = ({ children, role }) => {
   const { userInfo } = useSelector(state => state.auth);
@@ -8,9 +9,17 @@ const ProtectedRoute = ({ children, role }) => {
     return <Navigate to="/login" replace />;
   }
   if (role && userInfo.role !== role) {
-    return <Navigate to="/" replace />;
+    switch (userInfo.role) {
+      case Role.ADMIN:
+        return <Navigate to="/admin-management/dashboard" replace />;
+      case Role.STAFF:
+        return <Navigate to="/staff-management/contest" replace />;
+      case Role.COMPETITOR:
+        return <Navigate to="/" replace />;
+      default:
+        return <Navigate to="/" replace />;
+    }
   }
-
   return children;
 };
 

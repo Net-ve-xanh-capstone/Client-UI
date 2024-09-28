@@ -89,8 +89,8 @@ function CompetitorFragment({ resourceFrag }) {
     Rejected: 'Đã từ chối',
     Draft: 'Bản nháp',
     Delete: 'Đã xóa',
-    Pass: 'Qua vòng 1',
-    NotPass: 'Không qua vòng 1',
+    Pass: 'Qua vòng',
+    NotPass: 'Không qua vòng',
     FinalRound: 'Vòng chung kết',
     HasPrizes: 'Có giải thuởng',
   };
@@ -176,11 +176,10 @@ function CompetitorFragment({ resourceFrag }) {
         data.map(row => ({
           'Mã Thí Sinh': row.data[0],
           'Họ và tên': row.data[1],
-          Tuổi: row.data[2],
+          'Tuổi': row.data[2],
           'Giới tính': row.data[3],
           'Tình trạng': row.data[4],
           'Giải Thưởng': row.data[5],
-          'Vòng thi': row.data[6]?.props?.children || 'Không có vòng thi',
         })),
       );
 

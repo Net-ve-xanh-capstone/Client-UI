@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { getById } from '../../api/contestStaffApi.js';
-import { deleteRoundLevel } from '../../api/roundStaffApi.js';
+import { deleteRoundLevel, announceResults } from '../../api/roundStaffApi.js';
 import { formatDate } from '../../utils/formatDate.js';
 import DeleteModal from '../DeleteModal';
 import RoundForm from '../RoundForm/index.jsx';
@@ -36,7 +36,21 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   // fetch sending email
   const sendMail = async id => {
     try {
-      await sendMail(id);
+      const response = await announceResults(id);
+      if (response?.result) {
+        toast.success('Công bố kết quảthành công', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        getRound();
+        getContestDetail();
+      }
     } catch (error) {
       console.log(error);
     }

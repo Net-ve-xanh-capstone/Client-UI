@@ -29,9 +29,15 @@ export const getRoundById = id => {
 };
 
 export const adminEdit = payload => {
+  // eslint-disable-next-line quotes
   return axiosApi.put(`rounds`, payload);
 };
 
 export const finalRound = roundId => {
   return axiosApi.get(`rounds/finalround/${roundId}`);
 };
+
+export const announceResults = roundId => {
+  return axiosApi.get(`rounds/announce-results-round?roundId=${roundId}`);
+};
+

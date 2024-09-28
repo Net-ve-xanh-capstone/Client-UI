@@ -40,9 +40,10 @@ const ContestComing = () => {
       ),
     enabled: !!status,
   });
-  const contests = data?.data?.result.filter(
-    item => item.status !== paintingStatusActive,
-  );
+  const contests = data?.data?.result?.filter(
+    item => item.status !== paintingStatusActive
+  ) || [];
+
   const navigate = useNavigate();
   const handleChangeStatus = e => {
     setStatus(e.target.value);

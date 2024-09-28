@@ -37,8 +37,8 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   const sendMail = async id => {
     try {
       const response = await announceResults(id);
-      if (response?.result) {
-        toast.success('Công bố kết quảthành công', {
+      if (response?.data?.result) {
+        toast.success('Công bố kết quả thành công', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
@@ -81,7 +81,6 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
 
   const getRound = async () => {
     try {
-      console.log('checka');
       const { data } = await getById(roundFrag.id);
       setRound(sortRoundsByStartTime(data?.result.educationalLevel));
     } catch (e) {

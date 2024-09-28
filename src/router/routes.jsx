@@ -20,6 +20,7 @@ import ExaminerRound from '../pages/examinerRound/page.jsx';
 
 const Home = lazy(() => import('../pages/Home/Home'));
 const BlogPage = lazy(() => import('../pages/blogPage/BlogPage'));
+const BlogDetailPage = lazy(() => import('../pages/blogDetail/BlogDetailPage'));
 const Login = lazy(() => import('../pages/Login'));
 const SignUp = lazy(() => import('../pages/SignUp'));
 const SubmitPage = lazy(() => import('../pages/SubmitPage'));
@@ -127,6 +128,10 @@ const routes = [
   {
     path: 'blog',
     component: <BlogPage />,
+  },
+  {
+    path: 'blog-detail/:blogId',
+    component: <BlogDetailPage />,
   },
   { path: 'contest-detail/:contestId', component: <ContestDetail /> },
   { path: 'faq', component: <FAQPage /> },

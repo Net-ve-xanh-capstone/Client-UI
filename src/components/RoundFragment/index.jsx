@@ -17,7 +17,7 @@ import { renderWithTooltip } from '../../pages/admin/views/management/StaffManag
 function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
-  const [idRoundDelete, setIdRoundDelete] = useState();
+  const [idRoundDelete] = useState();
   // const isEditing = checkEditButton(roundFrag.startTime);
   const [round, setRound] = useState();
   const [editRoundData, setEditRoundData] = useState();
@@ -56,7 +56,7 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
     }
   };
 
-  // dowload file excel
+  // download file excel
   const downloadFile = async (levelData, roundData) => {
     try {
       const fileName = levelData?.level + ' - ' + roundData?.name + '.xlsx';
@@ -249,14 +249,6 @@ function RoundFragment({ roundFrag, getContestDetail, statusOfRound }) {
                       }>
                       <SendIcon />
                     </IconButton>
-                    {/* <IconButton
-                        aria-label="delete"
-                        size="large"
-                        color="error"
-                        onClick={() => hanldeOpenDelete(data.id)}
-                        disabled={isEditing}>
-                        <DeleteIcon />
-                      </IconButton> */}
                   </div>
                 </li>
               )),

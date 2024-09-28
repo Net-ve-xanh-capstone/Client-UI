@@ -13,15 +13,15 @@ export const getBlogId = (id) => {
 };
 
 export const updateBlog = (payload) => {
-  return axiosApi.put(`posts`, payload);
+  return axiosApi.put('posts', payload);
 };
 
 export const addnewBlog = (payload) => {
-  return axiosApi.post(`posts`, payload);
+  return axiosApi.post('posts', payload);
 };
 
 export const searchingBlog = (payload) => {
   return axiosApi.get(
-    `posts/search?searchString=${payload.serchString}&PageSize=10&PageNumber=${payload.pageNumber}`
+    `posts/search?searchString=${payload.serchString}&PageSize=10&PageNumber=${payload.pageNumber}`,
   );
 };

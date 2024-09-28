@@ -1,8 +1,10 @@
 import React from 'react';
 import { cutString } from '../../utils/formatDate.js';
 import styles from './card.module.css';
+import { useNavigate } from 'react-router-dom';
 
 function CardBlog({ blogList }) {
+  const navigate = useNavigate();
   return (
     <>
       {blogList?.length
@@ -13,7 +15,12 @@ function CardBlog({ blogList }) {
             </div>
             <div className={styles.card_content}>
               <div className={styles.text_box}>
-                <h3>
+                <h3
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => navigate(`/blog-detail/${vl.id}`)}
+                >
                   {vl.title?.length > 35
                     ? cutString(vl.title, 35) + '...'
                     : vl.title}

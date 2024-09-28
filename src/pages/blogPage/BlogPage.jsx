@@ -48,8 +48,8 @@ function Blog() {
                     fontSize: '1.5rem',
                   },
                   '.Mui-selected': {
-                    backgroundColor: '#5142fc !important', // Customize the selected item background color
-                    color: 'white', // Ensure text is readable on selected background
+                    backgroundColor: '#5142fc !important',
+                    color: 'white',
                   },
                 }}
               />

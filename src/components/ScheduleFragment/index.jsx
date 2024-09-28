@@ -24,7 +24,7 @@ import FinalScheduleForm from '../finalScheduleForm/page.jsx';
 import CircularProgress from '@mui/material/CircularProgress';
 import { renderWithTooltip } from '../../pages/admin/views/management/StaffManagementPage.jsx';
 
-function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
+function ScheduleFragment({ scheduleFrag }) {
   const [type, setType] = useState();
   const [schedule, setSchedule] = useState();
   const [listExam, setListExam] = useState();
@@ -173,11 +173,10 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scheduleFrag]);
 
-  // this is will render all of schedule follow with the data responding
   const renderRound = data => {
-    const roundChedule = schedule?.find(item => item.roundId === data.id);
-    const isActive = checkActiveScheduleButton(data.startTime, data.endTime); // unknow this variable makign for --- checking this?
-
+    const roundSchedule = schedule?.find(item => item.roundId === data.id);
+    // const isActive = checkActiveScheduleButton(data.startTime, data.endTime);
+    const isDisable = roundSchedule?.roundStatus !== 'Complete';
     return (
       <>
 
@@ -203,7 +202,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                     <li
                       className={styles.roundHeader}
                       style={{
-                        gridTemplateColumns: roundChedule?.roundName
+                        gridTemplateColumns: roundSchedule?.roundName
                           .toLowerCase()
                           .includes('Chung Kết'.toLowerCase())
                           ? 'repeat(9, 1fr)'
@@ -211,7 +210,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                       }}>
                       <div className={styles.col}>Giám khảo</div>
                       <div className={styles.col}>Ngày chấm</div>
-                      {roundChedule?.roundName
+                      {roundSchedule?.roundName
                         .toLowerCase()
                         .includes('Chung Kết'.toLowerCase()) ? (
                         <>
@@ -230,7 +229,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                       <div className={styles.col}>Trạng thái</div>
                       <div className={styles.col}>Tương tác</div>
                     </li>
-                    {roundChedule?.schedules?.length === 0 ? (
+                    {roundSchedule?.schedules?.length === 0 ? (
                       <>
                         {loading ? (
                           <div className={styles.loadingContainer}>
@@ -241,12 +240,12 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                         </div>)}
                       </>
                     ) : (
-                      roundChedule?.schedules?.map(scheduleData => (
+                      roundSchedule?.schedules?.map(scheduleData => (
                         <li
                           key={scheduleData.id}
                           className={styles.tableRow}
                           style={{
-                            gridTemplateColumns: roundChedule?.roundName
+                            gridTemplateColumns: roundSchedule?.roundName
                               .toLowerCase()
                               .includes('Chung Kết'.toLowerCase())
                               ? 'repeat(9, 1fr)'
@@ -258,7 +257,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                           <div className={styles.col} data-label="Ngày chấm">
                             <div>{renderWithTooltip(formatDate(scheduleData?.endDate), 20)}</div>
                           </div>
-                          {roundChedule?.roundName
+                          {roundSchedule?.roundName
                             .toLowerCase()
                             .includes('Chung Kết'.toLowerCase()) ? (
                             <>
@@ -314,7 +313,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                                 size="large"
                                 color="error"
                                 // disabled={scheduleData?.status === 'Done'}
-                                disabled={isActive}
+                                disabled={isDisable}
                                 onClick={() => hanldeOpenDelete(scheduleData?.id)}>
                                 <DeleteIcon />
                               </IconButton>
@@ -322,7 +321,7 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                                 aria-label="edit"
                                 size="large"
                                 color="primary"
-                                disabled={isActive}
+                                disabled={isDisable}
                                 onClick={() => handleOpenEdit(data, scheduleData)}>
                                 <EditIcon />
                               </IconButton>
@@ -336,8 +335,8 @@ function ScheduleFragment({ scheduleFrag, getContestDetail, statusOfRound }) {
                 <div className="flex justify-content-end mt-20">
                   <button
                     className="btn btn-outline-primary btn-lg"
-                    disabled={isActive}
-                    onClick={() => handleOpenCreate(data, roundChedule)}>
+                    disabled={isDisable}
+                    onClick={() => handleOpenCreate(data, roundSchedule)}>
                     Thêm lịch chấm
                   </button>
                 </div>

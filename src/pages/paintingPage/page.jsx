@@ -128,9 +128,9 @@ function PaintingPage({ contestId, statusOfRound }) {
     { value: 'Rejected', label: 'Đã từ chối' },
     { value: 'Draft', label: 'Bản nháp' },
     { value: 'Delete', label: 'Đã xóa' },
-    { value: 'Pass', label: 'Qua Vòng 1' },
-    { value: 'NotPasFinalRounds', label: 'Không qua vòng 1' },
-    { value: '', label: 'Vòng chung kết' },
+    { value: 'Pass', label: 'Qua vòng' },
+    { value: 'NotPass', label: 'Không qua vòng' },
+    { value: 'FinalRound', label: 'Vòng chung kết' },
     { value: 'HasPrizes ', label: 'Có giải thưởng' },
   ];
 

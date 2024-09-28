@@ -26,9 +26,10 @@ function CardPainting({ items, getPaintingByID }) {
               className={styles.status}
               style={{
                 backgroundColor:
-                  items.status === 'Đã chấp nhận' || items.status === 'Đã nộp'
+                  items.status === 'Đã chấp nhận' || items.status === 'Đã nộp' || items.status === 'Qua Vòng'
                     ? 'rgba(57, 153, 24, 0.7)'
-                    : 'rgba(255, 0, 0, 0.7)',
+                    : items.status === 'Đã từ chối' || items.status === 'Đã xóa' || items.status === 'Không qua vòng' ?
+                      'rgba(255, 0, 0, 0.7)' : '#FF8D21',
               }}>
               <h5>{items.status}</h5>
             </span>

@@ -9,7 +9,6 @@ import { Modal } from 'react-bootstrap';
 const PaintingItem = props => {
   const data = props.data;
   const loading = props.loading;
-
   const [visible, setVisible] = useState(6);
   const [modalShow, setModalShow] = useState(false);
   const [modalReject, setModalReject] = useState(false);
@@ -63,14 +62,16 @@ const PaintingItem = props => {
                           style={{ width: '220px' }}>
                           <span>Thêm vào bộ sưu tập</span>
                         </button>
-                        <button
-                          onClick={() =>
-                            handleEditPainting(item?.status, item?.contestId)
-                          }
-                          className="sc-button style-place-bid style fl-button pri-3 mt-5"
-                          style={{ width: '220px' }}>
-                          <span>Chỉnh sửa bài nộp</span>
-                        </button>
+                        {item?.status === 'Bản nháp' && (
+                          <button
+                            onClick={() =>
+                              handleEditPainting(item?.status, item?.contestId)
+                            }
+                            className="sc-button style-place-bid style fl-button pri-3 mt-5"
+                            style={{ width: '220px' }}>
+                            <span>Chỉnh sửa bài nộp</span>
+                          </button>
+                        )}
                       </div>
                       <div className="coming-soon">{item?.award}</div>
                     </div>
